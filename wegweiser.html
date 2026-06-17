@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Wegweiser zum Zimmer · Turm Hotel Frankfurt</title>
+<meta name="description" content="So finden Sie nach dem Check-in Ihr Zimmer im Turm Hotel Frankfurt – Wegbeschreibung für Haupt- und Nebengebäude in 15 Sprachen.">
+<meta name="robots" content="index, follow, max-image-preview:large">
+<link rel="canonical" href="https://intelligentresponder-max.github.io/turmhotel/wegweiser.html">
+
+<meta property="og:type" content="website">
+<meta property="og:locale" content="de_DE">
+<meta property="og:site_name" content="Turm Hotel Frankfurt">
+<meta property="og:title" content="Wegweiser zum Zimmer · Turm Hotel Frankfurt">
+<meta property="og:description" content="Wegbeschreibung zu Ihrem Zimmer in 15 Sprachen.">
+<meta property="og:url" content="https://intelligentresponder-max.github.io/turmhotel/wegweiser.html">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+
+<style>
+:root{
+  --green:#2e6b4f;       /* Turm Hotel green */
+  --green-deep:#234f3a;
+  --green-soft:#e4ede7;
+  --ink:#2a2622;
+  --cream:#f6f2ea;
+  --cream-2:#efe8db;
+  --line:#d6d0c2;
+  --muted:#6f665b;
+  --white:#fffdf8;
+  --gold:#c8a24a;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Jost',sans-serif;font-weight:300;color:var(--ink);background:var(--cream);line-height:1.65;-webkit-font-smoothing:antialiased}
+h1,h2,h3,.serif{font-family:'Cormorant Garamond',serif;font-weight:500;letter-spacing:.01em}
+a{color:var(--green-deep)}
+.eyebrow{font-weight:500;text-transform:uppercase;letter-spacing:.3em;font-size:.7rem;color:var(--green)}
+
+/* Header with green logo */
+header{position:sticky;top:0;z-index:50;background:rgba(246,242,234,.94);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+.nav{max-width:920px;margin:0 auto;padding:.8rem 1.5rem;display:flex;align-items:center;justify-content:space-between;gap:1rem}
+.brand{display:flex;align-items:center;gap:.7rem;text-decoration:none}
+.logo{
+  width:42px;height:52px;background:var(--green);border-radius:3px;
+  display:flex;flex-direction:column;align-items:center;justify-content:flex-end;
+  padding-bottom:5px;flex-shrink:0;position:relative;
+}
+.logo .crown{color:#fff;font-size:.85rem;line-height:1;margin-bottom:2px}
+.logo b{color:#fff;font-family:'Cormorant Garamond',serif;font-size:.62rem;letter-spacing:.14em;line-height:1;text-align:center}
+.brand .txt b{display:block;font-family:'Cormorant Garamond',serif;font-weight:600;font-size:1.2rem;color:var(--ink);letter-spacing:.03em;line-height:1.1}
+.brand .txt small{font-size:.58rem;letter-spacing:.26em;text-transform:uppercase;color:var(--muted)}
+.back{font-size:.78rem;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);text-decoration:none}
+.back:hover{color:var(--green-deep)}
+
+/* Hero */
+.hero{max-width:920px;margin:0 auto;padding:3rem 1.5rem 1rem;text-align:center}
+.hero .crown-big{color:var(--green);font-size:1.6rem}
+.hero h1{font-size:clamp(2.1rem,5.5vw,3.2rem);margin:.4rem 0 .2rem}
+.hero p.lead{color:var(--muted);max-width:32rem;margin:.4rem auto 0}
+.creative{font-family:'Cormorant Garamond',serif;font-style:italic;color:var(--green);font-size:1.1rem;margin-top:.3rem}
+
+/* Language switcher */
+.lang-wrap{max-width:920px;margin:1.6rem auto 0;padding:0 1.5rem}
+.lang-label{font-size:.72rem;text-transform:uppercase;letter-spacing:.18em;color:var(--muted);text-align:center;margin-bottom:.7rem}
+.lang-grid{display:flex;flex-wrap:wrap;justify-content:center;gap:.4rem}
+.lang-btn{
+  font-family:'Jost',sans-serif;font-size:.82rem;
+  padding:.45rem .85rem;border:1px solid var(--line);background:var(--white);
+  color:var(--ink);border-radius:40px;cursor:pointer;transition:all .15s;
+}
+.lang-btn:hover{border-color:var(--green)}
+.lang-btn.active{background:var(--green);color:#fff;border-color:var(--green)}
+
+/* Content card */
+.guide{max-width:920px;margin:2rem auto;padding:0 1.5rem}
+.title-line{font-size:clamp(1.5rem,4vw,2rem);text-align:center;margin-bottom:1.6rem;color:var(--green-deep)}
+.building{
+  background:var(--white);border:1px solid var(--line);border-radius:3px;
+  padding:1.8rem 1.8rem;margin-bottom:1.2rem;
+}
+.building h2{font-size:1.5rem;color:var(--green-deep);display:flex;align-items:center;gap:.6rem;margin-bottom:1rem}
+.building h2 .dot{width:9px;height:9px;background:var(--green);border-radius:50%;display:inline-block}
+.steps{list-style:none;display:grid;gap:.7rem}
+.steps li{display:flex;gap:.9rem;align-items:flex-start;font-size:1rem}
+.steps li .arr{color:var(--green);font-weight:500;flex-shrink:0;margin-top:.15rem}
+.rooms{margin-top:1.1rem;display:flex;flex-wrap:wrap;gap:.6rem}
+.room-chip{
+  background:var(--green-soft);color:var(--green-deep);
+  border-radius:30px;padding:.4rem 1rem;font-size:.92rem;
+}
+.room-chip b{font-weight:500}
+.closing{
+  text-align:center;font-family:'Cormorant Garamond',serif;font-size:1.3rem;
+  color:var(--green-deep);margin:1.8rem 0 .6rem;
+}
+
+footer{border-top:1px solid var(--line);background:var(--cream-2);margin-top:1rem}
+.foot-inner{max-width:920px;margin:0 auto;padding:2rem 1.5rem;display:flex;flex-wrap:wrap;justify-content:space-between;gap:1rem;font-size:.85rem;color:var(--muted)}
+.foot-inner .crown{color:var(--green)}
+.foot-links a{color:var(--muted);margin-left:1rem}
+@media(max-width:600px){.foot-inner{flex-direction:column}.foot-links a{margin:0 1rem 0 0}.building{padding:1.4rem}}
+[dir="rtl"] .steps li{flex-direction:row-reverse;text-align:right}
+[dir="rtl"] .building h2{flex-direction:row-reverse}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="nav">
+    <a class="brand" href="index.html">
+      <span class="logo"><span class="crown">♔</span><b>TURM<br>HOTEL</b></span>
+      <span class="txt"><b>Turm Hotel</b><small>Frankfurt am Main</small></span>
+    </a>
+    <a class="back" href="index.html">← Übersicht</a>
+  </div>
+</header>
+
+<div class="hero">
+  <div class="crown-big">♔</div>
+  <span class="eyebrow" id="eyebrow">Nach dem Check-in</span>
+  <h1 id="page-title">Wegweiser zum Zimmer</h1>
+  <p class="lead" id="page-lead">Wählen Sie Ihre Sprache und folgen Sie der Wegbeschreibung.</p>
+  <div class="creative">… Creative Moments</div>
+</div>
+
+<div class="lang-wrap">
+  <div class="lang-label" id="lang-label">Sprache wählen · Choose your language</div>
+  <div class="lang-grid" id="langGrid"></div>
+</div>
+
+<div class="guide">
+  <div class="title-line" id="guide-title"></div>
+
+  <div class="building">
+    <h2><span class="dot"></span><span id="main-h"></span></h2>
+    <ul class="steps" id="main-steps"></ul>
+    <div class="rooms" id="main-rooms"></div>
+  </div>
+
+  <div class="building">
+    <h2><span class="dot"></span><span id="annex-h"></span></h2>
+    <ul class="steps" id="annex-steps"></ul>
+    <div class="rooms" id="annex-rooms"></div>
+  </div>
+
+  <div class="closing" id="closing"></div>
+</div>
+
+<footer>
+  <div class="foot-inner">
+    <div>
+      <span class="crown">♔</span> <b class="serif" style="font-size:1.1rem">Turm Hotel Frankfurt</b><br>
+      Eschersheimer Landstraße 20 · 60322 Frankfurt am Main<br>
+      © 2026 Turm Hotel GmbH · Raum für Möglichkeiten
+    </div>
+    <div class="foot-links">
+      <a href="index.html">Gäste-Info</a>
+      <a href="https://www.turmhotel-frankfurt.de/">Hauptseite</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+// ===== Wegweiser-Daten · 15 Sprachen =====
+// Zimmer sind identisch in allen Sprachen, daher zentral:
+const ROOMS = {
+  main:  {f1:"11 · 12 · 14 · 15", f2:"21 · 22 · 23 · 24 · 25"},
+  annex: {f1:"102 – 110", f2:"202 – 210"}
+};
+
+const L = {
+  de:{name:"Deutsch", title:"Wegweiser zum Zimmer", lead:"Wählen Sie Ihre Sprache und folgen Sie der Wegbeschreibung.", eyebrow:"Nach dem Check-in",
+    guide:"So gelangen Sie zu Ihrem Zimmer",
+    mainH:"Im Hauptgebäude",
+    main:["Gehen Sie durch die Glastür direkt neben der Rezeption und biegen Sie rechts ab.","Dort finden Sie den Aufzug.","Bitte drücken Sie die Aufzugtür wieder fest zu, wenn Sie oben aussteigen."],
+    annexH:"Im Nebengebäude",
+    annex:["Gehen Sie neben dem Spiegel die Treppe hinunter, durch den Gang mit den roten Kinosesseln.","Am Ende des Ganges biegen Sie rechts ab und gehen durch die offene Glastür.","Neben dem Notausgang befindet sich auf der linken Seite der Aufzug.","Bitte biegen Sie oben noch einmal links ab, wenn Sie aussteigen."],
+    f1:"1. Etage", f2:"2. Etage",
+    closing:"Wir wünschen Ihnen einen angenehmen Aufenthalt!"},
+
+  en:{name:"English", title:"Finding your room", lead:"Choose your language and follow the directions.", eyebrow:"After check-in",
+    guide:"How to get to your room",
+    mainH:"In the main building",
+    main:["Go through the glass door next to the reception and turn right.","You will find the elevator there.","Please close the elevator doors firmly when you exit on the top floor."],
+    annexH:"In the annex",
+    annex:["Go down the stairs next to the mirror, through the hallway with the red cinema seats.","At the end of the hallway, turn right and go through the open glass door.","Next to the emergency exit, you will find the elevator on the left side.","Please turn left again when you exit on the top floor."],
+    f1:"1st floor", f2:"2nd floor",
+    closing:"We wish you a pleasant stay!"},
+
+  es:{name:"Español", title:"Cómo llegar a su habitación", lead:"Elija su idioma y siga las indicaciones.", eyebrow:"Después del check-in",
+    guide:"Cómo llegar a su habitación",
+    mainH:"En el edificio principal",
+    main:["Pase por la puerta de vidrio al lado de la recepción y gire a la derecha.","Allí encontrará el ascensor.","Por favor, cierre bien las puertas del ascensor cuando salga en la planta superior."],
+    annexH:"En el edificio anexo",
+    annex:["Baje las escaleras junto al espejo, por el pasillo con los asientos de cine rojos.","Al final del pasillo, gire a la derecha y pase por la puerta de vidrio abierta.","Junto a la salida de emergencia, encontrará el ascensor a la izquierda.","Por favor, gire de nuevo a la izquierda al salir en la planta superior."],
+    f1:"1er piso", f2:"2º piso",
+    closing:"¡Le deseamos una agradable estancia!"},
+
+  it:{name:"Italiano", title:"Come raggiungere la tua stanza", lead:"Scegli la tua lingua e segui le indicazioni.", eyebrow:"Dopo il check-in",
+    guide:"Come raggiungere la tua stanza",
+    mainH:"Nel corpo principale",
+    main:["Attraversa la porta di vetro accanto alla reception e gira a destra.","Lì troverai l'ascensore.","Ti preghiamo di chiudere bene le porte dell'ascensore quando esci al piano superiore."],
+    annexH:"Nell'edificio annesso",
+    annex:["Scendi le scale accanto allo specchio, attraverso il corridoio con le poltrone da cinema rosse.","Alla fine del corridoio, gira a destra e passa attraverso la porta di vetro aperta.","Accanto all'uscita di emergenza, troverai l'ascensore sulla sinistra.","Ti preghiamo di girare di nuovo a sinistra quando esci al piano superiore."],
+    f1:"1° piano", f2:"2° piano",
+    closing:"Ti auguriamo un soggiorno piacevole!"},
+
+  fr:{name:"Français", title:"Comment accéder à votre chambre", lead:"Choisissez votre langue et suivez les indications.", eyebrow:"Après l'enregistrement",
+    guide:"Comment accéder à votre chambre",
+    mainH:"Dans le bâtiment principal",
+    main:["Passez par la porte en verre à côté de la réception et tournez à droite.","Vous y trouverez l'ascenseur.","Veuillez bien fermer les portes de l'ascenseur lorsque vous sortez à l'étage supérieur."],
+    annexH:"Dans le bâtiment annexe",
+    annex:["Descendez les escaliers à côté du miroir, par le couloir avec les fauteuils de cinéma rouges.","Au bout du couloir, tournez à droite et passez par la porte en verre ouverte.","À côté de la sortie de secours, vous trouverez l'ascenseur sur la gauche.","Veuillez tourner à gauche à nouveau lorsque vous sortez à l'étage supérieur."],
+    f1:"1er étage", f2:"2ème étage",
+    closing:"Nous vous souhaitons un agréable séjour !"},
+
+  ru:{name:"Русский", title:"Как добраться до вашего номера", lead:"Выберите язык и следуйте указаниям.", eyebrow:"После регистрации",
+    guide:"Как добраться до вашего номера",
+    mainH:"В главном здании",
+    main:["Пройдите через стеклянную дверь рядом с рецепцией и поверните направо.","Там вы найдете лифт.","Пожалуйста, плотно закрывайте двери лифта при выходе на верхнем этаже."],
+    annexH:"В пристройке",
+    annex:["Спуститесь по лестнице рядом с зеркалом, через коридор с красными кинокреслами.","В конце коридора поверните направо и пройдите через открытую стеклянную дверь.","Слева от аварийного выхода вы найдете лифт.","Пожалуйста, ещё раз поверните налево при выходе на верхнем этаже."],
+    f1:"1-й этаж", f2:"2-й этаж",
+    closing:"Желаем вам приятного проживания!"},
+
+  uk:{name:"Українська", title:"Як дістатися до вашого номера", lead:"Виберіть мову та дотримуйтесь вказівок.", eyebrow:"Після реєстрації",
+    guide:"Як дістатися до вашого номера",
+    mainH:"В основній будівлі",
+    main:["Пройдіть через скляні двері поруч з рецепцією та поверніть праворуч.","Там ви знайдете ліфт.","Будь ласка, щільно зачиняйте двері ліфта при виході на верхньому поверсі."],
+    annexH:"У прибудові",
+    annex:["Спустіться сходами поруч із дзеркалом, через коридор із червоними кінокріслами.","В кінці коридору поверніть праворуч і пройдіть через відкриті скляні двері.","Зліва від аварійного виходу ви знайдете ліфт.","Будь ласка, ще раз поверніть ліворуч при виході на верхньому поверсі."],
+    f1:"1-й поверх", f2:"2-й поверх",
+    closing:"Бажаємо вам приємного перебування!"},
+
+  ja:{name:"日本語", title:"お部屋までの行き方", lead:"言語を選んで案内に従ってください。", eyebrow:"チェックイン後",
+    guide:"お部屋までの行き方",
+    mainH:"メインビルの場合",
+    main:["受付の横にあるガラスのドアを通り、右に曲がってください。","そこにエレベーターがあります。","上の階で降りるときは、エレベーターのドアをしっかり閉めてください。"],
+    annexH:"別棟の場合",
+    annex:["鏡の横の階段を下り、赤いシネマシートのある廊下を通り抜けてください。","廊下の終わりで右に曲がり、開いているガラスのドアを通ります。","非常口の横、左側にエレベーターがあります。","上の階で降りるときは、もう一度左に曲がってください。"],
+    f1:"1階", f2:"2階",
+    closing:"快適なご滞在をお祈りいたします！"},
+
+  zh:{name:"中文", title:"如何前往您的房间", lead:"请选择语言并按照指示前往。", eyebrow:"登记后",
+    guide:"如何前往您的房间",
+    mainH:"在主楼",
+    main:["请通过接待处旁的玻璃门，向右转。","那里有电梯。","上楼时请确保电梯门关紧。"],
+    annexH:"在附楼",
+    annex:["请从镜子旁的楼梯下去，穿过有红色影院座椅的走廊。","在走廊尽头向右转，经过打开的玻璃门。","在紧急出口旁，您会在左侧找到电梯。","上楼时请再向左转。"],
+    f1:"1楼", f2:"2楼",
+    closing:"祝您住宿愉快！"},
+
+  ro:{name:"Română", title:"Cum să ajungeți la camera dumneavoastră", lead:"Alegeți limba și urmați indicațiile.", eyebrow:"După check-in",
+    guide:"Cum să ajungeți la camera dumneavoastră",
+    mainH:"În clădirea principală",
+    main:["Mergeți prin ușa de sticlă de lângă recepție și virați la dreapta.","Acolo veți găsi liftul.","Vă rugăm să închideți bine ușile liftului când ieșiți la etajul superior."],
+    annexH:"În anexă",
+    annex:["Coborâți scările de lângă oglindă, pe coridorul cu fotolii de cinema roșii.","La capătul coridorului, virați la dreapta și treceți prin ușa de sticlă deschisă.","Lângă ieșirea de urgență, găsiți liftul pe partea stângă.","Vă rugăm să virați din nou la stânga când ieșiți la etajul superior."],
+    f1:"Etajul 1", f2:"Etajul 2",
+    closing:"Vă dorim o ședere plăcută!"},
+
+  pl:{name:"Polski", title:"Jak dotrzeć do swojego pokoju", lead:"Wybierz język i postępuj zgodnie ze wskazówkami.", eyebrow:"Po zameldowaniu",
+    guide:"Jak dotrzeć do swojego pokoju",
+    mainH:"W głównym budynku",
+    main:["Przejdź przez szklane drzwi obok recepcji i skręć w prawo.","Tam znajdziesz windę.","Proszę dokładnie zamykać drzwi windy przy wyjściu na górnym piętrze."],
+    annexH:"W budynku aneksu",
+    annex:["Zejdź po schodach obok lustra, przez korytarz z czerwonymi fotelami kinowymi.","Na końcu korytarza skręć w prawo i przejdź przez otwarte szklane drzwi.","Obok wyjścia awaryjnego znajdziesz windę po lewej stronie.","Proszę skręcić jeszcze raz w lewo przy wyjściu na górnym piętrze."],
+    f1:"1. piętro", f2:"2. piętro",
+    closing:"Życzymy przyjemnego pobytu!"},
+
+  cs:{name:"Čeština", title:"Jak se dostat do vašeho pokoje", lead:"Vyberte jazyk a postupujte podle pokynů.", eyebrow:"Po registraci",
+    guide:"Jak se dostat do vašeho pokoje",
+    mainH:"V hlavní budově",
+    main:["Projděte skleněnými dveřmi vedle recepce a zahněte doprava.","Tam najdete výtah.","Prosím, zavírejte dveře výtahu pevně při odchodu z horního patra."],
+    annexH:"V přístavbě",
+    annex:["Sestupte po schodech vedle zrcadla, chodbou s červenými kinosedadly.","Na konci chodby zahněte doprava a projděte otevřenými skleněnými dveřmi.","Vedle nouzového východu najdete výtah po levé straně.","Prosím, zahněte znovu vlevo při odchodu z horního patra."],
+    f1:"1. patro", f2:"2. patro",
+    closing:"Přejeme vám příjemný pobyt!"},
+
+  sr:{name:"Srpski", title:"Kako doći do vaše sobe", lead:"Izaberite jezik i pratite uputstva.", eyebrow:"Nakon prijave",
+    guide:"Kako doći do vaše sobe",
+    mainH:"U glavnoj zgradi",
+    main:["Prođite kroz staklena vrata pored recepcije i skrenite desno.","Tamo ćete pronaći lift.","Molimo vas da dobro zatvorite vrata lifta kada izađete na gornjem spratu."],
+    annexH:"U aneksu",
+    annex:["Siđite niz stepenice pored ogledala, kroz hodnik sa crvenim bioskopskim stolicama.","Na kraju hodnika skrenite desno i prođite kroz otvorena staklena vrata.","Pored izlaza za hitne slučajeve, lift se nalazi s leve strane.","Molimo vas da ponovo skrenete levo kada izađete na gornjem spratu."],
+    f1:"Prvi sprat", f2:"Drugi sprat",
+    closing:"Želimo vam prijatan boravak!"},
+
+  hr:{name:"Hrvatski", title:"Kako doći do vaše sobe", lead:"Odaberite jezik i slijedite upute.", eyebrow:"Nakon prijave",
+    guide:"Kako doći do vaše sobe",
+    mainH:"U glavnoj zgradi",
+    main:["Prođite kroz staklena vrata pored recepcije i skrenite desno.","Tamo ćete pronaći lift.","Molimo vas da dobro zatvorite vrata lifta kada izlazite na gornjem katu."],
+    annexH:"U aneksu",
+    annex:["Siđite niz stepenice pored ogledala, kroz hodnik s crvenim kino sjedalima.","Na kraju hodnika skrenite desno i prođite kroz otvorena staklena vrata.","Pored izlaza za hitne slučajeve, lift se nalazi s lijeve strane.","Molimo vas da ponovno skrenete lijevo kada izlazite na gornjem katu."],
+    f1:"Prvi kat", f2:"Drugi kat",
+    closing:"Želimo vam ugodan boravak!"},
+
+  pt:{name:"Português", title:"Como chegar ao seu quarto", lead:"Escolha o seu idioma e siga as indicações.", eyebrow:"Após o check-in",
+    guide:"Como chegar ao seu quarto",
+    mainH:"No prédio principal",
+    main:["Passe pela porta de vidro ao lado da recepção e vire à direita.","Lá você encontrará o elevador.","Por favor, feche bem as portas do elevador ao sair no andar superior."],
+    annexH:"No anexo",
+    annex:["Desça as escadas ao lado do espelho, pelo corredor com os assentos de cinema vermelhos.","No final do corredor, vire à direita e passe pela porta de vidro aberta.","Ao lado da saída de emergência, você encontrará o elevador à esquerda.","Por favor, vire à esquerda novamente ao sair no andar superior."],
+    f1:"1º andar", f2:"2º andar",
+    closing:"Desejamos a você uma estadia agradável!"},
+
+  ar:{name:"العربية", rtl:true, title:"كيفية الوصول إلى غرفتك", lead:"اختر لغتك واتبع الإرشادات.", eyebrow:"بعد تسجيل الوصول",
+    guide:"كيفية الوصول إلى غرفتك",
+    mainH:"في المبنى الرئيسي",
+    main:["اذهب عبر الباب الزجاجي بجوار الاستقبال وانعطف إلى اليمين.","ستجد المصعد هناك.","يرجى إغلاق أبواب المصعد بإحكام عند الخروج في الطابق العلوي."],
+    annexH:"في المبنى الملحق",
+    annex:["انزل الدرج بجانب المرآة، عبر الممر الذي يحتوي على كراسي السينما الحمراء.","في نهاية الممر، انعطف إلى اليمين وادخل عبر الباب الزجاجي المفتوح.","بجانب مخرج الطوارئ، ستجد المصعد على اليسار.","يرجى الانعطاف إلى اليسار مرة أخرى عند الخروج في الطابق العلوي."],
+    f1:"الطابق الأول", f2:"الطابق الثاني",
+    closing:"نتمنى لك إقامة ممتعة!"}
+};
+
+const order = ["de","en","es","it","fr","ru","uk","ja","zh","ro","pl","cs","sr","hr","pt","ar"];
+
+function render(code){
+  const d = L[code];
+  document.documentElement.lang = code;
+  document.documentElement.dir = d.rtl ? "rtl" : "ltr";
+
+  document.getElementById("eyebrow").textContent = d.eyebrow;
+  document.getElementById("page-title").textContent = d.title;
+  document.getElementById("page-lead").textContent = d.lead;
+  document.getElementById("guide-title").textContent = d.guide;
+
+  document.getElementById("main-h").textContent = d.mainH;
+  document.getElementById("main-steps").innerHTML = d.main.map(s=>`<li><span class="arr">→</span><span>${s}</span></li>`).join("");
+  document.getElementById("main-rooms").innerHTML =
+    `<span class="room-chip"><b>${d.f1}:</b> ${ROOMS.main.f1}</span><span class="room-chip"><b>${d.f2}:</b> ${ROOMS.main.f2}</span>`;
+
+  document.getElementById("annex-h").textContent = d.annexH;
+  document.getElementById("annex-steps").innerHTML = d.annex.map(s=>`<li><span class="arr">→</span><span>${s}</span></li>`).join("");
+  document.getElementById("annex-rooms").innerHTML =
+    `<span class="room-chip"><b>${d.f1}:</b> ${ROOMS.annex.f1}</span><span class="room-chip"><b>${d.f2}:</b> ${ROOMS.annex.f2}</span>`;
+
+  document.getElementById("closing").textContent = d.closing;
+
+  document.querySelectorAll(".lang-btn").forEach(b=>b.classList.toggle("active", b.dataset.code===code));
+}
+
+// build language buttons
+const grid = document.getElementById("langGrid");
+order.forEach(code=>{
+  const b=document.createElement("button");
+  b.className="lang-btn";b.dataset.code=code;b.textContent=L[code].name;
+  b.onclick=()=>render(code);
+  grid.appendChild(b);
+});
+
+// auto-detect browser language, fallback de
+const nav=(navigator.language||"de").slice(0,2).toLowerCase();
+render(L[nav]?nav:"de");
+</script>
+</body>
+</html>

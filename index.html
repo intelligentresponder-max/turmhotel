@@ -3,80 +3,458 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Turmhotel Frankfurt · Gästeportal</title>
-<meta name="description" content="Willkommen im Turmhotel Frankfurt. Alle Informationen für Ihren Aufenthalt.">
+
+<!-- SEO 2026: Primary Meta -->
+<title>André Schwarz — Freier Texter Frankfurt | Conversion Copy & Verkaufstexte</title>
+<meta name="description" content="Freier Texter in Frankfurt am Main. Verkaufstexte, Landingpages, politische Programme, zweisprachig DE/EN. Direktvertrieb-Hintergrund, Cambridge C1. Jetzt anfragen.">
+<meta name="keywords" content="Texter Frankfurt, Copywriter Frankfurt, Verkaufstexte, Landingpage Texter, Conversion Copy, zweisprachig Texter, Energie Texte, politische Texte, Ghostwriter Frankfurt">
+<meta name="author" content="André Schwarz">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://intelligentresponder-max.github.io/texter-portfolio/">
+
+<!-- Open Graph -->
+<meta property="og:type" content="website">
+<meta property="og:title" content="André Schwarz — Freier Texter Frankfurt | Conversion Copy">
+<meta property="og:description" content="Verkaufstexte, Landingpages und politische Texte aus Frankfurt. Direktvertrieb-Hintergrund, Cambridge C1, zweisprachig DE/EN.">
+<meta property="og:url" content="https://intelligentresponder-max.github.io/texter-portfolio/">
+<meta property="og:locale" content="de_DE">
+<meta property="og:site_name" content="André Schwarz — Freier Texter Frankfurt">
+
+<!-- GEO / AEO: Strukturierte Daten für KI-Suche 2026 -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Person",
+      "@id": "https://intelligentresponder-max.github.io/texter-portfolio/#person",
+      "name": "André Schwarz",
+      "jobTitle": "Freier Texter und Copywriter",
+      "description": "Freier Texter in Frankfurt am Main mit Direktvertrieb-Hintergrund. Spezialisiert auf Conversion Copy, Verkaufstexte, politische Programme und zweisprachige Inhalte (DE/EN). Cambridge C1 Advanced.",
+      "url": "https://intelligentresponder-max.github.io/texter-portfolio/",
+      "email": "andre.schwarz1@t-online.de",
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "Frankfurt am Main",
+        "addressCountry": "DE"
+      },
+      "knowsLanguage": ["de", "en"],
+      "hasCredential": {
+        "@type": "EducationalOccupationalCredential",
+        "name": "Cambridge Certificate in Advanced English (C1)"
+      }
+    },
+    {
+      "@type": "ProfessionalService",
+      "@id": "https://intelligentresponder-max.github.io/texter-portfolio/#service",
+      "name": "André Schwarz — Freier Texter Frankfurt",
+      "provider": {"@id": "https://intelligentresponder-max.github.io/texter-portfolio/#person"},
+      "areaServed": {"@type": "City", "name": "Frankfurt am Main"},
+      "serviceType": ["Verkaufstexte", "Landingpages", "Conversion Copy", "Politische Texte", "Ghostwriting", "Zweisprachige Texte DE/EN"],
+      "url": "https://intelligentresponder-max.github.io/texter-portfolio/"
+    },
+    {
+      "@type": "WebSite",
+      "url": "https://intelligentresponder-max.github.io/texter-portfolio/",
+      "name": "André Schwarz — Freier Texter Frankfurt",
+      "inLanguage": "de"
+    }
+  ]
+}
+</script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..900;1,9..144,300..900&family=Spline+Sans+Mono:wght@400;500;600&family=Spline+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+
 <style>
-  :root{--night:#12161d;--night-2:#1a1f29;--brass:#c4a35a;--brass-dim:#9c8147;--line:rgba(196,163,90,.22);--text:#e9e4d8;--muted:#9aa0ab;}
-  *{box-sizing:border-box;margin:0;padding:0}
+  :root{
+    --ink:#0c0a08;
+    --ink-soft:#161310;
+    --paper:#f4ede0;
+    --gold:#c9a227;
+    --gold-bright:#e8c14f;
+    --muted:#9b9085;
+    --line:rgba(201,162,39,.22);
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
   html{scroll-behavior:smooth}
-  body{background:var(--night);color:var(--text);font-family:Georgia,"Times New Roman",serif;line-height:1.6;-webkit-font-smoothing:antialiased;}
-  .wrap{max-width:880px;margin:0 auto;padding:0 20px}
-  .langbar{border-bottom:1px solid var(--line);background:var(--night-2);position:sticky;top:0;z-index:10;}
-  .langbar .wrap{display:flex;align-items:center;justify-content:space-between;padding:10px 20px;gap:12px;flex-wrap:wrap;}
-  .langbar small{color:var(--muted);font-family:system-ui,sans-serif;font-size:12px;letter-spacing:.08em;text-transform:uppercase}
-  .langselect{background:var(--night);color:var(--text);border:1px solid var(--line);border-radius:6px;padding:8px 12px;font-family:system-ui,sans-serif;font-size:15px;min-width:160px;}
-  header.hero{text-align:center;padding:64px 0 48px;}
-  .tower{width:46px;height:auto;margin:0 auto 22px;display:block;opacity:.95;}
-  .eyebrow{font-family:system-ui,sans-serif;font-size:12px;letter-spacing:.34em;text-transform:uppercase;color:var(--brass);margin-bottom:18px;}
-  header.hero h1{font-size:clamp(34px,8vw,56px);font-weight:400;line-height:1.1;margin-bottom:16px;}
-  header.hero p.lead{color:var(--muted);font-size:clamp(16px,4.5vw,19px);max-width:520px;margin:0 auto;}
-  .rule{width:64px;height:1px;background:var(--brass);margin:28px auto 0;opacity:.6;}
-  main{padding:8px 0 56px}
-  .grid{display:grid;grid-template-columns:1fr;gap:14px;margin-top:32px}
-  @media(min-width:620px){.grid{grid-template-columns:1fr 1fr}}
-  .card{display:block;text-decoration:none;color:inherit;background:var(--night-2);border:1px solid var(--line);border-radius:12px;padding:24px 22px;transition:border-color .2s ease,transform .2s ease;}
-  .card:hover,.card:focus-visible{border-color:var(--brass);transform:translateY(-2px);outline:none;}
-  .card .num{font-family:system-ui,sans-serif;font-size:12px;letter-spacing:.18em;color:var(--brass-dim);}
-  .card h2{font-size:23px;font-weight:400;margin:10px 0 6px;}
-  .card p{color:var(--muted);font-size:15px;font-family:system-ui,sans-serif}
-  .card.emergency{border-color:rgba(196,90,90,.4)}
-  .card.emergency:hover{border-color:#c45a5a}
-  .card.emergency .num{color:#c45a5a}
-  footer{border-top:1px solid var(--line);padding:28px 0 48px;text-align:center;color:var(--muted);font-family:system-ui,sans-serif;font-size:13px;}
-  footer strong{color:var(--text);font-weight:600}
+  body{
+    background:var(--ink);
+    color:var(--paper);
+    font-family:'Spline Sans',sans-serif;
+    line-height:1.6;
+    overflow-x:hidden;
+    -webkit-font-smoothing:antialiased;
+  }
+  body::before{
+    content:"";position:fixed;inset:0;z-index:0;pointer-events:none;
+    background:
+      radial-gradient(900px 500px at 80% -10%,rgba(201,162,39,.10),transparent 60%),
+      radial-gradient(700px 600px at -10% 100%,rgba(201,162,39,.06),transparent 60%);
+  }
+  body::after{
+    content:"";position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.04;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='120' height='120' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+  .wrap{position:relative;z-index:1;max-width:1080px;margin:0 auto;padding:0 28px}
+
+  /* NAV */
+  nav{
+    position:sticky;top:0;z-index:100;
+    background:rgba(12,10,8,0.92);backdrop-filter:blur(14px);
+    border-bottom:1px solid var(--line);
+    padding:14px 28px;display:flex;justify-content:space-between;align-items:center;
+  }
+  .nav-brand{
+    font-family:'Fraunces',serif;font-size:1rem;
+    color:var(--gold);text-decoration:none;letter-spacing:0.01em;
+  }
+  .nav-links{display:flex;gap:28px;list-style:none}
+  .nav-links a{
+    color:var(--muted);text-decoration:none;font-size:.8rem;
+    letter-spacing:.1em;text-transform:uppercase;
+    font-family:'Spline Sans Mono',monospace;transition:color .2s;
+  }
+  .nav-links a:hover{color:var(--gold)}
+
+  /* PDF BANNER */
+  .pdf-banner{
+    display:inline-flex;align-items:center;gap:10px;
+    background:rgba(201,162,39,.12);border:1px solid var(--line);
+    border-radius:2px;padding:10px 18px;text-decoration:none;
+    font-family:'Spline Sans Mono',monospace;font-size:.75rem;
+    letter-spacing:.12em;text-transform:uppercase;color:var(--gold);
+    transition:.25s;
+  }
+  .pdf-banner:hover{background:rgba(201,162,39,.22);border-color:var(--gold)}
+  .pdf-banner svg{flex-shrink:0}
+
+  /* HERO */
+  header{padding:100px 0 90px;position:relative}
+  .eyebrow{
+    font-family:'Spline Sans Mono',monospace;font-size:.72rem;letter-spacing:.35em;
+    text-transform:uppercase;color:var(--gold);margin-bottom:28px;
+    opacity:0;animation:rise .8s .1s forwards;
+  }
+  h1{
+    font-family:'Fraunces',serif;font-weight:600;line-height:1.02;
+    font-size:clamp(2.8rem,7vw,5.4rem);letter-spacing:-.02em;
+    opacity:0;animation:rise .9s .25s forwards;
+  }
+  h1 em{font-style:italic;color:var(--gold-bright)}
+  .lede{
+    margin-top:30px;max-width:620px;font-size:clamp(1.05rem,2vw,1.3rem);
+    color:#d8cdbd;opacity:0;animation:rise .9s .45s forwards;
+  }
+  .cta-row{margin-top:42px;display:flex;gap:18px;flex-wrap:wrap;opacity:0;animation:rise .9s .6s forwards}
+  .btn{
+    display:inline-block;padding:15px 30px;border-radius:2px;font-weight:600;
+    font-size:.95rem;text-decoration:none;transition:.25s;letter-spacing:.01em;
+  }
+  .btn-gold{background:var(--gold);color:var(--ink)}
+  .btn-gold:hover{background:var(--gold-bright);transform:translateY(-2px)}
+  .btn-ghost{border:1px solid var(--line);color:var(--paper)}
+  .btn-ghost:hover{border-color:var(--gold);color:var(--gold-bright)}
+
+  /* SECTION SHARED */
+  section{padding:70px 0;position:relative}
+  .sec-label{
+    font-family:'Spline Sans Mono',monospace;font-size:.72rem;letter-spacing:.3em;
+    text-transform:uppercase;color:var(--gold);margin-bottom:18px;display:flex;align-items:center;gap:14px;
+  }
+  .sec-label::before{content:"";width:34px;height:1px;background:var(--gold)}
+  h2{font-family:'Fraunces',serif;font-weight:500;font-size:clamp(1.8rem,4vw,2.8rem);letter-spacing:-.01em;line-height:1.1}
+
+  /* LEISTUNGEN */
+  .skills{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:1px;margin-top:46px;background:var(--line);border:1px solid var(--line)}
+  .skill{background:var(--ink);padding:34px 28px;transition:.3s}
+  .skill:hover{background:var(--ink-soft)}
+  .skill .num{font-family:'Spline Sans Mono',monospace;color:var(--gold);font-size:.8rem;letter-spacing:.1em}
+  .skill h3{font-family:'Fraunces',serif;font-weight:500;font-size:1.3rem;margin:14px 0 10px}
+  .skill p{color:var(--muted);font-size:.93rem}
+
+  /* ARBEITSPROBEN TEASER */
+  .arbeitsproben-teaser{
+    background:linear-gradient(135deg,rgba(201,162,39,.08),rgba(201,162,39,.04));
+    border:1px solid var(--line);border-radius:4px;
+    padding:40px;display:flex;justify-content:space-between;
+    align-items:center;flex-wrap:wrap;gap:24px;margin-top:46px;
+  }
+  .arbeitsproben-teaser:hover{border-color:rgba(201,162,39,.45)}
+  .teaser-count{
+    font-family:'Spline Sans Mono',monospace;font-size:.7rem;
+    letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin-bottom:10px;
+  }
+  .teaser-title{
+    font-family:'Fraunces',serif;font-size:1.6rem;font-weight:500;
+    color:var(--paper);margin-bottom:8px;
+  }
+  .teaser-desc{font-size:.88rem;color:var(--muted);max-width:460px}
+
+  /* PORTFOLIO */
+  .work{display:grid;gap:22px;margin-top:46px}
+  .card{
+    border:1px solid var(--line);border-radius:3px;padding:38px 36px;
+    background:linear-gradient(180deg,rgba(255,255,255,.015),transparent);
+    transition:.35s;position:relative;overflow:hidden;
+  }
+  .card::before{
+    content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--gold);
+    transform:scaleY(0);transform-origin:top;transition:.35s;
+  }
+  .card:hover{border-color:rgba(201,162,39,.45);transform:translateY(-3px)}
+  .card:hover::before{transform:scaleY(1)}
+  .card .tag{font-family:'Spline Sans Mono',monospace;font-size:.7rem;letter-spacing:.22em;text-transform:uppercase;color:var(--gold)}
+  .card h3{font-family:'Fraunces',serif;font-weight:500;font-size:1.55rem;margin:12px 0 12px;color:var(--paper)}
+  .card p{color:#cabfb0;max-width:760px}
+  .card .meta{margin-top:18px;font-size:.85rem;color:var(--muted);font-family:'Spline Sans Mono',monospace}
+  .card .meta a{color:var(--gold);text-decoration:none}
+  .card .meta a:hover{color:var(--gold-bright)}
+
+  /* PROOF / WERTE */
+  .values{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:34px;margin-top:46px}
+  .value h3{font-family:'Fraunces',serif;font-style:italic;font-weight:400;font-size:1.4rem;color:var(--gold-bright);margin-bottom:10px}
+  .value p{color:#cabfb0;font-size:.95rem}
+
+  /* CTA STRIP */
+  .final{text-align:center;padding:100px 0 80px}
+  .final h2{max-width:680px;margin:0 auto 18px}
+  .final p{color:var(--muted);max-width:520px;margin:0 auto 36px}
+  .final-actions{display:flex;gap:18px;justify-content:center;flex-wrap:wrap;align-items:center}
+
+  footer{border-top:1px solid var(--line);padding:38px 0;text-align:center;color:var(--muted);font-size:.85rem;font-family:'Spline Sans Mono',monospace}
+  footer a{color:var(--gold);text-decoration:none}
+  footer a:hover{color:var(--gold-bright)}
+  .footer-pdf{margin-top:14px}
+  .footer-links{margin-top:10px;display:flex;gap:20px;justify-content:center;flex-wrap:wrap}
+
+  @keyframes rise{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:translateY(0)}}
+
+  @media(max-width:640px){
+    nav{padding:12px 20px}
+    .nav-links{display:none}
+    header{padding:70px 0 50px}
+    section{padding:50px 0}
+    .card{padding:28px 24px}
+    .arbeitsproben-teaser{padding:28px}
+  }
 </style>
 </head>
+
 <body>
-  <div class="langbar"><div class="wrap">
-    <small data-i18n="langlabel">Sprache</small>
-    <select class="langselect" id="lang" aria-label="Sprache wählen / Choose language">
-      <option value="de">Deutsch</option><option value="en">English</option>
-      <option value="fr">Français</option><option value="es">Español</option>
-      <option value="it">Italiano</option><option value="tr">Türkçe</option>
-      <option value="ar">العربية</option><option value="ru">Русский</option>
-      <option value="zh">中文</option><option value="bn">বাংলা</option>
-    </select>
-  </div></div>
-  <header class="hero"><div class="wrap">
-    <svg class="tower" viewBox="0 0 40 80" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-      <path d="M20 2 L26 12 L14 12 Z" fill="#c4a35a"/>
-      <rect x="14" y="12" width="12" height="6" fill="#c4a35a"/>
-      <rect x="12" y="18" width="16" height="58" fill="none" stroke="#c4a35a" stroke-width="1.5"/>
-      <rect x="17" y="26" width="6" height="9" stroke="#c4a35a" stroke-width="1.2"/>
-      <rect x="17" y="42" width="6" height="9" stroke="#c4a35a" stroke-width="1.2"/>
-      <rect x="17" y="58" width="6" height="13" stroke="#c4a35a" stroke-width="1.2"/>
-    </svg>
-    <div class="eyebrow" data-i18n="eyebrow">Turmhotel Frankfurt</div>
-    <h1 data-i18n="welcome">Herzlich willkommen</h1>
-    <p class="lead" data-i18n="lead">Schön, dass Sie da sind. Hier finden Sie alles für einen angenehmen Aufenthalt.</p>
-    <div class="rule"></div>
-  </div></header>
-  <main><div class="wrap"><div class="grid">
-    <a class="card" href="checkin.html"><div class="num">01</div><h2 data-i18n="t_arrival">Ankunft &amp; Check-in</h2><p data-i18n="d_arrival">Anreise, Schlüssel und Late Check-in – Schritt für Schritt.</p></a>
-    <a class="card" href="zimmer.html"><div class="num">02</div><h2 data-i18n="t_room">Zimmer &amp; Service</h2><p data-i18n="d_room">WLAN, Frühstück, Rezeptionszeiten und mehr.</p></a>
-    <a class="card" href="willkommen.html"><div class="num">03</div><h2 data-i18n="t_book">Willkommensbuch</h2><p data-i18n="d_book">Alles Wissenswerte rund um Ihren Aufenthalt.</p></a>
-    <a class="card" href="umgebung.html"><div class="num">04</div><h2 data-i18n="t_city">Frankfurt entdecken</h2><p data-i18n="d_city">ÖPNV, Restaurants und Tipps für die Stadt.</p></a>
-    <a class="card emergency" href="notfall.html"><div class="num" data-i18n="n_emergency">NOTFALL</div><h2 data-i18n="t_emergency">Im Notfall</h2><p data-i18n="d_emergency">Wichtige Nummern und das richtige Verhalten. Notruf 112.</p></a>
-  </div></div></main>
-  <footer><div class="wrap"><strong>Turmhotel Frankfurt</strong><br><span data-i18n="foot">Rezeption rund um die Uhr für Sie da.</span></div></footer>
-  <script>
-    const i18n={
-      de:{langlabel:"Sprache",eyebrow:"Turmhotel Frankfurt",welcome:"Herzlich willkommen",lead:"Schön, dass Sie da sind. Hier finden Sie alles für einen angenehmen Aufenthalt.",t_arrival:"Ankunft & Check-in",d_arrival:"Anreise, Schlüssel und Late Check-in – Schritt für Schritt.",t_room:"Zimmer & Service",d_room:"WLAN, Frühstück, Rezeptionszeiten und mehr.",t_book:"Willkommensbuch",d_book:"Alles Wissenswerte rund um Ihren Aufenthalt.",t_city:"Frankfurt entdecken",d_city:"ÖPNV, Restaurants und Tipps für die Stadt.",n_emergency:"NOTFALL",t_emergency:"Im Notfall",d_emergency:"Wichtige Nummern und das richtige Verhalten. Notruf 112.",foot:"Rezeption rund um die Uhr für Sie da."},
-      en:{langlabel:"Language",eyebrow:"Turmhotel Frankfurt",welcome:"Welcome",lead:"We are glad you are here. Everything for a pleasant stay is right here.",t_arrival:"Arrival & Check-in",d_arrival:"Getting here, keys and late check-in – step by step.",t_room:"Room & Service",d_room:"Wi-Fi, breakfast, reception hours and more.",t_book:"Welcome Book",d_book:"Everything worth knowing about your stay.",t_city:"Discover Frankfurt",d_city:"Public transport, restaurants and city tips.",n_emergency:"EMERGENCY",t_emergency:"In an Emergency",d_emergency:"Important numbers and what to do. Emergency call 112.",foot:"Reception is here for you around the clock."}
-    };
-    const sel=document.getElementById('lang');
-    function apply(lang){const d=i18n[lang]||i18n.de;document.documentElement.lang=lang;document.documentElement.dir=(lang==='ar')?'rtl':'ltr';document.querySelectorAll('[data-i18n]').forEach(el=>{const k=el.getAttribute('data-i18n');if(d[k])el.textContent=d[k];});}
-    sel.addEventListener('change',e=>apply(e.target.value));apply('de');
-  </script>
+
+  <!-- NAV -->
+  <nav aria-label="Hauptnavigation">
+    <a href="/" class="nav-brand" aria-label="André Schwarz — Freier Texter Frankfurt">André Schwarz</a>
+    <ul class="nav-links" role="list">
+      <li><a href="#leistungen">Leistungen</a></li>
+      <li><a href="#arbeiten">Arbeiten</a></li>
+      <li><a href="arbeitsproben.html">Alle Arbeitsproben</a></li>
+      <li><a href="#kontakt">Kontakt</a></li>
+    </ul>
+  </nav>
+
+  <div class="wrap">
+
+    <!-- HERO -->
+    <header>
+      <p class="eyebrow">Freier Texter · Frankfurt am Main · DE / EN</p>
+      <h1>Texte, die nicht nur<br>gut klingen — <em>sondern verkaufen.</em></h1>
+      <p class="lede">Mein Hintergrund liegt im Direktvertrieb. Ich weiß aus erster Hand, welche Worte aus einem Interessenten einen Kunden machen — weil ich genau das jahrelang getan habe, bevor ich es aufgeschrieben habe.</p>
+      <div class="cta-row">
+        <a href="#kontakt" class="btn btn-gold">Projekt anfragen</a>
+        <a href="arbeitsproben.html" class="btn btn-ghost">Alle Arbeitsproben ansehen</a>
+        <a href="./Portfolio_Andre_Schwarz_v2.pdf" target="_blank" rel="noopener" class="pdf-banner" aria-label="Portfolio von André Schwarz als PDF herunterladen">
+          <svg width="14" height="16" viewBox="0 0 14 16" fill="none" aria-hidden="true"><path d="M2 0h7l5 5v11H2V0z" fill="none" stroke="currentColor" stroke-width="1.2"/><path d="M9 0v5h5" fill="none" stroke="currentColor" stroke-width="1.2"/><path d="M4 9h6M4 12h4" stroke="currentColor" stroke-width="1"/></svg>
+          Portfolio PDF
+        </a>
+      </div>
+    </header>
+
+    <!-- LEISTUNGEN -->
+    <section id="leistungen" aria-labelledby="leistungen-heading">
+      <div class="sec-label" aria-hidden="true">Schwerpunkte</div>
+      <h2 id="leistungen-heading">Worauf ich spezialisiert bin</h2>
+      <div class="skills" role="list">
+        <div class="skill" role="listitem">
+          <div class="num" aria-hidden="true">01</div>
+          <h3>Verkaufs&shy;texte</h3>
+          <p>Landingpages, Produkt&shy;beschreibungen und E-Mail-Strecken, optimiert auf Abschluss — nicht auf Applaus.</p>
+        </div>
+        <div class="skill" role="listitem">
+          <div class="num" aria-hidden="true">02</div>
+          <h3>Energie &amp; Versorger</h3>
+          <p>Als aktiver Energieberater kenne ich Tarife, Kunden&shy;einwände und die Sprache der Branche.</p>
+        </div>
+        <div class="skill" role="listitem">
+          <div class="num" aria-hidden="true">03</div>
+          <h3>Hotellerie</h3>
+          <p>Gäste&shy;kommunikation und Website-Texte aus eigener Praxis im Hotel&shy;betrieb.</p>
+        </div>
+        <div class="skill" role="listitem">
+          <div class="num" aria-hidden="true">04</div>
+          <h3>Politik &amp; Verwaltung</h3>
+          <p>Anträge, Programme und Positions&shy;papiere — präzise formuliert für ein anspruchsvolles Publikum.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ALLE ARBEITSPROBEN TEASER -->
+    <section aria-label="Portfolio-Übersicht">
+      <div class="arbeitsproben-teaser">
+        <div>
+          <div class="teaser-count">Portfolio · 15 Projekte · PDFs &amp; Live-Seiten</div>
+          <div class="teaser-title">Alle Arbeitsproben auf einen Blick</div>
+          <p class="teaser-desc">Von politischen Anträgen bis KfW-Businessplan, von Ökostrom-Landingpages bis Vereinsgründung — alle Projekte mit direkten PDF-Links und Repo-Verweisen.</p>
+        </div>
+        <a href="arbeitsproben.html" class="btn btn-gold" aria-label="Alle Arbeitsproben von André Schwarz ansehen">Alle ansehen →</a>
+      </div>
+    </section>
+
+    <!-- AUSGEWÄHLTE ARBEITEN -->
+    <section id="arbeiten" aria-labelledby="arbeiten-heading">
+      <div class="sec-label" aria-hidden="true">Ausgewählte Arbeiten</div>
+      <h2 id="arbeiten-heading">Arbeitsproben</h2>
+
+      <div style="margin-top:28px">
+        <a href="./Portfolio_Andre_Schwarz_v2.pdf" target="_blank" rel="noopener" class="pdf-banner" aria-label="Portfolio André Schwarz mit 10 Nischen-Illustrationen als PDF">
+          <svg width="14" height="16" viewBox="0 0 14 16" fill="none" aria-hidden="true"><path d="M2 0h7l5 5v11H2V0z" fill="none" stroke="currentColor" stroke-width="1.2"/><path d="M9 0v5h5" fill="none" stroke="currentColor" stroke-width="1.2"/><path d="M4 9h6M4 12h4" stroke="currentColor" stroke-width="1"/></svg>
+          Alle 10 Nischen als PDF — Portfolio herunterladen
+        </a>
+      </div>
+
+      <div class="work">
+
+        <article class="card" aria-label="Arbeitsprobe: Willkommensbuch Turmhotel Frankfurt">
+          <span class="tag">Hotellerie · Gästekommunikation</span>
+          <h3>Willkommensbuch — Turmhotel Frankfurt</h3>
+          <p>Mehrsprachiges Willkommensbuch und Gäste&shy;kommunikation für ein Frankfurter Stadthotel. Vom ersten Eindruck bis zur Abreise: Texte, die Orientierung geben und gleichzeitig die Marke tragen. Teil eines größeren Digitalisierungs- und Kommunikations&shy;projekts.</p>
+          <div class="meta">Konzept · Text · Mehrsprachig (DE / EN)</div>
+        </article>
+
+        <article class="card" aria-label="Arbeitsprobe: Wahlprogramm Freie Wähler Frankfurt 2026">
+          <span class="tag">Politik · Programmtext</span>
+          <h3>Wahlprogramm — Freie Wähler Frankfurt 2026</h3>
+          <p>Vollständige Neuschreibung des offiziellen Wahlprogramms zur Kommunalwahl 2026: komplexe kommunal&shy;politische Positionen über acht Themen&shy;felder hinweg in klare, überzeugende und wähler&shy;nahe Sprache übersetzt. Was übergeben wurde, war eine Copy-paste-Sammlung. Die Version, die heute im Internet steht, ist meine.</p>
+          <div class="meta"><a href="./Wahlprogramm-Freie-Waehler-Frankfurt-2026.pdf" target="_blank" rel="noopener" aria-label="Wahlprogramm Freie Wähler Frankfurt 2026 als PDF">PDF ansehen →</a> · Programmtext · Redaktion · Zielgruppen-Ansprache</div>
+        </article>
+
+        <article class="card" aria-label="Arbeitsprobe: Politische Anträge Ortsbeirat 10 Frankfurt">
+          <span class="tag">Politik · Verwaltungssprache</span>
+          <h3>Anträge im Ortsbeirat — BFF Bürger Für Frankfurt e.V.</h3>
+          <p>Politische Anträge als Copywriter für die Fraktion im Ortsbeirat 10, Frankfurt am Main. Formal korrekte Verwaltungs&shy;sprache mit klarer Argumentations&shy;kette — und der beste Beweis: Die Anträge wurden überwiegend <strong>einstimmig angenommen</strong>, einer sogar fraktions&shy;übergreifend von allen Parteien getragen.</p>
+          <div class="meta"><a href="./antraege.html" aria-label="Politische Anträge von André Schwarz ansehen">Anträge ansehen →</a> · Antragstext · Argumentation · Amtsdeutsch</div>
+        </article>
+
+        <article class="card" aria-label="Arbeitsprobe: Willkommensbuch in 30 Sprachen">
+          <span class="tag">Hotellerie · Mehrsprachig</span>
+          <h3>Willkommensbuch in 30 Sprachen</h3>
+          <p>Ein umfassendes Hotel-Willkommensbuch, verfasst in 30 Sprachen — nicht maschinell übersetzt, sondern hand&shy;werklich lokalisiert für jede Kultur. Jede Sprache führt den Gast durch die gleiche praktische Struktur (Check-in, WiFi, Notfälle, Parken, Mobilität, Frühstück, Zimmer, Rezeption, Business, Sehens&shy;würdigkeiten). Das ist nicht nur sprachlich, das ist Service-Design.</p>
+          <div class="meta"><a href="./willkommensbuch.html" aria-label="Willkommensbuch-Showcase ansehen">Showcase ansehen →</a> · 30 Sprachen · Lokalisiert · Gästeerlebnis</div>
+        </article>
+
+        <article class="card" aria-label="Arbeitsprobe: CROWN Value-Betting-Tool">
+          <span class="tag">Tech · Produkt &amp; Konzept</span>
+          <h3>CROWN — Value-Betting-Tool (Konzept &amp; Entwurf)</h3>
+          <p>Konzeption und textliche Ausarbeitung eines eigenen daten&shy;gestützten Analyse-Systems: von der Produkt&shy;idee über die Funktions&shy;beschreibung bis zur verständlichen Erklärung komplexer Logik (Multi-Threading, Kelly-Criterion, Telegram-Bot). Beweis, dass ich technische Themen in klare Sprache übersetze.</p>
+          <div class="meta"><a href="./crown-valuebet.html" style="color:var(--gold)" aria-label="CROWN Value-Bet-Tool Arbeitsprobe ansehen">Arbeitsprobe ansehen →</a> · Produkttext · Konzept · Technik verständlich erklärt</div>
+        </article>
+
+        <article class="card" aria-label="Arbeitsprobe: BanglaHilfe Deutschland zweisprachige Plattform">
+          <span class="tag">Web · Bilingual · Social Impact</span>
+          <h3>BanglaHilfe Deutschland — Service-Plattform</h3>
+          <p>Zweisprachige Service-Plattform (Deutsch / Bengali) für bangladeschische Zuwanderer in Deutschland. Verständliche Texte, die behördliche und alltägliche Hürden erklären, kombiniert mit Lead-Magnet-Seiten und integrierter Bezahl&shy;anbindung — Kommunikation, die Vertrauen schafft und Menschen wirklich weiterhilft.</p>
+          <div class="meta"><a href="https://intelligentresponder-max.github.io/bangla-hilfe" target="_blank" rel="noopener" aria-label="BanglaHilfe Deutschland Live-Seite">Live ansehen →</a> · DE / Bengali · Lead-Magnete · Gumroad</div>
+        </article>
+
+        <article class="card" aria-label="Arbeitsprobe: mindful7777 Wellness-Marke">
+          <span class="tag">Web · Wellness · GEO-optimiert</span>
+          <h3>mindful7777 — Wellness &amp; Selbsthypnose</h3>
+          <p>Aufbau einer Marke rund um wissenschaftlich fundierte Entspannung, Selbst&shy;hypnose und mentale Leistungs&shy;fähigkeit. Content-Strategie von Anfang an auf GEO (Generative Engine Optimization) ausgelegt — strukturiert, zitierfähig, für den KI-gestützten Suchraum 2026. Von Verkaufs&shy;texten bis Social-Media-Captions.</p>
+          <div class="meta"><a href="https://intelligentresponder-max.github.io/mindful7777" target="_blank" rel="noopener" aria-label="mindful7777 Wellness-Plattform ansehen">Live ansehen →</a> · GEO · Wellness · Gumroad · Markentext</div>
+        </article>
+
+        <article class="card" aria-label="Arbeitsprobe: Copy Code Agency Frankfurt">
+          <span class="tag">Agentur · Conversion Copy · KI</span>
+          <h3>Copy Code Agency — Digitale Produkte &amp; Conversion Copy</h3>
+          <p>Agentur für digitale Produkte mit Fullstack-Entwickler Tomasz Szafrański: drei Projekte in Entwicklung (KI-CV-Optimizer, Value Bet SaaS, IT-Recruiting-Plattform), jeder mit eigenem Verkaufs&shy;funnel. Meine Rolle: Conversion Copy, Brand &amp; SEO. In Aufbau — aber laufend.</p>
+          <div class="meta"><a href="https://intelligentresponder-max.github.io/copy-code-agency-website/" target="_blank" rel="noopener" aria-label="Copy Code Agency Website ansehen">Live ansehen →</a> · Conversion Copy · React · KI-Integration</div>
+        </article>
+
+        <article class="card" aria-label="Arbeitsprobe: Energie und Ökostrom Verkaufstexte">
+          <span class="tag">Energie · Verkaufstext · Mehrsprachig</span>
+          <h3>Energie &amp; Ökostrom — Verkaufstexte (ASGlobal)</h3>
+          <p>Verkaufs- und Fachtexte für digitale Energie-Werkzeuge: eine Ökostrom-Landingpage, die ehrlich gegen Greenwashing argumentiert und gleichzeitig auf Abschluss optimiert ist, ein vollständiges Energiemarkt-Glossar A–Z sowie ein Recruiting-Dokument in <strong>acht Sprachen</strong>. Fachlich fundiert aus eigener Praxis als Energieberater.</p>
+          <div class="meta">
+            <a href="./oekostrom-landingpage.pdf" target="_blank" rel="noopener" aria-label="Ökostrom Landingpage Frankfurt als PDF">Landingpage →</a> ·
+            <a href="./recruiting-8-sprachen.pdf" target="_blank" rel="noopener" aria-label="Recruiting-Texte in 8 Sprachen als PDF">Mehrsprachig →</a> ·
+            <a href="https://frankfurt-energie.online" target="_blank" rel="noopener" aria-label="Frankfurt Energie Online Website">Live →</a>
+            · Verkaufstext · DE + 7 Sprachen
+          </div>
+        </article>
+
+        <article class="card" aria-label="Arbeitsprobe: Strategiepapiere und formelle Korrespondenz">
+          <span class="tag">Fachtext · Strategie &amp; Recht</span>
+          <h3>Strategiepapiere &amp; formelle Korrespondenz</h3>
+          <p>Digitalisierungs-Roadmap für das Turmhotel Frankfurt (eigeninitiativ verfasst, inkl. PMS-Migration, Channel-Management und Revenue-Strategie) sowie formelle juristische Korrespondenz als Bevollmächtigter (§823 BGB, §1 HaftPflG). Präzision, wo jedes Wort zählt. Vollständige Dokumente auf Anfrage.</p>
+          <div class="meta"><a href="arbeitsproben.html" aria-label="Alle Strategiepapiere und Dokumente in den Arbeitsproben ansehen">Alle Dokumente →</a> · Strategietext · Juristisch · auf Anfrage</div>
+        </article>
+
+      </div>
+    </section>
+
+    <!-- WERTE -->
+    <section id="werte" aria-labelledby="werte-heading">
+      <div class="sec-label" aria-hidden="true">Arbeitsweise</div>
+      <h2 id="werte-heading">Was Sie von mir bekommen</h2>
+      <div class="values">
+        <div class="value">
+          <h3>Vom Kunden her gedacht</h3>
+          <p>Ich denke vom Kunden Ihres Kunden her — nicht vom Lehrbuch. Jeder Satz hat eine Aufgabe.</p>
+        </div>
+        <div class="value">
+          <h3>Pünktlich &amp; verlässlich</h3>
+          <p>Klare Absprachen, eingehaltene Deadlines, keine Floskeln. Sie wissen, woran Sie sind.</p>
+        </div>
+        <div class="value">
+          <h3>Zweisprachig</h3>
+          <p>Deutsch und Englisch — Cambridge C1 Advanced — für internationale Projekte aus einer Hand.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- KONTAKT -->
+    <section class="final" id="kontakt" aria-labelledby="kontakt-heading">
+      <div class="sec-label" style="justify-content:center" aria-hidden="true">Zusammenarbeit</div>
+      <h2 id="kontakt-heading">Ihr Text soll ein Ergebnis bringen —<br>kein hübsches Beiwerk.</h2>
+      <p>Schreiben Sie mir kurz, worum es geht. Sie bekommen zeitnah eine ehrliche Einschätzung, ob und wie ich helfen kann.</p>
+      <div class="final-actions">
+        <a href="mailto:andre.schwarz1@t-online.de" class="btn btn-gold" aria-label="E-Mail an André Schwarz senden">Projekt anfragen</a>
+        <a href="./Portfolio_Andre_Schwarz_v2.pdf" target="_blank" rel="noopener" class="pdf-banner" aria-label="Portfolio André Schwarz als PDF herunterladen">
+          <svg width="14" height="16" viewBox="0 0 14 16" fill="none" aria-hidden="true"><path d="M2 0h7l5 5v11H2V0z" fill="none" stroke="currentColor" stroke-width="1.2"/><path d="M9 0v5h5" fill="none" stroke="currentColor" stroke-width="1.2"/><path d="M4 9h6M4 12h4" stroke="currentColor" stroke-width="1"/></svg>
+          Portfolio PDF herunterladen
+        </a>
+      </div>
+    </section>
+
+  </div><!-- /wrap -->
+
+  <footer>
+    <div class="wrap">
+      <div>André Schwarz · Freier Texter · Frankfurt am Main · <a href="mailto:andre.schwarz1@t-online.de" aria-label="E-Mail an André Schwarz">E-Mail</a></div>
+      <div class="footer-links">
+        <a href="arbeitsproben.html">Alle Arbeitsproben</a>
+        <a href="antraege.html">Anträge</a>
+        <a href="willkommensbuch.html">Willkommensbuch</a>
+        <a href="crown-valuebet.html">CROWN v10</a>
+        <a href="https://github.com/intelligentresponder-max" target="_blank" rel="noopener" aria-label="GitHub-Profil von André Schwarz">GitHub</a>
+      </div>
+      <div class="footer-pdf">
+        <a href="./Portfolio_Andre_Schwarz_v2.pdf" target="_blank" rel="noopener" aria-label="Portfolio als PDF herunterladen">📄 Portfolio als PDF</a>
+      </div>
+    </div>
+  </footer>
+
 </body>
 </html>
