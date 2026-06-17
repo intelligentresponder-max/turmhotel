@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Turmhotel Frankfurt · Gästeportal</title>
+<meta name="description" content="Willkommen im Turmhotel Frankfurt. Alle Informationen für Ihren Aufenthalt.">
+<style>
+  :root{--night:#12161d;--night-2:#1a1f29;--brass:#c4a35a;--brass-dim:#9c8147;--line:rgba(196,163,90,.22);--text:#e9e4d8;--muted:#9aa0ab;}
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{background:var(--night);color:var(--text);font-family:Georgia,"Times New Roman",serif;line-height:1.6;-webkit-font-smoothing:antialiased;}
+  .wrap{max-width:880px;margin:0 auto;padding:0 20px}
+  .langbar{border-bottom:1px solid var(--line);background:var(--night-2);position:sticky;top:0;z-index:10;}
+  .langbar .wrap{display:flex;align-items:center;justify-content:space-between;padding:10px 20px;gap:12px;flex-wrap:wrap;}
+  .langbar small{color:var(--muted);font-family:system-ui,sans-serif;font-size:12px;letter-spacing:.08em;text-transform:uppercase}
+  .langselect{background:var(--night);color:var(--text);border:1px solid var(--line);border-radius:6px;padding:8px 12px;font-family:system-ui,sans-serif;font-size:15px;min-width:160px;}
+  header.hero{text-align:center;padding:64px 0 48px;}
+  .tower{width:46px;height:auto;margin:0 auto 22px;display:block;opacity:.95;}
+  .eyebrow{font-family:system-ui,sans-serif;font-size:12px;letter-spacing:.34em;text-transform:uppercase;color:var(--brass);margin-bottom:18px;}
+  header.hero h1{font-size:clamp(34px,8vw,56px);font-weight:400;line-height:1.1;margin-bottom:16px;}
+  header.hero p.lead{color:var(--muted);font-size:clamp(16px,4.5vw,19px);max-width:520px;margin:0 auto;}
+  .rule{width:64px;height:1px;background:var(--brass);margin:28px auto 0;opacity:.6;}
+  main{padding:8px 0 56px}
+  .grid{display:grid;grid-template-columns:1fr;gap:14px;margin-top:32px}
+  @media(min-width:620px){.grid{grid-template-columns:1fr 1fr}}
+  .card{display:block;text-decoration:none;color:inherit;background:var(--night-2);border:1px solid var(--line);border-radius:12px;padding:24px 22px;transition:border-color .2s ease,transform .2s ease;}
+  .card:hover,.card:focus-visible{border-color:var(--brass);transform:translateY(-2px);outline:none;}
+  .card .num{font-family:system-ui,sans-serif;font-size:12px;letter-spacing:.18em;color:var(--brass-dim);}
+  .card h2{font-size:23px;font-weight:400;margin:10px 0 6px;}
+  .card p{color:var(--muted);font-size:15px;font-family:system-ui,sans-serif}
+  .card.emergency{border-color:rgba(196,90,90,.4)}
+  .card.emergency:hover{border-color:#c45a5a}
+  .card.emergency .num{color:#c45a5a}
+  footer{border-top:1px solid var(--line);padding:28px 0 48px;text-align:center;color:var(--muted);font-family:system-ui,sans-serif;font-size:13px;}
+  footer strong{color:var(--text);font-weight:600}
+</style>
+</head>
+<body>
+  <div class="langbar"><div class="wrap">
+    <small data-i18n="langlabel">Sprache</small>
+    <select class="langselect" id="lang" aria-label="Sprache wählen / Choose language">
+      <option value="de">Deutsch</option><option value="en">English</option>
+      <option value="fr">Français</option><option value="es">Español</option>
+      <option value="it">Italiano</option><option value="tr">Türkçe</option>
+      <option value="ar">العربية</option><option value="ru">Русский</option>
+      <option value="zh">中文</option><option value="bn">বাংলা</option>
+    </select>
+  </div></div>
+  <header class="hero"><div class="wrap">
+    <svg class="tower" viewBox="0 0 40 80" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <path d="M20 2 L26 12 L14 12 Z" fill="#c4a35a"/>
+      <rect x="14" y="12" width="12" height="6" fill="#c4a35a"/>
+      <rect x="12" y="18" width="16" height="58" fill="none" stroke="#c4a35a" stroke-width="1.5"/>
+      <rect x="17" y="26" width="6" height="9" stroke="#c4a35a" stroke-width="1.2"/>
+      <rect x="17" y="42" width="6" height="9" stroke="#c4a35a" stroke-width="1.2"/>
+      <rect x="17" y="58" width="6" height="13" stroke="#c4a35a" stroke-width="1.2"/>
+    </svg>
+    <div class="eyebrow" data-i18n="eyebrow">Turmhotel Frankfurt</div>
+    <h1 data-i18n="welcome">Herzlich willkommen</h1>
+    <p class="lead" data-i18n="lead">Schön, dass Sie da sind. Hier finden Sie alles für einen angenehmen Aufenthalt.</p>
+    <div class="rule"></div>
+  </div></header>
+  <main><div class="wrap"><div class="grid">
+    <a class="card" href="checkin.html"><div class="num">01</div><h2 data-i18n="t_arrival">Ankunft &amp; Check-in</h2><p data-i18n="d_arrival">Anreise, Schlüssel und Late Check-in – Schritt für Schritt.</p></a>
+    <a class="card" href="zimmer.html"><div class="num">02</div><h2 data-i18n="t_room">Zimmer &amp; Service</h2><p data-i18n="d_room">WLAN, Frühstück, Rezeptionszeiten und mehr.</p></a>
+    <a class="card" href="willkommen.html"><div class="num">03</div><h2 data-i18n="t_book">Willkommensbuch</h2><p data-i18n="d_book">Alles Wissenswerte rund um Ihren Aufenthalt.</p></a>
+    <a class="card" href="umgebung.html"><div class="num">04</div><h2 data-i18n="t_city">Frankfurt entdecken</h2><p data-i18n="d_city">ÖPNV, Restaurants und Tipps für die Stadt.</p></a>
+    <a class="card emergency" href="notfall.html"><div class="num" data-i18n="n_emergency">NOTFALL</div><h2 data-i18n="t_emergency">Im Notfall</h2><p data-i18n="d_emergency">Wichtige Nummern und das richtige Verhalten. Notruf 112.</p></a>
+  </div></div></main>
+  <footer><div class="wrap"><strong>Turmhotel Frankfurt</strong><br><span data-i18n="foot">Rezeption rund um die Uhr für Sie da.</span></div></footer>
+  <script>
+    const i18n={
+      de:{langlabel:"Sprache",eyebrow:"Turmhotel Frankfurt",welcome:"Herzlich willkommen",lead:"Schön, dass Sie da sind. Hier finden Sie alles für einen angenehmen Aufenthalt.",t_arrival:"Ankunft & Check-in",d_arrival:"Anreise, Schlüssel und Late Check-in – Schritt für Schritt.",t_room:"Zimmer & Service",d_room:"WLAN, Frühstück, Rezeptionszeiten und mehr.",t_book:"Willkommensbuch",d_book:"Alles Wissenswerte rund um Ihren Aufenthalt.",t_city:"Frankfurt entdecken",d_city:"ÖPNV, Restaurants und Tipps für die Stadt.",n_emergency:"NOTFALL",t_emergency:"Im Notfall",d_emergency:"Wichtige Nummern und das richtige Verhalten. Notruf 112.",foot:"Rezeption rund um die Uhr für Sie da."},
+      en:{langlabel:"Language",eyebrow:"Turmhotel Frankfurt",welcome:"Welcome",lead:"We are glad you are here. Everything for a pleasant stay is right here.",t_arrival:"Arrival & Check-in",d_arrival:"Getting here, keys and late check-in – step by step.",t_room:"Room & Service",d_room:"Wi-Fi, breakfast, reception hours and more.",t_book:"Welcome Book",d_book:"Everything worth knowing about your stay.",t_city:"Discover Frankfurt",d_city:"Public transport, restaurants and city tips.",n_emergency:"EMERGENCY",t_emergency:"In an Emergency",d_emergency:"Important numbers and what to do. Emergency call 112.",foot:"Reception is here for you around the clock."}
+    };
+    const sel=document.getElementById('lang');
+    function apply(lang){const d=i18n[lang]||i18n.de;document.documentElement.lang=lang;document.documentElement.dir=(lang==='ar')?'rtl':'ltr';document.querySelectorAll('[data-i18n]').forEach(el=>{const k=el.getAttribute('data-i18n');if(d[k])el.textContent=d[k];});}
+    sel.addEventListener('change',e=>apply(e.target.value));apply('de');
+  </script>
+</body>
+</html>
