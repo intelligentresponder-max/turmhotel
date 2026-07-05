@@ -168,6 +168,8 @@ nav{
 .room-card.clean::before{background:var(--clean);}
 .room-card.dirty::before{background:var(--gold);opacity:.45;}
 .room-card.checkout::before{background:var(--checkout-col);}
+.room-card.checkout-red{background:rgba(192,57,43,.07);border-color:rgba(192,57,43,.3);}
+.room-card.checkout-red::before{background:var(--occupied);}
 
 .room-num{font-family:'Fraunces',serif;font-size:1.25rem;font-weight:600;line-height:1;color:var(--paper);}
 .room-status-row{margin-top:7px;display:flex;gap:4px;flex-wrap:wrap;}
@@ -522,7 +524,7 @@ nav{
       <div class="import-info-box" style="margin-bottom:14px;">
         <div class="import-info-title">JSON-Funktion einfügen</div>
         <p style="font-family:'Spline Sans Mono',monospace;font-size:.7rem;color:var(--muted);margin-bottom:10px;">
-          Format: <code style="color:var(--gold)">generateCleaningList</code> · Felder: <code style="color:var(--paper)">rooms_to_clean</code> (room, type) + optional <code style="color:var(--paper)">excluded_rooms</code>
+          Format: <code style="color:var(--gold)">processGuestListScan</code> · Felder: <code style="color:var(--paper)">data_extraction</code> (zimmer, abreise, pax, ui_color, hsk_notes) · ui_color: <span style="color:#e87070">Red</span>=Abreise, <span style="color:var(--checkout-col)">Orange</span>=Overnight
         </p>
       </div>
       <textarea id="json-input" style="width:100%;height:200px;background:rgba(255,255,255,.04);border:1px solid var(--line);border-radius:var(--radius);color:var(--paper);font-family:'Spline Sans Mono',monospace;font-size:.72rem;padding:12px;resize:vertical;line-height:1.5;" placeholder='{"processing_results":{"rooms_to_clean":[{"room":"011","type":"D"},...],"excluded_rooms":["024"]}}'></textarea>
@@ -709,7 +711,7 @@ function setFilter(f) {
 function roomMatchesFilter(r) {
   const rs = getRoomState(r);
   if (activeFilter === 'all') return true;
-  if (activeFilter === 'checkout') return rs.guestType === 'checkout';
+  if (activeFilter === 'checkout') return rs.guestType === 'checkout' || rs.guestType === 'overnight';
   if (activeFilter === 'dirty') return !rs.clean;
   if (activeFilter === 'unassigned') return !rs.staff;
   return true;
@@ -728,14 +730,15 @@ function renderRooms() {
       const card = document.createElement('div');
       let cardClass = 'room-card ';
       if (rs.clean) cardClass += 'clean';
-      else if (rs.guestType === 'checkout') cardClass += 'checkout';
+      else if (rs.guestType === 'checkout') cardClass += 'checkout-red';
+      else if (rs.guestType === 'overnight') cardClass += 'checkout';
       else cardClass += 'dirty';
       card.className = cardClass;
       card.onclick = () => openModal(r);
 
       let typeBadge = '';
-      if (rs.guestType === 'checkout') typeBadge = '<span class="badge badge-checkout">Abreise</span>';
-      else if (rs.guestType === 'overnight') typeBadge = '<span class="badge badge-overnight">Overnight</span>';
+      if (rs.guestType === 'checkout') typeBadge = '<span class="badge badge-occupied">Abreise</span>';
+      else if (rs.guestType === 'overnight') typeBadge = '<span class="badge badge-checkout">Overnight</span>';
       const typBdg = rs.roomType ? `<span class="badge" style="background:rgba(201,162,39,.1);color:var(--gold)">${rs.roomType}</span>` : '';
 
       card.innerHTML = `
@@ -794,9 +797,9 @@ function openModal(roomId) {
 
   // Guest type info
   const gi = document.getElementById('modal-guest-info');
-  const typeLabel = rs.roomType ? ` · Typ <strong style="color:var(--gold)">${rs.roomType}</strong>` : '';
-  if (rs.guestType === 'checkout') gi.innerHTML = `<span class="co-tag">↗ Abreise heute — Zimmer wird frei${typeLabel}</span>`;
-  else if (rs.guestType === 'overnight') gi.innerHTML = `<span class="ov-tag">🌙 Overnight — Gast bleibt${typeLabel}</span>`;
+  const paxLabel = rs.pax ? ` · ${rs.pax} Pers.` : '';
+  if (rs.guestType === 'checkout') gi.innerHTML = `<span class="co-tag" style="color:#e87070;">↗ Abreise heute${paxLabel} — Zimmer wird frei</span>`;
+  else if (rs.guestType === 'overnight') gi.innerHTML = `<span class="ov-tag">🌙 Overnight${paxLabel} — Gast bleibt</span>`;
   else gi.innerHTML = '';
 
   const sel = document.getElementById('modal-staff');
@@ -1293,41 +1296,36 @@ function parseJsonInput() {
   let data;
   try { data = JSON.parse(raw); } catch(e) { alert('Ungültiges JSON: ' + e.message); return; }
 
-  // Flexible: support top-level or nested unter processing_results
-  const results = data.processing_results || data;
-  const roomsRaw = results.rooms_to_clean || data.rooms_to_clean || [];
-  const excluded = results.excluded_rooms || data.excluded_rooms || [];
+  // Neues Format: processGuestListScan mit data_extraction Array
+  const entries = data.data_extraction || [];
+  if (!entries.length) { alert('Kein data_extraction Array gefunden.'); return; }
 
-  if (!roomsRaw.length) { alert('Keine rooms_to_clean gefunden.'); return; }
-
-  // Normalize room numbers: "011" → "11", keep as string
-  function normRoom(r) {
-    // Strip leading zeros for matching (App uses '11', not '011')
-    return String(parseInt(r, 10));
-  }
-
-  const excludedNorm = excluded.map(e => normRoom(e));
-
-  // Type mapping: 1→E, 2→D, 3→T (also accept string codes directly)
-  const typeMap = (data.parameters && data.parameters.filter_rules && data.parameters.filter_rules.type_mapping) || { '1':'E','2':'D','3':'T' };
+  function normRoom(r) { return String(parseInt(r, 10)); }
 
   jsonParsed = [];
   const skipped = [];
-  const excl = [];
 
-  roomsRaw.forEach(entry => {
-    const roomNorm = normRoom(entry.room);
-    if (excludedNorm.includes(roomNorm)) { excl.push(roomNorm); return; }
+  entries.forEach(entry => {
+    const roomNorm = normRoom(entry.zimmer || entry.room || '');
+    if (!roomNorm || roomNorm === 'NaN') return;
     if (!ALL_ROOMS.includes(roomNorm)) { skipped.push(roomNorm); return; }
 
-    // Resolve type
-    let typeRaw = String(entry.type || '');
-    let typeResolved = typeMap[typeRaw] || typeRaw || 'D';
+    // ui_color: "Red" = Abreise heute, "Orange" = Overnight/bleibt
+    const color = (entry.ui_color || '').toLowerCase();
+    let guestType = '';
+    if (color === 'red') guestType = 'checkout';
+    else if (color === 'orange') guestType = 'overnight';
+    else return; // ignorieren wenn kein ui_color
 
-    jsonParsed.push({ room: roomNorm, type: typeResolved });
+    jsonParsed.push({
+      room: roomNorm,
+      guestType,
+      pax: entry.pax || 0,
+      hsk_notes: entry.hsk_notes || '',
+    });
   });
 
-  showJsonPreview(jsonParsed, skipped, excl);
+  showJsonPreview(jsonParsed, skipped, []);
 }
 
 function showJsonPreview(rooms, skipped, excluded) {
@@ -1337,18 +1335,25 @@ function showJsonPreview(rooms, skipped, excluded) {
   const summary = document.getElementById('json-type-summary');
   list.innerHTML = '';
 
-  const byType = {};
-  rooms.forEach(r => {
-    byType[r.type] = (byType[r.type] || 0) + 1;
+  const co = rooms.filter(r => r.guestType === 'checkout');
+  const ov = rooms.filter(r => r.guestType === 'overnight');
+
+  co.forEach(r => {
     const tag = document.createElement('span');
     tag.className = 'preview-tag';
-    tag.textContent = r.room + ' · ' + r.type;
+    tag.style.cssText = 'background:rgba(192,57,43,.15);border-color:rgba(192,57,43,.4);color:#e87070;';
+    tag.textContent = r.room + (r.pax ? ' · ' + r.pax + 'P' : '') + (r.hsk_notes ? ' ⚑' : '');
+    list.appendChild(tag);
+  });
+  ov.forEach(r => {
+    const tag = document.createElement('span');
+    tag.className = 'preview-tag';
+    tag.textContent = r.room + (r.pax ? ' · ' + r.pax + 'P' : '') + ' 🌙';
     list.appendChild(tag);
   });
 
-  const typeStr = Object.entries(byType).map(([k,v]) => `${v}× ${k}`).join(' · ');
-  title.textContent = `${rooms.length} Abreisezimmer erkannt`;
-  summary.innerHTML = `<span style="color:var(--gold)">${typeStr}</span>${skipped.length ? ` · <span style="color:#e87070">${skipped.length} nicht im System</span>` : ''}${excluded.length ? ` · <span style="color:var(--muted)">${excluded.length} ausgeschlossen</span>` : ''}`;
+  title.textContent = `${rooms.length} Zimmer erkannt`;
+  summary.innerHTML = `<span style="color:#e87070">${co.length}× Abreise (Rot)</span> · <span style="color:var(--checkout-col)">${ov.length}× Overnight (Orange)</span>${skipped.length ? ` · <span style="color:var(--muted)">${skipped.length} übersprungen</span>` : ''}`;
 
   preview.style.removeProperty('display');
   preview.classList.add('show');
@@ -1357,26 +1362,23 @@ function showJsonPreview(rooms, skipped, excluded) {
 function applyJsonImport() {
   if (!jsonParsed.length) return;
 
-  // First clear all existing guestType
-  ALL_ROOMS.forEach(r => {
-    if (state[r]) state[r].guestType = '';
-  });
+  // Clear all existing guestType first
+  ALL_ROOMS.forEach(r => { if (state[r]) { state[r].guestType = ''; state[r].hsk_notes = ''; state[r].pax = 0; } });
 
-  jsonParsed.forEach(({ room, type }) => {
+  jsonParsed.forEach(({ room, guestType, pax, hsk_notes }) => {
     const rs = getRoomState(room);
-    state[room] = { ...rs, guestType: 'checkout', roomType: type };
+    state[room] = { ...rs, guestType, pax: pax || 0, note: hsk_notes || rs.note || '' };
   });
 
   saveState(state);
   renderRooms();
 
-  const typeCount = {};
-  jsonParsed.forEach(r => { typeCount[r.type] = (typeCount[r.type]||0)+1; });
-  const typeStr = Object.entries(typeCount).map(([k,v]) => `${v}× ${k}`).join(' · ');
+  const co = jsonParsed.filter(r => r.guestType === 'checkout').length;
+  const ov = jsonParsed.filter(r => r.guestType === 'overnight').length;
 
   const banner = document.getElementById('import-banner');
   document.getElementById('import-banner-text').innerHTML =
-    `✓ JSON geladen · <strong>${jsonParsed.length} Abreisezimmer</strong> (${typeStr}) · Datum: ${todayStr()}`;
+    `✓ JSON geladen · <strong style="color:#e87070">${co} Abreise (Rot)</strong> · <strong style="color:var(--checkout-col)">${ov} Overnight (Orange)</strong> · ${todayStr()}`;
   banner.classList.add('show');
   showTab('zimmer');
 }
