@@ -1071,8 +1071,8 @@ function setOccupied(v) { tempState.occupied = v; refreshModalButtons(); }
 
 function saveRoom() {
   if (!currentRoom) return;
-  const existing = getRoomState(currentRoom);
-  state[currentRoom] = {
+  const existing = getRoomState(doneRoom);
+  state[doneRoom] = {
     clean: tempState.clean,
     occupied: tempState.occupied,
     staff: document.getElementById('modal-staff').value,
@@ -1092,6 +1092,8 @@ function closeModalDirect() { document.getElementById('overlay').classList.remov
 function closeModal(e) { if (e.target === document.getElementById('overlay')) closeModalDirect(); }
 
 // ══ 3-KLICK FERTIGMELDUNG ══
+let doneRoom=null;
+let doneRoom=null;
 let doneChecks = { 1: false, 2: false, 3: false };
 
 function openDoneFlow() {
@@ -1132,15 +1134,15 @@ function toggleDoneStep(n) {
 }
 
 function confirmDone() {
-  if (!currentRoom) return;
+  if (!doneRoom) return;
   const extraReinigung = document.getElementById('extra-reinigung').value.trim();
   const extraBett = document.getElementById('extra-bett').value.trim();
   const noteparts = [];
   if (extraReinigung) noteparts.push('Reinigung: ' + extraReinigung);
   if (extraBett) noteparts.push('Bett/Gast: ' + extraBett);
 
-  const rs = getRoomState(currentRoom);
-  state[currentRoom] = { ...rs, clean: true, note: noteparts.join(' · ') || rs.note || '' };
+  const rs = getRoomState(doneRoom);
+  state[doneRoom] = { ...rs, clean: true, note: noteparts.join(' · ') || rs.note || '' };
   saveState(state);
   closeDoneFlow();
   renderRooms();
