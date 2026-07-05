@@ -359,6 +359,24 @@ nav{
 .check-item.checked .check-box{background:var(--clean);border-color:var(--clean);color:#fff;}
 .check-item .check-label{font-family:'Spline Sans',sans-serif;font-size:.88rem;color:var(--muted);}
 .check-item.checked .check-label{color:var(--paper);}
+
+/* ── TECHNIK TICKET ── */
+.tech-section{margin-top:18px;border-top:1px solid var(--line);padding-top:16px;}
+.tech-label{font-family:'Spline Sans Mono',monospace;font-size:.63rem;letter-spacing:.2em;text-transform:uppercase;color:var(--warn);margin-bottom:10px;display:flex;align-items:center;gap:8px;}
+.tech-label::before{content:"🔧";font-size:.8rem;}
+.tech-toggle{display:flex;gap:8px;margin-bottom:10px;}
+.tech-btn{padding:6px 14px;border-radius:2px;border:1px solid var(--line);background:none;color:var(--muted);cursor:pointer;font-family:'Spline Sans Mono',monospace;font-size:.68rem;letter-spacing:.08em;text-transform:uppercase;transition:.15s;}
+.tech-btn:hover{border-color:var(--warn);color:var(--warn);}
+.tech-btn.active-tech{background:var(--warn-bg);border-color:var(--warn);color:var(--warn);}
+.tech-fields{display:none;}
+.tech-fields.show{display:block;}
+.tech-cat-row{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px;}
+.tech-cat-btn{padding:4px 10px;border-radius:1px;border:1px solid var(--line);background:none;color:var(--muted);cursor:pointer;font-family:'Spline Sans Mono',monospace;font-size:.62rem;letter-spacing:.05em;transition:.15s;}
+.tech-cat-btn:hover{border-color:var(--warn);color:var(--warn);}
+.tech-cat-btn.selected{background:var(--warn-bg);border-color:var(--warn);color:var(--warn);}
+.tech-desc-input{width:100%;background:rgba(255,255,255,.05);border:1px solid var(--line);color:var(--paper);padding:8px 11px;border-radius:2px;font-family:'Spline Sans',sans-serif;font-size:.84rem;resize:none;height:62px;}
+.tech-desc-input:focus{outline:none;border-color:var(--warn);}
+.tech-ticket-sent{display:none;font-family:'Spline Sans Mono',monospace;font-size:.72rem;color:#4ecb82;margin-top:8px;}
 @media(max-width:640px){
   .room-grid{grid-template-columns:repeat(auto-fill,minmax(110px,1fr));}
   .main{padding:16px;}
@@ -371,6 +389,7 @@ nav{
 <nav>
   <a class="nav-brand" href="#">Turmhotel Frankfurt</a>
   <div class="nav-right">
+    <a href="../facility.html" style="font-family:'Spline Sans Mono',monospace;font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);text-decoration:none;border:1px solid var(--line);padding:5px 12px;border-radius:3px;transition:.15s;" onmouseover="this.style.color='var(--gold)';this.style.borderColor='var(--gold)'" onmouseout="this.style.color='var(--muted)';this.style.borderColor='var(--line)'">🔧 Facility</a>
     <button class="lang-btn active" onclick="setLang('de')">🇩🇪 DE</button>
     <button class="lang-btn" onclick="setLang('en')">🇬🇧 EN</button>
     <button class="lang-btn" onclick="setLang('hu')">🇭🇺 HU</button>
@@ -429,11 +448,33 @@ nav{
     <button class="filter-btn" id="f-unassigned" onclick="setFilter('unassigned')">Nicht zugewiesen</button>
   </div>
 
+  <!-- Nebenhaus -->
+  <div class="building-label">Vorderhaus (Nebenhaus)</div>
+  <div style="font-family:'Spline Sans Mono',monospace;font-size:.66rem;color:var(--muted);margin-bottom:12px;padding:8px 12px;background:rgba(255,255,255,.025);border-left:2px solid var(--line);border-radius:0 2px 2px 0;line-height:1.6;">
+    📍 Zugang: Rezeption EG → Verbindungsgang (~30 m) → Nebenhaus Block 1–5
+  </div>
+  <div class="floor-label">Block 1 &nbsp;·&nbsp; 11 <span style="font-size:.58rem;background:rgba(42,122,75,.18);color:#4ecb82;border:1px solid rgba(42,122,75,.4);padding:1px 5px;border-radius:1px;">SDH</span> &nbsp;12 <span style="font-size:.58rem;background:rgba(26,111,168,.18);color:#5bb3e8;border:1px solid rgba(26,111,168,.4);padding:1px 5px;border-radius:1px;">SDS</span></div>
+  <div class="room-grid" id="grid-n1-a"></div>
+  <div class="floor-label" style="margin-top:10px;color:var(--muted);">Tagungsraum Mailand — 1. OG (~6 Personen)</div>
+  <div class="room-grid" id="grid-tagungsraum-mailand"></div>
+  <div class="floor-label" style="margin-top:10px">Block 1 (Forts.) &nbsp;·&nbsp; 14 <span style="font-size:.58rem;background:rgba(230,126,34,.15);color:var(--warn);border:1px solid rgba(230,126,34,.4);padding:1px 5px;border-radius:1px;">STS</span> &nbsp;15 <span style="font-size:.58rem;background:rgba(201,162,39,.18);color:var(--gold-bright);border:1px solid rgba(201,162,39,.4);padding:1px 5px;border-radius:1px;">LGH ❄️</span></div>
+  <div class="room-grid" id="grid-n1-b"></div>
+  <div class="floor-label">Block 2 &nbsp;·&nbsp; 21 <span style="font-size:.58rem;background:rgba(42,122,75,.18);color:#4ecb82;border:1px solid rgba(42,122,75,.4);padding:1px 5px;border-radius:1px;">SDH</span> &nbsp;22–23 <span style="font-size:.58rem;background:rgba(26,111,168,.18);color:#5bb3e8;border:1px solid rgba(26,111,168,.4);padding:1px 5px;border-radius:1px;">SDS</span> &nbsp;24 <span style="font-size:.58rem;background:rgba(230,126,34,.15);color:var(--warn);border:1px solid rgba(230,126,34,.4);padding:1px 5px;border-radius:1px;">STS</span> &nbsp;25 <span style="font-size:.58rem;background:rgba(142,68,173,.15);color:#c084fc;border:1px solid rgba(142,68,173,.4);padding:1px 5px;border-radius:1px;">STH</span></div>
+  <div class="room-grid" id="grid-n2"></div>
+  <div class="floor-label">Block 3 &nbsp;·&nbsp; 31 <span style="font-size:.58rem;background:rgba(42,122,75,.18);color:#4ecb82;border:1px solid rgba(42,122,75,.4);padding:1px 5px;border-radius:1px;">SDH</span> &nbsp;32–33 <span style="font-size:.58rem;background:rgba(26,111,168,.18);color:#5bb3e8;border:1px solid rgba(26,111,168,.4);padding:1px 5px;border-radius:1px;">SDS</span> &nbsp;34 <span style="font-size:.58rem;background:rgba(230,126,34,.15);color:var(--warn);border:1px solid rgba(230,126,34,.4);padding:1px 5px;border-radius:1px;">STS</span> &nbsp;35 <span style="font-size:.58rem;background:rgba(142,68,173,.15);color:#c084fc;border:1px solid rgba(142,68,173,.4);padding:1px 5px;border-radius:1px;">STH</span></div>
+  <div class="room-grid" id="grid-n3"></div>
+  <div class="floor-label">Block 4 &nbsp;·&nbsp; 41 <span style="font-size:.58rem;background:rgba(42,122,75,.18);color:#4ecb82;border:1px solid rgba(42,122,75,.4);padding:1px 5px;border-radius:1px;">SDH</span> &nbsp;42–43 <span style="font-size:.58rem;background:rgba(26,111,168,.18);color:#5bb3e8;border:1px solid rgba(26,111,168,.4);padding:1px 5px;border-radius:1px;">SDS</span> &nbsp;44 <span style="font-size:.58rem;background:rgba(230,126,34,.15);color:var(--warn);border:1px solid rgba(230,126,34,.4);padding:1px 5px;border-radius:1px;">STS</span> &nbsp;45 <span style="font-size:.58rem;background:rgba(142,68,173,.15);color:#c084fc;border:1px solid rgba(142,68,173,.4);padding:1px 5px;border-radius:1px;">STH</span></div>
+  <div class="room-grid" id="grid-n4"></div>
+  <div class="floor-label">Block 5 &nbsp;·&nbsp; 51 <span style="font-size:.58rem;background:rgba(42,122,75,.18);color:#4ecb82;border:1px solid rgba(42,122,75,.4);padding:1px 5px;border-radius:1px;">SDH</span> &nbsp;52–53 <span style="font-size:.58rem;background:rgba(26,111,168,.18);color:#5bb3e8;border:1px solid rgba(26,111,168,.4);padding:1px 5px;border-radius:1px;">SDS</span> &nbsp;54 <span style="font-size:.58rem;background:rgba(230,126,34,.15);color:var(--warn);border:1px solid rgba(230,126,34,.4);padding:1px 5px;border-radius:1px;">STS</span> &nbsp;55 <span style="font-size:.58rem;background:rgba(142,68,173,.15);color:#c084fc;border:1px solid rgba(142,68,173,.4);padding:1px 5px;border-radius:1px;">STH</span></div>
+  <div class="room-grid" id="grid-n5"></div>
+
   <!-- Haupthaus -->
-  <div class="building-label">Haupthaus</div>
-  <div class="floor-label">Tagungsraum Barcelona — Backyard Building, EG (~30 Personen)</div>
-  <div class="room-grid" id="grid-tagungsraum-barcelona"></div>
-  <div class="floor-label">1. Etage (102–110)</div>
+  <div class="building-label">Haupthaus (Hinterhaus)</div>
+  <div style="font-family:'Spline Sans Mono',monospace;font-size:.66rem;color:var(--muted);margin-bottom:12px;padding:8px 12px;background:rgba(255,255,255,.025);border-left:2px solid var(--line);border-radius:0 2px 2px 0;line-height:1.6;">
+    📍 1. OG: Zimmer 101 Massageraum · Zimmer 102–110 · Etagen 2–5 folgen
+  </div>
+  <div class="floor-label">1. Etage — <span style="color:var(--danger);font-size:.65rem;">101 Massageraum</span> &nbsp;·&nbsp; 102–110</div>
+  <div class="room-grid" id="grid-massageraum"></div>
   <div class="room-grid" id="grid-h1"></div>
   <div class="floor-label">2. Etage (201–210)</div>
   <div class="room-grid" id="grid-h2"></div>
@@ -444,20 +485,13 @@ nav{
   <div class="floor-label">5. Etage (501–510)</div>
   <div class="room-grid" id="grid-h5"></div>
 
-  <!-- Nebenhaus -->
-  <div class="building-label">Nebenhaus</div>
-  <div class="floor-label">Tagungsraum Mailand — 1. OG, Eschersheimer Landstr. (~6 Personen)</div>
-  <div class="room-grid" id="grid-tagungsraum-mailand"></div>
-  <div class="floor-label">Block 1 (11–15)</div>
-  <div class="room-grid" id="grid-n1"></div>
-  <div class="floor-label">Block 2 (21–25)</div>
-  <div class="room-grid" id="grid-n2"></div>
-  <div class="floor-label">Block 3 (31–35)</div>
-  <div class="room-grid" id="grid-n3"></div>
-  <div class="floor-label">Block 4 (41–45)</div>
-  <div class="room-grid" id="grid-n4"></div>
-  <div class="floor-label">Block 5 (51–55)</div>
-  <div class="room-grid" id="grid-n5"></div>
+  <!-- Backyard -->
+  <div class="building-label">Backyard Building</div>
+  <div style="font-family:'Spline Sans Mono',monospace;font-size:.66rem;color:var(--muted);margin-bottom:12px;padding:8px 12px;background:rgba(255,255,255,.025);border-left:2px solid var(--line);border-radius:0 2px 2px 0;line-height:1.6;">
+    📍 Hinterhof · EG · Tagungsraum Barcelona (~30 Personen)
+  </div>
+  <div class="floor-label">Tagungsraum Barcelona — EG (~30 Personen)</div>
+  <div class="room-grid" id="grid-tagungsraum-barcelona"></div>
 
   <div class="reset-row">
     <button class="btn-export" onclick="exportData()">⬇ Stand exportieren</button>
@@ -623,6 +657,19 @@ nav{
     <div class="modal-title" id="checklist-room-title" style="margin-bottom:4px">Zimmer fertig?</div>
     <div style="font-family:'Spline Sans Mono',monospace;font-size:.7rem;color:var(--muted);margin-bottom:20px" id="checklist-subtitle">Bitte bestätigen:</div>
     <div id="checklist-items" style="display:grid;gap:9px;margin-bottom:24px"></div>
+    <!-- TECHNIK PROBLEM -->
+    <div class="tech-section">
+      <div class="tech-label">Technik-Problem melden (optional)</div>
+      <div class="tech-toggle">
+        <button class="tech-btn" id="tech-nein" onclick="setTechProblem(false)">✓ Alles ok</button>
+        <button class="tech-btn" id="tech-ja" onclick="setTechProblem(true)">⚠ Problem melden</button>
+      </div>
+      <div class="tech-fields" id="tech-fields">
+        <div class="tech-cat-row" id="tech-cat-row"></div>
+        <textarea class="tech-desc-input" id="tech-desc" placeholder="z.B. Glühbirne Bad defekt, Fernbedienung fehlt..."></textarea>
+        <div class="tech-ticket-sent" id="tech-ticket-sent">✓ Ticket erstellt — Facility Manager informiert</div>
+      </div>
+    </div>
     <div class="modal-actions">
       <button class="btn btn-cancel" onclick="closeChecklistDirect()">Abbrechen</button>
       <button class="btn btn-save" id="checklist-confirm-btn" onclick="confirmChecklist()" disabled style="opacity:.4">✓ Fertig melden</button>
@@ -637,20 +684,32 @@ nav{
 <script>
 // ══ ROOM MAP ══
 const ROOMS = {
-  'tagungsraum-barcelona': ['Tagungsraum Barcelona'],
+  'n1-a': ['11','12'],
+  'tagungsraum-mailand': ['Tagungsraum Mailand'],
+  'n1-b': ['14','15'],
+  'n2': ['21','22','23','24','25'],
+  'n3': ['31','32','33','34','35'],
+  'n4': ['41','42','43','44','45'],
+  'n5': ['51','52','53','54','55'],
+  'massageraum': ['101'],
   'h1': ['102','103','104','105','106','107','108','109','110'],
   'h2': ['201','202','203','204','205','206','207','208','209','210'],
   'h3': ['301','302','303','304','305','306','307','308','309','310'],
   'h4': ['401','402','403','404','405','406','407','408','409','410'],
   'h5': ['501','502','503','504','505','506','507','508','509','510'],
-  'tagungsraum-mailand': ['Tagungsraum Mailand'],
-  'n1': ['11','12','14','15'],
-  'n2': ['21','22','23','24','25'],
-  'n3': ['31','32','33','34','35'],
-  'n4': ['41','42','43','44','45'],
-  'n5': ['51','52','53','54','55'],
+  'tagungsraum-barcelona': ['Tagungsraum Barcelona'],
 };
 const ALL_ROOMS = Object.values(ROOMS).flat();
+const ROOM_TYPES = {
+  '11': 'SDH', '12': 'SDS', '14': 'STS', '15': 'LGH ❄️',
+  '21': 'SDH', '22': 'SDS', '23': 'SDS', '24': 'STS', '25': 'STH',
+  '31': 'SDH', '32': 'SDS', '33': 'SDS', '34': 'STS', '35': 'STH',
+  '41': 'SDH', '42': 'SDS', '43': 'SDS', '44': 'STS', '45': 'STH',
+  '51': 'SDH', '52': 'SDS', '53': 'SDS', '54': 'STS', '55': 'STH',
+  '101': 'MASSAGE',
+};
+// Legacy SDH list for compat
+const SDH_ROOMS = ['11','21','31','41','51'];
 
 const COLORS = ['#c9a227','#2a7a4b','#1a6fa8','#8e44ad','#e67e22','#c0392b','#16a085','#d4a574'];
 let selectedColor = COLORS[0];
@@ -709,7 +768,8 @@ function renderRooms() {
       const staffObj = staff.find(s => s.name === rs.staff);
       const card = document.createElement('div');
       let cardClass = 'room-card ';
-      if (rs.clean) cardClass += 'clean';
+      if (r === '101') { cardClass += 'dirty'; }
+      else if (rs.clean) cardClass += 'clean';
       else if (rs.guestType === 'checkout') cardClass += 'checkout';
       else cardClass += 'dirty';
       card.className = cardClass;
@@ -725,13 +785,23 @@ function renderRooms() {
       if (rs.guestType === 'checkout') typeBadge = '<span class="badge badge-checkout">Abreise</span>';
       else if (rs.guestType === 'overnight') typeBadge = '<span class="badge badge-overnight">Overnight</span>';
       const typBdg = rs.roomType ? `<span class="badge" style="background:rgba(201,162,39,.1);color:var(--gold)">${rs.roomType}</span>` : '';
+      const roomType = ROOM_TYPES[r] || '';
+      const typeColors = {
+        'SDH': 'background:rgba(42,122,75,.18);color:#4ecb82;border:1px solid rgba(42,122,75,.4)',
+        'SDS': 'background:rgba(26,111,168,.18);color:#5bb3e8;border:1px solid rgba(26,111,168,.4)',
+        'STS': 'background:rgba(230,126,34,.15);color:var(--warn);border:1px solid rgba(230,126,34,.4)',
+        'STH': 'background:rgba(142,68,173,.15);color:#c084fc;border:1px solid rgba(142,68,173,.4)',
+        'LGH ❄️': 'background:rgba(201,162,39,.18);color:var(--gold-bright);border:1px solid rgba(201,162,39,.4)',
+        'MASSAGE': 'background:rgba(192,57,43,.12);color:#e87070;border:1px solid rgba(192,57,43,.35)',
+      };
+      const sdhBdg = roomType ? \`<span class="badge" style="\${typeColors[roomType]||''}">\${roomType}</span>\` : '';
 
       card.innerHTML = `
         <div class="room-num">${r}</div>
         <div class="room-status-row">
           <span class="badge ${rs.clean ? 'badge-clean' : 'badge-dirty'}">${rs.clean ? 'Sauber' : 'Offen'}</span>
           <span class="badge ${rs.occupied ? 'badge-occupied' : 'badge-free'}">${rs.occupied ? 'Belegt' : 'Frei'}</span>
-          ${typeBadge}${typBdg}
+          ${sdhBdg}${typeBadge}${typBdg}
         </div>
         ${staffObj ? `<div class="room-staff"><span class="staff-chip" style="background:${staffObj.color}">${staffObj.abb}</span></div>` : ''}
         ${rs.note ? `<div class="room-note">${rs.note}</div>` : ''}
@@ -755,6 +825,7 @@ function renderRooms() {
 function updateStats() {
   let clean=0, dirty=0, free=0, occ=0, checkout=0, overnight=0;
   ALL_ROOMS.forEach(r => {
+    if (r === '101') return; // Massageraum — kein Gästezimmer
     const rs = getRoomState(r);
     if (rs.clean) clean++; else dirty++;
     if (rs.occupied) occ++; else free++;
@@ -1331,6 +1402,7 @@ function openChecklist(roomId) {
     container.appendChild(div);
   });
   updateChecklistBtn();
+  initTechSection();
   document.getElementById('checklist-overlay').classList.add('show');
 }
 
@@ -1358,6 +1430,7 @@ function confirmChecklist() {
   if (!checklistRoom) return;
   const rs = getRoomState(checklistRoom);
   state[checklistRoom] = { ...rs, clean: true };
+  createTechTicket(checklistRoom);
   saveState(state);
   renderRooms();
   renderOverview();
@@ -1370,6 +1443,70 @@ function closeChecklistDirect() {
 }
 function closeChecklist(e) {
   if (e.target === document.getElementById('checklist-overlay')) closeChecklistDirect();
+}
+
+
+// ══ TECHNIK TICKET SYSTEM ══
+const TECH_CATS = ['💡 Beleuchtung', '📺 TV / Fernbedienung', '🚿 Sanitär', '🔌 Steckdose', '🪟 Fenster / Tür', '🛏 Möbel', '❄️ Klima / Heizung', '🔑 Schloss / Safe', '📶 WLAN', '🧹 Sonstiges'];
+let techProblem = false;
+let selectedTechCat = '';
+
+function initTechSection() {
+  techProblem = false;
+  selectedTechCat = '';
+  document.getElementById('tech-nein').classList.remove('active-tech');
+  document.getElementById('tech-ja').classList.remove('active-tech');
+  document.getElementById('tech-fields').classList.remove('show');
+  document.getElementById('tech-desc').value = '';
+  document.getElementById('tech-ticket-sent').style.display = 'none';
+
+  // Build category buttons
+  const row = document.getElementById('tech-cat-row');
+  row.innerHTML = '';
+  TECH_CATS.forEach(cat => {
+    const btn = document.createElement('button');
+    btn.className = 'tech-cat-btn';
+    btn.textContent = cat;
+    btn.onclick = () => selectTechCat(cat, btn);
+    row.appendChild(btn);
+  });
+}
+
+function selectTechCat(cat, btn) {
+  selectedTechCat = cat;
+  document.querySelectorAll('.tech-cat-btn').forEach(b => b.classList.remove('selected'));
+  btn.classList.add('selected');
+}
+
+function setTechProblem(hasP) {
+  techProblem = hasP;
+  document.getElementById('tech-nein').classList.toggle('active-tech', !hasP);
+  document.getElementById('tech-ja').classList.toggle('active-tech', hasP);
+  document.getElementById('tech-fields').classList.toggle('show', hasP);
+}
+
+function createTechTicket(roomId) {
+  if (!techProblem) return;
+  const cat = selectedTechCat || 'Sonstiges';
+  const desc = document.getElementById('tech-desc').value.trim();
+  const title = cat.replace(/^.+? /, '') + (desc ? ': ' + desc.slice(0,50) : '');
+
+  // shared localStorage key with facility.html
+  let fTasks = [];
+  try { fTasks = JSON.parse(localStorage.getItem('facility_tasks') || '[]'); } catch {}
+
+  fTasks.push({
+    id: 'hk_' + Date.now(),
+    title: 'Zimmer ' + roomId + ' — ' + title,
+    cat: 'Elektro',
+    prio: 'mittel',
+    location: 'Zimmer ' + roomId,
+    desc: (desc || '') + '\n[Gemeldet beim Abschluss der Reinigung — Housekeeping]',
+    status: 'offen',
+    created: new Date().toLocaleString('de-DE'),
+  });
+  localStorage.setItem('facility_tasks', JSON.stringify(fTasks));
+  document.getElementById('tech-ticket-sent').style.display = 'block';
 }
 
 // ══ INIT ══
