@@ -283,6 +283,10 @@ nav{
 .color-options{display:flex;gap:7px;margin-bottom:12px;flex-wrap:wrap;}
 .color-opt{width:26px;height:26px;border-radius:50%;border:2px solid transparent;cursor:pointer;transition:.15s;}
 .color-opt.selected{border-color:var(--paper);transform:scale(1.15);}
+.avatar-opt{width:36px;height:36px;border-radius:50%;border:2px solid transparent;cursor:pointer;transition:.15s;font-size:1.2rem;display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,.06);}
+.avatar-opt:hover{border-color:rgba(201,162,39,.4);}
+.avatar-opt.selected{border-color:var(--gold);background:rgba(201,162,39,.12);}
+.staff-avatar-display{width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.3rem;flex-shrink:0;}
 .btn-add{background:var(--gold);color:var(--ink);font-weight:600;width:100%;}
 .btn-add:hover{background:var(--gold-bright);}
 
@@ -352,7 +356,16 @@ nav{
 <body>
 
 <nav>
-  <a class="nav-brand" href="#">Turmhotel Frankfurt</a>
+  <a class="nav-brand" href="#" style="display:flex;align-items:center;gap:10px;text-decoration:none;">
+    <svg width="28" height="36" viewBox="0 0 28 36" fill="none" xmlns="http://www.w3.org/2000/svg" style="flex-shrink:0;">
+      <rect width="28" height="36" rx="2" fill="#2e6b4f"/>
+      <text x="14" y="13" text-anchor="middle" font-size="12" fill="white" font-family="serif">&#x2654;</text>
+      <rect x="4" y="15" width="20" height="1.5" fill="white" opacity=".7"/>
+      <text x="14" y="28" text-anchor="middle" font-size="5.5" fill="white" font-family="sans-serif" letter-spacing="1.5" font-weight="600">TURM</text>
+      <text x="14" y="34" text-anchor="middle" font-size="4" fill="white" opacity=".75" font-family="sans-serif" letter-spacing=".5">HOTEL</text>
+    </svg>
+    <span style="font-family:'Fraunces',serif;font-size:.9rem;color:var(--gold);">Turmhotel Frankfurt</span>
+  </a>
   <div class="nav-right">
     <button class="lang-btn active" onclick="setLang('de')">🇩🇪 DE</button>
     <button class="lang-btn" onclick="setLang('en')">🇬🇧 EN</button>
@@ -466,16 +479,67 @@ nav{
   <div class="import-panel">
     <div class="building-label" style="margin-top:4px">Gästeliste importieren</div>
 
-    <!-- Drop Zone -->
-    <div class="import-zone" id="csv-dropzone" onclick="document.getElementById('csv-file-input').click()"
-         ondragover="event.preventDefault();this.style.borderColor='var(--gold)'"
-         ondragleave="this.style.borderColor=''"
-         ondrop="handleCsvDrop(event)">
-      <div class="import-zone-icon">📋</div>
-      <div class="import-zone-title">CSV-Datei hier ablegen</div>
-      <div class="import-zone-hint">oder klicken zum Auswählen · PMS-Export, Excel-CSV</div>
+    <!-- Import Mode Toggle -->
+    <div style="display:flex;gap:8px;margin-bottom:16px;">
+      <button class="filter-btn active" id="mode-btn-csv" onclick="switchImportMode('csv')">📷 Foto-Upload</button>
+      <button class="filter-btn" id="mode-btn-json" onclick="switchImportMode('json')">⚡ JSON-Funktion</button>
     </div>
-    <input type="file" id="csv-file-input" accept=".csv,.txt" style="display:none" onchange="handleCsvFile(event)">
+
+    <!-- CSV Mode -->
+    <div id="import-mode-csv">
+      <!-- Photo Upload -->
+      <div class="import-zone" id="photo-dropzone" onclick="document.getElementById('photo-file-input').click()"
+           ondragover="event.preventDefault();this.style.borderColor='var(--gold)'"
+           ondragleave="this.style.borderColor=''"
+           ondrop="handlePhotoDrop(event)">
+        <div class="import-zone-icon">📷</div>
+        <div class="import-zone-title">Foto der Gästeliste hochladen</div>
+        <div class="import-zone-hint">Handyfoto · Screenshot · Scan — KI liest Zimmernr. + Abreisedatum + Personenzahl</div>
+      </div>
+      <input type="file" id="photo-file-input" accept="image/*" style="display:none" onchange="handlePhotoFile(event)" capture="environment">
+
+      <div class="import-info-box" style="margin-top:12px;">
+        <div class="import-info-title">Datenschutz</div>
+        <p style="font-family:'Spline Sans Mono',monospace;font-size:.7rem;color:var(--muted);">
+          ✓ Keine Gästenamen werden gespeichert · Nur Zimmernr. + Abreisedatum + Personenzahl · Bild wird nur lokal verarbeitet
+        </p>
+      </div>
+
+      <!-- Photo Preview + Status -->
+      <div id="photo-status" style="display:none;margin-top:14px;">
+        <div style="display:flex;gap:12px;align-items:flex-start;flex-wrap:wrap;">
+          <img id="photo-thumb" style="max-width:140px;max-height:140px;border-radius:var(--radius);border:1px solid var(--line);object-fit:cover;" />
+          <div style="flex:1;">
+            <div id="photo-ai-status" style="font-family:'Spline Sans Mono',monospace;font-size:.76rem;color:var(--gold);margin-bottom:8px;">⏳ KI analysiert Bild...</div>
+            <div id="photo-ai-result" style="display:none;"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- JSON Mode -->
+    <div id="import-mode-json" style="display:none;">
+      <div class="import-info-box" style="margin-bottom:14px;">
+        <div class="import-info-title">JSON-Funktion einfügen</div>
+        <p style="font-family:'Spline Sans Mono',monospace;font-size:.7rem;color:var(--muted);margin-bottom:10px;">
+          Format: <code style="color:var(--gold)">generateCleaningList</code> · Felder: <code style="color:var(--paper)">rooms_to_clean</code> (room, type) + optional <code style="color:var(--paper)">excluded_rooms</code>
+        </p>
+      </div>
+      <textarea id="json-input" style="width:100%;height:200px;background:rgba(255,255,255,.04);border:1px solid var(--line);border-radius:var(--radius);color:var(--paper);font-family:'Spline Sans Mono',monospace;font-size:.72rem;padding:12px;resize:vertical;line-height:1.5;" placeholder='{"processing_results":{"rooms_to_clean":[{"room":"011","type":"D"},...],"excluded_rooms":["024"]}}'></textarea>
+      <div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap;">
+        <button class="btn btn-save" onclick="parseJsonInput()" style="flex:1;">⚡ JSON einlesen</button>
+        <button class="btn btn-cancel" onclick="document.getElementById('json-input').value='';document.getElementById('json-preview').classList.remove('show');">✕ Leeren</button>
+        <button class="btn btn-save" onclick="pasteFromClipboard()" style="background:rgba(201,162,39,.3);color:var(--gold-bright);">📋 Einfügen</button>
+      </div>
+
+      <!-- JSON Preview -->
+      <div class="import-preview show" id="json-preview" style="display:none!important;">
+        <div class="import-preview-title" id="json-preview-title">Erkannte Zimmer</div>
+        <div class="preview-list" id="json-preview-list"></div>
+        <div id="json-type-summary" style="font-family:'Spline Sans Mono',monospace;font-size:.7rem;color:var(--muted);margin:8px 0;"></div>
+        <button class="btn btn-apply" id="btn-apply-json" onclick="applyJsonImport()">✓ Auf Zimmer übertragen</button>
+      </div>
+    </div>
 
     <!-- Format Info -->
     <div class="import-info-box">
@@ -529,7 +593,9 @@ nav{
       </div>
       <div class="field-label">Farbe</div>
       <div class="color-options" id="color-options"></div>
-      <button class="btn btn-add" onclick="addStaff()">+ Hinzufügen</button>
+      <div class="field-label" style="margin-top:10px;">Avatar</div>
+      <div class="color-options" id="avatar-options" style="gap:8px;"></div>
+      <button class="btn btn-add" onclick="addStaff()" style="margin-top:4px;">+ Hinzufügen</button>
     </div>
   </div>
 </div>
@@ -589,8 +655,23 @@ const ROOMS = {
 };
 const ALL_ROOMS = Object.values(ROOMS).flat();
 
-const COLORS = ['#c9a227','#2a7a4b','#1a6fa8','#8e44ad','#e67e22','#c0392b','#16a085','#d4a574'];
+const COLORS = ['#2e6b4f','#c9a227','#1a6fa8','#8e44ad','#e67e22','#c0392b','#16a085','#d4a574'];
 let selectedColor = COLORS[0];
+
+// Avatar system
+const AVATARS = [
+  { id:'hk1', emoji:'🧹', label:'Housekeeping' },
+  { id:'hk2', emoji:'🛏️', label:'Zimmer' },
+  { id:'hk3', emoji:'🧽', label:'Reinigung' },
+  { id:'hk4', emoji:'🌿', label:'Grün' },
+  { id:'hk5', emoji:'⭐', label:'Senior' },
+  { id:'hk6', emoji:'🔑', label:'Rezeption' },
+  { id:'hk7', emoji:'🛎️', label:'Service' },
+  { id:'hk8', emoji:'🧴', label:'Wäsche' },
+  { id:'hk9', emoji:'🪣', label:'Putze' },
+  { id:'hk10', emoji:'💼', label:'Leitung' },
+];
+let selectedAvatar = AVATARS[0];
 let activeFilter = 'all';
 let csvParsed = []; // {room, type: 'checkout'|'overnight'}
 
@@ -655,13 +736,14 @@ function renderRooms() {
       let typeBadge = '';
       if (rs.guestType === 'checkout') typeBadge = '<span class="badge badge-checkout">Abreise</span>';
       else if (rs.guestType === 'overnight') typeBadge = '<span class="badge badge-overnight">Overnight</span>';
+      const typBdg = rs.roomType ? `<span class="badge" style="background:rgba(201,162,39,.1);color:var(--gold)">${rs.roomType}</span>` : '';
 
       card.innerHTML = `
         <div class="room-num">${r}</div>
         <div class="room-status-row">
           <span class="badge ${rs.clean ? 'badge-clean' : 'badge-dirty'}">${rs.clean ? 'Sauber' : 'Offen'}</span>
           <span class="badge ${rs.occupied ? 'badge-occupied' : 'badge-free'}">${rs.occupied ? 'Belegt' : 'Frei'}</span>
-          ${typeBadge}
+          ${typeBadge}${typBdg}
         </div>
         ${staffObj ? `<div class="room-staff"><span class="staff-chip" style="background:${staffObj.color}">${staffObj.abb}</span></div>` : ''}
         ${rs.note ? `<div class="room-note">${rs.note}</div>` : ''}
@@ -712,8 +794,9 @@ function openModal(roomId) {
 
   // Guest type info
   const gi = document.getElementById('modal-guest-info');
-  if (rs.guestType === 'checkout') gi.innerHTML = '<span class="co-tag">↗ Abreise heute — Zimmer wird frei</span>';
-  else if (rs.guestType === 'overnight') gi.innerHTML = '<span class="ov-tag">🌙 Overnight — Gast bleibt</span>';
+  const typeLabel = rs.roomType ? ` · Typ <strong style="color:var(--gold)">${rs.roomType}</strong>` : '';
+  if (rs.guestType === 'checkout') gi.innerHTML = `<span class="co-tag">↗ Abreise heute — Zimmer wird frei${typeLabel}</span>`;
+  else if (rs.guestType === 'overnight') gi.innerHTML = `<span class="ov-tag">🌙 Overnight — Gast bleibt${typeLabel}</span>`;
   else gi.innerHTML = '';
 
   const sel = document.getElementById('modal-staff');
@@ -750,6 +833,7 @@ function saveRoom() {
     staff: document.getElementById('modal-staff').value,
     note: document.getElementById('modal-note').value.trim(),
     guestType: existing.guestType || '',
+    roomType: existing.roomType || '',
   };
   saveState(state);
   renderRooms();
@@ -776,7 +860,7 @@ function renderOverview() {
     row.innerHTML = `
       <div class="staff-row-header">
         <div class="staff-name-display">
-          <span class="staff-chip" style="background:${s.color}">${s.abb}</span>${s.name}
+          <span class="staff-chip" style="background:${s.color}">${s.avatar||'🧹'} ${s.abb}</span>${s.name}
         </div>
         <span style="font-family:'Spline Sans Mono',monospace;font-size:.76rem;color:var(--muted)">
           ${done.length}/${assigned.length} · <span style="color:${s.color}">${pct}%</span>
@@ -823,9 +907,17 @@ function renderPersonal() {
   staff.forEach((s, i) => {
     const item = document.createElement('div');
     item.className = 'personal-item';
-    item.innerHTML = `<span class="staff-chip" style="background:${s.color}">${s.abb}</span><span class="pname">${s.name}</span><span class="pabb">${s.abb}</span><button class="del-btn" onclick="deleteStaff(${i})">×</button>`;
+    const av = s.avatar || '🧹';
+    item.innerHTML = `
+      <div class="staff-avatar-display" style="background:${s.color}">${av}</div>
+      <div style="flex:1;">
+        <div class="pname">${s.name}</div>
+        <div class="pabb" style="margin-top:2px;">${s.abb} · ${av}</div>
+      </div>
+      <button class="del-btn" onclick="deleteStaff(${i})">×</button>`;
     list.appendChild(item);
   });
+  // Color picker
   const cp = document.getElementById('color-options');
   cp.innerHTML = '';
   COLORS.forEach(c => {
@@ -835,6 +927,18 @@ function renderPersonal() {
     d.onclick = () => { selectedColor = c; renderPersonal(); };
     cp.appendChild(d);
   });
+  // Avatar picker
+  const ap = document.getElementById('avatar-options');
+  if (!ap) return;
+  ap.innerHTML = '';
+  AVATARS.forEach(av => {
+    const d = document.createElement('div');
+    d.className = 'avatar-opt' + (av.id === selectedAvatar.id ? ' selected' : '');
+    d.title = av.label;
+    d.textContent = av.emoji;
+    d.onclick = () => { selectedAvatar = av; renderPersonal(); };
+    ap.appendChild(d);
+  });
 }
 
 function addStaff() {
@@ -842,7 +946,7 @@ function addStaff() {
   const abb = document.getElementById('new-abb').value.trim().toUpperCase();
   if (!name || !abb) { alert('Name und Kürzel ausfüllen.'); return; }
   if (staff.find(s => s.name === name)) { alert('Name bereits vergeben.'); return; }
-  staff.push({ name, abb, color: selectedColor });
+  staff.push({ name, abb, color: selectedColor, avatar: selectedAvatar.emoji });
   saveStaffData(staff);
   document.getElementById('new-name').value = '';
   document.getElementById('new-abb').value = '';
@@ -867,6 +971,132 @@ function showTab(tab) {
   });
   if (tab === 'uebersicht') renderOverview();
   if (tab === 'personal') renderPersonal();
+}
+
+// ══ PHOTO IMPORT (Claude Vision) ══
+function handlePhotoDrop(event) {
+  event.preventDefault();
+  document.getElementById('photo-dropzone').style.borderColor = '';
+  const file = event.dataTransfer.files[0];
+  if (file && file.type.startsWith('image/')) processPhotoFile(file);
+}
+function handlePhotoFile(event) {
+  const file = event.target.files[0];
+  if (file) processPhotoFile(file);
+  event.target.value = '';
+}
+
+function processPhotoFile(file) {
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    const base64 = e.target.result.split(',')[1];
+    const mime = file.type || 'image/jpeg';
+
+    // Show thumbnail
+    document.getElementById('photo-thumb').src = e.target.result;
+    document.getElementById('photo-status').style.display = '';
+    document.getElementById('photo-ai-status').textContent = '⏳ KI liest Gästeliste...';
+    document.getElementById('photo-ai-result').style.display = 'none';
+
+    const today = todayStr(); // DD.MM.YYYY
+    const prompt = `Du bist ein Datenschutz-konformes Housekeeping-Tool. Analysiere dieses Bild einer Hotelgästeliste.
+
+WICHTIG — Datenschutz:
+- Lese KEINE Gästenamen aus
+- Lese NUR: Zimmernummer, Abreisedatum, Personenzahl
+
+Heutiges Datum: ${today}
+
+Aufgabe: Identifiziere alle Zeilen wo die Abreise dem heutigen Datum entspricht (${today}).
+
+Antworte NUR mit validem JSON ohne Markdown, exakt in diesem Format:
+{
+  "date_checked": "${today}",
+  "checkout_rooms": [
+    {"room": "11", "persons": 2},
+    {"room": "202", "persons": 1}
+  ],
+  "overnight_rooms": [
+    {"room": "12", "persons": 3}
+  ],
+  "total_found": 5,
+  "note": "kurze Anmerkung falls Bild unklar"
+}
+
+Zimmernummern als String ohne führende Nullen (z.B. "11" nicht "011").
+Falls kein Datum erkennbar oder Bild unscharf: leere Arrays zurückgeben und in note erklären.`;
+
+    fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-6',
+        max_tokens: 1000,
+        messages: [{
+          role: 'user',
+          content: [
+            { type: 'image', source: { type: 'base64', media_type: mime, data: base64 } },
+            { type: 'text', text: prompt }
+          ]
+        }]
+      })
+    })
+    .then(r => r.json())
+    .then(data => {
+      const text = (data.content || []).map(b => b.text || '').join('').trim();
+      let parsed;
+      try {
+        const clean = text.replace(/```json|```/g, '').trim();
+        parsed = JSON.parse(clean);
+      } catch(e) {
+        document.getElementById('photo-ai-status').textContent = '⚠️ KI-Antwort nicht lesbar — bitte JSON-Modus nutzen.';
+        return;
+      }
+
+      const coRooms = (parsed.checkout_rooms || []).filter(r => ALL_ROOMS.includes(String(r.room)));
+      const ovRooms = (parsed.overnight_rooms || []).filter(r => ALL_ROOMS.includes(String(r.room)));
+
+      // Store for apply
+      csvParsed = [
+        ...coRooms.map(r => ({ room: String(r.room), guestType: 'checkout', persons: r.persons })),
+        ...ovRooms.map(r => ({ room: String(r.room), guestType: 'overnight', persons: r.persons })),
+      ];
+
+      // Show result
+      const resultEl = document.getElementById('photo-ai-result');
+      resultEl.style.display = '';
+
+      let html = `<div style="font-family:'Spline Sans Mono',monospace;font-size:.72rem;margin-bottom:10px;">`;
+      if (coRooms.length) {
+        html += `<div style="color:var(--checkout-col);margin-bottom:6px;"><strong>${coRooms.length} Abreisezimmer heute:</strong></div>`;
+        html += `<div style="display:flex;flex-wrap:wrap;gap:5px;margin-bottom:10px;">`;
+        coRooms.forEach(r => {
+          html += `<span style="background:var(--checkout-bg);border:1px solid rgba(230,126,34,.3);color:var(--checkout-col);padding:2px 8px;border-radius:1px;">${r.room}${r.persons ? ' · '+r.persons+'P' : ''}</span>`;
+        });
+        html += '</div>';
+      }
+      if (ovRooms.length) {
+        html += `<div style="color:#c084fc;margin-bottom:6px;"><strong>${ovRooms.length} Overnight:</strong></div>`;
+        html += `<div style="display:flex;flex-wrap:wrap;gap:5px;margin-bottom:10px;">`;
+        ovRooms.forEach(r => {
+          html += `<span style="background:var(--overnight-bg);border:1px solid rgba(142,68,173,.3);color:#c084fc;padding:2px 8px;border-radius:1px;">${r.room}${r.persons ? ' · '+r.persons+'P' : ''}</span>`;
+        });
+        html += '</div>';
+      }
+      if (parsed.note) {
+        html += `<div style="color:var(--muted);font-style:italic;margin-top:4px;">${parsed.note}</div>`;
+      }
+      html += `<button class="btn btn-apply" onclick="applyCsvImport()" style="margin-top:12px;width:100%;">✓ Auf Zimmer übertragen</button>`;
+      html += '</div>';
+
+      resultEl.innerHTML = html;
+      document.getElementById('photo-ai-status').textContent = `✓ ${parsed.total_found || csvParsed.length} Zimmer erkannt`;
+    })
+    .catch(err => {
+      document.getElementById('photo-ai-status').textContent = '⚠️ Fehler: ' + err.message;
+    });
+  };
+  reader.readAsDataURL(file);
 }
 
 // ══ CSV IMPORT ══
@@ -1034,6 +1264,121 @@ function applyManual() {
   saveState(state);
   renderRooms();
   document.getElementById('manual-room').value = '';
+}
+
+// ══ IMPORT MODE TOGGLE ══
+function switchImportMode(mode) {
+  document.getElementById('import-mode-csv').style.display = mode === 'csv' ? '' : 'none';
+  document.getElementById('import-mode-json').style.display = mode === 'json' ? '' : 'none';
+  document.getElementById('mode-btn-csv').classList.toggle('active', mode === 'csv');
+  document.getElementById('mode-btn-json').classList.toggle('active', mode === 'json');
+}
+
+// ══ JSON IMPORT ══
+let jsonParsed = [];
+
+async function pasteFromClipboard() {
+  try {
+    const text = await navigator.clipboard.readText();
+    document.getElementById('json-input').value = text;
+  } catch {
+    alert('Einfügen nicht möglich — bitte manuell Ctrl+V ins Textfeld.');
+  }
+}
+
+function parseJsonInput() {
+  const raw = document.getElementById('json-input').value.trim();
+  if (!raw) { alert('Bitte JSON einfügen.'); return; }
+
+  let data;
+  try { data = JSON.parse(raw); } catch(e) { alert('Ungültiges JSON: ' + e.message); return; }
+
+  // Flexible: support top-level or nested unter processing_results
+  const results = data.processing_results || data;
+  const roomsRaw = results.rooms_to_clean || data.rooms_to_clean || [];
+  const excluded = results.excluded_rooms || data.excluded_rooms || [];
+
+  if (!roomsRaw.length) { alert('Keine rooms_to_clean gefunden.'); return; }
+
+  // Normalize room numbers: "011" → "11", keep as string
+  function normRoom(r) {
+    // Strip leading zeros for matching (App uses '11', not '011')
+    return String(parseInt(r, 10));
+  }
+
+  const excludedNorm = excluded.map(e => normRoom(e));
+
+  // Type mapping: 1→E, 2→D, 3→T (also accept string codes directly)
+  const typeMap = (data.parameters && data.parameters.filter_rules && data.parameters.filter_rules.type_mapping) || { '1':'E','2':'D','3':'T' };
+
+  jsonParsed = [];
+  const skipped = [];
+  const excl = [];
+
+  roomsRaw.forEach(entry => {
+    const roomNorm = normRoom(entry.room);
+    if (excludedNorm.includes(roomNorm)) { excl.push(roomNorm); return; }
+    if (!ALL_ROOMS.includes(roomNorm)) { skipped.push(roomNorm); return; }
+
+    // Resolve type
+    let typeRaw = String(entry.type || '');
+    let typeResolved = typeMap[typeRaw] || typeRaw || 'D';
+
+    jsonParsed.push({ room: roomNorm, type: typeResolved });
+  });
+
+  showJsonPreview(jsonParsed, skipped, excl);
+}
+
+function showJsonPreview(rooms, skipped, excluded) {
+  const preview = document.getElementById('json-preview');
+  const list = document.getElementById('json-preview-list');
+  const title = document.getElementById('json-preview-title');
+  const summary = document.getElementById('json-type-summary');
+  list.innerHTML = '';
+
+  const byType = {};
+  rooms.forEach(r => {
+    byType[r.type] = (byType[r.type] || 0) + 1;
+    const tag = document.createElement('span');
+    tag.className = 'preview-tag';
+    tag.textContent = r.room + ' · ' + r.type;
+    list.appendChild(tag);
+  });
+
+  const typeStr = Object.entries(byType).map(([k,v]) => `${v}× ${k}`).join(' · ');
+  title.textContent = `${rooms.length} Abreisezimmer erkannt`;
+  summary.innerHTML = `<span style="color:var(--gold)">${typeStr}</span>${skipped.length ? ` · <span style="color:#e87070">${skipped.length} nicht im System</span>` : ''}${excluded.length ? ` · <span style="color:var(--muted)">${excluded.length} ausgeschlossen</span>` : ''}`;
+
+  preview.style.removeProperty('display');
+  preview.classList.add('show');
+}
+
+function applyJsonImport() {
+  if (!jsonParsed.length) return;
+
+  // First clear all existing guestType
+  ALL_ROOMS.forEach(r => {
+    if (state[r]) state[r].guestType = '';
+  });
+
+  jsonParsed.forEach(({ room, type }) => {
+    const rs = getRoomState(room);
+    state[room] = { ...rs, guestType: 'checkout', roomType: type };
+  });
+
+  saveState(state);
+  renderRooms();
+
+  const typeCount = {};
+  jsonParsed.forEach(r => { typeCount[r.type] = (typeCount[r.type]||0)+1; });
+  const typeStr = Object.entries(typeCount).map(([k,v]) => `${v}× ${k}`).join(' · ');
+
+  const banner = document.getElementById('import-banner');
+  document.getElementById('import-banner-text').innerHTML =
+    `✓ JSON geladen · <strong>${jsonParsed.length} Abreisezimmer</strong> (${typeStr}) · Datum: ${todayStr()}`;
+  banner.classList.add('show');
+  showTab('zimmer');
 }
 
 // ══ RESET ══
