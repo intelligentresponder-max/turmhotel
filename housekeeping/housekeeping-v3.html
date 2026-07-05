@@ -192,6 +192,79 @@ nav{
   color:var(--gold);padding:1px 5px;border-radius:1px;
 }
 
+/* Zimmer-Rahmen = Putzkraft-Farbe wenn zugewiesen & nicht fertig */
+.room-card.assigned{border-width:2px;}
+
+/* 3-Klick Fertigmeldung */
+.done-overlay{
+  display:none;position:fixed;inset:0;z-index:400;
+  background:rgba(0,0,0,.82);backdrop-filter:blur(6px);
+  align-items:center;justify-content:center;padding:20px;
+}
+.done-overlay.show{display:flex;}
+.done-modal{
+  background:#0f1a12;border:1px solid rgba(42,122,75,.4);
+  border-radius:6px;padding:0;width:100%;max-width:480px;
+  animation:slideUp .2s ease;overflow:hidden;
+}
+.done-modal-header{
+  background:rgba(42,122,75,.2);padding:18px 22px;
+  border-bottom:1px solid rgba(42,122,75,.25);
+}
+.done-modal-header h3{font-family:'Fraunces',serif;font-size:1.2rem;color:#7ecfa0;}
+.done-modal-header p{font-family:'Spline Sans Mono',monospace;font-size:.7rem;color:var(--muted);margin-top:4px;}
+.done-steps{padding:20px 22px;display:flex;flex-direction:column;gap:0;}
+.done-step{
+  border:1px solid rgba(42,122,75,.2);border-radius:4px;
+  margin-bottom:10px;overflow:hidden;transition:.2s;
+}
+.done-step.checked{border-color:rgba(42,122,75,.5);background:rgba(42,122,75,.08);}
+.done-step-header{
+  display:flex;align-items:center;gap:12px;
+  padding:13px 16px;cursor:pointer;
+}
+.done-step-check{
+  width:24px;height:24px;border-radius:50%;border:2px solid rgba(42,122,75,.4);
+  display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;transition:.2s;font-size:.9rem;
+}
+.done-step.checked .done-step-check{background:#2a7a4b;border-color:#2a7a4b;color:#fff;}
+.done-step-label{font-family:'Spline Sans',sans-serif;font-size:.88rem;color:var(--paper);flex:1;line-height:1.4;}
+.done-step.checked .done-step-label{color:#7ecfa0;}
+.done-step-sub{
+  padding:0 16px 14px 52px;display:none;
+  font-family:'Spline Sans Mono',monospace;font-size:.72rem;color:var(--muted);
+  line-height:1.7;
+}
+.done-step.open .done-step-sub{display:block;}
+.done-step-extra{
+  margin-top:8px;padding:8px 10px;
+  background:rgba(255,255,255,.04);border:1px solid var(--line);border-radius:2px;
+  color:var(--paper);font-family:'Spline Sans',sans-serif;font-size:.82rem;
+  width:100%;resize:none;height:56px;
+}
+.done-step-extra:focus{outline:none;border-color:rgba(42,122,75,.5);}
+.done-step-extra::placeholder{color:var(--muted);}
+.done-modal-footer{
+  padding:14px 22px;border-top:1px solid rgba(42,122,75,.2);
+  display:flex;gap:10px;
+}
+.btn-done-confirm{
+  flex:1;background:#2a7a4b;color:#fff;font-weight:600;
+  padding:11px;border-radius:3px;border:none;cursor:pointer;
+  font-family:'Spline Sans Mono',monospace;font-size:.78rem;
+  letter-spacing:.1em;text-transform:uppercase;transition:.15s;
+  opacity:.4;pointer-events:none;
+}
+.btn-done-confirm.ready{opacity:1;pointer-events:all;}
+.btn-done-confirm.ready:hover{background:#23653e;}
+.btn-done-cancel{
+  background:none;border:1px solid var(--line);color:var(--muted);
+  padding:11px 18px;border-radius:3px;cursor:pointer;
+  font-family:'Spline Sans Mono',monospace;font-size:.72rem;transition:.15s;
+}
+.btn-done-cancel:hover{color:var(--paper);}
+
 /* ── SECTION LABELS ── */
 .building-label{
   font-family:'Spline Sans Mono',monospace;font-size:.66rem;letter-spacing:.3em;text-transform:uppercase;
@@ -679,6 +752,57 @@ nav{
 
 </div><!-- /main -->
 
+<!-- ══ 3-KLICK FERTIGMELDUNG ══ -->
+<div class="done-overlay" id="done-overlay">
+  <div class="done-modal">
+    <div class="done-modal-header">
+      <h3 id="done-room-title">Zimmer fertig melden</h3>
+      <p>Bitte alle 3 Punkte bestätigen</p>
+    </div>
+    <div class="done-steps">
+
+      <!-- SCHRITT 1: Lüftung -->
+      <div class="done-step" id="done-step-1" onclick="toggleDoneStep(1)">
+        <div class="done-step-header">
+          <div class="done-step-check" id="done-check-1">1</div>
+          <div class="done-step-label">🪟 Fenster geöffnet &amp; Durchzug hergestellt — Tür offen bis Fertigmeldung</div>
+        </div>
+      </div>
+
+      <!-- SCHRITT 2: Reinigung -->
+      <div class="done-step" id="done-step-2" onclick="toggleDoneStep(2)">
+        <div class="done-step-header">
+          <div class="done-step-check" id="done-check-2">2</div>
+          <div class="done-step-label">🧹 Reinigung vollständig durchgeführt</div>
+        </div>
+        <div class="done-step-sub" onclick="event.stopPropagation()">
+          ✓ Sichtbare Oberflächen mit frischem Lappen gereinigt<br>
+          ✓ Boden gesaugt &amp; gewischt — auch unter dem Bett<br>
+          ✓ Regale, Ablagen, Schrank (oben / Türen / innen)<br>
+          <textarea class="done-step-extra" id="extra-reinigung" placeholder="Extra-Zeit gebraucht für... (optional beschreiben)"></textarea>
+        </div>
+      </div>
+
+      <!-- SCHRITT 3: Bett & Gast -->
+      <div class="done-step" id="done-step-3" onclick="toggleDoneStep(3)">
+        <div class="done-step-header">
+          <div class="done-step-check" id="done-check-3">3</div>
+          <div class="done-step-label">🛏️ Bett &amp; Gast-Besonderheiten</div>
+        </div>
+        <div class="done-step-sub" onclick="event.stopPropagation()">
+          ✓ Bett frisch bezogen nach Vorgabe<br>
+          <textarea class="done-step-extra" id="extra-bett" placeholder="Extra Treatment / Gastwunsch / Stammgast-Besonderheit... (optional)"></textarea>
+        </div>
+      </div>
+
+    </div>
+    <div class="done-modal-footer">
+      <button class="btn-done-cancel" onclick="closeDoneFlow()">Abbrechen</button>
+      <button class="btn-done-confirm" id="btn-done-confirm" onclick="confirmDone()">✓ Zimmer fertig</button>
+    </div>
+  </div>
+</div>
+
 <!-- ══ MODAL ══ -->
 <div class="overlay" id="overlay" onclick="closeModal(event)">
   <div class="modal">
@@ -708,6 +832,7 @@ nav{
     <div class="modal-actions">
       <button class="btn btn-cancel" onclick="closeModalDirect()">Abbrechen</button>
       <button class="btn btn-save" onclick="saveRoom()">Speichern</button>
+      <button class="btn btn-save" onclick="openDoneFlow()" style="background:#2a7a4b;" id="btn-fertig">✓ Fertig melden</button>
     </div>
   </div>
 </div>
@@ -810,7 +935,13 @@ function renderRooms() {
       else if (rs.guestType === 'checkout') cardClass += 'checkout-red';
       else if (rs.guestType === 'overnight') cardClass += 'checkout';
       else cardClass += 'dirty';
+      if (staffObj && !rs.clean) cardClass += ' assigned';
       card.className = cardClass;
+      // Putzkraft-Farbe als Rahmen wenn zugewiesen & nicht fertig
+      if (staffObj && !rs.clean) {
+        card.style.borderColor = staffObj.color;
+        card.style.boxShadow = `0 0 0 1px ${staffObj.color}40`;
+      }
       card.onclick = () => openModal(r);
 
       let typeBadge = '';
@@ -944,6 +1075,66 @@ function saveRoom() {
 
 function closeModalDirect() { document.getElementById('overlay').classList.remove('show'); currentRoom = null; }
 function closeModal(e) { if (e.target === document.getElementById('overlay')) closeModalDirect(); }
+
+// ══ 3-KLICK FERTIGMELDUNG ══
+let doneChecks = { 1: false, 2: false, 3: false };
+
+function openDoneFlow() {
+  if (!currentRoom) return;
+  doneChecks = { 1: false, 2: false, 3: false };
+  [1,2,3].forEach(i => {
+    document.getElementById('done-step-' + i).classList.remove('checked','open');
+    document.getElementById('done-check-' + i).textContent = i;
+  });
+  document.getElementById('extra-reinigung').value = '';
+  document.getElementById('extra-bett').value = '';
+  document.getElementById('done-room-title').textContent = 'Zimmer ' + currentRoom + ' fertig melden';
+  document.getElementById('btn-done-confirm').classList.remove('ready');
+  closeModalDirect();
+  document.getElementById('done-overlay').classList.add('show');
+}
+
+function toggleDoneStep(n) {
+  const step = document.getElementById('done-step-' + n);
+  const check = document.getElementById('done-check-' + n);
+  if (doneChecks[n]) {
+    // uncheck
+    doneChecks[n] = false;
+    step.classList.remove('checked');
+    check.textContent = n;
+    // close sub if open
+    step.classList.remove('open');
+  } else {
+    doneChecks[n] = true;
+    step.classList.add('checked');
+    check.textContent = '✓';
+    // open sub details for step 2+3
+    if (n === 2 || n === 3) step.classList.add('open');
+  }
+  // Confirm-Button freischalten wenn alle 3 gecheckt
+  const allDone = doneChecks[1] && doneChecks[2] && doneChecks[3];
+  document.getElementById('btn-done-confirm').classList.toggle('ready', allDone);
+}
+
+function confirmDone() {
+  if (!currentRoom) return;
+  const extraReinigung = document.getElementById('extra-reinigung').value.trim();
+  const extraBett = document.getElementById('extra-bett').value.trim();
+  const noteparts = [];
+  if (extraReinigung) noteparts.push('Reinigung: ' + extraReinigung);
+  if (extraBett) noteparts.push('Bett/Gast: ' + extraBett);
+
+  const rs = getRoomState(currentRoom);
+  state[currentRoom] = { ...rs, clean: true, note: noteparts.join(' · ') || rs.note || '' };
+  saveState(state);
+  closeDoneFlow();
+  renderRooms();
+  renderOverview();
+}
+
+function closeDoneFlow() {
+  document.getElementById('done-overlay').classList.remove('show');
+}
 
 // ══ OVERVIEW ══
 function renderOverview() {
