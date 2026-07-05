@@ -402,6 +402,17 @@ nav{
 .personal-item .pabb{font-family:'Spline Sans Mono',monospace;font-size:.78rem;color:var(--muted);}
 .del-btn{background:none;border:1px solid rgba(192,57,43,.35);color:#e87070;cursor:pointer;padding:3px 9px;border-radius:2px;font-size:.72rem;transition:.15s;}
 .del-btn:hover{background:var(--occupied-bg);}
+.vz-badge{font-family:'Spline Sans Mono',monospace;font-size:.6rem;padding:2px 6px;border-radius:1px;background:rgba(26,111,168,.15);color:#5bb3e8;border:1px solid rgba(26,111,168,.3);}
+.tz-badge{font-family:'Spline Sans Mono',monospace;font-size:.6rem;padding:2px 6px;border-radius:1px;background:rgba(142,68,173,.12);color:#c084fc;border:1px solid rgba(142,68,173,.3);}
+.presence-dot{width:10px;height:10px;border-radius:50%;background:rgba(255,255,255,.1);border:2px solid rgba(255,255,255,.15);cursor:pointer;transition:.3s;flex-shrink:0;}
+.presence-dot.online{background:#2a7a4b;border-color:#4ecb82;box-shadow:0 0 6px rgba(78,203,130,.5);}
+.duty-tag{font-family:'Spline Sans Mono',monospace;font-size:.62rem;padding:1px 6px;border-radius:1px;}
+.duty-on{background:rgba(42,122,75,.15);color:#7ecfa0;border:1px solid rgba(42,122,75,.3);}
+.duty-off{background:rgba(255,255,255,.04);color:var(--muted);border:1px solid var(--line);}
+.duty-sick{background:rgba(192,57,43,.1);color:#e87070;border:1px solid rgba(192,57,43,.25);}
+.duty-vacation{background:rgba(201,162,39,.1);color:var(--gold);border:1px solid var(--line);}
+.personal-item{display:flex;align-items:center;gap:10px;background:rgba(255,255,255,.035);border:1px solid var(--line);border-radius:var(--radius);padding:10px 14px;}
+.personal-item.on-duty{border-color:rgba(42,122,75,.35);}
 .add-staff-form{background:rgba(255,255,255,.025);border:1px solid var(--line);border-radius:var(--radius);padding:22px;}
 .add-staff-form h3{font-family:'Fraunces',serif;font-size:1rem;color:var(--gold);margin-bottom:16px;}
 .form-row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px;}
@@ -1031,7 +1042,11 @@ function openModal(roomId) {
 
   const sel = document.getElementById('modal-staff');
   sel.innerHTML = '<option value="">— Niemand zugewiesen —</option>';
-  staff.forEach(s => {
+  const dutyStaff = staff.filter(s => s.duty === 'on');
+  if (!dutyStaff.length && staff.length) {
+    container.innerHTML += '<p style="color:var(--muted);font-family:\'Spline Sans Mono\',monospace;font-size:.8rem;margin-top:8px">Heute kein Personal im Dienst.</p>';
+  }
+  dutyStaff.forEach(s => {
     const opt = document.createElement('option');
     opt.value = s.name;
     opt.textContent = s.name + ' (' + s.abb + ')';
@@ -1190,6 +1205,27 @@ function renderOverview() {
 }
 
 // ══ PERSONAL ══
+function dutyLabel(d) {
+  if (d==='on') return '<span class="duty-tag duty-on">Dienst</span>';
+  if (d==='sick') return '<span class="duty-tag duty-sick">Krank</span>';
+  if (d==='vacation') return '<span class="duty-tag duty-vacation">Urlaub</span>';
+  return '<span class="duty-tag duty-off">Frei</span>';
+}
+
+function togglePresence(i) {
+  staff[i].present = !staff[i].present;
+  saveStaffData(staff);
+  renderPersonal();
+}
+
+function cycleDuty(i) {
+  const cycle = ['on','off','sick','vacation'];
+  const cur = cycle.indexOf(staff[i].duty || 'off');
+  staff[i].duty = cycle[(cur+1) % cycle.length];
+  saveStaffData(staff);
+  renderPersonal();
+}
+
 function renderPersonal() {
   const list = document.getElementById('personal-list');
   list.innerHTML = '';
@@ -1198,13 +1234,21 @@ function renderPersonal() {
   }
   staff.forEach((s, i) => {
     const item = document.createElement('div');
-    item.className = 'personal-item';
+    const onDuty = s.duty === 'on';
+    item.className = 'personal-item' + (onDuty ? ' on-duty' : '');
     const av = s.avatar || '🧹';
+    const typeBadge = s.type === 'VZ'
+      ? `<span class="vz-badge">VZ ${s.hours||'08:00'}</span>`
+      : `<span class="tz-badge">TZ ${s.hours||'09:00'}</span>`;
     item.innerHTML = `
-      <div class="staff-avatar-display" style="background:${s.color}">${av}</div>
+      <div class="presence-dot ${s.present ? 'online' : ''}" title="${s.present ? 'Anwesend' : 'Klicken = Anwesenheit bestätigen'}" onclick="togglePresence(${i})"></div>
+      <div class="staff-avatar-display" style="background:${s.color};opacity:${onDuty?1:.45}">${av}</div>
       <div style="flex:1;">
-        <div class="pname">${s.name}</div>
-        <div class="pabb" style="margin-top:2px;">${s.abb} · ${av}</div>
+        <div class="pname" style="opacity:${onDuty?1:.6}">${s.name}</div>
+        <div style="display:flex;gap:5px;align-items:center;margin-top:3px;flex-wrap:wrap;">
+          ${typeBadge}
+          <span onclick="cycleDuty(${i})" style="cursor:pointer;">${dutyLabel(s.duty||'off')}</span>
+        </div>
       </div>
       <button class="del-btn" onclick="deleteStaff(${i})">×</button>`;
     list.appendChild(item);
@@ -1238,7 +1282,7 @@ function addStaff() {
   const abb = document.getElementById('new-abb').value.trim().toUpperCase();
   if (!name || !abb) { alert('Name und Kürzel ausfüllen.'); return; }
   if (staff.find(s => s.name === name)) { alert('Name bereits vergeben.'); return; }
-  staff.push({ name, abb, color: selectedColor, avatar: selectedAvatar.emoji });
+  staff.push({ name, abb, color: selectedColor, avatar: selectedAvatar.emoji, type: 'TZ', hours:'09:00-15:00', duty:'off', present: false });
   saveStaffData(staff);
   document.getElementById('new-name').value = '';
   document.getElementById('new-abb').value = '';
@@ -1778,7 +1822,31 @@ function setLang(lang) {
   });
 }
 
+// ══ DEFAULT STAFF ANLEGEN (nur wenn leer) ══
+function initDefaultStaff() {
+  if (staff.length > 0) return; // schon vorhanden
+  const defaults = [
+    { name:'Kanczler', abb:'KA', color:'#c9a227', avatar:'👑', type:'VZ', hours:'08:00-16:30', duty:'on' },
+    { name:'Loi',      abb:'LO', color:'#1a6fa8', avatar:'👑', type:'VZ', hours:'08:00-16:30', duty:'sick' },
+    { name:'Boateng',  abb:'BO', color:'#16a085', avatar:'🧹', type:'VZ', hours:'08:00-16:30', duty:'on' },
+    { name:'Ouattara', abb:'OU', color:'#8e44ad', avatar:'🧹', type:'VZ', hours:'08:00-16:30', duty:'off' },
+    { name:'Olah, Eva',abb:'EV', color:'#e67e22', avatar:'🌿', type:'TZ', hours:'09:00-15:00', duty:'on' },
+    { name:'Tuhluk',   abb:'TU', color:'#c0392b', avatar:'🧹', type:'TZ', hours:'09:00-15:00', duty:'sick' },
+    { name:'Mehari',   abb:'ME', color:'#2a7a4b', avatar:'🧹', type:'TZ', hours:'09:00-15:00', duty:'vacation' },
+    { name:'Kulwinder',abb:'KU', color:'#d4a574', avatar:'🧽', type:'TZ', hours:'09:00-15:00', duty:'on' },
+    { name:'Haidari',  abb:'HA', color:'#1a6fa8', avatar:'🧹', type:'TZ', hours:'09:00-15:00', duty:'off' },
+    { name:'da Silva', abb:'DS', color:'#8e44ad', avatar:'🧹', type:'TZ', hours:'09:00-15:00', duty:'on' },
+    { name:'El Houssaini', abb:'EH', color:'#16a085', avatar:'🧹', type:'TZ', hours:'09:00-15:00', duty:'off' },
+  ];
+  defaults.forEach(d => staff.push({
+    name: d.name, abb: d.abb, color: d.color, avatar: d.avatar,
+    type: d.type, hours: d.hours, duty: d.duty, present: false
+  }));
+  saveStaffData(staff);
+}
+
 // ══ INIT ══
+initDefaultStaff();
 renderRooms();
 renderPersonal();
 updateStats();
