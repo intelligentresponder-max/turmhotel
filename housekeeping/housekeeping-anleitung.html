@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Housekeeping Manager — Kurzanleitung</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Jost',sans-serif;font-weight:300;background:#f6f2ea;color:#2a2622;-webkit-font-smoothing:antialiased;}
+
+/* PRINT */
+@media print {
+  .no-print{display:none!important;}
+  body{background:#fff;}
+  .card{box-shadow:none!important;border:1px solid #ddd!important;}
+}
+
+.page{max-width:600px;margin:0 auto;padding:24px 16px 40px;}
+
+/* HEADER */
+.header{
+  display:flex;align-items:center;gap:16px;
+  padding:20px 24px;
+  background:#2e6b4f;border-radius:10px;
+  margin-bottom:20px;
+}
+.logo-box{
+  width:52px;height:64px;background:rgba(255,255,255,.15);
+  border-radius:6px;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;flex-shrink:0;
+  border:1px solid rgba(255,255,255,.25);
+}
+.logo-crown{font-size:1.6rem;line-height:1;margin-bottom:2px;}
+.logo-text{font-family:'Cormorant Garamond',serif;font-size:.55rem;color:rgba(255,255,255,.8);letter-spacing:2px;text-transform:uppercase;}
+.header-info h1{font-family:'Cormorant Garamond',serif;font-size:1.4rem;color:#fff;font-weight:500;line-height:1.2;}
+.header-info p{font-size:.75rem;color:rgba(255,255,255,.7);margin-top:4px;font-weight:400;}
+.header-info a{color:#b3d9c4;font-size:.72rem;word-break:break-all;}
+
+/* QR placeholder */
+.qr-row{
+  display:flex;align-items:center;gap:12px;
+  background:#fff;border:1px solid #dde8e1;border-radius:8px;
+  padding:12px 16px;margin-bottom:16px;
+}
+.qr-box{
+  width:70px;height:70px;background:#2e6b4f;border-radius:6px;
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;
+  font-size:2rem;
+}
+.qr-info{flex:1;}
+.qr-info strong{font-size:.85rem;font-weight:600;color:#2e6b4f;display:block;margin-bottom:3px;}
+.qr-info span{font-size:.72rem;color:#666;line-height:1.5;}
+
+/* SECTION */
+.section{margin-bottom:14px;}
+.section-title{
+  font-family:'Cormorant Garamond',serif;font-size:1.05rem;font-weight:600;
+  color:#2e6b4f;margin-bottom:8px;
+  display:flex;align-items:center;gap:8px;
+  padding-bottom:6px;border-bottom:1px solid #d6e8dd;
+}
+.step-num{
+  width:22px;height:22px;border-radius:50%;background:#2e6b4f;
+  color:#fff;font-family:'Jost',sans-serif;font-size:.72rem;font-weight:600;
+  display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;
+}
+
+.card{
+  background:#fff;border-radius:8px;padding:14px 16px;
+  box-shadow:0 1px 6px rgba(46,107,79,.08);border:1px solid #e8f0eb;
+  margin-bottom:10px;
+}
+.step-row{display:flex;gap:10px;align-items:flex-start;margin-bottom:8px;}
+.step-row:last-child{margin-bottom:0;}
+.step-icon{font-size:1.1rem;flex-shrink:0;margin-top:1px;}
+.step-text{flex:1;font-size:.84rem;line-height:1.5;color:#2a2622;}
+.step-text strong{font-weight:600;color:#2e6b4f;}
+.step-text .sub{font-size:.76rem;color:#666;margin-top:2px;display:block;}
+
+/* Color badges */
+.badge-red{display:inline-block;background:#faddd9;color:#c0392b;border:1px solid #f0b8b0;border-radius:3px;padding:1px 7px;font-size:.72rem;font-weight:500;}
+.badge-orange{display:inline-block;background:#fdebd0;color:#e67e22;border:1px solid #f5cba7;border-radius:3px;padding:1px 7px;font-size:.72rem;font-weight:500;}
+.badge-green{display:inline-block;background:#d5f0e0;color:#2a7a4b;border:1px solid #a9dbc0;border-radius:3px;padding:1px 7px;font-size:.72rem;font-weight:500;}
+
+/* Checklist */
+.checklist{list-style:none;padding:0;}
+.checklist li{
+  display:flex;align-items:flex-start;gap:8px;
+  font-size:.82rem;padding:6px 0;border-bottom:1px solid #f0f0f0;line-height:1.4;
+}
+.checklist li:last-child{border-bottom:none;}
+.check-circle{
+  width:18px;height:18px;border-radius:50%;border:2px solid #2e6b4f;
+  flex-shrink:0;margin-top:1px;display:flex;align-items:center;justify-content:center;
+  font-size:.65rem;color:#2e6b4f;font-weight:700;
+}
+
+/* Footer */
+.footer{
+  text-align:center;font-size:.7rem;color:#888;margin-top:20px;
+  padding-top:14px;border-top:1px solid #ddd;
+}
+.footer strong{color:#2e6b4f;}
+
+/* Print button */
+.print-btn{
+  display:block;width:100%;padding:12px;margin-bottom:16px;
+  background:#2e6b4f;color:#fff;border:none;border-radius:8px;
+  font-family:'Jost',sans-serif;font-size:.88rem;font-weight:500;
+  cursor:pointer;letter-spacing:.05em;
+}
+.print-btn:hover{background:#234f3a;}
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- HEADER -->
+  <div class="header">
+    <div class="logo-box">
+      <div class="logo-crown">♔</div>
+      <div class="logo-text">TURM</div>
+    </div>
+    <div class="header-info">
+      <h1>Housekeeping Manager</h1>
+      <p>Turmhotel Frankfurt — Digitale Zimmerverwaltung</p>
+      <a href="https://intelligentresponder-max.github.io/turmhotel/housekeeping/housekeeping-v3.html">
+        → App öffnen
+      </a>
+    </div>
+  </div>
+
+  <!-- QR / LINK -->
+  <div class="qr-row">
+    <div class="qr-box">📱</div>
+    <div class="qr-info">
+      <strong>App-Link — einfach antippen:</strong>
+      <span>
+        intelligentresponder-max.github.io/<br>
+        turmhotel/housekeeping/housekeeping-v3.html<br><br>
+        💡 Am besten als Lesezeichen speichern!
+      </span>
+    </div>
+  </div>
+
+  <button class="print-btn no-print" onclick="window.print()">🖨️ Anleitung drucken</button>
+
+  <!-- MORGENS -->
+  <div class="section">
+    <div class="section-title"><span class="step-num">1</span> Morgens — Gästeliste einlesen (Hausdame)</div>
+    <div class="card">
+      <div class="step-row"><div class="step-icon">📋</div><div class="step-text">Tab <strong>Gästeliste</strong> öffnen → <strong>⚡ JSON-Funktion</strong> wählen</div></div>
+      <div class="step-row"><div class="step-icon">📋</div><div class="step-text">JSON vom Vorabend einkopieren → <strong>⚡ JSON einlesen</strong></div></div>
+      <div class="step-row"><div class="step-icon">✅</div><div class="step-text"><strong>✓ Auf Zimmer übertragen</strong> klicken<span class="sub"><span class="badge-red">Abreise</span> = rote Zimmer · <span class="badge-orange">Bleibt</span> = orange Zimmer</span></div></div>
+    </div>
+  </div>
+
+  <!-- ANWESENHEIT -->
+  <div class="section">
+    <div class="section-title"><span class="step-num">2</span> Anwesenheit bestätigen</div>
+    <div class="card">
+      <div class="step-row"><div class="step-icon">👥</div><div class="step-text">Tab <strong>Personal</strong> öffnen</div></div>
+      <div class="step-row"><div class="step-icon">🟢</div><div class="step-text">Kleinen <strong>Kreis links</strong> antippen wenn man da ist → leuchtet grün</div></div>
+    </div>
+  </div>
+
+  <!-- ZIMMER ZUWEISEN -->
+  <div class="section">
+    <div class="section-title"><span class="step-num">3</span> Zimmer zuweisen</div>
+    <div class="card">
+      <div class="step-row"><div class="step-icon">🏠</div><div class="step-text">Tab <strong>Zimmer</strong> → rotes Zimmer antippen</div></div>
+      <div class="step-row"><div class="step-icon">👤</div><div class="step-text">Mitarbeiterin aus Liste auswählen → <strong>Speichern</strong></div></div>
+      <div class="step-row"><div class="step-icon">🎨</div><div class="step-text">Zimmerrahmen färbt sich in <strong>Farbe der Putzkraft</strong> — bis Zimmer fertig gemeldet</div></div>
+    </div>
+  </div>
+
+  <!-- FERTIG MELDEN -->
+  <div class="section">
+    <div class="section-title"><span class="step-num">4</span> Zimmer fertig melden — 3 Klicks</div>
+    <div class="card">
+      <div class="step-row"><div class="step-icon">🏠</div><div class="step-text">Zimmer antippen → <strong style="color:#2a7a4b">✓ Fertig melden</strong> drücken</div></div>
+      <ul class="checklist">
+        <li><div class="check-circle">1</div><span>🪟 <strong>Fenster geöffnet</strong> — Durchzug hergestellt, Tür offen bis Fertigmeldung</span></li>
+        <li><div class="check-circle">2</div><span>🧹 <strong>Reinigung vollständig</strong> — Oberflächen, Boden (auch unter Bett), Regale/Schrank<br><em style="font-size:.75rem;color:#888">Optional: Extra-Aufwand beschreiben</em></span></li>
+        <li><div class="check-circle">3</div><span>🛏️ <strong>Bett & Gast</strong> — frisch bezogen, Sonderwünsche notiert<br><em style="font-size:.75rem;color:#888">Optional: Stammgast-Besonderheiten eintragen</em></span></li>
+      </ul>
+      <div style="margin-top:10px;padding:8px 12px;background:#d5f0e0;border-radius:5px;font-size:.8rem;color:#2a7a4b;">
+        ✅ Alle 3 bestätigt → Zimmer wird <span class="badge-green">Grün</span> — fertig!
+      </div>
+    </div>
+  </div>
+
+  <!-- HAUSNACHRICHT -->
+  <div class="section">
+    <div class="section-title"><span class="step-num">5</span> Hausnachricht (tagesaktuelle Anweisung)</div>
+    <div class="card">
+      <div class="step-row"><div class="step-icon">📢</div><div class="step-text">Grüner Balken oben → <strong>✎ Nachricht</strong> antippen</div></div>
+      <div class="step-row"><div class="step-icon">✏️</div><div class="step-text">Anweisung eingeben z.B. <em>"Heute alle Bäder desinfizieren"</em> → Speichern<span class="sub">Gilt für alle — sichtbar beim Öffnen jedes Zimmers</span></div></div>
+    </div>
+  </div>
+
+  <!-- FARBEN LEGENDE -->
+  <div class="section">
+    <div class="section-title">Farb-Legende</div>
+    <div class="card">
+      <div class="step-row"><div class="step-icon">🔴</div><div class="step-text"><strong>Rot</strong> — Abreisezimmer — Vollreinigung + Bettwäsche komplett wechseln</div></div>
+      <div class="step-row"><div class="step-icon">🟠</div><div class="step-text"><strong>Orange</strong> — Bleibezimmer — Gast bleibt, Tagesreinigung</div></div>
+      <div class="step-row"><div class="step-icon">🟡</div><div class="step-text"><strong>Gelb/Farbe</strong> — Putzkraft zugewiesen, noch nicht fertig</div></div>
+      <div class="step-row"><div class="step-icon">🟢</div><div class="step-text"><strong>Grün</strong> — Zimmer fertig gemeldet ✅</div></div>
+    </div>
+  </div>
+
+  <div class="footer">
+    <strong>Turmhotel Frankfurt</strong> · Eschersheimer Landstraße 20 · 60322 Frankfurt<br>
+    Digitalisierung: André Schwarz — ASGlobal · Stand Juli 2026
+  </div>
+
+</div>
+</body>
+</html>
