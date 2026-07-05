@@ -140,131 +140,6 @@ nav{
 .import-banner-text{font-family:'Spline Sans Mono',monospace;font-size:.76rem;color:var(--checkout-col);flex:1;}
 .import-banner-text strong{color:var(--gold-bright);}
 
-/* Hausnachricht */
-.house-msg-bar{
-  position:relative;z-index:1;
-  background:rgba(46,107,79,.12);border-bottom:1px solid rgba(46,107,79,.3);
-  padding:10px 24px;display:flex;align-items:center;gap:12px;flex-wrap:wrap;
-}
-.house-msg-bar.hidden{display:none;}
-.house-msg-icon{font-size:1.1rem;flex-shrink:0;}
-.house-msg-text{
-  font-family:'Spline Sans Mono',monospace;font-size:.76rem;
-  color:#7ecfa0;flex:1;font-style:italic;
-}
-.house-msg-text.empty{color:var(--muted);font-style:normal;}
-.house-msg-edit{
-  background:none;border:1px solid rgba(46,107,79,.4);color:#7ecfa0;
-  padding:4px 10px;border-radius:2px;font-family:'Spline Sans Mono',monospace;
-  font-size:.66rem;cursor:pointer;transition:.15s;white-space:nowrap;
-}
-.house-msg-edit:hover{background:rgba(46,107,79,.2);}
-
-/* Hausnachricht Modal */
-.house-msg-modal{
-  background:#101a13;border:1px solid rgba(46,107,79,.3);
-  border-radius:4px;padding:24px;width:100%;max-width:440px;
-  animation:slideUp .18s ease;
-}
-.house-msg-modal h3{font-family:'Fraunces',serif;font-size:1.1rem;color:#7ecfa0;margin-bottom:14px;}
-.house-msg-textarea{
-  width:100%;background:rgba(255,255,255,.05);border:1px solid rgba(46,107,79,.3);
-  color:var(--paper);padding:10px 12px;border-radius:2px;margin-bottom:14px;
-  font-family:'Spline Sans',sans-serif;font-size:.9rem;resize:none;height:90px;
-}
-.house-msg-textarea:focus{outline:none;border-color:#2e6b4f;}
-
-/* Aufgaben-Badge im Modal */
-.task-badge{
-  display:inline-flex;align-items:center;gap:6px;
-  padding:6px 12px;border-radius:2px;margin-bottom:16px;
-  font-family:'Spline Sans Mono',monospace;font-size:.75rem;font-weight:600;
-}
-.task-badge.full{background:rgba(192,57,43,.15);color:#e87070;border:1px solid rgba(192,57,43,.3);}
-.task-badge.daily{background:rgba(142,68,173,.12);color:#c084fc;border:1px solid rgba(142,68,173,.3);}
-.task-badge.linen{background:rgba(201,162,39,.12);color:var(--gold);border:1px solid var(--line);}
-.task-badge.normal{background:rgba(42,122,75,.12);color:#7ecfa0;border:1px solid rgba(42,122,75,.3);}
-
-/* Bettwäsche-Flag auf Karte */
-.linen-flag{
-  position:absolute;top:6px;right:7px;
-  font-size:.65rem;background:rgba(201,162,39,.2);
-  color:var(--gold);padding:1px 5px;border-radius:1px;
-}
-
-/* Zimmer-Rahmen = Putzkraft-Farbe wenn zugewiesen & nicht fertig */
-.room-card.assigned{border-width:2px;}
-
-/* 3-Klick Fertigmeldung */
-.done-overlay{
-  display:none;position:fixed;inset:0;z-index:400;
-  background:rgba(0,0,0,.82);backdrop-filter:blur(6px);
-  align-items:center;justify-content:center;padding:20px;
-}
-.done-overlay.show{display:flex;}
-.done-modal{
-  background:#0f1a12;border:1px solid rgba(42,122,75,.4);
-  border-radius:6px;padding:0;width:100%;max-width:480px;
-  animation:slideUp .2s ease;overflow:hidden;
-}
-.done-modal-header{
-  background:rgba(42,122,75,.2);padding:18px 22px;
-  border-bottom:1px solid rgba(42,122,75,.25);
-}
-.done-modal-header h3{font-family:'Fraunces',serif;font-size:1.2rem;color:#7ecfa0;}
-.done-modal-header p{font-family:'Spline Sans Mono',monospace;font-size:.7rem;color:var(--muted);margin-top:4px;}
-.done-steps{padding:20px 22px;display:flex;flex-direction:column;gap:0;}
-.done-step{
-  border:1px solid rgba(42,122,75,.2);border-radius:4px;
-  margin-bottom:10px;overflow:hidden;transition:.2s;
-}
-.done-step.checked{border-color:rgba(42,122,75,.5);background:rgba(42,122,75,.08);}
-.done-step-header{
-  display:flex;align-items:center;gap:12px;
-  padding:13px 16px;cursor:pointer;
-}
-.done-step-check{
-  width:24px;height:24px;border-radius:50%;border:2px solid rgba(42,122,75,.4);
-  display:flex;align-items:center;justify-content:center;
-  flex-shrink:0;transition:.2s;font-size:.9rem;
-}
-.done-step.checked .done-step-check{background:#2a7a4b;border-color:#2a7a4b;color:#fff;}
-.done-step-label{font-family:'Spline Sans',sans-serif;font-size:.88rem;color:var(--paper);flex:1;line-height:1.4;}
-.done-step.checked .done-step-label{color:#7ecfa0;}
-.done-step-sub{
-  padding:0 16px 14px 52px;display:none;
-  font-family:'Spline Sans Mono',monospace;font-size:.72rem;color:var(--muted);
-  line-height:1.7;
-}
-.done-step.open .done-step-sub{display:block;}
-.done-step-extra{
-  margin-top:8px;padding:8px 10px;
-  background:rgba(255,255,255,.04);border:1px solid var(--line);border-radius:2px;
-  color:var(--paper);font-family:'Spline Sans',sans-serif;font-size:.82rem;
-  width:100%;resize:none;height:56px;
-}
-.done-step-extra:focus{outline:none;border-color:rgba(42,122,75,.5);}
-.done-step-extra::placeholder{color:var(--muted);}
-.done-modal-footer{
-  padding:14px 22px;border-top:1px solid rgba(42,122,75,.2);
-  display:flex;gap:10px;
-}
-.btn-done-confirm{
-  flex:1;background:#2a7a4b;color:#fff;font-weight:600;
-  padding:11px;border-radius:3px;border:none;cursor:pointer;
-  font-family:'Spline Sans Mono',monospace;font-size:.78rem;
-  letter-spacing:.1em;text-transform:uppercase;transition:.15s;
-  opacity:.4;pointer-events:none;
-}
-.btn-done-confirm.ready{opacity:1;pointer-events:all;}
-.btn-done-confirm.ready:hover{background:#23653e;}
-.btn-done-cancel{
-  background:none;border:1px solid var(--line);color:var(--muted);
-  padding:11px 18px;border-radius:3px;cursor:pointer;
-  font-family:'Spline Sans Mono',monospace;font-size:.72rem;transition:.15s;
-}
-.btn-done-cancel:hover{color:var(--paper);}
-
 /* ── SECTION LABELS ── */
 .building-label{
   font-family:'Spline Sans Mono',monospace;font-size:.66rem;letter-spacing:.3em;text-transform:uppercase;
@@ -293,8 +168,6 @@ nav{
 .room-card.clean::before{background:var(--clean);}
 .room-card.dirty::before{background:var(--gold);opacity:.45;}
 .room-card.checkout::before{background:var(--checkout-col);}
-.room-card.checkout-red{background:rgba(192,57,43,.07);border-color:rgba(192,57,43,.3);}
-.room-card.checkout-red::before{background:var(--occupied);}
 
 .room-num{font-family:'Fraunces',serif;font-size:1.25rem;font-weight:600;line-height:1;color:var(--paper);}
 .room-status-row{margin-top:7px;display:flex;gap:4px;flex-wrap:wrap;}
@@ -402,17 +275,6 @@ nav{
 .personal-item .pabb{font-family:'Spline Sans Mono',monospace;font-size:.78rem;color:var(--muted);}
 .del-btn{background:none;border:1px solid rgba(192,57,43,.35);color:#e87070;cursor:pointer;padding:3px 9px;border-radius:2px;font-size:.72rem;transition:.15s;}
 .del-btn:hover{background:var(--occupied-bg);}
-.vz-badge{font-family:'Spline Sans Mono',monospace;font-size:.6rem;padding:2px 6px;border-radius:1px;background:rgba(26,111,168,.15);color:#5bb3e8;border:1px solid rgba(26,111,168,.3);}
-.tz-badge{font-family:'Spline Sans Mono',monospace;font-size:.6rem;padding:2px 6px;border-radius:1px;background:rgba(142,68,173,.12);color:#c084fc;border:1px solid rgba(142,68,173,.3);}
-.presence-dot{width:10px;height:10px;border-radius:50%;background:rgba(255,255,255,.1);border:2px solid rgba(255,255,255,.15);cursor:pointer;transition:.3s;flex-shrink:0;}
-.presence-dot.online{background:#2a7a4b;border-color:#4ecb82;box-shadow:0 0 6px rgba(78,203,130,.5);}
-.duty-tag{font-family:'Spline Sans Mono',monospace;font-size:.62rem;padding:1px 6px;border-radius:1px;}
-.duty-on{background:rgba(42,122,75,.15);color:#7ecfa0;border:1px solid rgba(42,122,75,.3);}
-.duty-off{background:rgba(255,255,255,.04);color:var(--muted);border:1px solid var(--line);}
-.duty-sick{background:rgba(192,57,43,.1);color:#e87070;border:1px solid rgba(192,57,43,.25);}
-.duty-vacation{background:rgba(201,162,39,.1);color:var(--gold);border:1px solid var(--line);}
-.personal-item{display:flex;align-items:center;gap:10px;background:rgba(255,255,255,.035);border:1px solid var(--line);border-radius:var(--radius);padding:10px 14px;}
-.personal-item.on-duty{border-color:rgba(42,122,75,.35);}
 .add-staff-form{background:rgba(255,255,255,.025);border:1px solid var(--line);border-radius:var(--radius);padding:22px;}
 .add-staff-form h3{font-family:'Fraunces',serif;font-size:1rem;color:var(--gold);margin-bottom:16px;}
 .form-row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px;}
@@ -421,10 +283,6 @@ nav{
 .color-options{display:flex;gap:7px;margin-bottom:12px;flex-wrap:wrap;}
 .color-opt{width:26px;height:26px;border-radius:50%;border:2px solid transparent;cursor:pointer;transition:.15s;}
 .color-opt.selected{border-color:var(--paper);transform:scale(1.15);}
-.avatar-opt{width:36px;height:36px;border-radius:50%;border:2px solid transparent;cursor:pointer;transition:.15s;font-size:1.2rem;display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,.06);}
-.avatar-opt:hover{border-color:rgba(201,162,39,.4);}
-.avatar-opt.selected{border-color:var(--gold);background:rgba(201,162,39,.12);}
-.staff-avatar-display{width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.3rem;flex-shrink:0;}
 .btn-add{background:var(--gold);color:var(--ink);font-weight:600;width:100%;}
 .btn-add:hover{background:var(--gold-bright);}
 
@@ -484,6 +342,23 @@ nav{
 .tool-footer a{color:var(--gold);text-decoration:none;}
 .tool-footer a:hover{color:var(--gold-bright);}
 
+
+/* ── CHECKLIST ── */
+.check-item{
+  display:flex;align-items:center;gap:12px;
+  background:rgba(255,255,255,.04);border:1px solid var(--line);
+  border-radius:2px;padding:11px 14px;cursor:pointer;transition:.15s;
+}
+.check-item:hover{border-color:rgba(201,162,39,.4);}
+.check-item.checked{background:var(--clean-bg);border-color:var(--clean);}
+.check-item .check-box{
+  width:18px;height:18px;border-radius:2px;border:1.5px solid var(--line);
+  flex-shrink:0;display:flex;align-items:center;justify-content:center;
+  font-size:.75rem;transition:.15s;
+}
+.check-item.checked .check-box{background:var(--clean);border-color:var(--clean);color:#fff;}
+.check-item .check-label{font-family:'Spline Sans',sans-serif;font-size:.88rem;color:var(--muted);}
+.check-item.checked .check-label{color:var(--paper);}
 @media(max-width:640px){
   .room-grid{grid-template-columns:repeat(auto-fill,minmax(110px,1fr));}
   .main{padding:16px;}
@@ -494,16 +369,7 @@ nav{
 <body>
 
 <nav>
-  <a class="nav-brand" href="#" style="display:flex;align-items:center;gap:10px;text-decoration:none;">
-    <svg width="28" height="36" viewBox="0 0 28 36" fill="none" xmlns="http://www.w3.org/2000/svg" style="flex-shrink:0;">
-      <rect width="28" height="36" rx="2" fill="#2e6b4f"/>
-      <text x="14" y="13" text-anchor="middle" font-size="12" fill="white" font-family="serif">&#x2654;</text>
-      <rect x="4" y="15" width="20" height="1.5" fill="white" opacity=".7"/>
-      <text x="14" y="28" text-anchor="middle" font-size="5.5" fill="white" font-family="sans-serif" letter-spacing="1.5" font-weight="600">TURM</text>
-      <text x="14" y="34" text-anchor="middle" font-size="4" fill="white" opacity=".75" font-family="sans-serif" letter-spacing=".5">HOTEL</text>
-    </svg>
-    <span style="font-family:'Fraunces',serif;font-size:.9rem;color:var(--gold);">Turmhotel Frankfurt</span>
-  </a>
+  <a class="nav-brand" href="#">Turmhotel Frankfurt</a>
   <div class="nav-right">
     <button class="lang-btn active" onclick="setLang('de')">🇩🇪 DE</button>
     <button class="lang-btn" onclick="setLang('en')">🇬🇧 EN</button>
@@ -535,29 +401,6 @@ nav{
   <div class="stat"><div class="stat-dot" style="background:#5bb3e8"></div><span class="stat-num" id="stat-free">0</span><span class="stat-label" id="lbl-free">frei</span></div>
   <div class="stat"><div class="stat-dot" style="background:#e87070"></div><span class="stat-num" id="stat-occ">0</span><span class="stat-label" id="lbl-occ">belegt</span></div>
   <div class="date-chip" id="date-chip"></div>
-</div>
-
-<!-- HAUSNACHRICHT BAR -->
-<div class="house-msg-bar" id="house-msg-bar">
-  <span class="house-msg-icon">📋</span>
-  <span class="house-msg-text empty" id="house-msg-display">Keine Hausnachricht für heute — klicken zum Hinzufügen</span>
-  <button class="house-msg-edit" onclick="openHouseMsg()">✎ Nachricht</button>
-</div>
-
-<!-- HAUSNACHRICHT OVERLAY -->
-<div class="overlay" id="house-msg-overlay" onclick="closeHouseMsgOverlay(event)">
-  <div class="house-msg-modal">
-    <h3>📋 Hausnachricht für heute</h3>
-    <p style="font-family:'Spline Sans Mono',monospace;font-size:.7rem;color:var(--muted);margin-bottom:12px;">
-      Gilt für alle Zimmer — sichtbar beim Öffnen jedes Zimmers
-    </p>
-    <textarea class="house-msg-textarea" id="house-msg-input" placeholder="z.B. Heute alle Bäder desinfizieren · Minibar auffüllen · Late-Checkout Zimmer 045 bis 14:00"></textarea>
-    <div style="display:flex;gap:8px;">
-      <button class="btn btn-save" onclick="saveHouseMsg()" style="flex:1;">✓ Speichern</button>
-      <button class="btn btn-cancel" onclick="clearHouseMsg()">Löschen</button>
-      <button class="btn btn-cancel" onclick="closeHouseMsgDirect()">✕</button>
-    </div>
-  </div>
 </div>
 
 <!-- TABS -->
@@ -642,40 +485,21 @@ nav{
 
     <!-- Import Mode Toggle -->
     <div style="display:flex;gap:8px;margin-bottom:16px;">
-      <button class="filter-btn active" id="mode-btn-csv" onclick="switchImportMode('csv')">📷 Foto-Upload</button>
+      <button class="filter-btn active" id="mode-btn-csv" onclick="switchImportMode('csv')">📋 CSV-Datei</button>
       <button class="filter-btn" id="mode-btn-json" onclick="switchImportMode('json')">⚡ JSON-Funktion</button>
     </div>
 
     <!-- CSV Mode -->
     <div id="import-mode-csv">
-      <!-- Photo Upload -->
-      <div class="import-zone" id="photo-dropzone" onclick="document.getElementById('photo-file-input').click()"
+      <div class="import-zone" id="csv-dropzone" onclick="document.getElementById('csv-file-input').click()"
            ondragover="event.preventDefault();this.style.borderColor='var(--gold)'"
            ondragleave="this.style.borderColor=''"
-           ondrop="handlePhotoDrop(event)">
-        <div class="import-zone-icon">📷</div>
-        <div class="import-zone-title">Foto der Gästeliste hochladen</div>
-        <div class="import-zone-hint">Handyfoto · Screenshot · Scan — KI liest Zimmernr. + Abreisedatum + Personenzahl</div>
+           ondrop="handleCsvDrop(event)">
+        <div class="import-zone-icon">📋</div>
+        <div class="import-zone-title">CSV-Datei hier ablegen</div>
+        <div class="import-zone-hint">oder klicken zum Auswählen · PMS-Export, Excel-CSV</div>
       </div>
-      <input type="file" id="photo-file-input" accept="image/*" style="display:none" onchange="handlePhotoFile(event)" capture="environment">
-
-      <div class="import-info-box" style="margin-top:12px;">
-        <div class="import-info-title">Datenschutz</div>
-        <p style="font-family:'Spline Sans Mono',monospace;font-size:.7rem;color:var(--muted);">
-          ✓ Keine Gästenamen werden gespeichert · Nur Zimmernr. + Abreisedatum + Personenzahl · Bild wird nur lokal verarbeitet
-        </p>
-      </div>
-
-      <!-- Photo Preview + Status -->
-      <div id="photo-status" style="display:none;margin-top:14px;">
-        <div style="display:flex;gap:12px;align-items:flex-start;flex-wrap:wrap;">
-          <img id="photo-thumb" style="max-width:140px;max-height:140px;border-radius:var(--radius);border:1px solid var(--line);object-fit:cover;" />
-          <div style="flex:1;">
-            <div id="photo-ai-status" style="font-family:'Spline Sans Mono',monospace;font-size:.76rem;color:var(--gold);margin-bottom:8px;">⏳ KI analysiert Bild...</div>
-            <div id="photo-ai-result" style="display:none;"></div>
-          </div>
-        </div>
-      </div>
+      <input type="file" id="csv-file-input" accept=".csv,.txt" style="display:none" onchange="handleCsvFile(event)">
     </div>
 
     <!-- JSON Mode -->
@@ -683,7 +507,7 @@ nav{
       <div class="import-info-box" style="margin-bottom:14px;">
         <div class="import-info-title">JSON-Funktion einfügen</div>
         <p style="font-family:'Spline Sans Mono',monospace;font-size:.7rem;color:var(--muted);margin-bottom:10px;">
-          Format: <code style="color:var(--gold)">processGuestListScan</code> · Felder: <code style="color:var(--paper)">data_extraction</code> (zimmer, abreise, pax, ui_color, hsk_notes) · ui_color: <span style="color:#e87070">Red</span>=Abreise, <span style="color:var(--checkout-col)">Orange</span>=Overnight
+          Format: <code style="color:var(--gold)">generateCleaningList</code> · Felder: <code style="color:var(--paper)">rooms_to_clean</code> (room, type) + optional <code style="color:var(--paper)">excluded_rooms</code>
         </p>
       </div>
       <textarea id="json-input" style="width:100%;height:200px;background:rgba(255,255,255,.04);border:1px solid var(--line);border-radius:var(--radius);color:var(--paper);font-family:'Spline Sans Mono',monospace;font-size:.72rem;padding:12px;resize:vertical;line-height:1.5;" placeholder='{"processing_results":{"rooms_to_clean":[{"room":"011","type":"D"},...],"excluded_rooms":["024"]}}'></textarea>
@@ -754,73 +578,18 @@ nav{
       </div>
       <div class="field-label">Farbe</div>
       <div class="color-options" id="color-options"></div>
-      <div class="field-label" style="margin-top:10px;">Avatar</div>
-      <div class="color-options" id="avatar-options" style="gap:8px;"></div>
-      <button class="btn btn-add" onclick="addStaff()" style="margin-top:4px;">+ Hinzufügen</button>
+      <button class="btn btn-add" onclick="addStaff()">+ Hinzufügen</button>
     </div>
   </div>
 </div>
 
 </div><!-- /main -->
 
-<!-- ══ 3-KLICK FERTIGMELDUNG ══ -->
-<div class="done-overlay" id="done-overlay">
-  <div class="done-modal">
-    <div class="done-modal-header">
-      <h3 id="done-room-title">Zimmer fertig melden</h3>
-      <p>Bitte alle 3 Punkte bestätigen</p>
-    </div>
-    <div class="done-steps">
-
-      <!-- SCHRITT 1: Lüftung -->
-      <div class="done-step" id="done-step-1" onclick="toggleDoneStep(1)">
-        <div class="done-step-header">
-          <div class="done-step-check" id="done-check-1">1</div>
-          <div class="done-step-label">🪟 Fenster geöffnet &amp; Durchzug hergestellt — Tür offen bis Fertigmeldung</div>
-        </div>
-      </div>
-
-      <!-- SCHRITT 2: Reinigung -->
-      <div class="done-step" id="done-step-2" onclick="toggleDoneStep(2)">
-        <div class="done-step-header">
-          <div class="done-step-check" id="done-check-2">2</div>
-          <div class="done-step-label">🧹 Reinigung vollständig durchgeführt</div>
-        </div>
-        <div class="done-step-sub" onclick="event.stopPropagation()">
-          ✓ Sichtbare Oberflächen mit frischem Lappen gereinigt<br>
-          ✓ Boden gesaugt &amp; gewischt — auch unter dem Bett<br>
-          ✓ Regale, Ablagen, Schrank (oben / Türen / innen)<br>
-          <textarea class="done-step-extra" id="extra-reinigung" placeholder="Extra-Zeit gebraucht für... (optional beschreiben)"></textarea>
-        </div>
-      </div>
-
-      <!-- SCHRITT 3: Bett & Gast -->
-      <div class="done-step" id="done-step-3" onclick="toggleDoneStep(3)">
-        <div class="done-step-header">
-          <div class="done-step-check" id="done-check-3">3</div>
-          <div class="done-step-label">🛏️ Bett &amp; Gast-Besonderheiten</div>
-        </div>
-        <div class="done-step-sub" onclick="event.stopPropagation()">
-          ✓ Bett frisch bezogen nach Vorgabe<br>
-          <textarea class="done-step-extra" id="extra-bett" placeholder="Extra Treatment / Gastwunsch / Stammgast-Besonderheit... (optional)"></textarea>
-        </div>
-      </div>
-
-    </div>
-    <div class="done-modal-footer">
-      <button class="btn-done-cancel" onclick="closeDoneFlow()">Abbrechen</button>
-      <button class="btn-done-confirm" id="btn-done-confirm" onclick="confirmDone()">✓ Zimmer fertig</button>
-    </div>
-  </div>
-</div>
-
 <!-- ══ MODAL ══ -->
 <div class="overlay" id="overlay" onclick="closeModal(event)">
   <div class="modal">
     <div class="modal-title" id="modal-title">Zimmer 101</div>
-    <div id="modal-task-badge"></div>
     <div class="modal-guest-info" id="modal-guest-info"></div>
-    <div id="modal-house-msg" style="display:none;background:rgba(46,107,79,.1);border:1px solid rgba(46,107,79,.25);border-radius:2px;padding:8px 12px;margin-bottom:16px;font-family:'Spline Sans Mono',monospace;font-size:.72rem;color:#7ecfa0;"></div>
 
     <div class="field-label">Reinigung</div>
     <div class="toggle-row">
@@ -843,7 +612,20 @@ nav{
     <div class="modal-actions">
       <button class="btn btn-cancel" onclick="closeModalDirect()">Abbrechen</button>
       <button class="btn btn-save" onclick="saveRoom()">Speichern</button>
-      <button class="btn btn-save" onclick="openDoneFlow()" style="background:#2a7a4b;" id="btn-fertig">✓ Fertig melden</button>
+    </div>
+  </div>
+</div>
+
+
+<!-- ══ CHECKLIST MODAL ══ -->
+<div class="overlay" id="checklist-overlay" onclick="closeChecklist(event)">
+  <div class="modal" style="max-width:480px">
+    <div class="modal-title" id="checklist-room-title" style="margin-bottom:4px">Zimmer fertig?</div>
+    <div style="font-family:'Spline Sans Mono',monospace;font-size:.7rem;color:var(--muted);margin-bottom:20px" id="checklist-subtitle">Bitte bestätigen:</div>
+    <div id="checklist-items" style="display:grid;gap:9px;margin-bottom:24px"></div>
+    <div class="modal-actions">
+      <button class="btn btn-cancel" onclick="closeChecklistDirect()">Abbrechen</button>
+      <button class="btn btn-save" id="checklist-confirm-btn" onclick="confirmChecklist()" disabled style="opacity:.4">✓ Fertig melden</button>
     </div>
   </div>
 </div>
@@ -870,23 +652,8 @@ const ROOMS = {
 };
 const ALL_ROOMS = Object.values(ROOMS).flat();
 
-const COLORS = ['#2e6b4f','#c9a227','#1a6fa8','#8e44ad','#e67e22','#c0392b','#16a085','#d4a574'];
+const COLORS = ['#c9a227','#2a7a4b','#1a6fa8','#8e44ad','#e67e22','#c0392b','#16a085','#d4a574'];
 let selectedColor = COLORS[0];
-
-// Avatar system
-const AVATARS = [
-  { id:'hk1', emoji:'🧹', label:'Housekeeping' },
-  { id:'hk2', emoji:'🛏️', label:'Zimmer' },
-  { id:'hk3', emoji:'🧽', label:'Reinigung' },
-  { id:'hk4', emoji:'🌿', label:'Grün' },
-  { id:'hk5', emoji:'⭐', label:'Senior' },
-  { id:'hk6', emoji:'🔑', label:'Rezeption' },
-  { id:'hk7', emoji:'🛎️', label:'Service' },
-  { id:'hk8', emoji:'🧴', label:'Wäsche' },
-  { id:'hk9', emoji:'🪣', label:'Putze' },
-  { id:'hk10', emoji:'💼', label:'Leitung' },
-];
-let selectedAvatar = AVATARS[0];
 let activeFilter = 'all';
 let csvParsed = []; // {room, type: 'checkout'|'overnight'}
 
@@ -924,7 +691,7 @@ function setFilter(f) {
 function roomMatchesFilter(r) {
   const rs = getRoomState(r);
   if (activeFilter === 'all') return true;
-  if (activeFilter === 'checkout') return rs.guestType === 'checkout' || rs.guestType === 'overnight';
+  if (activeFilter === 'checkout') return rs.guestType === 'checkout';
   if (activeFilter === 'dirty') return !rs.clean;
   if (activeFilter === 'unassigned') return !rs.staff;
   return true;
@@ -943,21 +710,20 @@ function renderRooms() {
       const card = document.createElement('div');
       let cardClass = 'room-card ';
       if (rs.clean) cardClass += 'clean';
-      else if (rs.guestType === 'checkout') cardClass += 'checkout-red';
-      else if (rs.guestType === 'overnight') cardClass += 'checkout';
+      else if (rs.guestType === 'checkout') cardClass += 'checkout';
       else cardClass += 'dirty';
-      if (staffObj && !rs.clean) cardClass += ' assigned';
       card.className = cardClass;
-      // Putzkraft-Farbe als Rahmen wenn zugewiesen & nicht fertig
-      if (staffObj && !rs.clean) {
-        card.style.borderColor = staffObj.color;
-        card.style.boxShadow = `0 0 0 1px ${staffObj.color}40`;
-      }
       card.onclick = () => openModal(r);
+      // Feature: Zimmerfarbe = Putzkraft-Farbe bei Zuweisung
+      if (staffObj) {
+        card.style.setProperty('--card-staff-color', staffObj.color);
+        card.style.borderLeftColor = staffObj.color;
+        card.style.borderLeftWidth = '3px';
+      }
 
       let typeBadge = '';
-      if (rs.guestType === 'checkout') typeBadge = '<span class="badge badge-occupied">Abreise</span>';
-      else if (rs.guestType === 'overnight') typeBadge = '<span class="badge badge-checkout">Overnight</span>';
+      if (rs.guestType === 'checkout') typeBadge = '<span class="badge badge-checkout">Abreise</span>';
+      else if (rs.guestType === 'overnight') typeBadge = '<span class="badge badge-overnight">Overnight</span>';
       const typBdg = rs.roomType ? `<span class="badge" style="background:rgba(201,162,39,.1);color:var(--gold)">${rs.roomType}</span>` : '';
 
       card.innerHTML = `
@@ -969,7 +735,15 @@ function renderRooms() {
         </div>
         ${staffObj ? `<div class="room-staff"><span class="staff-chip" style="background:${staffObj.color}">${staffObj.abb}</span></div>` : ''}
         ${rs.note ? `<div class="room-note">${rs.note}</div>` : ''}
-        ${rs.linenChange ? '<div class="linen-flag">🛏️ Wäsche</div>' : ''}
+        ${!rs.clean && rs.staff ? `<div style="margin-top:7px"><button
+          style="font-family:'Spline Sans Mono',monospace;font-size:.6rem;letter-spacing:.08em;
+                 background:rgba(42,122,75,.15);border:1px solid rgba(42,122,75,.4);color:#4ecb82;
+                 padding:3px 9px;border-radius:2px;cursor:pointer;width:100%;transition:.15s"
+          onclick="event.stopPropagation();openChecklist('${r}')"
+          onmouseover="this.style.background='rgba(42,122,75,.3)'"
+          onmouseout="this.style.background='rgba(42,122,75,.15)'">
+          ✓ Fertig melden
+        </button></div>` : ''}
       `;
       el.appendChild(card);
     });
@@ -1017,36 +791,14 @@ function openModal(roomId) {
 
   // Guest type info
   const gi = document.getElementById('modal-guest-info');
-  const paxLabel = rs.pax ? ` · ${rs.pax} Pers.` : '';
-  if (rs.guestType === 'checkout') gi.innerHTML = `<span class="co-tag" style="color:#e87070;">↗ Abreise heute${paxLabel} — Zimmer wird frei</span>`;
-  else if (rs.guestType === 'overnight') gi.innerHTML = `<span class="ov-tag">🌙 Overnight${paxLabel} — Gast bleibt</span>`;
+  const typeLabel = rs.roomType ? ` · Typ <strong style="color:var(--gold)">${rs.roomType}</strong>` : '';
+  if (rs.guestType === 'checkout') gi.innerHTML = `<span class="co-tag">↗ Abreise heute — Zimmer wird frei${typeLabel}</span>`;
+  else if (rs.guestType === 'overnight') gi.innerHTML = `<span class="ov-tag">🌙 Overnight — Gast bleibt${typeLabel}</span>`;
   else gi.innerHTML = '';
-
-  // Aufgaben-Badge
-  const badge = document.getElementById('modal-task-badge');
-  if (rs.guestType === 'checkout') {
-    badge.innerHTML = '<div class="task-badge full">🧹 Vollreinigung + Bettwäsche komplett wechseln</div>';
-  } else if (rs.linenChange) {
-    badge.innerHTML = '<div class="task-badge linen">🛏️ Bettwäschewechsel (3+ Tage) + Tagesreinigung</div>';
-  } else if (rs.guestType === 'overnight') {
-    badge.innerHTML = '<div class="task-badge daily">🌙 Tagesreinigung — Gast bleibt</div>';
-  } else {
-    badge.innerHTML = '<div class="task-badge normal">✓ Normale Reinigung</div>';
-  }
-
-  // Hausnachricht anzeigen
-  const hm = localStorage.getItem('hk_house_msg') || '';
-  const hmEl = document.getElementById('modal-house-msg');
-  if (hm) { hmEl.style.display = ''; hmEl.textContent = '📋 ' + hm; }
-  else { hmEl.style.display = 'none'; }
 
   const sel = document.getElementById('modal-staff');
   sel.innerHTML = '<option value="">— Niemand zugewiesen —</option>';
-  const dutyStaff = staff.filter(s => s.duty === 'on');
-  if (!dutyStaff.length && staff.length) {
-    container.innerHTML += '<p style="color:var(--muted);font-family:\'Spline Sans Mono\',monospace;font-size:.8rem;margin-top:8px">Heute kein Personal im Dienst.</p>';
-  }
-  dutyStaff.forEach(s => {
+  staff.forEach(s => {
     const opt = document.createElement('option');
     opt.value = s.name;
     opt.textContent = s.name + ' (' + s.abb + ')';
@@ -1071,16 +823,14 @@ function setOccupied(v) { tempState.occupied = v; refreshModalButtons(); }
 
 function saveRoom() {
   if (!currentRoom) return;
-  const existing = getRoomState(doneRoom);
-  state[doneRoom] = {
+  const existing = getRoomState(currentRoom);
+  state[currentRoom] = {
     clean: tempState.clean,
     occupied: tempState.occupied,
     staff: document.getElementById('modal-staff').value,
     note: document.getElementById('modal-note').value.trim(),
     guestType: existing.guestType || '',
     roomType: existing.roomType || '',
-    linenChange: existing.linenChange || false,
-    pax: existing.pax || 0,
   };
   saveState(state);
   renderRooms();
@@ -1090,68 +840,6 @@ function saveRoom() {
 
 function closeModalDirect() { document.getElementById('overlay').classList.remove('show'); currentRoom = null; }
 function closeModal(e) { if (e.target === document.getElementById('overlay')) closeModalDirect(); }
-
-// ══ 3-KLICK FERTIGMELDUNG ══
-let doneRoom=null;
-let doneRoom=null;
-let doneChecks = { 1: false, 2: false, 3: false };
-
-function openDoneFlow() {
-  if (!currentRoom) return;
-  doneChecks = { 1: false, 2: false, 3: false };
-  [1,2,3].forEach(i => {
-    document.getElementById('done-step-' + i).classList.remove('checked','open');
-    document.getElementById('done-check-' + i).textContent = i;
-  });
-  document.getElementById('extra-reinigung').value = '';
-  document.getElementById('extra-bett').value = '';
-  document.getElementById('done-room-title').textContent = 'Zimmer ' + currentRoom + ' fertig melden';
-  document.getElementById('btn-done-confirm').classList.remove('ready');
-  closeModalDirect();
-  document.getElementById('done-overlay').classList.add('show');
-}
-
-function toggleDoneStep(n) {
-  const step = document.getElementById('done-step-' + n);
-  const check = document.getElementById('done-check-' + n);
-  if (doneChecks[n]) {
-    // uncheck
-    doneChecks[n] = false;
-    step.classList.remove('checked');
-    check.textContent = n;
-    // close sub if open
-    step.classList.remove('open');
-  } else {
-    doneChecks[n] = true;
-    step.classList.add('checked');
-    check.textContent = '✓';
-    // open sub details for step 2+3
-    if (n === 2 || n === 3) step.classList.add('open');
-  }
-  // Confirm-Button freischalten wenn alle 3 gecheckt
-  const allDone = doneChecks[1] && doneChecks[2] && doneChecks[3];
-  document.getElementById('btn-done-confirm').classList.toggle('ready', allDone);
-}
-
-function confirmDone() {
-  if (!doneRoom) return;
-  const extraReinigung = document.getElementById('extra-reinigung').value.trim();
-  const extraBett = document.getElementById('extra-bett').value.trim();
-  const noteparts = [];
-  if (extraReinigung) noteparts.push('Reinigung: ' + extraReinigung);
-  if (extraBett) noteparts.push('Bett/Gast: ' + extraBett);
-
-  const rs = getRoomState(doneRoom);
-  state[doneRoom] = { ...rs, clean: true, note: noteparts.join(' · ') || rs.note || '' };
-  saveState(state);
-  closeDoneFlow();
-  renderRooms();
-  renderOverview();
-}
-
-function closeDoneFlow() {
-  document.getElementById('done-overlay').classList.remove('show');
-}
 
 // ══ OVERVIEW ══
 function renderOverview() {
@@ -1169,7 +857,7 @@ function renderOverview() {
     row.innerHTML = `
       <div class="staff-row-header">
         <div class="staff-name-display">
-          <span class="staff-chip" style="background:${s.color}">${s.avatar||'🧹'} ${s.abb}</span>${s.name}
+          <span class="staff-chip" style="background:${s.color}">${s.abb}</span>${s.name}
         </div>
         <span style="font-family:'Spline Sans Mono',monospace;font-size:.76rem;color:var(--muted)">
           ${done.length}/${assigned.length} · <span style="color:${s.color}">${pct}%</span>
@@ -1207,27 +895,6 @@ function renderOverview() {
 }
 
 // ══ PERSONAL ══
-function dutyLabel(d) {
-  if (d==='on') return '<span class="duty-tag duty-on">Dienst</span>';
-  if (d==='sick') return '<span class="duty-tag duty-sick">Krank</span>';
-  if (d==='vacation') return '<span class="duty-tag duty-vacation">Urlaub</span>';
-  return '<span class="duty-tag duty-off">Frei</span>';
-}
-
-function togglePresence(i) {
-  staff[i].present = !staff[i].present;
-  saveStaffData(staff);
-  renderPersonal();
-}
-
-function cycleDuty(i) {
-  const cycle = ['on','off','sick','vacation'];
-  const cur = cycle.indexOf(staff[i].duty || 'off');
-  staff[i].duty = cycle[(cur+1) % cycle.length];
-  saveStaffData(staff);
-  renderPersonal();
-}
-
 function renderPersonal() {
   const list = document.getElementById('personal-list');
   list.innerHTML = '';
@@ -1236,26 +903,10 @@ function renderPersonal() {
   }
   staff.forEach((s, i) => {
     const item = document.createElement('div');
-    const onDuty = s.duty === 'on';
-    item.className = 'personal-item' + (onDuty ? ' on-duty' : '');
-    const av = s.avatar || '🧹';
-    const typeBadge = s.type === 'VZ'
-      ? `<span class="vz-badge">VZ ${s.hours||'08:00'}</span>`
-      : `<span class="tz-badge">TZ ${s.hours||'09:00'}</span>`;
-    item.innerHTML = `
-      <div class="presence-dot ${s.present ? 'online' : ''}" title="${s.present ? 'Anwesend' : 'Klicken = Anwesenheit bestätigen'}" onclick="togglePresence(${i})"></div>
-      <div class="staff-avatar-display" style="background:${s.color};opacity:${onDuty?1:.45}">${av}</div>
-      <div style="flex:1;">
-        <div class="pname" style="opacity:${onDuty?1:.6}">${s.name}</div>
-        <div style="display:flex;gap:5px;align-items:center;margin-top:3px;flex-wrap:wrap;">
-          ${typeBadge}
-          <span onclick="cycleDuty(${i})" style="cursor:pointer;">${dutyLabel(s.duty||'off')}</span>
-        </div>
-      </div>
-      <button class="del-btn" onclick="deleteStaff(${i})">×</button>`;
+    item.className = 'personal-item';
+    item.innerHTML = `<span class="staff-chip" style="background:${s.color}">${s.abb}</span><span class="pname">${s.name}</span><span class="pabb">${s.abb}</span><button class="del-btn" onclick="deleteStaff(${i})">×</button>`;
     list.appendChild(item);
   });
-  // Color picker
   const cp = document.getElementById('color-options');
   cp.innerHTML = '';
   COLORS.forEach(c => {
@@ -1265,18 +916,6 @@ function renderPersonal() {
     d.onclick = () => { selectedColor = c; renderPersonal(); };
     cp.appendChild(d);
   });
-  // Avatar picker
-  const ap = document.getElementById('avatar-options');
-  if (!ap) return;
-  ap.innerHTML = '';
-  AVATARS.forEach(av => {
-    const d = document.createElement('div');
-    d.className = 'avatar-opt' + (av.id === selectedAvatar.id ? ' selected' : '');
-    d.title = av.label;
-    d.textContent = av.emoji;
-    d.onclick = () => { selectedAvatar = av; renderPersonal(); };
-    ap.appendChild(d);
-  });
 }
 
 function addStaff() {
@@ -1284,7 +923,7 @@ function addStaff() {
   const abb = document.getElementById('new-abb').value.trim().toUpperCase();
   if (!name || !abb) { alert('Name und Kürzel ausfüllen.'); return; }
   if (staff.find(s => s.name === name)) { alert('Name bereits vergeben.'); return; }
-  staff.push({ name, abb, color: selectedColor, avatar: selectedAvatar.emoji, type: 'TZ', hours:'09:00-15:00', duty:'off', present: false });
+  staff.push({ name, abb, color: selectedColor });
   saveStaffData(staff);
   document.getElementById('new-name').value = '';
   document.getElementById('new-abb').value = '';
@@ -1309,132 +948,6 @@ function showTab(tab) {
   });
   if (tab === 'uebersicht') renderOverview();
   if (tab === 'personal') renderPersonal();
-}
-
-// ══ PHOTO IMPORT (Claude Vision) ══
-function handlePhotoDrop(event) {
-  event.preventDefault();
-  document.getElementById('photo-dropzone').style.borderColor = '';
-  const file = event.dataTransfer.files[0];
-  if (file && file.type.startsWith('image/')) processPhotoFile(file);
-}
-function handlePhotoFile(event) {
-  const file = event.target.files[0];
-  if (file) processPhotoFile(file);
-  event.target.value = '';
-}
-
-function processPhotoFile(file) {
-  const reader = new FileReader();
-  reader.onload = function(e) {
-    const base64 = e.target.result.split(',')[1];
-    const mime = file.type || 'image/jpeg';
-
-    // Show thumbnail
-    document.getElementById('photo-thumb').src = e.target.result;
-    document.getElementById('photo-status').style.display = '';
-    document.getElementById('photo-ai-status').textContent = '⏳ KI liest Gästeliste...';
-    document.getElementById('photo-ai-result').style.display = 'none';
-
-    const today = todayStr(); // DD.MM.YYYY
-    const prompt = `Du bist ein Datenschutz-konformes Housekeeping-Tool. Analysiere dieses Bild einer Hotelgästeliste.
-
-WICHTIG — Datenschutz:
-- Lese KEINE Gästenamen aus
-- Lese NUR: Zimmernummer, Abreisedatum, Personenzahl
-
-Heutiges Datum: ${today}
-
-Aufgabe: Identifiziere alle Zeilen wo die Abreise dem heutigen Datum entspricht (${today}).
-
-Antworte NUR mit validem JSON ohne Markdown, exakt in diesem Format:
-{
-  "date_checked": "${today}",
-  "checkout_rooms": [
-    {"room": "11", "persons": 2},
-    {"room": "202", "persons": 1}
-  ],
-  "overnight_rooms": [
-    {"room": "12", "persons": 3}
-  ],
-  "total_found": 5,
-  "note": "kurze Anmerkung falls Bild unklar"
-}
-
-Zimmernummern als String ohne führende Nullen (z.B. "11" nicht "011").
-Falls kein Datum erkennbar oder Bild unscharf: leere Arrays zurückgeben und in note erklären.`;
-
-    fetch('https://api.anthropic.com/v1/messages', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        model: 'claude-sonnet-4-6',
-        max_tokens: 1000,
-        messages: [{
-          role: 'user',
-          content: [
-            { type: 'image', source: { type: 'base64', media_type: mime, data: base64 } },
-            { type: 'text', text: prompt }
-          ]
-        }]
-      })
-    })
-    .then(r => r.json())
-    .then(data => {
-      const text = (data.content || []).map(b => b.text || '').join('').trim();
-      let parsed;
-      try {
-        const clean = text.replace(/```json|```/g, '').trim();
-        parsed = JSON.parse(clean);
-      } catch(e) {
-        document.getElementById('photo-ai-status').textContent = '⚠️ KI-Antwort nicht lesbar — bitte JSON-Modus nutzen.';
-        return;
-      }
-
-      const coRooms = (parsed.checkout_rooms || []).filter(r => ALL_ROOMS.includes(String(r.room)));
-      const ovRooms = (parsed.overnight_rooms || []).filter(r => ALL_ROOMS.includes(String(r.room)));
-
-      // Store for apply
-      csvParsed = [
-        ...coRooms.map(r => ({ room: String(r.room), guestType: 'checkout', persons: r.persons })),
-        ...ovRooms.map(r => ({ room: String(r.room), guestType: 'overnight', persons: r.persons })),
-      ];
-
-      // Show result
-      const resultEl = document.getElementById('photo-ai-result');
-      resultEl.style.display = '';
-
-      let html = `<div style="font-family:'Spline Sans Mono',monospace;font-size:.72rem;margin-bottom:10px;">`;
-      if (coRooms.length) {
-        html += `<div style="color:var(--checkout-col);margin-bottom:6px;"><strong>${coRooms.length} Abreisezimmer heute:</strong></div>`;
-        html += `<div style="display:flex;flex-wrap:wrap;gap:5px;margin-bottom:10px;">`;
-        coRooms.forEach(r => {
-          html += `<span style="background:var(--checkout-bg);border:1px solid rgba(230,126,34,.3);color:var(--checkout-col);padding:2px 8px;border-radius:1px;">${r.room}${r.persons ? ' · '+r.persons+'P' : ''}</span>`;
-        });
-        html += '</div>';
-      }
-      if (ovRooms.length) {
-        html += `<div style="color:#c084fc;margin-bottom:6px;"><strong>${ovRooms.length} Overnight:</strong></div>`;
-        html += `<div style="display:flex;flex-wrap:wrap;gap:5px;margin-bottom:10px;">`;
-        ovRooms.forEach(r => {
-          html += `<span style="background:var(--overnight-bg);border:1px solid rgba(142,68,173,.3);color:#c084fc;padding:2px 8px;border-radius:1px;">${r.room}${r.persons ? ' · '+r.persons+'P' : ''}</span>`;
-        });
-        html += '</div>';
-      }
-      if (parsed.note) {
-        html += `<div style="color:var(--muted);font-style:italic;margin-top:4px;">${parsed.note}</div>`;
-      }
-      html += `<button class="btn btn-apply" onclick="applyCsvImport()" style="margin-top:12px;width:100%;">✓ Auf Zimmer übertragen</button>`;
-      html += '</div>';
-
-      resultEl.innerHTML = html;
-      document.getElementById('photo-ai-status').textContent = `✓ ${parsed.total_found || csvParsed.length} Zimmer erkannt`;
-    })
-    .catch(err => {
-      document.getElementById('photo-ai-status').textContent = '⚠️ Fehler: ' + err.message;
-    });
-  };
-  reader.readAsDataURL(file);
 }
 
 // ══ CSV IMPORT ══
@@ -1631,36 +1144,41 @@ function parseJsonInput() {
   let data;
   try { data = JSON.parse(raw); } catch(e) { alert('Ungültiges JSON: ' + e.message); return; }
 
-  // Neues Format: processGuestListScan mit data_extraction Array
-  const entries = data.data_extraction || [];
-  if (!entries.length) { alert('Kein data_extraction Array gefunden.'); return; }
+  // Flexible: support top-level or nested unter processing_results
+  const results = data.processing_results || data;
+  const roomsRaw = results.rooms_to_clean || data.rooms_to_clean || [];
+  const excluded = results.excluded_rooms || data.excluded_rooms || [];
 
-  function normRoom(r) { return String(parseInt(r, 10)); }
+  if (!roomsRaw.length) { alert('Keine rooms_to_clean gefunden.'); return; }
+
+  // Normalize room numbers: "011" → "11", keep as string
+  function normRoom(r) {
+    // Strip leading zeros for matching (App uses '11', not '011')
+    return String(parseInt(r, 10));
+  }
+
+  const excludedNorm = excluded.map(e => normRoom(e));
+
+  // Type mapping: 1→E, 2→D, 3→T (also accept string codes directly)
+  const typeMap = (data.parameters && data.parameters.filter_rules && data.parameters.filter_rules.type_mapping) || { '1':'E','2':'D','3':'T' };
 
   jsonParsed = [];
   const skipped = [];
+  const excl = [];
 
-  entries.forEach(entry => {
-    const roomNorm = normRoom(entry.zimmer || entry.room || '');
-    if (!roomNorm || roomNorm === 'NaN') return;
+  roomsRaw.forEach(entry => {
+    const roomNorm = normRoom(entry.room);
+    if (excludedNorm.includes(roomNorm)) { excl.push(roomNorm); return; }
     if (!ALL_ROOMS.includes(roomNorm)) { skipped.push(roomNorm); return; }
 
-    // ui_color: "Red" = Abreise heute, "Orange" = Overnight/bleibt
-    const color = (entry.ui_color || '').toLowerCase();
-    let guestType = '';
-    if (color === 'red') guestType = 'checkout';
-    else if (color === 'orange') guestType = 'overnight';
-    else return; // ignorieren wenn kein ui_color
+    // Resolve type
+    let typeRaw = String(entry.type || '');
+    let typeResolved = typeMap[typeRaw] || typeRaw || 'D';
 
-    jsonParsed.push({
-      room: roomNorm,
-      guestType,
-      pax: entry.pax || 0,
-      hsk_notes: entry.hsk_notes || '',
-    });
+    jsonParsed.push({ room: roomNorm, type: typeResolved });
   });
 
-  showJsonPreview(jsonParsed, skipped, []);
+  showJsonPreview(jsonParsed, skipped, excl);
 }
 
 function showJsonPreview(rooms, skipped, excluded) {
@@ -1670,25 +1188,18 @@ function showJsonPreview(rooms, skipped, excluded) {
   const summary = document.getElementById('json-type-summary');
   list.innerHTML = '';
 
-  const co = rooms.filter(r => r.guestType === 'checkout');
-  const ov = rooms.filter(r => r.guestType === 'overnight');
-
-  co.forEach(r => {
+  const byType = {};
+  rooms.forEach(r => {
+    byType[r.type] = (byType[r.type] || 0) + 1;
     const tag = document.createElement('span');
     tag.className = 'preview-tag';
-    tag.style.cssText = 'background:rgba(192,57,43,.15);border-color:rgba(192,57,43,.4);color:#e87070;';
-    tag.textContent = r.room + (r.pax ? ' · ' + r.pax + 'P' : '') + (r.hsk_notes ? ' ⚑' : '');
-    list.appendChild(tag);
-  });
-  ov.forEach(r => {
-    const tag = document.createElement('span');
-    tag.className = 'preview-tag';
-    tag.textContent = r.room + (r.pax ? ' · ' + r.pax + 'P' : '') + ' 🌙';
+    tag.textContent = r.room + ' · ' + r.type;
     list.appendChild(tag);
   });
 
-  title.textContent = `${rooms.length} Zimmer erkannt`;
-  summary.innerHTML = `<span style="color:#e87070">${co.length}× Abreise (Rot)</span> · <span style="color:var(--checkout-col)">${ov.length}× Overnight (Orange)</span>${skipped.length ? ` · <span style="color:var(--muted)">${skipped.length} übersprungen</span>` : ''}`;
+  const typeStr = Object.entries(byType).map(([k,v]) => `${v}× ${k}`).join(' · ');
+  title.textContent = `${rooms.length} Abreisezimmer erkannt`;
+  summary.innerHTML = `<span style="color:var(--gold)">${typeStr}</span>${skipped.length ? ` · <span style="color:#e87070">${skipped.length} nicht im System</span>` : ''}${excluded.length ? ` · <span style="color:var(--muted)">${excluded.length} ausgeschlossen</span>` : ''}`;
 
   preview.style.removeProperty('display');
   preview.classList.add('show');
@@ -1697,61 +1208,28 @@ function showJsonPreview(rooms, skipped, excluded) {
 function applyJsonImport() {
   if (!jsonParsed.length) return;
 
-  // Clear all existing guestType first
-  ALL_ROOMS.forEach(r => { if (state[r]) { state[r].guestType = ''; state[r].hsk_notes = ''; state[r].pax = 0; } });
+  // First clear all existing guestType
+  ALL_ROOMS.forEach(r => {
+    if (state[r]) state[r].guestType = '';
+  });
 
-  jsonParsed.forEach(({ room, guestType, pax, hsk_notes }) => {
+  jsonParsed.forEach(({ room, type }) => {
     const rs = getRoomState(room);
-    state[room] = { ...rs, guestType, pax: pax || 0, note: hsk_notes || rs.note || '' };
+    state[room] = { ...rs, guestType: 'checkout', roomType: type };
   });
 
   saveState(state);
   renderRooms();
 
-  const co = jsonParsed.filter(r => r.guestType === 'checkout').length;
-  const ov = jsonParsed.filter(r => r.guestType === 'overnight').length;
+  const typeCount = {};
+  jsonParsed.forEach(r => { typeCount[r.type] = (typeCount[r.type]||0)+1; });
+  const typeStr = Object.entries(typeCount).map(([k,v]) => `${v}× ${k}`).join(' · ');
 
   const banner = document.getElementById('import-banner');
   document.getElementById('import-banner-text').innerHTML =
-    `✓ JSON geladen · <strong style="color:#e87070">${co} Abreise (Rot)</strong> · <strong style="color:var(--checkout-col)">${ov} Overnight (Orange)</strong> · ${todayStr()}`;
+    `✓ JSON geladen · <strong>${jsonParsed.length} Abreisezimmer</strong> (${typeStr}) · Datum: ${todayStr()}`;
   banner.classList.add('show');
   showTab('zimmer');
-}
-
-// ══ HAUSNACHRICHT ══
-function openHouseMsg() {
-  const current = localStorage.getItem('hk_house_msg') || '';
-  document.getElementById('house-msg-input').value = current;
-  document.getElementById('house-msg-overlay').classList.add('show');
-}
-function closeHouseMsgDirect() {
-  document.getElementById('house-msg-overlay').classList.remove('show');
-}
-function closeHouseMsgOverlay(e) {
-  if (e.target === document.getElementById('house-msg-overlay')) closeHouseMsgDirect();
-}
-function saveHouseMsg() {
-  const msg = document.getElementById('house-msg-input').value.trim();
-  localStorage.setItem('hk_house_msg', msg);
-  updateHouseMsgBar();
-  closeHouseMsgDirect();
-}
-function clearHouseMsg() {
-  localStorage.removeItem('hk_house_msg');
-  document.getElementById('house-msg-input').value = '';
-  updateHouseMsgBar();
-  closeHouseMsgDirect();
-}
-function updateHouseMsgBar() {
-  const msg = localStorage.getItem('hk_house_msg') || '';
-  const el = document.getElementById('house-msg-display');
-  if (msg) {
-    el.textContent = msg;
-    el.classList.remove('empty');
-  } else {
-    el.textContent = 'Keine Hausnachricht für heute — klicken zum Hinzufügen';
-    el.classList.add('empty');
-  }
 }
 
 // ══ RESET ══
@@ -1824,35 +1302,80 @@ function setLang(lang) {
   });
 }
 
-// ══ DEFAULT STAFF ANLEGEN (nur wenn leer) ══
-function initDefaultStaff() {
-  if (staff.length > 0) return; // schon vorhanden
-  const defaults = [
-    { name:'Kanczler', abb:'KA', color:'#c9a227', avatar:'👑', type:'VZ', hours:'08:00-16:30', duty:'on' },
-    { name:'Loi',      abb:'LO', color:'#1a6fa8', avatar:'👑', type:'VZ', hours:'08:00-16:30', duty:'sick' },
-    { name:'Boateng',  abb:'BO', color:'#16a085', avatar:'🧹', type:'VZ', hours:'08:00-16:30', duty:'on' },
-    { name:'Ouattara', abb:'OU', color:'#8e44ad', avatar:'🧹', type:'VZ', hours:'08:00-16:30', duty:'off' },
-    { name:'Olah, Eva',abb:'EV', color:'#e67e22', avatar:'🌿', type:'TZ', hours:'09:00-15:00', duty:'on' },
-    { name:'Tuhluk',   abb:'TU', color:'#c0392b', avatar:'🧹', type:'TZ', hours:'09:00-15:00', duty:'sick' },
-    { name:'Mehari',   abb:'ME', color:'#2a7a4b', avatar:'🧹', type:'TZ', hours:'09:00-15:00', duty:'vacation' },
-    { name:'Kulwinder',abb:'KU', color:'#d4a574', avatar:'🧽', type:'TZ', hours:'09:00-15:00', duty:'on' },
-    { name:'Haidari',  abb:'HA', color:'#1a6fa8', avatar:'🧹', type:'TZ', hours:'09:00-15:00', duty:'off' },
-    { name:'da Silva', abb:'DS', color:'#8e44ad', avatar:'🧹', type:'TZ', hours:'09:00-15:00', duty:'on' },
-    { name:'El Houssaini', abb:'EH', color:'#16a085', avatar:'🧹', type:'TZ', hours:'09:00-15:00', duty:'off' },
-  ];
-  defaults.forEach(d => staff.push({
-    name: d.name, abb: d.abb, color: d.color, avatar: d.avatar,
-    type: d.type, hours: d.hours, duty: d.duty, present: false
-  }));
-  saveStaffData(staff);
+
+// ══ 3-KLICK FERTIGMELDUNG ══
+const CHECKLIST = [
+  'Bett frisch bezogen & glatt',
+  'Bad gereinigt (WC, Dusche, Spiegel)',
+  'Handtücher vollständig (2 groß, 2 klein, 1 Matte)',
+  'Staubgesaugt & Oberflächen abgewischt',
+  'Zimmertür geschlossen',
+];
+
+let checklistRoom = null;
+let checklistDone = new Set();
+
+function openChecklist(roomId) {
+  checklistRoom = roomId;
+  checklistDone = new Set();
+  document.getElementById('checklist-room-title').textContent = 'Zimmer ' + roomId + ' — Fertig?';
+  document.getElementById('checklist-subtitle').textContent = 'Alle Punkte bestätigen zum Fertigmelden:';
+  const container = document.getElementById('checklist-items');
+  container.innerHTML = '';
+  CHECKLIST.forEach((label, i) => {
+    const div = document.createElement('div');
+    div.className = 'check-item';
+    div.id = 'ci-' + i;
+    div.onclick = () => toggleCheckItem(i, div);
+    div.innerHTML = `<div class="check-box" id="cb-${i}"></div><div class="check-label">${label}</div>`;
+    container.appendChild(div);
+  });
+  updateChecklistBtn();
+  document.getElementById('checklist-overlay').classList.add('show');
+}
+
+function toggleCheckItem(i, el) {
+  if (checklistDone.has(i)) {
+    checklistDone.delete(i);
+    el.classList.remove('checked');
+    document.getElementById('cb-'+i).textContent = '';
+  } else {
+    checklistDone.add(i);
+    el.classList.add('checked');
+    document.getElementById('cb-'+i).textContent = '✓';
+  }
+  updateChecklistBtn();
+}
+
+function updateChecklistBtn() {
+  const allDone = checklistDone.size === CHECKLIST.length;
+  const btn = document.getElementById('checklist-confirm-btn');
+  btn.disabled = !allDone;
+  btn.style.opacity = allDone ? '1' : '0.4';
+}
+
+function confirmChecklist() {
+  if (!checklistRoom) return;
+  const rs = getRoomState(checklistRoom);
+  state[checklistRoom] = { ...rs, clean: true };
+  saveState(state);
+  renderRooms();
+  renderOverview();
+  closeChecklistDirect();
+}
+
+function closeChecklistDirect() {
+  document.getElementById('checklist-overlay').classList.remove('show');
+  checklistRoom = null;
+}
+function closeChecklist(e) {
+  if (e.target === document.getElementById('checklist-overlay')) closeChecklistDirect();
 }
 
 // ══ INIT ══
-initDefaultStaff();
 renderRooms();
 renderPersonal();
 updateStats();
-updateHouseMsgBar();
 </script>
 </body>
 </html>
