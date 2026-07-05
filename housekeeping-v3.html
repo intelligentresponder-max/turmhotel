@@ -1,0 +1,1115 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Housekeeping — Turmhotel Frankfurt</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..900;1,9..144,300..900&family=Spline+Sans+Mono:wght@400;500;600&family=Spline+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --ink: #0c0a08;
+  --ink-2: #161310;
+  --paper: #f4ede0;
+  --gold: #c9a227;
+  --gold-bright: #e8c14f;
+  --muted: #9b9085;
+  --line: rgba(201,162,39,.18);
+  --clean: #2a7a4b;
+  --clean-bg: rgba(42,122,75,.15);
+  --occupied: #c0392b;
+  --occupied-bg: rgba(192,57,43,.12);
+  --free-col: #1a6fa8;
+  --free-bg: rgba(26,111,168,.12);
+  --checkout-col: #e67e22;
+  --checkout-bg: rgba(230,126,34,.14);
+  --overnight-col: #8e44ad;
+  --overnight-bg: rgba(142,68,173,.14);
+  --dirty: rgba(201,162,39,.15);
+  --radius: 3px;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{
+  font-family:'Spline Sans',sans-serif;
+  background:var(--ink);color:var(--paper);
+  min-height:100vh;-webkit-font-smoothing:antialiased;
+}
+body::before{
+  content:"";position:fixed;inset:0;z-index:0;pointer-events:none;
+  background:
+    radial-gradient(900px 500px at 80% -10%,rgba(201,162,39,.07),transparent 60%),
+    radial-gradient(700px 600px at -10% 100%,rgba(201,162,39,.04),transparent 60%);
+}
+
+/* ── NAV ── */
+nav{
+  position:sticky;top:0;z-index:200;
+  background:rgba(12,10,8,.95);backdrop-filter:blur(14px);
+  border-bottom:1px solid var(--line);
+  padding:12px 24px;
+  display:flex;justify-content:space-between;align-items:center;gap:12px;
+}
+.nav-brand{font-family:'Fraunces',serif;font-size:.95rem;color:var(--gold);text-decoration:none;}
+.nav-right{display:flex;align-items:center;gap:10px;}
+.lang-btn{
+  padding:4px 10px;border-radius:var(--radius);border:1px solid var(--line);
+  background:none;color:var(--muted);
+  font-family:'Spline Sans Mono',monospace;font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;
+  cursor:pointer;transition:.15s;
+}
+.lang-btn:hover{color:var(--paper);}
+.lang-btn.active{background:rgba(201,162,39,.12);color:var(--gold);border-color:var(--gold);}
+
+/* ── HEADER ── */
+.tool-header{
+  position:relative;z-index:1;
+  padding:40px 24px 28px;max-width:1280px;margin:0 auto;
+  border-bottom:1px solid var(--line);
+}
+.eyebrow{
+  font-family:'Spline Sans Mono',monospace;font-size:.68rem;letter-spacing:.3em;text-transform:uppercase;
+  color:var(--gold);margin-bottom:12px;
+}
+.tool-title{
+  font-family:'Fraunces',serif;
+  font-size:clamp(1.7rem,4vw,2.6rem);font-weight:500;letter-spacing:-.01em;line-height:1.1;
+}
+.tool-title em{font-style:italic;color:var(--gold-bright);}
+.tool-meta{margin-top:8px;font-family:'Spline Sans Mono',monospace;font-size:.74rem;color:var(--muted);}
+.tool-meta span{color:var(--gold);}
+
+/* ── PROGRESS BAR ── */
+.progress-wrap{
+  position:relative;z-index:1;
+  background:rgba(255,255,255,.025);border-bottom:1px solid var(--line);
+  padding:12px 24px;
+}
+.progress-label-row{
+  display:flex;justify-content:space-between;align-items:center;
+  font-family:'Spline Sans Mono',monospace;font-size:.72rem;margin-bottom:8px;
+}
+.progress-pct{color:var(--gold);font-weight:600;}
+.progress-track{height:5px;background:rgba(255,255,255,.07);border-radius:10px;overflow:hidden;}
+.progress-fill{height:100%;border-radius:10px;background:var(--clean);transition:width .5s;}
+
+/* ── STATS BAR ── */
+.stats-bar{
+  position:relative;z-index:1;
+  background:rgba(255,255,255,.02);border-bottom:1px solid var(--line);
+  padding:10px 24px;
+  display:flex;gap:20px;align-items:center;flex-wrap:wrap;
+}
+.stat{display:flex;align-items:center;gap:6px;font-family:'Spline Sans Mono',monospace;font-size:.74rem;}
+.stat-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;}
+.stat-num{color:var(--paper);font-weight:600;}
+.stat-label{color:var(--muted);}
+.date-chip{
+  margin-left:auto;
+  font-family:'Spline Sans Mono',monospace;font-size:.72rem;
+  background:rgba(201,162,39,.1);border:1px solid var(--line);
+  padding:4px 10px;border-radius:2px;color:var(--gold);
+}
+
+/* ── TABS ── */
+.tabs{
+  position:relative;z-index:1;
+  display:flex;border-bottom:1px solid var(--line);
+  background:rgba(12,10,8,.5);padding:0 24px;overflow-x:auto;
+}
+.tab{
+  padding:12px 18px;
+  font-family:'Spline Sans Mono',monospace;font-size:.7rem;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--muted);cursor:pointer;border:none;background:none;
+  border-bottom:2px solid transparent;transition:.15s;white-space:nowrap;
+}
+.tab:hover{color:var(--paper);}
+.tab.active{color:var(--gold);border-bottom-color:var(--gold);}
+
+/* ── MAIN ── */
+.main{position:relative;z-index:1;max-width:1280px;margin:0 auto;padding:24px;}
+
+/* ── IMPORT BANNER ── */
+.import-banner{
+  background:rgba(230,126,34,.08);border:1px solid rgba(230,126,34,.3);
+  border-radius:var(--radius);padding:14px 18px;margin-bottom:24px;
+  display:none;align-items:center;gap:14px;flex-wrap:wrap;
+}
+.import-banner.show{display:flex;}
+.import-banner-text{font-family:'Spline Sans Mono',monospace;font-size:.76rem;color:var(--checkout-col);flex:1;}
+.import-banner-text strong{color:var(--gold-bright);}
+
+/* ── SECTION LABELS ── */
+.building-label{
+  font-family:'Spline Sans Mono',monospace;font-size:.66rem;letter-spacing:.3em;text-transform:uppercase;
+  color:var(--gold);margin:28px 0 14px;
+  display:flex;align-items:center;gap:12px;
+}
+.building-label::before{content:"";width:28px;height:1px;background:var(--gold);}
+.floor-label{
+  font-family:'Spline Sans Mono',monospace;font-size:.63rem;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--muted);margin:20px 0 8px;
+}
+
+/* ── ROOM GRID ── */
+.room-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(132px,1fr));
+  gap:7px;
+}
+.room-card{
+  background:rgba(255,255,255,.035);border:1px solid var(--line);
+  border-radius:var(--radius);padding:12px 11px;
+  cursor:pointer;transition:.2s;position:relative;overflow:hidden;
+}
+.room-card:hover{border-color:rgba(201,162,39,.4);transform:translateY(-2px);box-shadow:0 4px 20px rgba(0,0,0,.3);}
+.room-card::before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;transition:.2s;}
+.room-card.clean::before{background:var(--clean);}
+.room-card.dirty::before{background:var(--gold);opacity:.45;}
+.room-card.checkout::before{background:var(--checkout-col);}
+
+.room-num{font-family:'Fraunces',serif;font-size:1.25rem;font-weight:600;line-height:1;color:var(--paper);}
+.room-status-row{margin-top:7px;display:flex;gap:4px;flex-wrap:wrap;}
+.badge{
+  font-family:'Spline Sans Mono',monospace;font-size:.56rem;letter-spacing:.05em;text-transform:uppercase;
+  padding:2px 5px;border-radius:1px;
+}
+.badge-clean{background:var(--clean-bg);color:#4ecb82;}
+.badge-dirty{background:var(--dirty);color:var(--gold);}
+.badge-free{background:var(--free-bg);color:#5bb3e8;}
+.badge-occupied{background:var(--occupied-bg);color:#e87070;}
+.badge-checkout{background:var(--checkout-bg);color:var(--checkout-col);}
+.badge-overnight{background:var(--overnight-bg);color:#c084fc;}
+.room-staff{margin-top:5px;font-family:'Spline Sans Mono',monospace;font-size:.62rem;color:var(--muted);}
+.staff-chip{
+  display:inline-block;padding:1px 6px;border-radius:10px;
+  font-size:.6rem;font-weight:600;color:#fff;
+  font-family:'Spline Sans Mono',monospace;
+}
+.room-note{margin-top:4px;font-size:.67rem;color:var(--muted);font-style:italic;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+
+/* ── FILTER ROW ── */
+.filter-row{
+  display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px;align-items:center;
+}
+.filter-btn{
+  padding:5px 13px;border-radius:2px;border:1px solid var(--line);
+  background:none;color:var(--muted);cursor:pointer;
+  font-family:'Spline Sans Mono',monospace;font-size:.68rem;letter-spacing:.08em;text-transform:uppercase;
+  transition:.15s;
+}
+.filter-btn:hover{border-color:rgba(201,162,39,.4);color:var(--paper);}
+.filter-btn.active{background:rgba(201,162,39,.12);color:var(--gold);border-color:var(--gold);}
+.filter-btn.f-checkout.active{background:var(--checkout-bg);color:var(--checkout-col);border-color:rgba(230,126,34,.4);}
+.filter-btn.f-dirty.active{background:var(--dirty);color:var(--gold-bright);border-color:rgba(201,162,39,.4);}
+
+/* ── MODAL ── */
+.overlay{
+  display:none;position:fixed;inset:0;z-index:300;
+  background:rgba(0,0,0,.72);backdrop-filter:blur(5px);
+  align-items:center;justify-content:center;padding:20px;
+}
+.overlay.show{display:flex;}
+.modal{
+  background:#1a1612;border:1px solid var(--line);
+  border-radius:4px;padding:28px;width:100%;max-width:440px;
+  animation:slideUp .18s ease;
+}
+@keyframes slideUp{from{opacity:0;transform:translateY(14px);}to{opacity:1;transform:translateY(0);}}
+.modal-title{font-family:'Fraunces',serif;font-size:1.4rem;margin-bottom:6px;color:var(--gold-bright);}
+.modal-guest-info{font-family:'Spline Sans Mono',monospace;font-size:.72rem;color:var(--muted);margin-bottom:22px;min-height:18px;}
+.modal-guest-info .co-tag{color:var(--checkout-col);}
+.modal-guest-info .ov-tag{color:#c084fc;}
+.field-label{
+  font-family:'Spline Sans Mono',monospace;font-size:.65rem;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--muted);margin-bottom:7px;
+}
+.toggle-row{display:flex;gap:7px;margin-bottom:18px;flex-wrap:wrap;}
+.toggle-btn{
+  padding:7px 14px;border-radius:2px;border:1px solid var(--line);
+  background:none;color:var(--muted);cursor:pointer;
+  font-family:'Spline Sans Mono',monospace;font-size:.7rem;letter-spacing:.08em;text-transform:uppercase;
+  transition:.15s;
+}
+.toggle-btn:hover{border-color:var(--gold);color:var(--gold);}
+.toggle-btn.active-clean{background:var(--clean-bg);border-color:var(--clean);color:#4ecb82;}
+.toggle-btn.active-dirty{background:var(--dirty);border-color:var(--gold);color:var(--gold);}
+.toggle-btn.active-free{background:var(--free-bg);border-color:var(--free-col);color:#5bb3e8;}
+.toggle-btn.active-occupied{background:var(--occupied-bg);border-color:var(--occupied);color:#e87070;}
+.staff-select,.note-input{
+  width:100%;background:rgba(255,255,255,.05);
+  border:1px solid var(--line);color:var(--paper);
+  padding:9px 12px;border-radius:2px;margin-bottom:18px;
+  font-family:'Spline Sans Mono',monospace;font-size:.8rem;
+}
+.note-input{font-family:'Spline Sans',sans-serif;font-size:.88rem;resize:none;height:66px;}
+.note-input:focus,.staff-select:focus{outline:none;border-color:var(--gold);}
+.modal-actions{display:flex;gap:9px;justify-content:flex-end;}
+.btn{
+  padding:9px 20px;border-radius:2px;border:none;cursor:pointer;
+  font-family:'Spline Sans Mono',monospace;font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;transition:.15s;
+}
+.btn-save{background:var(--gold);color:var(--ink);font-weight:600;}
+.btn-save:hover{background:var(--gold-bright);}
+.btn-cancel{background:rgba(255,255,255,.06);color:var(--muted);border:1px solid var(--line);}
+.btn-cancel:hover{color:var(--paper);}
+
+/* ── OVERVIEW ── */
+.staff-overview{display:grid;gap:16px;margin-top:8px;}
+.staff-row{background:rgba(255,255,255,.035);border:1px solid var(--line);border-radius:var(--radius);padding:20px 22px;}
+.staff-row-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;flex-wrap:wrap;gap:8px;}
+.staff-name-display{display:flex;align-items:center;gap:10px;font-family:'Fraunces',serif;font-size:1.1rem;}
+.staff-progress-bar{height:4px;background:rgba(255,255,255,.07);border-radius:2px;margin-bottom:8px;overflow:hidden;}
+.staff-progress-fill{height:100%;border-radius:2px;transition:width .5s;}
+.staff-rooms-list{font-family:'Spline Sans Mono',monospace;font-size:.7rem;color:var(--muted);display:flex;flex-wrap:wrap;gap:5px;}
+.staff-room-tag{padding:2px 7px;border-radius:1px;border:1px solid var(--line);color:var(--paper);}
+.staff-room-tag.done{border-color:var(--clean);color:#4ecb82;}
+.staff-room-tag.checkout{border-color:rgba(230,126,34,.4);color:var(--checkout-col);}
+
+/* ── PERSONAL ── */
+.personal-panel{max-width:540px;}
+.personal-list{display:grid;gap:8px;margin-bottom:24px;}
+.personal-item{display:flex;align-items:center;gap:12px;background:rgba(255,255,255,.035);border:1px solid var(--line);border-radius:var(--radius);padding:12px 16px;}
+.personal-item .pname{flex:1;font-size:.92rem;}
+.personal-item .pabb{font-family:'Spline Sans Mono',monospace;font-size:.78rem;color:var(--muted);}
+.del-btn{background:none;border:1px solid rgba(192,57,43,.35);color:#e87070;cursor:pointer;padding:3px 9px;border-radius:2px;font-size:.72rem;transition:.15s;}
+.del-btn:hover{background:var(--occupied-bg);}
+.add-staff-form{background:rgba(255,255,255,.025);border:1px solid var(--line);border-radius:var(--radius);padding:22px;}
+.add-staff-form h3{font-family:'Fraunces',serif;font-size:1rem;color:var(--gold);margin-bottom:16px;}
+.form-row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px;}
+.form-input{flex:1;min-width:110px;background:rgba(255,255,255,.06);border:1px solid var(--line);color:var(--paper);padding:8px 11px;border-radius:2px;font-family:'Spline Sans',sans-serif;font-size:.86rem;}
+.form-input:focus{outline:none;border-color:var(--gold);}
+.color-options{display:flex;gap:7px;margin-bottom:12px;flex-wrap:wrap;}
+.color-opt{width:26px;height:26px;border-radius:50%;border:2px solid transparent;cursor:pointer;transition:.15s;}
+.color-opt.selected{border-color:var(--paper);transform:scale(1.15);}
+.btn-add{background:var(--gold);color:var(--ink);font-weight:600;width:100%;}
+.btn-add:hover{background:var(--gold-bright);}
+
+/* ── IMPORT TAB ── */
+.import-panel{max-width:640px;}
+.import-zone{
+  border:2px dashed rgba(201,162,39,.25);border-radius:var(--radius);
+  padding:36px 24px;text-align:center;cursor:pointer;transition:.2s;
+  margin-bottom:20px;
+}
+.import-zone:hover{border-color:rgba(201,162,39,.5);background:rgba(201,162,39,.04);}
+.import-zone-icon{font-size:2rem;margin-bottom:10px;}
+.import-zone-title{font-family:'Fraunces',serif;font-size:1.1rem;color:var(--gold);margin-bottom:6px;}
+.import-zone-hint{font-family:'Spline Sans Mono',monospace;font-size:.72rem;color:var(--muted);}
+.import-info-box{
+  background:rgba(255,255,255,.03);border:1px solid var(--line);border-radius:var(--radius);
+  padding:18px 20px;margin-bottom:20px;
+}
+.import-info-title{font-family:'Spline Sans Mono',monospace;font-size:.65rem;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin-bottom:12px;}
+.csv-format-table{width:100%;border-collapse:collapse;font-family:'Spline Sans Mono',monospace;font-size:.72rem;}
+.csv-format-table th{text-align:left;color:var(--gold);padding:4px 8px;border-bottom:1px solid var(--line);}
+.csv-format-table td{padding:4px 8px;color:var(--muted);border-bottom:1px solid rgba(201,162,39,.07);}
+.csv-format-table td:first-child{color:var(--paper);}
+.import-preview{
+  background:rgba(255,255,255,.03);border:1px solid rgba(230,126,34,.3);border-radius:var(--radius);
+  padding:18px 20px;margin-bottom:20px;display:none;
+}
+.import-preview.show{display:block;}
+.import-preview-title{font-family:'Spline Sans Mono',monospace;font-size:.65rem;letter-spacing:.2em;text-transform:uppercase;color:var(--checkout-col);margin-bottom:10px;}
+.preview-list{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:12px;}
+.preview-tag{
+  font-family:'Spline Sans Mono',monospace;font-size:.68rem;
+  padding:2px 8px;border-radius:1px;border:1px solid rgba(230,126,34,.3);
+  color:var(--checkout-col);
+}
+.preview-tag.overnight{border-color:rgba(142,68,173,.3);color:#c084fc;}
+.btn-apply{background:var(--checkout-col);color:#fff;font-weight:600;width:100%;margin-top:4px;}
+.btn-apply:hover{opacity:.9;}
+.btn-apply:disabled{opacity:.4;cursor:not-allowed;}
+.manual-add-form{background:rgba(255,255,255,.025);border:1px solid var(--line);border-radius:var(--radius);padding:22px;margin-top:20px;}
+.manual-add-form h3{font-family:'Fraunces',serif;font-size:1rem;color:var(--gold);margin-bottom:14px;}
+
+/* ── RESET ROW ── */
+.reset-row{margin-top:36px;padding-top:22px;border-top:1px solid var(--line);display:flex;gap:10px;flex-wrap:wrap;}
+.btn-reset{background:rgba(192,57,43,.12);border:1px solid rgba(192,57,43,.35);color:#e87070;padding:8px 16px;border-radius:2px;font-family:'Spline Sans Mono',monospace;font-size:.7rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;transition:.15s;}
+.btn-reset:hover{background:rgba(192,57,43,.22);}
+.btn-reset-day{background:rgba(201,162,39,.1);border:1px solid var(--line);color:var(--gold);padding:8px 16px;border-radius:2px;font-family:'Spline Sans Mono',monospace;font-size:.7rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;transition:.15s;}
+.btn-reset-day:hover{background:rgba(201,162,39,.2);}
+.btn-export{background:rgba(26,111,168,.12);border:1px solid rgba(26,111,168,.35);color:#6ab0e0;padding:8px 16px;border-radius:2px;font-family:'Spline Sans Mono',monospace;font-size:.7rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;transition:.15s;}
+.btn-export:hover{background:rgba(26,111,168,.24);}
+.btn-import-json{background:rgba(42,122,75,.12);border:1px solid rgba(42,122,75,.35);color:#6ad4a0;padding:8px 16px;border-radius:2px;font-family:'Spline Sans Mono',monospace;font-size:.7rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;transition:.15s;}
+.btn-import-json:hover{background:rgba(42,122,75,.24);}
+#import-file-json{display:none;}
+
+/* ── FOOTER ── */
+.tool-footer{position:relative;z-index:1;border-top:1px solid var(--line);margin-top:48px;padding:22px 24px;text-align:center;font-family:'Spline Sans Mono',monospace;font-size:.7rem;color:var(--muted);}
+.tool-footer a{color:var(--gold);text-decoration:none;}
+.tool-footer a:hover{color:var(--gold-bright);}
+
+@media(max-width:640px){
+  .room-grid{grid-template-columns:repeat(auto-fill,minmax(110px,1fr));}
+  .main{padding:16px;}
+  .stats-bar{gap:12px;padding:8px 16px;}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <a class="nav-brand" href="#">Turmhotel Frankfurt</a>
+  <div class="nav-right">
+    <button class="lang-btn active" onclick="setLang('de')">🇩🇪 DE</button>
+    <button class="lang-btn" onclick="setLang('en')">🇬🇧 EN</button>
+    <button class="lang-btn" onclick="setLang('hu')">🇭🇺 HU</button>
+  </div>
+</nav>
+
+<div class="tool-header">
+  <p class="eyebrow" id="lbl-eyebrow">Digitalisierungsprojekt · Turmhotel Frankfurt</p>
+  <h1 class="tool-title">Housekeeping <em>Manager</em> <span style="font-family:'Spline Sans Mono',monospace;font-size:.55em;color:var(--muted);font-weight:400;font-style:normal;">v3</span></h1>
+  <p class="tool-meta" id="lbl-meta">Entwickelt von <span>André Schwarz — ASGlobal</span> · Daten lokal im Browser gespeichert</p>
+</div>
+
+<!-- PROGRESS -->
+<div class="progress-wrap">
+  <div class="progress-label-row">
+    <span id="lbl-progress-text" style="font-family:'Spline Sans Mono',monospace;font-size:.72rem;color:var(--muted);">Tagesfortschritt Reinigung</span>
+    <span class="progress-pct" id="progress-pct">0%</span>
+  </div>
+  <div class="progress-track"><div class="progress-fill" id="progress-fill" style="width:0%"></div></div>
+</div>
+
+<!-- STATS -->
+<div class="stats-bar">
+  <div class="stat"><div class="stat-dot" style="background:#4ecb82"></div><span class="stat-num" id="stat-clean">0</span><span class="stat-label" id="lbl-clean">gereinigt</span></div>
+  <div class="stat"><div class="stat-dot" style="background:var(--gold)"></div><span class="stat-num" id="stat-dirty">0</span><span class="stat-label" id="lbl-dirty">ausstehend</span></div>
+  <div class="stat"><div class="stat-dot" style="background:var(--checkout-col)"></div><span class="stat-num" id="stat-checkout">0</span><span class="stat-label" id="lbl-checkout">Abreise</span></div>
+  <div class="stat"><div class="stat-dot" style="background:#c084fc"></div><span class="stat-num" id="stat-overnight">0</span><span class="stat-label" id="lbl-overnight">Overnight</span></div>
+  <div class="stat"><div class="stat-dot" style="background:#5bb3e8"></div><span class="stat-num" id="stat-free">0</span><span class="stat-label" id="lbl-free">frei</span></div>
+  <div class="stat"><div class="stat-dot" style="background:#e87070"></div><span class="stat-num" id="stat-occ">0</span><span class="stat-label" id="lbl-occ">belegt</span></div>
+  <div class="date-chip" id="date-chip"></div>
+</div>
+
+<!-- TABS -->
+<div class="tabs">
+  <button class="tab active" id="tab-btn-zimmer" onclick="showTab('zimmer')">Zimmer</button>
+  <button class="tab" id="tab-btn-uebersicht" onclick="showTab('uebersicht')">Übersicht</button>
+  <button class="tab" id="tab-btn-gaeste" onclick="showTab('gaeste')">Gästeliste</button>
+  <button class="tab" id="tab-btn-personal" onclick="showTab('personal')">Personal</button>
+</div>
+
+<div class="main">
+
+<!-- ══ TAB: ZIMMER ══ -->
+<div id="tab-zimmer">
+  <!-- Import Banner -->
+  <div class="import-banner" id="import-banner">
+    <span class="import-banner-text" id="import-banner-text"></span>
+    <button class="btn btn-cancel" onclick="document.getElementById('import-banner').classList.remove('show')" style="padding:5px 12px;font-size:.68rem;">✕</button>
+  </div>
+
+  <!-- Filter -->
+  <div class="filter-row">
+    <button class="filter-btn active" id="f-all" onclick="setFilter('all')">Alle</button>
+    <button class="filter-btn f-checkout" id="f-checkout" onclick="setFilter('checkout')">Abreise</button>
+    <button class="filter-btn f-dirty" id="f-dirty" onclick="setFilter('dirty')">Offen</button>
+    <button class="filter-btn" id="f-unassigned" onclick="setFilter('unassigned')">Nicht zugewiesen</button>
+  </div>
+
+  <!-- Haupthaus -->
+  <div class="building-label">Haupthaus</div>
+  <div class="floor-label">Tagungsraum Barcelona — Backyard Building, EG (~30 Personen)</div>
+  <div class="room-grid" id="grid-tagungsraum-barcelona"></div>
+  <div class="floor-label">1. Etage (102–110)</div>
+  <div class="room-grid" id="grid-h1"></div>
+  <div class="floor-label">2. Etage (201–210)</div>
+  <div class="room-grid" id="grid-h2"></div>
+  <div class="floor-label">3. Etage (301–310)</div>
+  <div class="room-grid" id="grid-h3"></div>
+  <div class="floor-label">4. Etage (401–410)</div>
+  <div class="room-grid" id="grid-h4"></div>
+  <div class="floor-label">5. Etage (501–510)</div>
+  <div class="room-grid" id="grid-h5"></div>
+
+  <!-- Nebenhaus -->
+  <div class="building-label">Nebenhaus</div>
+  <div class="floor-label">Tagungsraum Mailand — 1. OG, Eschersheimer Landstr. (~6 Personen)</div>
+  <div class="room-grid" id="grid-tagungsraum-mailand"></div>
+  <div class="floor-label">Block 1 (11–15)</div>
+  <div class="room-grid" id="grid-n1"></div>
+  <div class="floor-label">Block 2 (21–25)</div>
+  <div class="room-grid" id="grid-n2"></div>
+  <div class="floor-label">Block 3 (31–35)</div>
+  <div class="room-grid" id="grid-n3"></div>
+  <div class="floor-label">Block 4 (41–45)</div>
+  <div class="room-grid" id="grid-n4"></div>
+  <div class="floor-label">Block 5 (51–55)</div>
+  <div class="room-grid" id="grid-n5"></div>
+
+  <div class="reset-row">
+    <button class="btn-export" onclick="exportData()">⬇ Stand exportieren</button>
+    <button class="btn-import-json" onclick="document.getElementById('import-file-json').click()">⬆ Stand importieren</button>
+    <input type="file" id="import-file-json" accept=".json" onchange="importData(event)">
+    <button class="btn-reset-day" onclick="resetDay()">Neuer Tag</button>
+    <button class="btn-reset" onclick="resetAll()">Reset</button>
+  </div>
+</div>
+
+<!-- ══ TAB: ÜBERSICHT ══ -->
+<div id="tab-uebersicht" style="display:none">
+  <div class="building-label" style="margin-top:4px">Übersicht nach Personal</div>
+  <div class="staff-overview" id="staff-overview"></div>
+  <div style="margin-top:28px;padding-top:22px;border-top:1px solid var(--line);">
+    <div class="building-label" style="margin-top:0">Nicht zugewiesene Zimmer</div>
+    <div class="room-grid" id="unassigned-grid" style="margin-top:8px"></div>
+  </div>
+</div>
+
+<!-- ══ TAB: GÄSTELISTE ══ -->
+<div id="tab-gaeste" style="display:none">
+  <div class="import-panel">
+    <div class="building-label" style="margin-top:4px">Gästeliste importieren</div>
+
+    <!-- Drop Zone -->
+    <div class="import-zone" id="csv-dropzone" onclick="document.getElementById('csv-file-input').click()"
+         ondragover="event.preventDefault();this.style.borderColor='var(--gold)'"
+         ondragleave="this.style.borderColor=''"
+         ondrop="handleCsvDrop(event)">
+      <div class="import-zone-icon">📋</div>
+      <div class="import-zone-title">CSV-Datei hier ablegen</div>
+      <div class="import-zone-hint">oder klicken zum Auswählen · PMS-Export, Excel-CSV</div>
+    </div>
+    <input type="file" id="csv-file-input" accept=".csv,.txt" style="display:none" onchange="handleCsvFile(event)">
+
+    <!-- Format Info -->
+    <div class="import-info-box">
+      <div class="import-info-title">Erwartetes CSV-Format</div>
+      <table class="csv-format-table">
+        <tr><th>Spalte</th><th>Beispiel</th><th>Hinweis</th></tr>
+        <tr><td>Zimmer</td><td>201</td><td>Zimmernummer</td></tr>
+        <tr><td>Abreise</td><td>05.07.2026</td><td>Datum (TT.MM.JJJJ)</td></tr>
+        <tr><td>Anreise</td><td>06.07.2026</td><td>optional</td></tr>
+        <tr><td>Gast</td><td>Müller, Hans</td><td>optional</td></tr>
+        <tr><td>Status</td><td>Abreise / Overnight</td><td>optional, wird erkannt</td></tr>
+      </table>
+      <p style="font-family:'Spline Sans Mono',monospace;font-size:.68rem;color:var(--muted);margin-top:10px;">
+        Trennzeichen: Semikolon (;) oder Komma (,) · Erste Zeile = Kopfzeile · Heutiges Datum (05.07.2026) wird automatisch gefiltert.
+      </p>
+    </div>
+
+    <!-- Manuell hinzufügen -->
+    <div class="manual-add-form">
+      <h3>Zimmer manuell markieren</h3>
+      <div class="form-row">
+        <input class="form-input" id="manual-room" placeholder="Zimmernr." style="max-width:120px;">
+        <select class="staff-select" id="manual-type" style="margin-bottom:0;flex:1;">
+          <option value="checkout">Abreise heute</option>
+          <option value="overnight">Overnight (bleibt)</option>
+          <option value="none">Zurücksetzen</option>
+        </select>
+        <button class="btn btn-save" onclick="applyManual()" style="white-space:nowrap;">Setzen</button>
+      </div>
+    </div>
+
+    <!-- Preview -->
+    <div class="import-preview" id="import-preview">
+      <div class="import-preview-title" id="preview-title">Erkannte Zimmer</div>
+      <div class="preview-list" id="preview-list"></div>
+      <button class="btn btn-apply" id="btn-apply-csv" onclick="applyCsvImport()">Auf Zimmer übertragen</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ TAB: PERSONAL ══ -->
+<div id="tab-personal" style="display:none">
+  <div class="building-label" style="margin-top:4px">Mitarbeiter</div>
+  <div class="personal-panel">
+    <div class="personal-list" id="personal-list"></div>
+    <div class="add-staff-form">
+      <h3>Mitarbeiter hinzufügen</h3>
+      <div class="form-row">
+        <input class="form-input" id="new-name" placeholder="Name" maxlength="30">
+        <input class="form-input" id="new-abb" placeholder="Kürzel" maxlength="3" style="max-width:80px;text-transform:uppercase">
+      </div>
+      <div class="field-label">Farbe</div>
+      <div class="color-options" id="color-options"></div>
+      <button class="btn btn-add" onclick="addStaff()">+ Hinzufügen</button>
+    </div>
+  </div>
+</div>
+
+</div><!-- /main -->
+
+<!-- ══ MODAL ══ -->
+<div class="overlay" id="overlay" onclick="closeModal(event)">
+  <div class="modal">
+    <div class="modal-title" id="modal-title">Zimmer 101</div>
+    <div class="modal-guest-info" id="modal-guest-info"></div>
+
+    <div class="field-label">Reinigung</div>
+    <div class="toggle-row">
+      <button class="toggle-btn" id="btn-clean" onclick="setClean(true)">✓ Gereinigt</button>
+      <button class="toggle-btn" id="btn-dirty" onclick="setClean(false)">⏳ Ausstehend</button>
+    </div>
+
+    <div class="field-label">Belegung</div>
+    <div class="toggle-row">
+      <button class="toggle-btn" id="btn-free" onclick="setOccupied(false)">○ Frei</button>
+      <button class="toggle-btn" id="btn-occupied" onclick="setOccupied(true)">● Belegt</button>
+    </div>
+
+    <div class="field-label">Mitarbeiter</div>
+    <select class="staff-select" id="modal-staff"></select>
+
+    <div class="field-label">Notiz</div>
+    <textarea class="note-input" id="modal-note" placeholder="z.B. Handtücher fehlen..."></textarea>
+
+    <div class="modal-actions">
+      <button class="btn btn-cancel" onclick="closeModalDirect()">Abbrechen</button>
+      <button class="btn btn-save" onclick="saveRoom()">Speichern</button>
+    </div>
+  </div>
+</div>
+
+<div class="tool-footer">
+  Entwickelt von <a href="#">André Schwarz — ASGlobal</a> · Turmhotel Frankfurt
+</div>
+
+<script>
+// ══ ROOM MAP ══
+const ROOMS = {
+  'tagungsraum-barcelona': ['Tagungsraum Barcelona'],
+  'h1': ['102','103','104','105','106','107','108','109','110'],
+  'h2': ['201','202','203','204','205','206','207','208','209','210'],
+  'h3': ['301','302','303','304','305','306','307','308','309','310'],
+  'h4': ['401','402','403','404','405','406','407','408','409','410'],
+  'h5': ['501','502','503','504','505','506','507','508','509','510'],
+  'tagungsraum-mailand': ['Tagungsraum Mailand'],
+  'n1': ['11','12','14','15'],
+  'n2': ['21','22','23','24','25'],
+  'n3': ['31','32','33','34','35'],
+  'n4': ['41','42','43','44','45'],
+  'n5': ['51','52','53','54','55'],
+};
+const ALL_ROOMS = Object.values(ROOMS).flat();
+
+const COLORS = ['#c9a227','#2a7a4b','#1a6fa8','#8e44ad','#e67e22','#c0392b','#16a085','#d4a574'];
+let selectedColor = COLORS[0];
+let activeFilter = 'all';
+let csvParsed = []; // {room, type: 'checkout'|'overnight'}
+
+// ══ PERSISTENCE ══
+function loadState()  { try { return JSON.parse(localStorage.getItem('hk_state3') || '{}'); } catch { return {}; } }
+function loadStaff()  { try { const s = JSON.parse(localStorage.getItem('hk_staff3') || '[]'); return s.length ? s : []; } catch { return []; } }
+function saveState(s) { localStorage.setItem('hk_state3', JSON.stringify(s)); }
+function saveStaffData(s) { localStorage.setItem('hk_staff3', JSON.stringify(s)); }
+
+let state = loadState();
+let staff = loadStaff();
+
+function getRoomState(id) {
+  return state[id] || { clean: false, occupied: false, staff: '', note: '', guestType: '' };
+}
+
+// ══ TODAY ══
+function todayStr() {
+  const d = new Date();
+  const dd = String(d.getDate()).padStart(2,'0');
+  const mm = String(d.getMonth()+1).padStart(2,'0');
+  const yy = d.getFullYear();
+  return `${dd}.${mm}.${yy}`;
+}
+
+// ══ FILTER ══
+function setFilter(f) {
+  activeFilter = f;
+  ['all','checkout','dirty','unassigned'].forEach(k => {
+    document.getElementById('f-' + k).classList.toggle('active', k === f);
+  });
+  renderRooms();
+}
+
+function roomMatchesFilter(r) {
+  const rs = getRoomState(r);
+  if (activeFilter === 'all') return true;
+  if (activeFilter === 'checkout') return rs.guestType === 'checkout';
+  if (activeFilter === 'dirty') return !rs.clean;
+  if (activeFilter === 'unassigned') return !rs.staff;
+  return true;
+}
+
+// ══ RENDER ROOMS ══
+function renderRooms() {
+  Object.entries(ROOMS).forEach(([gridId, rooms]) => {
+    const el = document.getElementById('grid-' + gridId);
+    if (!el) return;
+    el.innerHTML = '';
+    rooms.forEach(r => {
+      if (!roomMatchesFilter(r)) return;
+      const rs = getRoomState(r);
+      const staffObj = staff.find(s => s.name === rs.staff);
+      const card = document.createElement('div');
+      let cardClass = 'room-card ';
+      if (rs.clean) cardClass += 'clean';
+      else if (rs.guestType === 'checkout') cardClass += 'checkout';
+      else cardClass += 'dirty';
+      card.className = cardClass;
+      card.onclick = () => openModal(r);
+
+      let typeBadge = '';
+      if (rs.guestType === 'checkout') typeBadge = '<span class="badge badge-checkout">Abreise</span>';
+      else if (rs.guestType === 'overnight') typeBadge = '<span class="badge badge-overnight">Overnight</span>';
+
+      card.innerHTML = `
+        <div class="room-num">${r}</div>
+        <div class="room-status-row">
+          <span class="badge ${rs.clean ? 'badge-clean' : 'badge-dirty'}">${rs.clean ? 'Sauber' : 'Offen'}</span>
+          <span class="badge ${rs.occupied ? 'badge-occupied' : 'badge-free'}">${rs.occupied ? 'Belegt' : 'Frei'}</span>
+          ${typeBadge}
+        </div>
+        ${staffObj ? `<div class="room-staff"><span class="staff-chip" style="background:${staffObj.color}">${staffObj.abb}</span></div>` : ''}
+        ${rs.note ? `<div class="room-note">${rs.note}</div>` : ''}
+      `;
+      el.appendChild(card);
+    });
+  });
+  updateStats();
+}
+
+// ══ STATS + PROGRESS ══
+function updateStats() {
+  let clean=0, dirty=0, free=0, occ=0, checkout=0, overnight=0;
+  ALL_ROOMS.forEach(r => {
+    const rs = getRoomState(r);
+    if (rs.clean) clean++; else dirty++;
+    if (rs.occupied) occ++; else free++;
+    if (rs.guestType === 'checkout') checkout++;
+    if (rs.guestType === 'overnight') overnight++;
+  });
+  document.getElementById('stat-clean').textContent = clean;
+  document.getElementById('stat-dirty').textContent = dirty;
+  document.getElementById('stat-free').textContent = free;
+  document.getElementById('stat-occ').textContent = occ;
+  document.getElementById('stat-checkout').textContent = checkout;
+  document.getElementById('stat-overnight').textContent = overnight;
+
+  const total = ALL_ROOMS.length;
+  const pct = total ? Math.round(clean / total * 100) : 0;
+  document.getElementById('progress-pct').textContent = pct + '%';
+  document.getElementById('progress-fill').style.width = pct + '%';
+
+  const d = new Date();
+  document.getElementById('date-chip').textContent =
+    d.toLocaleDateString('de-DE', {weekday:'short', day:'2-digit', month:'2-digit', year:'numeric'});
+}
+
+// ══ MODAL ══
+let currentRoom = null;
+let tempState = {};
+
+function openModal(roomId) {
+  currentRoom = roomId;
+  const rs = getRoomState(roomId);
+  tempState = { ...rs };
+
+  document.getElementById('modal-title').textContent = 'Zimmer ' + roomId;
+
+  // Guest type info
+  const gi = document.getElementById('modal-guest-info');
+  if (rs.guestType === 'checkout') gi.innerHTML = '<span class="co-tag">↗ Abreise heute — Zimmer wird frei</span>';
+  else if (rs.guestType === 'overnight') gi.innerHTML = '<span class="ov-tag">🌙 Overnight — Gast bleibt</span>';
+  else gi.innerHTML = '';
+
+  const sel = document.getElementById('modal-staff');
+  sel.innerHTML = '<option value="">— Niemand zugewiesen —</option>';
+  staff.forEach(s => {
+    const opt = document.createElement('option');
+    opt.value = s.name;
+    opt.textContent = s.name + ' (' + s.abb + ')';
+    if (s.name === rs.staff) opt.selected = true;
+    sel.appendChild(opt);
+  });
+
+  document.getElementById('modal-note').value = rs.note || '';
+  refreshModalButtons();
+  document.getElementById('overlay').classList.add('show');
+}
+
+function refreshModalButtons() {
+  document.getElementById('btn-clean').className = 'toggle-btn' + (tempState.clean ? ' active-clean' : '');
+  document.getElementById('btn-dirty').className = 'toggle-btn' + (!tempState.clean ? ' active-dirty' : '');
+  document.getElementById('btn-free').className = 'toggle-btn' + (!tempState.occupied ? ' active-free' : '');
+  document.getElementById('btn-occupied').className = 'toggle-btn' + (tempState.occupied ? ' active-occupied' : '');
+}
+
+function setClean(v) { tempState.clean = v; refreshModalButtons(); }
+function setOccupied(v) { tempState.occupied = v; refreshModalButtons(); }
+
+function saveRoom() {
+  if (!currentRoom) return;
+  const existing = getRoomState(currentRoom);
+  state[currentRoom] = {
+    clean: tempState.clean,
+    occupied: tempState.occupied,
+    staff: document.getElementById('modal-staff').value,
+    note: document.getElementById('modal-note').value.trim(),
+    guestType: existing.guestType || '',
+  };
+  saveState(state);
+  renderRooms();
+  renderOverview();
+  closeModalDirect();
+}
+
+function closeModalDirect() { document.getElementById('overlay').classList.remove('show'); currentRoom = null; }
+function closeModal(e) { if (e.target === document.getElementById('overlay')) closeModalDirect(); }
+
+// ══ OVERVIEW ══
+function renderOverview() {
+  const container = document.getElementById('staff-overview');
+  container.innerHTML = '';
+  if (!staff.length) {
+    container.innerHTML = '<p style="color:var(--muted);font-family:\'Spline Sans Mono\',monospace;font-size:.8rem">Noch keine Mitarbeiter — gehe zu »Personal«.</p>';
+  }
+  staff.forEach(s => {
+    const assigned = ALL_ROOMS.filter(r => getRoomState(r).staff === s.name);
+    const done = assigned.filter(r => getRoomState(r).clean);
+    const pct = assigned.length ? Math.round(done.length / assigned.length * 100) : 0;
+    const row = document.createElement('div');
+    row.className = 'staff-row';
+    row.innerHTML = `
+      <div class="staff-row-header">
+        <div class="staff-name-display">
+          <span class="staff-chip" style="background:${s.color}">${s.abb}</span>${s.name}
+        </div>
+        <span style="font-family:'Spline Sans Mono',monospace;font-size:.76rem;color:var(--muted)">
+          ${done.length}/${assigned.length} · <span style="color:${s.color}">${pct}%</span>
+        </span>
+      </div>
+      <div class="staff-progress-bar"><div class="staff-progress-fill" style="width:${pct}%;background:${s.color}"></div></div>
+      <div class="staff-rooms-list">
+        ${assigned.length ? assigned.map(r => {
+          const rs = getRoomState(r);
+          let cls = 'staff-room-tag';
+          if (rs.clean) cls += ' done';
+          else if (rs.guestType === 'checkout') cls += ' checkout';
+          return `<span class="${cls}">${r}</span>`;
+        }).join('') : '<span style="color:var(--muted)">Keine Zimmer zugewiesen</span>'}
+      </div>
+    `;
+    container.appendChild(row);
+  });
+
+  const unassigned = ALL_ROOMS.filter(r => !getRoomState(r).staff);
+  const ugrid = document.getElementById('unassigned-grid');
+  ugrid.innerHTML = '';
+  if (!unassigned.length) {
+    ugrid.innerHTML = '<p style="color:var(--muted);font-size:.8rem;font-family:\'Spline Sans Mono\',monospace">Alle Zimmer sind zugewiesen ✓</p>';
+  } else {
+    unassigned.forEach(r => {
+      const rs = getRoomState(r);
+      const tag = document.createElement('div');
+      tag.className = 'room-card ' + (rs.clean ? 'clean' : 'dirty');
+      tag.onclick = () => { showTab('zimmer'); openModal(r); };
+      tag.innerHTML = `<div class="room-num">${r}</div><div class="room-status-row"><span class="badge ${rs.clean ? 'badge-clean':'badge-dirty'}">${rs.clean?'Sauber':'Offen'}</span></div>`;
+      ugrid.appendChild(tag);
+    });
+  }
+}
+
+// ══ PERSONAL ══
+function renderPersonal() {
+  const list = document.getElementById('personal-list');
+  list.innerHTML = '';
+  if (!staff.length) {
+    list.innerHTML = '<p style="color:var(--muted);font-size:.8rem;font-family:\'Spline Sans Mono\',monospace;padding:8px 0">Noch keine Mitarbeiter.</p>';
+  }
+  staff.forEach((s, i) => {
+    const item = document.createElement('div');
+    item.className = 'personal-item';
+    item.innerHTML = `<span class="staff-chip" style="background:${s.color}">${s.abb}</span><span class="pname">${s.name}</span><span class="pabb">${s.abb}</span><button class="del-btn" onclick="deleteStaff(${i})">×</button>`;
+    list.appendChild(item);
+  });
+  const cp = document.getElementById('color-options');
+  cp.innerHTML = '';
+  COLORS.forEach(c => {
+    const d = document.createElement('div');
+    d.className = 'color-opt' + (c === selectedColor ? ' selected' : '');
+    d.style.background = c;
+    d.onclick = () => { selectedColor = c; renderPersonal(); };
+    cp.appendChild(d);
+  });
+}
+
+function addStaff() {
+  const name = document.getElementById('new-name').value.trim();
+  const abb = document.getElementById('new-abb').value.trim().toUpperCase();
+  if (!name || !abb) { alert('Name und Kürzel ausfüllen.'); return; }
+  if (staff.find(s => s.name === name)) { alert('Name bereits vergeben.'); return; }
+  staff.push({ name, abb, color: selectedColor });
+  saveStaffData(staff);
+  document.getElementById('new-name').value = '';
+  document.getElementById('new-abb').value = '';
+  renderPersonal(); renderRooms();
+}
+
+function deleteStaff(i) {
+  if (!confirm('Mitarbeiter entfernen?')) return;
+  const name = staff[i].name;
+  staff.splice(i, 1);
+  saveStaffData(staff);
+  Object.keys(state).forEach(r => { if (state[r].staff === name) state[r].staff = ''; });
+  saveState(state);
+  renderPersonal(); renderRooms(); renderOverview();
+}
+
+// ══ TABS ══
+function showTab(tab) {
+  ['zimmer','uebersicht','gaeste','personal'].forEach(id => {
+    document.getElementById('tab-' + id).style.display = id === tab ? '' : 'none';
+    document.getElementById('tab-btn-' + id).classList.toggle('active', id === tab);
+  });
+  if (tab === 'uebersicht') renderOverview();
+  if (tab === 'personal') renderPersonal();
+}
+
+// ══ CSV IMPORT ══
+function handleCsvDrop(event) {
+  event.preventDefault();
+  document.getElementById('csv-dropzone').style.borderColor = '';
+  const file = event.dataTransfer.files[0];
+  if (file) parseCsvFile(file);
+}
+function handleCsvFile(event) {
+  const file = event.target.files[0];
+  if (file) parseCsvFile(file);
+  event.target.value = '';
+}
+
+function parseCsvFile(file) {
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    const text = e.target.result;
+    const results = parseCsv(text);
+    showCsvPreview(results);
+  };
+  reader.readAsText(file, 'UTF-8');
+}
+
+function parseCsv(text) {
+  const lines = text.trim().split(/\r?\n/);
+  if (lines.length < 2) return [];
+  // detect separator
+  const sep = lines[0].includes(';') ? ';' : ',';
+  const headers = lines[0].split(sep).map(h => h.trim().toLowerCase().replace(/"/g,''));
+
+  // find column indices (flexible matching)
+  const colZimmer = findCol(headers, ['zimmer','room','zim','zimmer-nr','zimmernr','nr']);
+  const colAbreise = findCol(headers, ['abreise','checkout','departure','abr','check-out','check out']);
+  const colAnreise = findCol(headers, ['anreise','checkin','arrival','anr','check-in','check in']);
+  const colStatus = findCol(headers, ['status','typ','type']);
+  const colGast = findCol(headers, ['gast','guest','name','gäste']);
+
+  const today = todayStr();
+  const todayDate = parseDate(today);
+  const results = [];
+
+  for (let i = 1; i < lines.length; i++) {
+    const cells = lines[i].split(sep).map(c => c.trim().replace(/"/g,''));
+    if (!cells.some(c => c)) continue;
+
+    const roomRaw = colZimmer >= 0 ? cells[colZimmer] : '';
+    const room = roomRaw.trim();
+    if (!room || !ALL_ROOMS.includes(room)) continue;
+
+    const abreiseRaw = colAbreise >= 0 ? cells[colAbreise] : '';
+    const anreiseRaw = colAnreise >= 0 ? cells[colAnreise] : '';
+    const statusRaw = (colStatus >= 0 ? cells[colStatus] : '').toLowerCase();
+
+    let guestType = '';
+
+    // Determine by status column first
+    if (statusRaw.includes('abreise') || statusRaw.includes('checkout') || statusRaw.includes('departure')) {
+      guestType = 'checkout';
+    } else if (statusRaw.includes('overnight') || statusRaw.includes('bleib') || statusRaw.includes('stay')) {
+      guestType = 'overnight';
+    } else {
+      // Determine by dates
+      const abreiseDate = parseDate(abreiseRaw);
+      const anreiseDate = parseDate(anreiseRaw);
+      if (abreiseDate && datesEqual(abreiseDate, todayDate)) {
+        guestType = 'checkout';
+      } else if (abreiseDate && abreiseDate > todayDate) {
+        guestType = 'overnight';
+      } else if (anreiseDate && datesEqual(anreiseDate, todayDate)) {
+        guestType = 'checkout'; // arriving today — room needs prep
+      }
+    }
+
+    if (guestType) results.push({ room, guestType });
+  }
+  return results;
+}
+
+function findCol(headers, candidates) {
+  for (const c of candidates) {
+    const idx = headers.findIndex(h => h === c || h.includes(c));
+    if (idx >= 0) return idx;
+  }
+  return -1;
+}
+
+function parseDate(str) {
+  if (!str) return null;
+  // DD.MM.YYYY
+  let m = str.match(/^(\d{1,2})\.(\d{1,2})\.(\d{4})$/);
+  if (m) return new Date(+m[3], +m[2]-1, +m[1]);
+  // YYYY-MM-DD
+  m = str.match(/^(\d{4})-(\d{2})-(\d{2})/);
+  if (m) return new Date(+m[1], +m[2]-1, +m[3]);
+  return null;
+}
+
+function datesEqual(a, b) {
+  return a && b && a.getFullYear()===b.getFullYear() && a.getMonth()===b.getMonth() && a.getDate()===b.getDate();
+}
+
+function showCsvPreview(results) {
+  csvParsed = results;
+  const preview = document.getElementById('import-preview');
+  const list = document.getElementById('preview-list');
+  const title = document.getElementById('preview-title');
+  list.innerHTML = '';
+
+  if (!results.length) {
+    title.textContent = 'Keine passenden Zimmer für heute gefunden';
+    preview.classList.add('show');
+    document.getElementById('btn-apply-csv').disabled = true;
+    return;
+  }
+
+  const co = results.filter(r => r.guestType === 'checkout');
+  const ov = results.filter(r => r.guestType === 'overnight');
+  title.textContent = `${results.length} Zimmer erkannt — ${co.length} Abreise, ${ov.length} Overnight`;
+
+  co.forEach(r => {
+    const tag = document.createElement('span');
+    tag.className = 'preview-tag';
+    tag.textContent = r.room + ' ↗';
+    list.appendChild(tag);
+  });
+  ov.forEach(r => {
+    const tag = document.createElement('span');
+    tag.className = 'preview-tag overnight';
+    tag.textContent = r.room + ' 🌙';
+    list.appendChild(tag);
+  });
+
+  document.getElementById('btn-apply-csv').disabled = false;
+  preview.classList.add('show');
+}
+
+function applyCsvImport() {
+  if (!csvParsed.length) return;
+  csvParsed.forEach(({ room, guestType }) => {
+    const rs = getRoomState(room);
+    state[room] = { ...rs, guestType };
+  });
+  saveState(state);
+  renderRooms();
+
+  // Show banner in Zimmer tab
+  const co = csvParsed.filter(r => r.guestType === 'checkout').length;
+  const ov = csvParsed.filter(r => r.guestType === 'overnight').length;
+  const banner = document.getElementById('import-banner');
+  document.getElementById('import-banner-text').innerHTML =
+    `✓ Gästeliste importiert · <strong>${co} Abreise</strong> · <strong>${ov} Overnight</strong> · Datum: ${todayStr()}`;
+  banner.classList.add('show');
+  showTab('zimmer');
+}
+
+// Manual guest type
+function applyManual() {
+  const room = document.getElementById('manual-room').value.trim();
+  const type = document.getElementById('manual-type').value;
+  if (!room || !ALL_ROOMS.includes(room)) { alert('Zimmer nicht gefunden: ' + room); return; }
+  const rs = getRoomState(room);
+  state[room] = { ...rs, guestType: type === 'none' ? '' : type };
+  saveState(state);
+  renderRooms();
+  document.getElementById('manual-room').value = '';
+}
+
+// ══ RESET ══
+function resetDay() {
+  if (!confirm('Reinigungsstatus aller Zimmer zurücksetzen?')) return;
+  ALL_ROOMS.forEach(r => { if (state[r]) state[r].clean = false; });
+  saveState(state); renderRooms();
+}
+function resetAll() {
+  if (!confirm('ALLES zurücksetzen? (Zimmer + Personal + Gästeliste)')) return;
+  state = {}; staff = [];
+  saveState(state); saveStaffData(staff);
+  renderRooms(); renderPersonal(); renderOverview();
+}
+
+// ══ EXPORT / IMPORT JSON ══
+function exportData() {
+  const payload = { version: 3, exported: new Date().toISOString(), state, staff };
+  const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'housekeeping-' + new Date().toISOString().slice(0,10) + '.json';
+  a.click();
+  URL.revokeObjectURL(url);
+}
+function importData(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    try {
+      const payload = JSON.parse(e.target.result);
+      if (!payload.state) throw new Error('Ungültiges Format');
+      if (!confirm('Stand vom ' + (payload.exported || '?').slice(0,10) + ' laden?')) return;
+      state = payload.state;
+      staff = payload.staff || [];
+      saveState(state); saveStaffData(staff);
+      renderRooms(); renderPersonal(); renderOverview();
+      alert('✓ Stand geladen.');
+    } catch(err) { alert('Fehler: ' + err.message); }
+    event.target.value = '';
+  };
+  reader.readAsText(file);
+}
+
+// ══ LANGUAGE ══
+const L = {
+  de: { eyebrow:'Digitalisierungsprojekt · Turmhotel Frankfurt', meta:'Entwickelt von <span>André Schwarz — ASGlobal</span> · Daten lokal im Browser gespeichert', clean:'gereinigt', dirty:'ausstehend', free:'frei', occ:'belegt', checkout:'Abreise', overnight:'Overnight', progress:'Tagesfortschritt Reinigung', tabs:['Zimmer','Übersicht','Gästeliste','Personal'] },
+  en: { eyebrow:'Digitalisation Project · Turmhotel Frankfurt', meta:'Developed by <span>André Schwarz — ASGlobal</span> · Data stored locally in browser', clean:'cleaned', dirty:'pending', free:'vacant', occ:'occupied', checkout:'Checkout', overnight:'Overnight', progress:'Daily Cleaning Progress', tabs:['Rooms','Overview','Guest List','Staff'] },
+  hu: { eyebrow:'Digitalizációs Projekt · Turmhotel Frankfurt', meta:'Fejlesztette: <span>André Schwarz — ASGlobal</span> · Az adatok helyben tárolódnak', clean:'takarítva', dirty:'folyamatban', free:'szabad', occ:'foglalt', checkout:'Kijelentkezés', overnight:'Overnight', progress:'Napi takarítás', tabs:['Szobák','Áttekintés','Vendéglista','Személyzet'] },
+};
+let currentLang = 'de';
+function setLang(lang) {
+  currentLang = lang;
+  const t = L[lang];
+  document.querySelectorAll('.lang-btn').forEach((b,i) => b.classList.toggle('active',['de','en','hu'][i]===lang));
+  document.getElementById('lbl-eyebrow').textContent = t.eyebrow;
+  document.getElementById('lbl-meta').innerHTML = t.meta;
+  document.getElementById('lbl-clean').textContent = t.clean;
+  document.getElementById('lbl-dirty').textContent = t.dirty;
+  document.getElementById('lbl-free').textContent = t.free;
+  document.getElementById('lbl-occ').textContent = t.occ;
+  document.getElementById('lbl-checkout').textContent = t.checkout;
+  document.getElementById('lbl-overnight').textContent = t.overnight;
+  document.getElementById('lbl-progress-text').textContent = t.progress;
+  t.tabs.forEach((label, i) => {
+    const ids = ['zimmer','uebersicht','gaeste','personal'];
+    document.getElementById('tab-btn-' + ids[i]).textContent = label;
+  });
+}
+
+// ══ INIT ══
+renderRooms();
+renderPersonal();
+updateStats();
+</script>
+</body>
+</html>
