@@ -1546,8 +1546,19 @@ function forceFixNotes() {
   });
   saveState(state);
 }
+function assignTeamsAndInstructions() {
+  const teams = ["Team", "Team 2", "Team 3"];
+  const instructions = "So meldest du fertig: Zimmer antippen -> Haken bei Reinigung/Belegung setzen -> Fertig melden -> bestaetigen. Fehlt Bettwaesche o.ae., NICHT fertig melden, sondern hier eintragen z.B. Bettwaesche fehlt - bleibt bis morgen offen.";
+  ALL_ROOMS.forEach(function(room, i) {
+    const rs = getRoomState(room);
+    const team = teams[i % teams.length];
+    state[room] = Object.assign({}, rs, { staff: team, note: instructions });
+  });
+  saveState(state);
+}
 seedAllRoomsTestNote();
 forceFixNotes();
+assignTeamsAndInstructions();
 renderRooms();
 renderPersonal();
 updateStats();
