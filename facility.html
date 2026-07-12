@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Facility Manager — Turmhotel Frankfurt</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..900;1,9..144,300..900&family=Spline+Sans+Mono:wght@400;500;600&family=Spline+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#0c0a08;--ink-2:#161310;--paper:#f4ede0;
+  --gold:#c9a227;--gold-bright:#e8c14f;--muted:#9b9085;--line:rgba(201,162,39,.18);
+  --clean:#2a7a4b;--clean-bg:rgba(42,122,75,.15);
+  --warn:#e67e22;--warn-bg:rgba(230,126,34,.13);
+  --danger:#c0392b;--danger-bg:rgba(192,57,43,.13);
+  --info:#1a6fa8;--info-bg:rgba(26,111,168,.13);
+  --purple:#8e44ad;--purple-bg:rgba(142,68,173,.13);
+  --radius:3px;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{font-family:'Spline Sans',sans-serif;background:var(--ink);color:var(--paper);min-height:100vh;-webkit-font-smoothing:antialiased;}
+body::before{content:"";position:fixed;inset:0;z-index:0;pointer-events:none;
+  background:radial-gradient(900px 500px at 80% -10%,rgba(201,162,39,.07),transparent 60%),
+             radial-gradient(700px 600px at -10% 100%,rgba(201,162,39,.04),transparent 60%);}
+
+/* NAV */
+nav{position:sticky;top:0;z-index:200;background:rgba(12,10,8,.95);backdrop-filter:blur(14px);border-bottom:1px solid var(--line);padding:12px 24px;display:flex;justify-content:space-between;align-items:center;gap:12px;}
+.nav-brand{font-family:'Fraunces',serif;font-size:.95rem;color:var(--gold);text-decoration:none;}
+.nav-right{display:flex;align-items:center;gap:10px;}
+.nav-link{color:var(--muted);text-decoration:none;font-family:'Spline Sans Mono',monospace;font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;border:1px solid var(--line);padding:5px 12px;border-radius:var(--radius);transition:.15s;}
+.nav-link:hover{color:var(--gold);border-color:var(--gold);}
+
+/* HEADER */
+.tool-header{position:relative;z-index:1;padding:36px 24px 24px;max-width:1280px;margin:0 auto;border-bottom:1px solid var(--line);}
+.eyebrow{font-family:'Spline Sans Mono',monospace;font-size:.68rem;letter-spacing:.3em;text-transform:uppercase;color:var(--gold);margin-bottom:10px;}
+.tool-title{font-family:'Fraunces',serif;font-size:clamp(1.6rem,4vw,2.4rem);font-weight:500;letter-spacing:-.01em;}
+.tool-title em{font-style:italic;color:var(--gold-bright);}
+.tool-meta{margin-top:6px;font-family:'Spline Sans Mono',monospace;font-size:.72rem;color:var(--muted);}
+
+/* STATS */
+.stats-bar{position:relative;z-index:1;background:rgba(255,255,255,.02);border-bottom:1px solid var(--line);padding:10px 24px;display:flex;gap:20px;align-items:center;flex-wrap:wrap;}
+.stat{display:flex;align-items:center;gap:6px;font-family:'Spline Sans Mono',monospace;font-size:.74rem;}
+.stat-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;}
+.stat-num{color:var(--paper);font-weight:600;}
+.stat-label{color:var(--muted);}
+.date-chip{margin-left:auto;font-family:'Spline Sans Mono',monospace;font-size:.7rem;background:rgba(201,162,39,.1);border:1px solid var(--line);padding:4px 10px;border-radius:2px;color:var(--gold);}
+
+/* TABS */
+.tabs{position:relative;z-index:1;display:flex;border-bottom:1px solid var(--line);background:rgba(12,10,8,.5);padding:0 24px;overflow-x:auto;}
+.tab{padding:12px 18px;font-family:'Spline Sans Mono',monospace;font-size:.7rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);cursor:pointer;border:none;background:none;border-bottom:2px solid transparent;transition:.15s;white-space:nowrap;}
+.tab:hover{color:var(--paper);}
+.tab.active{color:var(--gold);border-bottom-color:var(--gold);}
+
+/* MAIN */
+.main{position:relative;z-index:1;max-width:1280px;margin:0 auto;padding:24px;}
+
+/* BOARD */
+.board{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px;margin-top:8px;}
+.column{background:rgba(255,255,255,.025);border:1px solid var(--line);border-radius:var(--radius);padding:16px;}
+.col-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;}
+.col-title{font-family:'Spline Sans Mono',monospace;font-size:.68rem;letter-spacing:.2em;text-transform:uppercase;}
+.col-count{font-family:'Spline Sans Mono',monospace;font-size:.68rem;background:rgba(255,255,255,.06);border:1px solid var(--line);padding:2px 8px;border-radius:10px;color:var(--muted);}
+.col-offen .col-title{color:var(--warn);}
+.col-progress .col-title{color:var(--info);}
+.col-done .col-title{color:var(--clean);}
+
+/* TASK CARD */
+.task-card{background:rgba(255,255,255,.04);border:1px solid var(--line);border-radius:var(--radius);padding:14px;margin-bottom:8px;transition:.2s;cursor:pointer;position:relative;}
+.task-card:hover{border-color:rgba(201,162,39,.4);transform:translateY(-1px);}
+.task-card.prio-hoch::before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--danger);border-radius:var(--radius) 0 0 var(--radius);}
+.task-card.prio-mittel::before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--warn);border-radius:var(--radius) 0 0 var(--radius);}
+.task-card.prio-niedrig::before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--muted);border-radius:var(--radius) 0 0 var(--radius);}
+.task-card.beschwerde::before{background:var(--purple);}
+.task-top{display:flex;justify-content:space-between;align-items:flex-start;gap:8px;margin-bottom:6px;}
+.task-cat{font-family:'Spline Sans Mono',monospace;font-size:.6rem;letter-spacing:.12em;text-transform:uppercase;padding:2px 7px;border-radius:1px;}
+.cat-sanitaer{background:var(--info-bg);color:#5bb3e8;}
+.cat-elektro{background:rgba(255,214,0,.1);color:#ffd600;}
+.cat-moebel{background:var(--warn-bg);color:var(--warn);}
+.cat-reinigung{background:var(--clean-bg);color:#4ecb82;}
+.cat-sicherheit{background:var(--danger-bg);color:#e87070;}
+.cat-sonstiges{background:rgba(255,255,255,.06);color:var(--muted);}
+.cat-beschwerde{background:var(--purple-bg);color:#c084fc;}
+.task-prio{font-family:'Spline Sans Mono',monospace;font-size:.6rem;padding:2px 6px;border-radius:1px;}
+.prio-chip-hoch{background:var(--danger-bg);color:#e87070;}
+.prio-chip-mittel{background:var(--warn-bg);color:var(--warn);}
+.prio-chip-niedrig{background:rgba(255,255,255,.05);color:var(--muted);}
+.task-title{font-family:'Fraunces',serif;font-size:1rem;font-weight:500;color:var(--paper);margin-bottom:4px;}
+.task-location{font-family:'Spline Sans Mono',monospace;font-size:.68rem;color:var(--gold);}
+.task-desc{font-size:.82rem;color:var(--muted);margin-top:6px;line-height:1.5;}
+.task-meta{margin-top:10px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:6px;}
+.task-date{font-family:'Spline Sans Mono',monospace;font-size:.62rem;color:var(--muted);}
+.task-actions{display:flex;gap:6px;}
+.task-btn{font-family:'Spline Sans Mono',monospace;font-size:.6rem;letter-spacing:.08em;text-transform:uppercase;padding:3px 9px;border-radius:2px;border:1px solid var(--line);background:none;color:var(--muted);cursor:pointer;transition:.15s;}
+.task-btn:hover{color:var(--gold);border-color:rgba(201,162,39,.4);}
+.task-btn.btn-start{border-color:rgba(26,111,168,.4);color:#5bb3e8;}
+.task-btn.btn-start:hover{background:var(--info-bg);}
+.task-btn.btn-done{border-color:rgba(42,122,75,.4);color:#4ecb82;}
+.task-btn.btn-done:hover{background:var(--clean-bg);}
+.task-btn.btn-del{border-color:rgba(192,57,43,.3);color:#e87070;}
+.task-btn.btn-del:hover{background:var(--danger-bg);}
+.empty-col{font-family:'Spline Sans Mono',monospace;font-size:.72rem;color:var(--muted);text-align:center;padding:24px 0;opacity:.6;}
+
+/* NEW TASK FORM */
+.form-panel{max-width:600px;}
+.form-section{background:rgba(255,255,255,.025);border:1px solid var(--line);border-radius:var(--radius);padding:24px;margin-bottom:20px;}
+.form-section h3{font-family:'Fraunces',serif;font-size:1.1rem;color:var(--gold);margin-bottom:18px;}
+.form-group{margin-bottom:14px;}
+.field-label{font-family:'Spline Sans Mono',monospace;font-size:.63rem;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin-bottom:7px;}
+.form-input,.form-select,.form-textarea{width:100%;background:rgba(255,255,255,.05);border:1px solid var(--line);color:var(--paper);padding:9px 12px;border-radius:2px;font-family:'Spline Sans',sans-serif;font-size:.88rem;}
+.form-textarea{resize:none;height:80px;font-family:'Spline Sans',sans-serif;}
+.form-input:focus,.form-select:focus,.form-textarea:focus{outline:none;border-color:var(--gold);}
+.form-select option{background:#1a1612;color:var(--paper);}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.btn-submit{background:var(--gold);color:var(--ink);font-weight:600;width:100%;padding:11px;border:none;border-radius:2px;font-family:'Spline Sans Mono',monospace;font-size:.75rem;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;transition:.15s;margin-top:4px;}
+.btn-submit:hover{background:var(--gold-bright);}
+.btn-submit-purple{background:var(--purple);color:#fff;}
+.btn-submit-purple:hover{opacity:.9;}
+
+/* BESCHWERDE FORMULAR */
+.beschwerde-intro{background:var(--purple-bg);border:1px solid rgba(142,68,173,.3);border-radius:var(--radius);padding:16px 20px;margin-bottom:20px;font-family:'Spline Sans Mono',monospace;font-size:.75rem;color:#c084fc;line-height:1.6;}
+
+/* FILTER */
+.filter-row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px;align-items:center;}
+.filter-btn{padding:5px 13px;border-radius:2px;border:1px solid var(--line);background:none;color:var(--muted);cursor:pointer;font-family:'Spline Sans Mono',monospace;font-size:.68rem;letter-spacing:.08em;text-transform:uppercase;transition:.15s;}
+.filter-btn:hover{border-color:rgba(201,162,39,.4);color:var(--paper);}
+.filter-btn.active{background:rgba(201,162,39,.12);color:var(--gold);border-color:var(--gold);}
+
+/* FOOTER */
+.tool-footer{position:relative;z-index:1;border-top:1px solid var(--line);margin-top:48px;padding:20px 24px;text-align:center;font-family:'Spline Sans Mono',monospace;font-size:.7rem;color:var(--muted);}
+.tool-footer a{color:var(--gold);text-decoration:none;}
+
+@media(max-width:640px){.form-row{grid-template-columns:1fr;}.board{grid-template-columns:1fr;}}
+</style>
+</head>
+<body>
+
+<nav>
+  <a class="nav-brand" href="#">Facility Manager — Turmhotel ♔</a>
+  <div class="nav-right">
+    <a class="nav-link" href="housekeeping/housekeeping-v3.html">← Housekeeping</a>
+  </div>
+</nav>
+
+<div class="tool-header">
+  <div class="eyebrow">Turmhotel Frankfurt · Facility & Beschwerden</div>
+  <div class="tool-title">Aufgaben & <em>Beschwerden</em></div>
+  <div class="tool-meta">Hausmeister · Handwerker · Rezeption · Gästefeedback</div>
+</div>
+
+<div class="stats-bar">
+  <div class="stat"><div class="stat-dot" style="background:var(--warn)"></div><span class="stat-num" id="stat-offen">0</span><span class="stat-label">offen</span></div>
+  <div class="stat"><div class="stat-dot" style="background:var(--info)"></div><span class="stat-num" id="stat-progress">0</span><span class="stat-label">in Arbeit</span></div>
+  <div class="stat"><div class="stat-dot" style="background:var(--clean)"></div><span class="stat-num" id="stat-done">0</span><span class="stat-label">erledigt</span></div>
+  <div class="stat"><div class="stat-dot" style="background:var(--purple)"></div><span class="stat-num" id="stat-beschwerden">0</span><span class="stat-label">Beschwerden</span></div>
+  <div class="stat"><div class="stat-dot" style="background:var(--danger)"></div><span class="stat-num" id="stat-hoch">0</span><span class="stat-label">hohe Prio</span></div>
+  <div class="date-chip" id="date-chip"></div>
+</div>
+
+<div class="tabs">
+  <button class="tab active" id="tab-btn-board" onclick="showTab('board')">Board</button>
+  <button class="tab" id="tab-btn-neu" onclick="showTab('neu')">+ Neue Aufgabe</button>
+  <button class="tab" id="tab-btn-beschwerde" onclick="showTab('beschwerde')">Gast-Beschwerde</button>
+</div>
+
+<div class="main">
+
+  <!-- BOARD TAB -->
+  <div id="tab-board">
+    <div class="filter-row">
+      <button class="filter-btn active" id="f-all" onclick="setFilter('all')">Alle</button>
+      <button class="filter-btn" id="f-hoch" onclick="setFilter('hoch')">🔴 Hohe Prio</button>
+      <button class="filter-btn" id="f-beschwerde" onclick="setFilter('beschwerde')">💬 Beschwerden</button>
+      <button class="filter-btn" id="f-sanitaer" onclick="setFilter('Sanitär')">🔧 Sanitär</button>
+      <button class="filter-btn" id="f-elektro" onclick="setFilter('Elektro')">⚡ Elektro</button>
+    </div>
+    <div class="board">
+      <div class="column col-offen">
+        <div class="col-header">
+          <span class="col-title">⏳ Offen</span>
+          <span class="col-count" id="count-offen">0</span>
+        </div>
+        <div id="col-offen-list"></div>
+      </div>
+      <div class="column col-progress">
+        <div class="col-header">
+          <span class="col-title">🔧 In Arbeit</span>
+          <span class="col-count" id="count-progress">0</span>
+        </div>
+        <div id="col-progress-list"></div>
+      </div>
+      <div class="column col-done">
+        <div class="col-header">
+          <span class="col-title">✓ Erledigt</span>
+          <span class="col-count" id="count-done">0</span>
+        </div>
+        <div id="col-done-list"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- NEUE AUFGABE TAB -->
+  <div id="tab-neu" style="display:none">
+    <div class="form-panel">
+      <div class="form-section">
+        <h3>Neue Aufgabe erstellen</h3>
+        <div class="form-group">
+          <div class="field-label">Titel / Kurzbeschreibung</div>
+          <input class="form-input" id="new-title" placeholder="z.B. Wasserhahn tropft" maxlength="80">
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <div class="field-label">Kategorie</div>
+            <select class="form-select" id="new-cat">
+              <option value="Sanitär">🔧 Sanitär</option>
+              <option value="Elektro">⚡ Elektro</option>
+              <option value="Möbel">🪑 Möbel / Einrichtung</option>
+              <option value="Reinigung">🧹 Reinigung</option>
+              <option value="Sicherheit">🔒 Sicherheit</option>
+              <option value="Sonstiges">📋 Sonstiges</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <div class="field-label">Priorität</div>
+            <select class="form-select" id="new-prio">
+              <option value="mittel">Mittel</option>
+              <option value="hoch">🔴 Hoch</option>
+              <option value="niedrig">Niedrig</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="field-label">Ort / Zimmer</div>
+          <input class="form-input" id="new-location" placeholder="z.B. Zimmer 204 oder Lobby" maxlength="60">
+        </div>
+        <div class="form-group">
+          <div class="field-label">Details (optional)</div>
+          <textarea class="form-textarea" id="new-desc" placeholder="Zusätzliche Informationen für den Handwerker..."></textarea>
+        </div>
+        <button class="btn-submit" onclick="addTask()">+ Aufgabe erstellen</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- BESCHWERDE TAB -->
+  <div id="tab-beschwerde" style="display:none">
+    <div class="form-panel">
+      <div class="beschwerde-intro">
+        💬 Gast-Beschwerde wird automatisch als Aufgabe mit Kategorie <strong>Beschwerde</strong> und hoher Priorität ins Board eingetragen. Die Rezeption sieht sie sofort.
+      </div>
+      <div class="form-section">
+        <h3>Gast-Beschwerde erfassen</h3>
+        <div class="form-row">
+          <div class="form-group">
+            <div class="field-label">Zimmer / Bereich</div>
+            <input class="form-input" id="b-location" placeholder="z.B. Zimmer 310" maxlength="60">
+          </div>
+          <div class="form-group">
+            <div class="field-label">Gast-Name (optional)</div>
+            <input class="form-input" id="b-guest" placeholder="optional" maxlength="60">
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="field-label">Beschwerde</div>
+          <input class="form-input" id="b-title" placeholder="z.B. Lärm aus Nachbarzimmer" maxlength="80">
+        </div>
+        <div class="form-group">
+          <div class="field-label">Details</div>
+          <textarea class="form-textarea" id="b-desc" placeholder="Was hat der Gast genau geschildert?"></textarea>
+        </div>
+        <button class="btn-submit btn-submit-purple" onclick="addBeschwerde()">Beschwerde → Board</button>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /main -->
+
+<div class="tool-footer">
+  Turmhotel Frankfurt · Facility Manager · Entwickelt von <a href="#">André Schwarz — ASGlobal</a>
+</div>
+
+<script>
+// ══ PERSISTENCE ══
+function load() { try { return JSON.parse(localStorage.getItem('facility_tasks') || '[]'); } catch { return []; } }
+function save(d) { localStorage.setItem('facility_tasks', JSON.stringify(d)); }
+
+let tasks = load();
+let activeFilter = 'all';
+let nextId = Date.now();
+
+// ══ TODAY ══
+function todayStr() {
+  const d = new Date();
+  return String(d.getDate()).padStart(2,'0') + '.' + String(d.getMonth()+1).padStart(2,'0') + '.' + d.getFullYear();
+}
+function nowStr() {
+  const d = new Date();
+  return todayStr() + ' ' + String(d.getHours()).padStart(2,'0') + ':' + String(d.getMinutes()).padStart(2,'0');
+}
+
+// ══ CAT CSS ══
+function catClass(cat) {
+  const m = { 'Sanitär':'sanitaer','Elektro':'elektro','Möbel':'moebel','Reinigung':'reinigung','Sicherheit':'sicherheit','Beschwerde':'beschwerde' };
+  return 'cat-' + (m[cat] || 'sonstiges');
+}
+
+// ══ FILTER ══
+function setFilter(f) {
+  activeFilter = f;
+  ['all','hoch','beschwerde','Sanitär','Elektro'].forEach(k => {
+    const el = document.getElementById('f-' + k.toLowerCase());
+    if (el) el.classList.toggle('active', k === f);
+  });
+  // handle custom filter ids
+  document.querySelectorAll('.filter-btn').forEach(b => {
+    if (b.getAttribute('onclick') === `setFilter('${f}')`) b.classList.add('active');
+    else b.classList.remove('active');
+  });
+  renderBoard();
+}
+
+function matchesFilter(t) {
+  if (activeFilter === 'all') return true;
+  if (activeFilter === 'hoch') return t.prio === 'hoch';
+  if (activeFilter === 'beschwerde') return t.cat === 'Beschwerde';
+  return t.cat === activeFilter;
+}
+
+// ══ RENDER ══
+function renderBoard() {
+  const cols = { offen: [], progress: [], done: [] };
+  tasks.forEach(t => {
+    if (!matchesFilter(t)) return;
+    cols[t.status].push(t);
+  });
+
+  ['offen','progress','done'].forEach(status => {
+    const el = document.getElementById('col-' + status + '-list');
+    el.innerHTML = '';
+    document.getElementById('count-' + status).textContent = cols[status].length;
+    if (!cols[status].length) {
+      el.innerHTML = '<div class="empty-col">Keine Aufgaben</div>';
+      return;
+    }
+    // sort: hoch first
+    cols[status].sort((a,b) => (a.prio==='hoch'?0:1)-(b.prio==='hoch'?0:1));
+    cols[status].forEach(t => el.appendChild(buildCard(t)));
+  });
+
+  updateStats();
+}
+
+function buildCard(t) {
+  const div = document.createElement('div');
+  let cls = 'task-card prio-' + t.prio;
+  if (t.cat === 'Beschwerde') cls += ' beschwerde';
+  div.className = cls;
+
+  let actions = '';
+  if (t.status === 'offen') actions = `<button class="task-btn btn-start" onclick="moveTask('${t.id}','progress')">In Arbeit</button>`;
+  if (t.status === 'progress') actions = `<button class="task-btn btn-done" onclick="moveTask('${t.id}','done')">✓ Erledigt</button>`;
+  if (t.status === 'done') actions = `<button class="task-btn btn-del" onclick="deleteTask('${t.id}')">Löschen</button>`;
+  if (t.status !== 'done') actions += ` <button class="task-btn btn-del" onclick="deleteTask('${t.id}')">×</button>`;
+
+  div.innerHTML = `
+    <div class="task-top">
+      <span class="task-cat ${catClass(t.cat)}">${t.cat}</span>
+      <span class="task-prio prio-chip-${t.prio}">${t.prio}</span>
+    </div>
+    <div class="task-title">${t.title}</div>
+    <div class="task-location">📍 ${t.location || '—'}</div>
+    ${t.desc ? `<div class="task-desc">${t.desc}</div>` : ''}
+    <div class="task-meta">
+      <span class="task-date">${t.created}</span>
+      <div class="task-actions">${actions}</div>
+    </div>
+  `;
+  return div;
+}
+
+// ══ ACTIONS ══
+function moveTask(id, status) {
+  const t = tasks.find(x => x.id === id);
+  if (t) { t.status = status; save(tasks); renderBoard(); }
+}
+function deleteTask(id) {
+  if (!confirm('Aufgabe löschen?')) return;
+  tasks = tasks.filter(x => x.id !== id);
+  save(tasks); renderBoard();
+}
+
+// ══ NEW TASK ══
+function addTask() {
+  const title = document.getElementById('new-title').value.trim();
+  const location = document.getElementById('new-location').value.trim();
+  if (!title) { alert('Titel ausfüllen.'); return; }
+  tasks.push({
+    id: 't' + (++nextId),
+    title,
+    cat: document.getElementById('new-cat').value,
+    prio: document.getElementById('new-prio').value,
+    location,
+    desc: document.getElementById('new-desc').value.trim(),
+    status: 'offen',
+    created: nowStr(),
+  });
+  save(tasks);
+  document.getElementById('new-title').value = '';
+  document.getElementById('new-location').value = '';
+  document.getElementById('new-desc').value = '';
+  renderBoard();
+  showTab('board');
+}
+
+// ══ BESCHWERDE ══
+function addBeschwerde() {
+  const title = document.getElementById('b-title').value.trim();
+  const location = document.getElementById('b-location').value.trim();
+  if (!title) { alert('Beschwerde ausfüllen.'); return; }
+  const guest = document.getElementById('b-guest').value.trim();
+  const desc = document.getElementById('b-desc').value.trim();
+  tasks.push({
+    id: 't' + (++nextId),
+    title: (guest ? `[${guest}] ` : '') + title,
+    cat: 'Beschwerde',
+    prio: 'hoch',
+    location,
+    desc,
+    status: 'offen',
+    created: nowStr(),
+  });
+  save(tasks);
+  document.getElementById('b-title').value = '';
+  document.getElementById('b-location').value = '';
+  document.getElementById('b-guest').value = '';
+  document.getElementById('b-desc').value = '';
+  renderBoard();
+  showTab('board');
+  alert('✓ Beschwerde als Aufgabe eingetragen.');
+}
+
+// ══ STATS ══
+function updateStats() {
+  const offen = tasks.filter(t => t.status === 'offen').length;
+  const progress = tasks.filter(t => t.status === 'progress').length;
+  const done = tasks.filter(t => t.status === 'done').length;
+  const beschwerden = tasks.filter(t => t.cat === 'Beschwerde' && t.status !== 'done').length;
+  const hoch = tasks.filter(t => t.prio === 'hoch' && t.status !== 'done').length;
+  document.getElementById('stat-offen').textContent = offen;
+  document.getElementById('stat-progress').textContent = progress;
+  document.getElementById('stat-done').textContent = done;
+  document.getElementById('stat-beschwerden').textContent = beschwerden;
+  document.getElementById('stat-hoch').textContent = hoch;
+  document.getElementById('date-chip').textContent = new Date().toLocaleDateString('de-DE',{weekday:'short',day:'2-digit',month:'2-digit',year:'numeric'});
+}
+
+// ══ TABS ══
+function showTab(tab) {
+  ['board','neu','beschwerde'].forEach(id => {
+    document.getElementById('tab-' + id).style.display = id === tab ? '' : 'none';
+    document.getElementById('tab-btn-' + id).classList.toggle('active', id === tab);
+  });
+}
+
+// ══ INIT ══
+renderBoard();
+</script>
+</body>
+</html>

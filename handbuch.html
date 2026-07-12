@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Handbuch — Housekeeping Manager · Turmhotel Frankfurt</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..900;1,9..144,300..900&family=Spline+Sans+Mono:wght@400;500;600&family=Spline+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#0c0a08;--paper:#f4ede0;--gold:#c9a227;--gold-bright:#e8c14f;--muted:#9b9085;--line:rgba(201,162,39,.18);--clean:#2a7a4b;--warn:#e67e22;--danger:#c0392b;--radius:3px;}
+*{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{font-family:'Spline Sans',sans-serif;background:var(--ink);color:var(--paper);line-height:1.6;-webkit-font-smoothing:antialiased;}
+body::before{content:"";position:fixed;inset:0;z-index:0;pointer-events:none;background:radial-gradient(900px 500px at 80% -10%,rgba(201,162,39,.07),transparent 60%),radial-gradient(700px 600px at -10% 100%,rgba(201,162,39,.04),transparent 60%);}
+
+nav{position:sticky;top:0;z-index:200;background:rgba(12,10,8,.95);backdrop-filter:blur(14px);border-bottom:1px solid var(--line);padding:12px 24px;display:flex;justify-content:space-between;align-items:center;gap:12px;}
+.nav-brand{font-family:'Fraunces',serif;font-size:.95rem;color:var(--gold);text-decoration:none;}
+.nav-right{display:flex;gap:8px;}
+.lang-btn{padding:4px 10px;border-radius:var(--radius);border:1px solid var(--line);background:none;color:var(--muted);font-family:'Spline Sans Mono',monospace;font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;transition:.15s;}
+.lang-btn:hover{color:var(--paper);}
+.lang-btn.active{background:rgba(201,162,39,.12);color:var(--gold);border-color:var(--gold);}
+
+.wrap{position:relative;z-index:1;max-width:860px;margin:0 auto;padding:0 24px 80px;}
+
+/* HERO */
+.hero{padding:48px 0 36px;border-bottom:1px solid var(--line);}
+.eyebrow{font-family:'Spline Sans Mono',monospace;font-size:.68rem;letter-spacing:.3em;text-transform:uppercase;color:var(--gold);margin-bottom:12px;}
+.hero h1{font-family:'Fraunces',serif;font-size:clamp(1.8rem,4vw,2.8rem);font-weight:500;letter-spacing:-.01em;line-height:1.1;}
+.hero h1 em{font-style:italic;color:var(--gold-bright);}
+.hero p{margin-top:14px;color:#cabfb0;font-size:.95rem;max-width:600px;line-height:1.75;}
+.tool-link{display:inline-flex;align-items:center;gap:8px;margin-top:20px;font-family:'Spline Sans Mono',monospace;font-size:.72rem;color:var(--gold);text-decoration:none;border:1px solid var(--line);padding:7px 14px;border-radius:var(--radius);transition:.15s;}
+.tool-link:hover{border-color:var(--gold);background:rgba(201,162,39,.08);}
+
+/* TOC */
+.toc{margin:32px 0;background:rgba(255,255,255,.025);border:1px solid var(--line);border-radius:var(--radius);padding:22px 26px;}
+.toc-title{font-family:'Spline Sans Mono',monospace;font-size:.65rem;letter-spacing:.25em;text-transform:uppercase;color:var(--gold);margin-bottom:14px;}
+.toc ol{padding-left:18px;display:grid;gap:6px;}
+.toc li{font-size:.9rem;color:#cabfb0;}
+.toc a{color:var(--gold);text-decoration:none;transition:.15s;}
+.toc a:hover{color:var(--gold-bright);}
+
+/* SECTIONS */
+.section{padding:40px 0;border-bottom:1px solid var(--line);}
+.section:last-child{border-bottom:none;}
+.sec-num{font-family:'Spline Sans Mono',monospace;font-size:.65rem;letter-spacing:.25em;text-transform:uppercase;color:var(--gold);margin-bottom:10px;}
+.section h2{font-family:'Fraunces',serif;font-size:1.6rem;font-weight:500;margin-bottom:18px;}
+.section p{color:#cabfb0;line-height:1.8;margin-bottom:14px;font-size:.95rem;}
+.section p:last-child{margin-bottom:0;}
+
+/* STEPS */
+.steps{display:grid;gap:12px;margin:20px 0;}
+.step{display:flex;gap:16px;align-items:flex-start;background:rgba(255,255,255,.03);border:1px solid var(--line);border-radius:var(--radius);padding:16px 18px;}
+.step-num{font-family:'Fraunces',serif;font-size:1.4rem;color:var(--gold);font-weight:600;min-width:28px;line-height:1;}
+.step-body{}
+.step-title{font-weight:600;color:var(--paper);margin-bottom:4px;font-size:.95rem;}
+.step-desc{font-size:.88rem;color:#9b9085;line-height:1.65;}
+.step-desc strong{color:var(--paper);}
+
+/* TIPS / WARNINGS */
+.tip{background:rgba(42,122,75,.1);border:1px solid rgba(42,122,75,.3);border-left:3px solid var(--clean);border-radius:0 var(--radius) var(--radius) 0;padding:14px 18px;margin:16px 0;font-size:.88rem;color:#cabfb0;line-height:1.7;}
+.tip strong{color:#4ecb82;}
+.warn{background:rgba(230,126,34,.08);border:1px solid rgba(230,126,34,.3);border-left:3px solid var(--warn);border-radius:0 var(--radius) var(--radius) 0;padding:14px 18px;margin:16px 0;font-size:.88rem;color:#cabfb0;line-height:1.7;}
+.warn strong{color:var(--warn);}
+
+/* COLOR LEGEND */
+.legend{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;margin:20px 0;}
+.legend-item{display:flex;align-items:center;gap:12px;background:rgba(255,255,255,.03);border:1px solid var(--line);border-radius:var(--radius);padding:12px 14px;}
+.legend-dot{width:14px;height:14px;border-radius:2px;flex-shrink:0;}
+.legend-text{font-size:.85rem;color:#cabfb0;}
+.legend-text strong{display:block;color:var(--paper);font-size:.88rem;margin-bottom:2px;}
+
+/* BADGE DEMO */
+.badge-row{display:flex;gap:8px;flex-wrap:wrap;margin:14px 0;}
+.bdg{font-family:'Spline Sans Mono',monospace;font-size:.65rem;letter-spacing:.05em;text-transform:uppercase;padding:3px 8px;border-radius:1px;}
+
+/* CONTACT */
+.contacts{display:grid;gap:10px;margin:16px 0;}
+.contact-item{background:rgba(255,255,255,.03);border:1px solid var(--line);border-radius:var(--radius);padding:14px 18px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;}
+.contact-name{font-weight:600;color:var(--paper);font-size:.92rem;}
+.contact-role{font-family:'Spline Sans Mono',monospace;font-size:.67rem;color:var(--muted);margin-top:2px;}
+.contact-info{font-family:'Spline Sans Mono',monospace;font-size:.75rem;color:var(--gold);}
+
+@media(max-width:600px){.step{flex-direction:column;gap:8px;}.step-num{font-size:1.1rem;}}
+</style>
+</head>
+<body>
+
+<nav>
+  <a class="nav-brand" href="housekeeping/housekeeping-v3.html">♔ Turmhotel Frankfurt</a>
+  <div class="nav-right">
+    <button class="lang-btn active" onclick="setLang('de')">DE</button>
+    <button class="lang-btn" onclick="setLang('hu')">HU</button>
+    <button class="lang-btn" onclick="setLang('en')">EN</button>
+  </div>
+</nav>
+
+<div class="wrap">
+
+  <div class="hero">
+    <div class="eyebrow" data-key="eyebrow">Turmhotel Frankfurt · Housekeeping</div>
+    <h1 data-key="h1">Handbuch<br><em>Housekeeping Manager</em></h1>
+    <p data-key="hero_p">Dieses Handbuch erklärt Schritt für Schritt, wie das digitale Tool funktioniert — vom Einlesen der Gästeliste bis zur Fertigmeldung eines Zimmers.</p>
+    <a class="tool-link" href="housekeeping/housekeeping-v3.html">→ <span data-key="tool_link">Direkt zum Tool öffnen</span></a>
+  </div>
+
+  <!-- TOC -->
+  <div class="toc">
+    <div class="toc-title" data-key="toc_title">Inhalt</div>
+    <ol>
+      <li><a href="#gaesteliste" data-key="toc_1">Gästeliste einlesen (Foto-Workflow)</a></li>
+      <li><a href="#zimmer" data-key="toc_2">Zimmer verwalten & Status setzen</a></li>
+      <li><a href="#farben" data-key="toc_3">Farben & Badges verstehen</a></li>
+      <li><a href="#fertig" data-key="toc_4">Zimmer fertig melden (3-Klick)</a></li>
+      <li><a href="#technik" data-key="toc_5">Technik-Problem melden</a></li>
+      <li><a href="#personal" data-key="toc_6">Personal & Zuweisung</a></li>
+      <li><a href="#kontakt" data-key="toc_7">Notfallkontakte</a></li>
+    </ol>
+  </div>
+
+  <!-- 1. GÄSTELISTE -->
+  <div class="section" id="gaesteliste">
+    <div class="sec-num">01</div>
+    <h2 data-key="s1_h2">Gästeliste einlesen — Foto-Workflow</h2>
+    <p data-key="s1_p1">Die Rezeption schickt jeden Abend die Gästeliste per WhatsApp oder E-Mail. Diese Liste enthält: <strong>Zimmernummer, Name, Anreise, Abreise, Erwachsene, Zimmerkategorie, Zimmerpreis.</strong></p>
+    <p data-key="s1_p2">So wird die Liste ins Tool übertragen:</p>
+
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-body">
+          <div class="step-title" data-key="s1_s1_t">Foto der Liste machen</div>
+          <div class="step-desc" data-key="s1_s1_d">Die gedruckte Gästeliste gut beleuchtet fotografieren. Ganz gerade halten — alle Zeilen müssen lesbar sein. Kein Blitz nötig, Tageslicht reicht.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-body">
+          <div class="step-title" data-key="s1_s2_t">Foto an Claude schicken</div>
+          <div class="step-desc" data-key="s1_s2_d">Das Foto in <strong>claude.ai</strong> hochladen (Büroklammer-Symbol). Dann schreiben: <em>„Bitte als JSON extrahieren: Zimmernummer, Anreise, Abreise"</em>. Claude liest die Liste aus und gibt ein JSON zurück.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-body">
+          <div class="step-title" data-key="s1_s3_t">JSON kopieren</div>
+          <div class="step-desc" data-key="s1_s3_d">Das JSON von Claude <strong>komplett kopieren</strong> (langer Tipp auf Text → Alles auswählen → Kopieren).</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">4</div>
+        <div class="step-body">
+          <div class="step-title" data-key="s1_s4_t">Im Tool einfügen</div>
+          <div class="step-desc" data-key="s1_s4_d">Im Housekeeping Manager Tab <strong>„Gästeliste"</strong> öffnen → <strong>„JSON"</strong> wählen → JSON einfügen → <strong>„Vorschau"</strong> prüfen → <strong>„Übernehmen"</strong> tippen. Fertig — alle Abreise-Zimmer leuchten <span style="color:var(--warn)">orange</span>.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="tip"><strong>✓ Tipp:</strong> Am besten jeden Abend nach Feierabend machen, damit morgens früh alles vorbereitet ist.</div>
+    <div class="warn"><strong>⚠ Wichtig:</strong> Nur die Abreise-Zimmer werden markiert. Overnight-Gäste bleiben wie sie sind — nicht anfassen, Sachen des Gastes nicht verschieben.</div>
+  </div>
+
+  <!-- 2. ZIMMER -->
+  <div class="section" id="zimmer">
+    <div class="sec-num">02</div>
+    <h2 data-key="s2_h2">Zimmer verwalten & Status setzen</h2>
+    <p data-key="s2_p1">Jedes Zimmer ist eine Karte. Antippen öffnet das Zimmer-Modal.</p>
+
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-body">
+          <div class="step-title" data-key="s2_s1_t">Zimmerkarte antippen</div>
+          <div class="step-desc" data-key="s2_s1_d">Das Modal öffnet sich. Oben steht die Zimmernummer und ob es ein Abreise- oder Overnight-Zimmer ist.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-body">
+          <div class="step-title" data-key="s2_s2_t">Reinigungsstatus wählen</div>
+          <div class="step-desc" data-key="s2_s2_d"><strong>„Gereinigt"</strong> = Zimmer fertig. <strong>„Ausstehend"</strong> = noch nicht geputzt.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-body">
+          <div class="step-title" data-key="s2_s3_t">Mitarbeiterin zuweisen</div>
+          <div class="step-desc" data-key="s2_s3_d">Im Dropdown den eigenen Namen wählen. Die Karte bekommt dann die eigene Teamfarbe am linken Rand.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">4</div>
+        <div class="step-body">
+          <div class="step-title" data-key="s2_s4_t">Speichern</div>
+          <div class="step-desc" data-key="s2_s4_d"><strong>„Speichern"</strong> antippen. Die Karte aktualisiert sich sofort.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3. FARBEN -->
+  <div class="section" id="farben">
+    <div class="sec-num">03</div>
+    <h2 data-key="s3_h2">Farben & Badges verstehen</h2>
+    <p data-key="s3_p">Der linke Streifen auf jeder Zimmerkarte zeigt den Status:</p>
+
+    <div class="legend">
+      <div class="legend-item">
+        <div class="legend-dot" style="background:var(--clean)"></div>
+        <div class="legend-text"><strong data-key="col_clean">Grün — Gereinigt</strong><span data-key="col_clean_d">Zimmer ist fertig und sauber</span></div>
+      </div>
+      <div class="legend-item">
+        <div class="legend-dot" style="background:var(--gold);opacity:.6"></div>
+        <div class="legend-text"><strong data-key="col_dirty">Gold — Offen</strong><span data-key="col_dirty_d">Zimmer noch nicht geputzt</span></div>
+      </div>
+      <div class="legend-item">
+        <div class="legend-dot" style="background:var(--warn)"></div>
+        <div class="legend-text"><strong data-key="col_checkout">Orange — Abreise</strong><span data-key="col_checkout_d">Gast reist heute ab → Vollreinigung</span></div>
+      </div>
+    </div>
+
+    <p data-key="s3_p2" style="margin-top:16px">Zimmertyp-Badges (Nebenhaus):</p>
+    <div class="badge-row">
+      <span class="bdg" style="background:rgba(42,122,75,.18);color:#4ecb82;border:1px solid rgba(42,122,75,.4)">SDH</span>
+      <span style="font-size:.8rem;color:var(--muted);align-self:center" data-key="bdg_sdh">Superior Doppel Hofseite</span>
+    </div>
+    <div class="badge-row">
+      <span class="bdg" style="background:rgba(26,111,168,.18);color:#5bb3e8;border:1px solid rgba(26,111,168,.4)">SDS</span>
+      <span style="font-size:.8rem;color:var(--muted);align-self:center" data-key="bdg_sds">Superior Doppel Straßenseite</span>
+    </div>
+    <div class="badge-row">
+      <span class="bdg" style="background:rgba(230,126,34,.15);color:var(--warn);border:1px solid rgba(230,126,34,.4)">STS</span>
+      <span style="font-size:.8rem;color:var(--muted);align-self:center" data-key="bdg_sts">Superior Triple Straßenseite</span>
+    </div>
+    <div class="badge-row">
+      <span class="bdg" style="background:rgba(142,68,173,.15);color:#c084fc;border:1px solid rgba(142,68,173,.4)">STH</span>
+      <span style="font-size:.8rem;color:var(--muted);align-self:center" data-key="bdg_sth">Superior Triple Hofseite</span>
+    </div>
+    <div class="badge-row">
+      <span class="bdg" style="background:rgba(201,162,39,.18);color:var(--gold-bright);border:1px solid rgba(201,162,39,.4)">LGH ❄️</span>
+      <span style="font-size:.8rem;color:var(--muted);align-self:center" data-key="bdg_lgh">Little Gym Hofseite · Klimaanlage · Zimmer 15</span>
+    </div>
+  </div>
+
+  <!-- 4. FERTIG MELDEN -->
+  <div class="section" id="fertig">
+    <div class="sec-num">04</div>
+    <h2 data-key="s4_h2">Zimmer fertig melden — 3-Klick</h2>
+    <p data-key="s4_p">Wenn ein Zimmer fertig geputzt ist, direkt auf der Karte fertig melden — ohne das volle Modal zu öffnen:</p>
+
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-body">
+          <div class="step-title" data-key="s4_s1_t">„✓ Fertig melden" tippen</div>
+          <div class="step-desc" data-key="s4_s1_d">Der grüne Button erscheint auf jeder Karte, die noch offen und zugewiesen ist.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-body">
+          <div class="step-title" data-key="s4_s2_t">Checkliste abhaken</div>
+          <div class="step-desc" data-key="s4_s2_d">5 Punkte antippen: <strong>Bett · Bad · Handtücher · Staubsaugen · Tür</strong>. Alle 5 müssen grün sein.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-body">
+          <div class="step-title" data-key="s4_s3_t">Bestätigen</div>
+          <div class="step-desc" data-key="s4_s3_d"><strong>„✓ Fertig melden"</strong> wird aktiv → antippen → Zimmer ist grün.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="tip"><strong>✓ Goldene Regel:</strong> Würdest du selbst gerne in diesem Zimmer übernachten? Wenn ja — perfekt. Wenn nicht — nochmal.</div>
+  </div>
+
+  <!-- 5. TECHNIK -->
+  <div class="section" id="technik">
+    <div class="sec-num">05</div>
+    <h2 data-key="s5_h2">Technik-Problem melden</h2>
+    <p data-key="s5_p">Kaputte Glühbirne, defekte Fernbedienung, tropfender Hahn — direkt beim Fertig-Melden melden:</p>
+
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-body">
+          <div class="step-title" data-key="s5_s1_t">„⚠ Problem melden" wählen</div>
+          <div class="step-desc" data-key="s5_s1_d">In der Checkliste unten — statt „Alles ok" auf „Problem melden" tippen.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-body">
+          <div class="step-title" data-key="s5_s2_t">Kategorie wählen</div>
+          <div class="step-desc" data-key="s5_s2_d">Beleuchtung · TV · Sanitär · Steckdose · Fenster · Möbel · Klima · Schloss · WLAN · Sonstiges</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-body">
+          <div class="step-title" data-key="s5_s3_t">Kurz beschreiben & Fertig melden</div>
+          <div class="step-desc" data-key="s5_s3_d">Optional: kurze Beschreibung eingeben. Dann normal fertig melden — das Ticket geht <strong>automatisch</strong> an den Facility Manager. Hausmeister sieht es sofort.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="warn"><strong>⚠ Sicherheit:</strong> Bei Stromausfall, Wasserrohrbruch oder Feuer — sofort die Rezeption anrufen. Nicht selbst eingreifen.</div>
+  </div>
+
+  <!-- 6. PERSONAL -->
+  <div class="section" id="personal">
+    <div class="sec-num">06</div>
+    <h2 data-key="s6_h2">Personal & Zuweisung</h2>
+    <p data-key="s6_p">Im Tab <strong>„Personal"</strong> können Mitarbeiterinnen angelegt werden. Jede bekommt eine Farbe und ein Kürzel.</p>
+
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-body">
+          <div class="step-title" data-key="s6_s1_t">Neue Mitarbeiterin anlegen</div>
+          <div class="step-desc" data-key="s6_s1_d">Tab „Personal" → Name eingeben → Kürzel (2–3 Buchstaben) → Farbe wählen → „+ Hinzufügen".</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-body">
+          <div class="step-title" data-key="s6_s2_t">Zimmer zuweisen</div>
+          <div class="step-desc" data-key="s6_s2_d">Zimmerkarte antippen → im Dropdown den Namen wählen → Speichern. Die Karte bekommt den farbigen Rand der Mitarbeiterin.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-body">
+          <div class="step-title" data-key="s6_s3_t">Fortschritt prüfen</div>
+          <div class="step-desc" data-key="s6_s3_d">Tab „Übersicht" → pro Mitarbeiterin: wie viele Zimmer fertig, wie viele noch offen. Fortschrittsbalken in ihrer Farbe.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="tip"><strong>✓ Tipp für die Hausdame:</strong> Morgens zuerst Zimmer zuweisen, dann im Lauf des Tages in der Übersicht prüfen wer wie weit ist.</div>
+  </div>
+
+  <!-- 7. KONTAKT -->
+  <div class="section" id="kontakt">
+    <div class="sec-num">07</div>
+    <h2 data-key="s7_h2">Notfallkontakte</h2>
+    <p data-key="s7_p">Bei Problemen immer zuerst die Hausdame fragen. Bei Notfällen:</p>
+
+    <div class="contacts">
+      <div class="contact-item">
+        <div><div class="contact-name">Notruf</div><div class="contact-role" data-key="c_notruf_r">Feuerwehr · Rettung</div></div>
+        <div class="contact-info">112</div>
+      </div>
+      <div class="contact-item">
+        <div><div class="contact-name">Polizei</div><div class="contact-role" data-key="c_polizei_r">Nicht-lebensbedrohlich</div></div>
+        <div class="contact-info">110</div>
+      </div>
+      <div class="contact-item">
+        <div><div class="contact-name">Tanja</div><div class="contact-role" data-key="c_tanja_r">Hotelleitung</div></div>
+        <div class="contact-info" data-key="c_tanja_i">Bei Hausdame erfragen</div>
+      </div>
+      <div class="contact-item">
+        <div><div class="contact-name">Nicole</div><div class="contact-role" data-key="c_nicole_r">Direktorin · Nacht-Notfall</div></div>
+        <div class="contact-info" data-key="c_nicole_i">Bei Hausdame erfragen</div>
+      </div>
+      <div class="contact-item">
+        <div><div class="contact-name">Ralf</div><div class="contact-role" data-key="c_ralf_r">Notfallkontakt</div></div>
+        <div class="contact-info" data-key="c_ralf_i">Bei Hausdame erfragen</div>
+      </div>
+      <div class="contact-item">
+        <div><div class="contact-name" data-key="c_hotel_n">Hotel-Adresse</div><div class="contact-role">Turmhotel Frankfurt</div></div>
+        <div class="contact-info">Eschersheimer Landstr. 20</div>
+      </div>
+    </div>
+
+    <div class="warn" style="margin-top:20px"><strong data-key="fire_t">🔥 Brandfall:</strong> <span data-key="fire_d">Ruhig bleiben · Gäste informieren · Haus verlassen · 112 rufen · Aufzug NICHT benutzen.</span></div>
+  </div>
+
+</div><!-- /wrap -->
+
+<script>
+const T = {
+  de: {
+    eyebrow:'Turmhotel Frankfurt · Housekeeping',
+    h1:'Handbuch<br><em>Housekeeping Manager</em>',
+    hero_p:'Dieses Handbuch erklärt Schritt für Schritt, wie das digitale Tool funktioniert — vom Einlesen der Gästeliste bis zur Fertigmeldung eines Zimmers.',
+    tool_link:'Direkt zum Tool öffnen',
+    toc_title:'Inhalt',
+    toc_1:'Gästeliste einlesen (Foto-Workflow)',
+    toc_2:'Zimmer verwalten & Status setzen',
+    toc_3:'Farben & Badges verstehen',
+    toc_4:'Zimmer fertig melden (3-Klick)',
+    toc_5:'Technik-Problem melden',
+    toc_6:'Personal & Zuweisung',
+    toc_7:'Notfallkontakte',
+    s1_h2:'Gästeliste einlesen — Foto-Workflow',
+    s1_p1:'Die Rezeption schickt jeden Abend die Gästeliste. Diese enthält: <strong>Zimmernummer, Name, Anreise, Abreise, Erwachsene, Zimmerkategorie, Zimmerpreis.</strong>',
+    s1_p2:'So wird die Liste ins Tool übertragen:',
+    s1_s1_t:'Foto der Liste machen',
+    s1_s1_d:'Die gedruckte Gästeliste gut beleuchtet fotografieren. Alle Zeilen müssen lesbar sein.',
+    s1_s2_t:'Foto an Claude schicken',
+    s1_s2_d:'Das Foto in <strong>claude.ai</strong> hochladen. Dann schreiben: <em>„Bitte als JSON extrahieren: Zimmernummer, Anreise, Abreise"</em>.',
+    s1_s3_t:'JSON kopieren',
+    s1_s3_d:'Das JSON von Claude <strong>komplett kopieren</strong> (langer Tipp auf Text → Alles auswählen → Kopieren).',
+    s1_s4_t:'Im Tool einfügen',
+    s1_s4_d:'Tab <strong>„Gästeliste"</strong> → <strong>„JSON"</strong> → einfügen → <strong>„Vorschau"</strong> → <strong>„Übernehmen"</strong>. Abreise-Zimmer leuchten orange.',
+    s2_h2:'Zimmer verwalten & Status setzen',
+    s2_p1:'Jedes Zimmer ist eine Karte. Antippen öffnet das Zimmer-Modal.',
+    s2_s1_t:'Zimmerkarte antippen',
+    s2_s1_d:'Das Modal öffnet sich mit Zimmernummer und Gast-Info.',
+    s2_s2_t:'Reinigungsstatus wählen',
+    s2_s2_d:'<strong>„Gereinigt"</strong> = fertig. <strong>„Ausstehend"</strong> = noch offen.',
+    s2_s3_t:'Mitarbeiterin zuweisen',
+    s2_s3_d:'Im Dropdown den eigenen Namen wählen. Karte bekommt die Teamfarbe.',
+    s2_s4_t:'Speichern',
+    s2_s4_d:'<strong>„Speichern"</strong> antippen. Karte aktualisiert sich sofort.',
+    s3_h2:'Farben & Badges verstehen',
+    s3_p:'Der linke Streifen auf jeder Karte zeigt den Status:',
+    s3_p2:'Zimmertyp-Badges (Nebenhaus):',
+    col_clean:'Grün — Gereinigt',col_clean_d:'Zimmer fertig und sauber',
+    col_dirty:'Gold — Offen',col_dirty_d:'Zimmer noch nicht geputzt',
+    col_checkout:'Orange — Abreise',col_checkout_d:'Gast reist heute ab → Vollreinigung',
+    bdg_sdh:'Superior Doppel Hofseite',bdg_sds:'Superior Doppel Straßenseite',
+    bdg_sts:'Superior Triple Straßenseite',bdg_sth:'Superior Triple Hofseite',
+    bdg_lgh:'Little Gym Hofseite · Klimaanlage · Zimmer 15',
+    s4_h2:'Zimmer fertig melden — 3-Klick',
+    s4_p:'Zimmer fertig geputzt? Direkt auf der Karte melden:',
+    s4_s1_t:'„✓ Fertig melden" tippen',s4_s1_d:'Grüner Button auf jeder offenen, zugewiesenen Karte.',
+    s4_s2_t:'Checkliste abhaken',s4_s2_d:'5 Punkte: <strong>Bett · Bad · Handtücher · Staubsaugen · Tür</strong>. Alle 5 müssen grün sein.',
+    s4_s3_t:'Bestätigen',s4_s3_d:'<strong>„✓ Fertig melden"</strong> wird aktiv → antippen → Zimmer ist grün.',
+    s5_h2:'Technik-Problem melden',
+    s5_p:'Kaputte Glühbirne, defekte Fernbedienung, tropfender Hahn — direkt beim Fertig-Melden melden:',
+    s5_s1_t:'„⚠ Problem melden" wählen',s5_s1_d:'In der Checkliste unten — statt „Alles ok" auf „Problem melden" tippen.',
+    s5_s2_t:'Kategorie wählen',s5_s2_d:'Beleuchtung · TV · Sanitär · Steckdose · Fenster · Möbel · Klima · Schloss · WLAN · Sonstiges',
+    s5_s3_t:'Kurz beschreiben & Fertig melden',s5_s3_d:'Optional: kurze Beschreibung. Ticket geht <strong>automatisch</strong> an den Facility Manager.',
+    s6_h2:'Personal & Zuweisung',
+    s6_p:'Im Tab <strong>„Personal"</strong> Mitarbeiterinnen anlegen.',
+    s6_s1_t:'Neue Mitarbeiterin anlegen',s6_s1_d:'Tab „Personal" → Name → Kürzel → Farbe → „+ Hinzufügen".',
+    s6_s2_t:'Zimmer zuweisen',s6_s2_d:'Karte antippen → Dropdown → Namen wählen → Speichern.',
+    s6_s3_t:'Fortschritt prüfen',s6_s3_d:'Tab „Übersicht" → Fortschritt pro Mitarbeiterin.',
+    s7_h2:'Notfallkontakte',
+    s7_p:'Bei Problemen immer zuerst die Hausdame fragen. Bei Notfällen:',
+    c_notruf_r:'Feuerwehr · Rettung',c_polizei_r:'Nicht-lebensbedrohlich',
+    c_tanja_r:'Hotelleitung',c_tanja_i:'Bei Hausdame erfragen',
+    c_nicole_r:'Direktorin · Nacht-Notfall',c_nicole_i:'Bei Hausdame erfragen',
+    c_ralf_r:'Notfallkontakt',c_ralf_i:'Bei Hausdame erfragen',
+    c_hotel_n:'Hotel-Adresse',
+    fire_t:'🔥 Brandfall:',fire_d:'Ruhig bleiben · Gäste informieren · Haus verlassen · 112 rufen · Aufzug NICHT benutzen.',
+  },
+  hu: {
+    eyebrow:'Turmhotel Frankfurt · Housekeeping',
+    h1:'Kézikönyv<br><em>Housekeeping Manager</em>',
+    hero_p:'Ez a kézikönyv lépésről lépésre elmagyarázza a digitális eszköz működését — a vendéglista beolvasásától a szoba kész jelzéséig.',
+    tool_link:'Megnyitás az eszközben',
+    toc_title:'Tartalom',
+    toc_1:'Vendéglista beolvasása (fotó-munkafolyamat)',
+    toc_2:'Szobák kezelése és státusz beállítása',
+    toc_3:'Színek és jelvények megértése',
+    toc_4:'Szoba kész jelzése (3 kattintás)',
+    toc_5:'Műszaki probléma bejelentése',
+    toc_6:'Személyzet és hozzárendelés',
+    toc_7:'Vészhelyzeti kapcsolatok',
+    s1_h2:'Vendéglista beolvasása — Fotó-munkafolyamat',
+    s1_p1:'A recepció minden este elküldi a vendéglistát. Ez tartalmazza: <strong>szobaszám, név, érkezés, távozás, felnőttek, szobakategória, szobáár.</strong>',
+    s1_p2:'Így töltsd be a listát az eszközbe:',
+    s1_s1_t:'Fénykép készítése',s1_s1_d:'Fényképezd le jól megvilágítva a nyomtatott vendéglistát. Minden sornak olvashatónak kell lennie.',
+    s1_s2_t:'Fotó küldése Claude-nak',s1_s2_d:'Töltsd fel a fotót a <strong>claude.ai</strong> oldalra. Majd írd: <em>„Kérlek JSON-ként add vissza: szobaszám, érkezés, távozás"</em>.',
+    s1_s3_t:'JSON másolása',s1_s3_d:'A Claude JSON-ját <strong>teljesen másold ki</strong> (hosszan tartsd → Összes kijelölése → Másolás).',
+    s1_s4_t:'Beillesztés az eszközbe',s1_s4_d:'„Vendéglista" fül → „JSON" → beillesztés → „Előnézet" → „Alkalmazás". A távozó szobák narancsszínűvé válnak.',
+    s2_h2:'Szobák kezelése és státusz beállítása',
+    s2_p1:'Minden szoba egy kártya. Érintsd meg a szoba-modal megnyitásához.',
+    s2_s1_t:'Szobakártya megérintése',s2_s1_d:'A modal megnyílik a szobaszámmal és vendéginformációval.',
+    s2_s2_t:'Takarítási státusz kiválasztása',s2_s2_d:'<strong>„Takarítva"</strong> = kész. <strong>„Folyamatban"</strong> = még nem.',
+    s2_s3_t:'Dolgozó hozzárendelése',s2_s3_d:'Válaszd ki a saját neved a legördülőből. A kártya megkapja a csapatszínedet.',
+    s2_s4_t:'Mentés',s2_s4_d:'Érintsd meg a <strong>„Mentés"</strong> gombot. A kártya azonnal frissül.',
+    s3_h2:'Színek és jelvények megértése',
+    s3_p:'A bal oldali csík mutatja a státuszt:',s3_p2:'Szobatípus-jelvények (Vorderhaus):',
+    col_clean:'Zöld — Takarítva',col_clean_d:'A szoba kész és tiszta',
+    col_dirty:'Arany — Nyitott',col_dirty_d:'A szoba még nem lett kitakarítva',
+    col_checkout:'Narancs — Kijelentkezés',col_checkout_d:'A vendég ma távozik → alapos takarítás',
+    bdg_sdh:'Superior Dupla Udvari oldal',bdg_sds:'Superior Dupla Utcai oldal',
+    bdg_sts:'Superior Tripla Utcai oldal',bdg_sth:'Superior Tripla Udvari oldal',
+    bdg_lgh:'Little Gym Udvari oldal · Légkondicionáló · 15-ös szoba',
+    s4_h2:'Szoba kész jelzése — 3 kattintás',
+    s4_p:'Kész a szoba? Jelezd közvetlenül a kártyán:',
+    s4_s1_t:'„✓ Kész jelzése" megérintése',s4_s1_d:'Zöld gomb minden nyitott, hozzárendelt kártyán.',
+    s4_s2_t:'Ellenőrzőlista kipipálása',s4_s2_d:'5 pont: <strong>Ágy · Fürdőszoba · Törülközők · Porszívózás · Ajtó</strong>. Mindnek zöldnek kell lennie.',
+    s4_s3_t:'Megerősítés',s4_s3_d:'A <strong>„✓ Kész"</strong> gomb aktívvá válik → megérintés → szoba zöld.',
+    s5_h2:'Műszaki probléma bejelentése',
+    s5_p:'Égett lámpa, hibás távirányító, csöpögő csap — jelezd a befejezéskor:',
+    s5_s1_t:'„⚠ Probléma bejelentése" kiválasztása',s5_s1_d:'Az ellenőrzőlista alján — az „Minden rendben" helyett.',
+    s5_s2_t:'Kategória kiválasztása',s5_s2_d:'Világítás · TV · Víz · Dugalj · Ablak · Bútor · Klíma · Zár · WIFI · Egyéb',
+    s5_s3_t:'Rövid leírás és kész jelzés',s5_s3_d:'Opcionális: rövid leírás. A jegy <strong>automatikusan</strong> megjelenik a Facility Managernél.',
+    s6_h2:'Személyzet és hozzárendelés',
+    s6_p:'A <strong>„Személyzet"</strong> fülön dolgozókat lehet hozzáadni.',
+    s6_s1_t:'Új dolgozó hozzáadása',s6_s1_d:'„Személyzet" fül → Név → Rövidítés → Szín → „+ Hozzáadás".',
+    s6_s2_t:'Szoba hozzárendelése',s6_s2_d:'Kártya → legördülő → név kiválasztása → Mentés.',
+    s6_s3_t:'Haladás ellenőrzése',s6_s3_d:'„Áttekintés" fül → haladás dolgozónként.',
+    s7_h2:'Vészhelyzeti kapcsolatok',
+    s7_p:'Problémák esetén először mindig kérdezd a szobafelügyelőt. Vészhelyzetben:',
+    c_notruf_r:'Tűzoltók · Mentők',c_polizei_r:'Nem életveszélyes',
+    c_tanja_r:'Szállodavezetés',c_tanja_i:'Kérd a szobafelügyelőtől',
+    c_nicole_r:'Igazgatónő · Éjszakai vészhelyzet',c_nicole_i:'Kérd a szobafelügyelőtől',
+    c_ralf_r:'Vészhelyzeti kapcsolat',c_ralf_i:'Kérd a szobafelügyelőtől',
+    c_hotel_n:'Szálloda-cím',
+    fire_t:'🔥 Tűz esetén:',fire_d:'Maradj nyugodt · Értesítsd a vendégeket · Hagyd el az épületet · Hívj 112-t · NE használd a liftet.',
+  },
+  en: {
+    eyebrow:'Turmhotel Frankfurt · Housekeeping',
+    h1:'Manual<br><em>Housekeeping Manager</em>',
+    hero_p:'This manual explains step by step how the digital tool works — from importing the guest list to marking a room as clean.',
+    tool_link:'Open the tool directly',
+    toc_title:'Contents',
+    toc_1:'Import guest list (photo workflow)',
+    toc_2:'Manage rooms & set status',
+    toc_3:'Understanding colours & badges',
+    toc_4:'Mark room as done (3-click)',
+    toc_5:'Report a technical problem',
+    toc_6:'Staff & assignment',
+    toc_7:'Emergency contacts',
+    s1_h2:'Import guest list — Photo workflow',
+    s1_p1:'The reception sends the guest list every evening. It contains: <strong>room number, name, arrival, departure, adults, room category, room price.</strong>',
+    s1_p2:'How to load the list into the tool:',
+    s1_s1_t:'Take a photo',s1_s1_d:'Photograph the printed guest list in good light. All rows must be readable.',
+    s1_s2_t:'Send photo to Claude',s1_s2_d:'Upload the photo to <strong>claude.ai</strong>. Then write: <em>"Please extract as JSON: room number, arrival, departure"</em>.',
+    s1_s3_t:'Copy the JSON',s1_s3_d:'<strong>Copy the entire JSON</strong> from Claude (long press → Select all → Copy).',
+    s1_s4_t:'Paste into the tool',s1_s4_d:'"Guest list" tab → "JSON" → paste → "Preview" → "Apply". Checkout rooms turn orange.',
+    s2_h2:'Manage rooms & set status',
+    s2_p1:'Every room is a card. Tap to open the room modal.',
+    s2_s1_t:'Tap the room card',s2_s1_d:'The modal opens with the room number and guest info.',
+    s2_s2_t:'Select cleaning status',s2_s2_d:'<strong>"Cleaned"</strong> = done. <strong>"Pending"</strong> = still open.',
+    s2_s3_t:'Assign a staff member',s2_s3_d:'Select your name from the dropdown. The card gets your team colour.',
+    s2_s4_t:'Save',s2_s4_d:'Tap <strong>"Save"</strong>. The card updates immediately.',
+    s3_h2:'Understanding colours & badges',
+    s3_p:'The left stripe on each card shows the status:',s3_p2:'Room type badges (Vorderhaus):',
+    col_clean:'Green — Cleaned',col_clean_d:'Room is ready and clean',
+    col_dirty:'Gold — Open',col_dirty_d:'Room not yet cleaned',
+    col_checkout:'Orange — Checkout',col_checkout_d:'Guest checking out today → full clean',
+    bdg_sdh:'Superior Double Courtyard',bdg_sds:'Superior Double Streetside',
+    bdg_sts:'Superior Triple Streetside',bdg_sth:'Superior Triple Courtyard',
+    bdg_lgh:'Little Gym Courtyard · A/C · Room 15',
+    s4_h2:'Mark room as done — 3-click',
+    s4_p:'Room finished? Mark it directly on the card:',
+    s4_s1_t:'Tap "✓ Mark as done"',s4_s1_d:'Green button on every open, assigned card.',
+    s4_s2_t:'Tick off the checklist',s4_s2_d:'5 items: <strong>Bed · Bathroom · Towels · Vacuum · Door</strong>. All 5 must be green.',
+    s4_s3_t:'Confirm',s4_s3_d:'<strong>"✓ Mark as done"</strong> becomes active → tap → room turns green.',
+    s5_h2:'Report a technical problem',
+    s5_p:'Broken light bulb, faulty remote, dripping tap — report it when finishing the room:',
+    s5_s1_t:'Select "⚠ Report problem"',s5_s1_d:'At the bottom of the checklist — instead of "All ok".',
+    s5_s2_t:'Select category',s5_s2_d:'Lighting · TV · Plumbing · Socket · Window · Furniture · A/C · Lock · WiFi · Other',
+    s5_s3_t:'Brief description & finish',s5_s3_d:'Optional short description. Ticket goes <strong>automatically</strong> to the Facility Manager.',
+    s6_h2:'Staff & assignment',
+    s6_p:'Add staff members in the <strong>"Staff"</strong> tab.',
+    s6_s1_t:'Add new staff member',s6_s1_d:'"Staff" tab → Name → Abbreviation → Colour → "+ Add".',
+    s6_s2_t:'Assign a room',s6_s2_d:'Tap card → dropdown → select name → Save.',
+    s6_s3_t:'Check progress',s6_s3_d:'"Overview" tab → progress per staff member.',
+    s7_h2:'Emergency contacts',
+    s7_p:'For problems, always ask the housekeeper first. In emergencies:',
+    c_notruf_r:'Fire brigade · Ambulance',c_polizei_r:'Non-life-threatening',
+    c_tanja_r:'Hotel management',c_tanja_i:'Ask the housekeeper',
+    c_nicole_r:'Director · Night emergency',c_nicole_i:'Ask the housekeeper',
+    c_ralf_r:'Emergency contact',c_ralf_i:'Ask the housekeeper',
+    c_hotel_n:'Hotel address',
+    fire_t:'🔥 Fire:',fire_d:'Stay calm · Inform guests · Leave the building · Call 112 · Do NOT use the lift.',
+  },
+};
+
+let lang = 'de';
+function setLang(l) {
+  lang = l;
+  document.querySelectorAll('.lang-btn').forEach((b,i) => b.classList.toggle('active',['de','hu','en'][i]===l));
+  document.querySelectorAll('[data-key]').forEach(el => {
+    const key = el.getAttribute('data-key');
+    if (T[l][key] !== undefined) el.innerHTML = T[l][key];
+  });
+}
+setLang('de');
+</script>
+</body>
+</html>
