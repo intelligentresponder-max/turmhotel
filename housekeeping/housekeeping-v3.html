@@ -1524,7 +1524,18 @@ function seedNotes() {
   });
   saveState(state);
 }
+function seedAllRoomsTestNote() {
+  const msg = "Erster Test laeuft - bitte Zimmer-Funktion pruefen und ausprobieren";
+  ALL_ROOMS.forEach(function(room) {
+    const rs = getRoomState(room);
+    if (rs.note === "") {
+      state[room] = Object.assign({}, rs, { note: msg });
+    }
+  });
+  saveState(state);
+}
 seedNotes();
+seedAllRoomsTestNote();
 renderRooms();
 renderPersonal();
 updateStats();
