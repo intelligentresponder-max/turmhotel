@@ -1535,7 +1535,19 @@ function seedAllRoomsTestNote() {
   saveState(state);
 }
 seedNotes();
+function forceFixNotes() {
+  const fixes = {
+    "44": "Bitte pruefen: Abreise-Zimmer noch nicht eindeutig zugeordnet (STS)",
+    "54": "Bitte pruefen: Abreise-Zimmer noch nicht eindeutig zugeordnet (STS)"
+  };
+  Object.keys(fixes).forEach(function(room) {
+    const rs = getRoomState(room);
+    state[room] = Object.assign({}, rs, { note: fixes[room] });
+  });
+  saveState(state);
+}
 seedAllRoomsTestNote();
+forceFixNotes();
 renderRooms();
 renderPersonal();
 updateStats();
