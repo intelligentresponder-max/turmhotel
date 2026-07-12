@@ -794,7 +794,7 @@ function renderRooms() {
         'LGH ❄️': 'background:rgba(201,162,39,.18);color:var(--gold-bright);border:1px solid rgba(201,162,39,.4)',
         'MASSAGE': 'background:rgba(192,57,43,.12);color:#e87070;border:1px solid rgba(192,57,43,.35)',
       };
-      const sdhBdg = roomType ? `<span class="badge" style="\${typeColors[roomType]||''}">\${roomType}</span>` : '';
+      const sdhBdg = roomType ? `<span class="badge" style="${typeColors[roomType]||''}">${roomType}</span>` : '';
 
       card.innerHTML = `
         <div class="room-num">${r}</div>
