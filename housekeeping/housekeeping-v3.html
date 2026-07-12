@@ -1510,6 +1510,21 @@ function createTechTicket(roomId) {
 }
 
 // ══ INIT ══
+function seedNotes() {
+  const seeds = {
+    "44": "Bitte pruefen: koennte Turck (STS, Abreise heute) sein",
+    "54": "Bitte pruefen: koennte Turck (STS, Abreise heute) sein",
+    "404": "Siphon stinkt - bitte Haustechnik informieren"
+  };
+  Object.keys(seeds).forEach(function(room) {
+    const rs = getRoomState(room);
+    if (rs.note === "") {
+      state[room] = Object.assign({}, rs, { note: seeds[room] });
+    }
+  });
+  saveState(state);
+}
+seedNotes();
 renderRooms();
 renderPersonal();
 updateStats();
