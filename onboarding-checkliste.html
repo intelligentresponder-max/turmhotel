@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>Onboarding-Checkliste · Firmen- &amp; Gruppenbuchung</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --gruen: #1f3d2b;
+    --gruen-hell: #eef3ef;
+    --messing: #b08d4c;
+    --tinte: #22261f;
+    --linie: #c9cec6;
+    --markierung: #fdf6dc; /* dezentes Gelb wie in der Excel-Vorlage */
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Jost', sans-serif;
+    font-weight: 400;
+    color: var(--tinte);
+    background: #f4f4f2;
+    font-size: 12px;
+    line-height: 1.35;
+  }
+  .blatt {
+    background: #fff;
+    max-width: 210mm;
+    margin: 16px auto;
+    padding: 14mm 12mm;
+    box-shadow: 0 2px 14px rgba(0,0,0,.12);
+  }
+
+  /* ── Kopf ─────────────────────────── */
+  header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    border-bottom: 2.5px solid var(--gruen);
+    padding-bottom: 8px;
+    margin-bottom: 10px;
+  }
+  .marke {
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 700;
+    font-size: 24px;
+    letter-spacing: .06em;
+    color: var(--gruen);
+  }
+  .marke small {
+    display: block;
+    font-family: 'Jost', sans-serif;
+    font-weight: 500;
+    font-size: 10px;
+    letter-spacing: .28em;
+    text-transform: uppercase;
+    color: var(--messing);
+    margin-top: 2px;
+  }
+  .titelblock { text-align: right; }
+  .titelblock h1 {
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 600;
+    font-size: 17px;
+    color: var(--gruen);
+  }
+  .titelblock .datum {
+    font-size: 11px;
+    margin-top: 4px;
+  }
+  .datum .feld {
+    display: inline-block;
+    border-bottom: 1px solid var(--tinte);
+    min-width: 90px;
+  }
+
+  /* ── Gastdaten ────────────────────── */
+  .gastdaten {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    margin-bottom: 10px;
+  }
+  .gd-box { border: 1px solid var(--linie); }
+  .gd-box h2 {
+    font-family: 'Jost', sans-serif;
+    font-weight: 600;
+    font-size: 10px;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    background: var(--gruen);
+    color: #fff;
+    padding: 4px 8px;
+  }
+  .gd-box.rechnung h2 { background: var(--messing); }
+  .gd-box table { width: 100%; border-collapse: collapse; }
+  .gd-box td {
+    border-top: 1px solid var(--linie);
+    padding: 5px 8px;
+    height: 22px;
+  }
+  .gd-box td:first-child {
+    width: 38%;
+    font-weight: 500;
+    background: var(--gruen-hell);
+  }
+  .gd-box.rechnung td:last-child { background: var(--markierung); }
+
+  /* ── Kenntnisnahme ────────────────── */
+  .kenntnis { margin-bottom: 10px; }
+  .kenntnis table { width: 100%; border-collapse: collapse; }
+  .kenntnis th, .kenntnis td {
+    border: 1px solid var(--linie);
+    padding: 4px 6px;
+    text-align: center;
+    font-size: 10px;
+  }
+  .kenntnis th {
+    background: var(--gruen-hell);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: .06em;
+  }
+  .kenntnis td { height: 24px; }
+
+  /* ── Checkliste ───────────────────── */
+  .liste table { width: 100%; border-collapse: collapse; }
+  .liste th {
+    font-size: 10px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: .08em;
+    border-bottom: 2px solid var(--gruen);
+    padding: 4px 6px;
+    text-align: left;
+  }
+  .liste th.mitte, .liste td.mitte { text-align: center; }
+  .liste td {
+    border-bottom: 1px solid var(--linie);
+    padding: 4px 6px;
+    vertical-align: middle;
+    height: 22px;
+  }
+  .liste .abschnitt td {
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 700;
+    font-size: 14px;
+    color: var(--gruen);
+    background: var(--gruen-hell);
+    border-bottom: 1px solid var(--gruen);
+    padding-top: 6px;
+  }
+  .liste .abschnitt td span.nr {
+    color: var(--messing);
+    margin-right: 6px;
+  }
+  .sp-aufgabe { width: 30%; }
+  .sp-bemerkung { width: 32%; }
+  .sp-janein { width: 5%; }
+  .sp-datum { width: 12%; }
+  .sp-erledigt { width: 11%; }
+  .bemerkung { font-style: italic; color: #4a4f46; }
+  .kasten {
+    display: inline-block;
+    width: 11px;
+    height: 11px;
+    border: 1.4px solid var(--tinte);
+    vertical-align: middle;
+  }
+  .schreiblinie { border-bottom: 1px dotted #9aa096; display: block; height: 15px; }
+
+  /* ── Fußzeile ─────────────────────── */
+  footer {
+    margin-top: 12px;
+    padding-top: 6px;
+    border-top: 1px solid var(--linie);
+    display: flex;
+    justify-content: space-between;
+    font-size: 9px;
+    color: #666b62;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+  }
+
+  /* ── Bildschirm-Extras ────────────── */
+  .druckleiste {
+    max-width: 210mm;
+    margin: 14px auto 0;
+    text-align: right;
+  }
+  .druckleiste button {
+    font-family: 'Jost', sans-serif;
+    font-weight: 500;
+    font-size: 13px;
+    letter-spacing: .08em;
+    background: var(--gruen);
+    color: #fff;
+    border: none;
+    padding: 9px 22px;
+    cursor: pointer;
+  }
+  .druckleiste button:hover { background: #2c5540; }
+  .druckleiste button:focus-visible { outline: 3px solid var(--messing); outline-offset: 2px; }
+
+  /* ── Druck ────────────────────────── */
+  @media print {
+    @page { size: A4; margin: 10mm; }
+    body { background: #fff; font-size: 11px; }
+    .blatt { box-shadow: none; margin: 0; padding: 0; max-width: none; }
+    .druckleiste { display: none; }
+    .liste tr, .gd-box, .kenntnis { break-inside: avoid; }
+    .abschnitt { break-after: avoid; }
+  }
+</style>
+</head>
+<body>
+
+<div class="druckleiste"><button onclick="window.print()">Drucken (A4)</button></div>
+
+<div class="blatt">
+
+  <header>
+    <div class="marke">Turmhotel<small>Frankfurt am Main</small></div>
+    <div class="titelblock">
+      <h1>Onboarding-Checkliste · Firmen- &amp; Gruppenbuchung</h1>
+      <div class="datum">Aufnahmedatum: <span class="feld">&nbsp;</span></div>
+    </div>
+  </header>
+
+  <!-- Gastdaten -->
+  <div class="gastdaten">
+    <div class="gd-box">
+      <h2>Gastdaten · Privat</h2>
+      <table>
+        <tr><td>Vorname, Name</td><td>&nbsp;</td></tr>
+        <tr><td>Straße</td><td>&nbsp;</td></tr>
+        <tr><td>Postleitzahl, Ort</td><td>&nbsp;</td></tr>
+        <tr><td>Tel. / E-Mail</td><td>&nbsp;</td></tr>
+        <tr><td>Geburtsdatum</td><td>&nbsp;</td></tr>
+      </table>
+    </div>
+    <div class="gd-box rechnung">
+      <h2>Rechnungsanschrift</h2>
+      <table>
+        <tr><td>Firma / Institution</td><td>&nbsp;</td></tr>
+        <tr><td>Straße</td><td>&nbsp;</td></tr>
+        <tr><td>Postleitzahl, Ort</td><td>&nbsp;</td></tr>
+        <tr><td>Ansprechpartner</td><td>&nbsp;</td></tr>
+        <tr><td>Tel. / E-Mail</td><td>&nbsp;</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <!-- Kenntnisnahme -->
+  <div class="kenntnis">
+    <table>
+      <tr>
+        <th colspan="6">Zur Kenntnis von (Kürzel + Datum)</th>
+      </tr>
+      <tr>
+        <th>Geschäftsführung</th><th>R.M.</th><th>N.W.</th><th>D.N.</th><th>Andere</th><th>Andere</th>
+      </tr>
+      <tr>
+        <td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td>
+      </tr>
+    </table>
+  </div>
+
+  <!-- Checkliste -->
+  <div class="liste">
+    <table>
+      <thead>
+        <tr>
+          <th class="sp-aufgabe">Aufgabe</th>
+          <th class="sp-bemerkung">Bemerkung</th>
+          <th class="sp-janein mitte">Ja</th>
+          <th class="sp-janein mitte">Nein</th>
+          <th class="sp-datum">Ausführungsdatum</th>
+          <th class="sp-erledigt">Erledigt am / Kürzel</th>
+        </tr>
+      </thead>
+      <tbody>
+
+        <tr class="abschnitt"><td colspan="6"><span class="nr">1</span>Rechnungslegung</td></tr>
+        <tr><td>Vorauszahlung gewünscht?</td><td class="bemerkung">Proforma, Paylink oder Kontodetails</td><td class="mitte"><span class="kasten"></span></td><td class="mitte"><span class="kasten"></span></td><td>&nbsp;</td><td>&nbsp;</td></tr>
+        <tr><td>Firmenkreditkarte?</td><td class="bemerkung">Absicherung der Buchung durch:</td><td class="mitte"><span class="kasten"></span></td><td class="mitte"><span class="kasten"></span></td><td>&nbsp;</td><td>&nbsp;</td></tr>
+        <tr><td>Bevorzugte Zahlungsweise</td><td><span class="schreiblinie"></span></td><td class="mitte"></td><td class="mitte"></td><td>&nbsp;</td><td>&nbsp;</td></tr>
+        <tr><td>Goethe-Uni Fachbereich (FB)?</td><td><span class="schreiblinie"></span></td><td class="mitte"><span class="kasten"></span></td><td class="mitte"><span class="kasten"></span></td><td>&nbsp;</td><td>&nbsp;</td></tr>
+        <tr><td>Rechnungsinstruktionen</td><td class="bemerkung">Infoblatt der Goethe-Uni wegen Konformität beachten</td><td class="mitte"><span class="kasten"></span></td><td class="mitte"><span class="kasten"></span></td><td>&nbsp;</td><td>&nbsp;</td></tr>
+        <tr><td>VAT- / Steuernummer auf Rechnung</td><td><span class="schreiblinie"></span></td><td class="mitte"><span class="kasten"></span></td><td class="mitte"><span class="kasten"></span></td><td>&nbsp;</td><td>&nbsp;</td></tr>
+        <tr><td>Debitorenkonto Nr.</td><td><span class="schreiblinie"></span></td><td class="mitte"><span class="kasten"></span></td><td class="mitte"><span class="kasten"></span></td><td>&nbsp;</td><td>&nbsp;</td></tr>
+
+        <tr class="abschnitt"><td colspan="6"><span class="nr">2</span>Mitreisende</td></tr>
+        <tr><td>Anzahl weiterer Personen</td><td><span class="schreiblinie"></span></td><td class="mitte"></td><td class="mitte"></td><td>&nbsp;</td><td>&nbsp;</td></tr>
+        <tr><td>Name(n) auf Meldeschein</td><td><span class="schreiblinie"></span></td><td class="mitte"><span class="kasten"></span></td><td class="mitte"><span class="kasten"></span></td><td>&nbsp;</td><td>&nbsp;</td></tr>
+        <tr><td>Anschrift, E-Mail, Telefon</td><td><span class="schreiblinie"></span></td><td class="mitte"><span class="kasten"></span></td><td class="mitte"><span class="kasten"></span></td><td>&nbsp;</td><td>&nbsp;</td></tr>
+        <tr><td>Absicherung der Buchung</td><td><span class="schreiblinie"></span></td><td class="mitte"><span class="kasten"></span></td><td class="mitte"><span class="kasten"></span></td><td>&nbsp;</td><td>&nbsp;</td></tr>
+
+        <tr class="abschnitt"><td colspan="6"><span class="nr">3</span>Angebot</td></tr>
+        <tr><td>Angebot erstellt und versendet am</td><td><span class="schreiblinie"></span></td><td class="mitte"><span class="kasten"></span></td><td class="mitte"><span class="kasten"></span></td><td>&nbsp;</td><td>&nbsp;</td></tr>
+        <tr><td>Angebot gültig bis</td><td><span class="schreiblinie"></span></td><td class="mitte"></td><td class="mitte"></td><td>&nbsp;</td><td>&nbsp;</td></tr>
+        <tr><td>Angebot angenommen?</td><td><span class="schreiblinie"></span></td><td class="mitte"><span class="kasten"></span></td><td class="mitte"><span class="kasten"></span></td><td>&nbsp;</td><td>&nbsp;</td></tr>
+
+        <tr class="abschnitt"><td colspan="6"><span class="nr">4</span>Reservierung</td></tr>
+        <tr><td>Preis / Zimmer</td><td><span class="schreiblinie"></span></td><td class="mitte"></td><td class="mitte"></td><td>&nbsp;</td><td>&nbsp;</td></tr>
+        <tr><td>Frühstück inklusive?</td><td><span class="schreiblinie"></span></td><td class="mitte"><span class="kasten"></span></td><td class="mitte"><span class="kasten"></span></td><td>&nbsp;</td><td>&nbsp;</td></tr>
+        <tr><td>Messebuchung?</td><td class="bemerkung">Messezeitraum / Konditionen prüfen</td><td class="mitte"><span class="kasten"></span></td><td class="mitte"><span class="kasten"></span></td><td>&nbsp;</td><td>&nbsp;</td></tr>
+
+        <tr class="abschnitt"><td colspan="6"><span class="nr">5</span>Stornierung</td></tr>
+        <tr><td>Frist</td><td><span class="schreiblinie"></span></td><td class="mitte"></td><td class="mitte"></td><td>&nbsp;</td><td>&nbsp;</td></tr>
+        <tr><td>Stornobedingungen kommuniziert?</td><td><span class="schreiblinie"></span></td><td class="mitte"><span class="kasten"></span></td><td class="mitte"><span class="kasten"></span></td><td>&nbsp;</td><td>&nbsp;</td></tr>
+
+        <tr class="abschnitt"><td colspan="6"><span class="nr">6</span>Anreise &amp; Check-in</td></tr>
+        <tr><td>Voraussichtliche Ankunftszeit</td><td><span class="schreiblinie"></span></td><td class="mitte"></td><td class="mitte"></td><td>&nbsp;</td><td>&nbsp;</td></tr>
+        <tr><td>Late Check-in nötig?</td><td class="bemerkung">Ablauf laut Late-Check-in-Dokumentation vereinbaren</td><td class="mitte"><span class="kasten"></span></td><td class="mitte"><span class="kasten"></span></td><td>&nbsp;</td><td>&nbsp;</td></tr>
+        <tr><td>Parkplatz benötigt / reserviert?</td><td><span class="schreiblinie"></span></td><td class="mitte"><span class="kasten"></span></td><td class="mitte"><span class="kasten"></span></td><td>&nbsp;</td><td>&nbsp;</td></tr>
+        <tr><td>Sonderwünsche notiert?</td><td><span class="schreiblinie"></span></td><td class="mitte"><span class="kasten"></span></td><td class="mitte"><span class="kasten"></span></td><td>&nbsp;</td><td>&nbsp;</td></tr>
+
+        <tr class="abschnitt"><td colspan="6"><span class="nr">7</span>Abreise &amp; Abrechnung</td></tr>
+        <tr><td>Rechnung erstellt und versendet?</td><td><span class="schreiblinie"></span></td><td class="mitte"><span class="kasten"></span></td><td class="mitte"><span class="kasten"></span></td><td>&nbsp;</td><td>&nbsp;</td></tr>
+        <tr><td>Zahlung eingegangen?</td><td><span class="schreiblinie"></span></td><td class="mitte"><span class="kasten"></span></td><td class="mitte"><span class="kasten"></span></td><td>&nbsp;</td><td>&nbsp;</td></tr>
+
+        <tr class="abschnitt"><td colspan="6"><span class="nr">8</span>Nachbereitung</td></tr>
+        <tr><td>Reklamation?</td><td><span class="schreiblinie"></span></td><td class="mitte"><span class="kasten"></span></td><td class="mitte"><span class="kasten"></span></td><td>&nbsp;</td><td>&nbsp;</td></tr>
+        <tr><td>Nachkalkulation / errechneter Erlös</td><td><span class="schreiblinie"></span></td><td class="mitte"></td><td class="mitte"></td><td>&nbsp;</td><td>&nbsp;</td></tr>
+        <tr><td>Gast für Folgebuchung vorgemerkt?</td><td><span class="schreiblinie"></span></td><td class="mitte"><span class="kasten"></span></td><td class="mitte"><span class="kasten"></span></td><td>&nbsp;</td><td>&nbsp;</td></tr>
+
+      </tbody>
+    </table>
+  </div>
+
+  <footer>
+    <span>Turmhotel Frankfurt · Interne Checkliste</span>
+    <span>Version 1.0 · Nur für den internen Gebrauch</span>
+  </footer>
+
+</div>
+
+</body>
+</html>
