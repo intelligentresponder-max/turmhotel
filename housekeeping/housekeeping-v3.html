@@ -578,7 +578,11 @@ nav{
 
     <!-- Manuell hinzufügen -->
     <div class="manual-add-form">
-      <h3>Zimmer manuell markieren</h3>
+      <div style="margin:20px 0;padding:16px;border:1px solid rgba(230,126,34,.35);border-radius:4px;background:rgba(230,126,34,.06)">
+  <div style="font-size:.78rem;color:var(--muted);margin-bottom:10px">Setzt Belegung, Reinigung und Zuweisung fuer ALLE Zimmer zurueck. Personal bleibt erhalten.</div>
+  <button class="btn" style="background:var(--checkout-col);color:#fff" onclick="resetRoomStatus()">Zimmerstatus zuruecksetzen</button>
+</div>
+<h3>Zimmer manuell markieren</h3>
       <div class="form-row">
         <input class="form-input" id="manual-room" placeholder="Zimmernr." style="max-width:120px;">
         <select class="staff-select" id="manual-type" style="margin-bottom:0;flex:1;">
@@ -1186,8 +1190,23 @@ function showCsvPreview(results) {
   preview.classList.add('show');
 }
 
+function resetRoomStatus() {
+  if (!confirm('Alle Zimmerstatus zuruecksetzen (Belegung, Reinigung, Zuweisung)? Personal bleibt erhalten.')) return;
+  state = {};
+  saveState(state);
+  csvParsed = [];
+  const banner = document.getElementById('import-banner');
+  if (banner) banner.classList.remove('show');
+  renderRooms(); renderPersonal(); renderOverview();
+  alert('Zimmerstatus wurde zurueckgesetzt.');
+}
+
 function applyCsvImport() {
   if (!csvParsed.length) return;
+  ALL_ROOMS.forEach(id => {
+    const old = getRoomState(id);
+    state[id] = { ...old, guestType: '' };
+  });
   csvParsed.forEach(({ room, guestType }) => {
     const rs = getRoomState(room);
     state[room] = { ...rs, guestType };
