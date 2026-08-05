@@ -724,6 +724,15 @@ function saveStaffData(s) { localStorage.setItem('hk_staff3', JSON.stringify(s))
 
 let state = loadState();
 let staff = loadStaff();
+if (!staff.length) {
+  staff = [
+    { name: 'Kanczler', abb: 'KAN', color: '#c9a227' },
+    { name: 'Eva', abb: 'EVA', color: '#4ecb82' },
+    { name: 'Mehari', abb: 'MEH', color: '#5b8dee' },
+    { name: 'Kulwinder', abb: 'KUL', color: '#e67e22' }
+  ];
+  saveStaffData(staff);
+}
 
 function getRoomState(id) {
   return state[id] || { clean: false, occupied: false, staff: '', note: '', guestType: '' };
