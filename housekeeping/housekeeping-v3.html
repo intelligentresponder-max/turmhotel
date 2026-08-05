@@ -602,6 +602,7 @@ nav{
 <!-- ══ TAB: PERSONAL ══ -->
 <div id="tab-personal" style="display:none">
   <div class="building-label" style="margin-top:4px">Mitarbeiter</div>
+  <button class="btn btn-add" onclick="autoAssignStaff()" style="margin-bottom:16px">⚡ Zimmer automatisch verteilen (paritätisch)</button>
   <div class="personal-panel">
     <div class="personal-list" id="personal-list"></div>
     <div class="add-staff-form">
@@ -975,6 +976,25 @@ function renderOverview() {
 }
 
 // ══ PERSONAL ══
+function autoAssignStaff() {
+  if (!staff.length) { alert('Erst Personal anlegen.'); return; }
+  const checkoutRooms = ALL_ROOMS.filter(id => getRoomState(id).guestType === 'checkout').sort((a,b) => parseInt(a) - parseInt(b));
+  const overnightRooms = ALL_ROOMS.filter(id => getRoomState(id).guestType === 'overnight').sort((a,b) => parseInt(a) - parseInt(b));
+  if (!checkoutRooms.length && !overnightRooms.length) { alert('Erst Gästeliste importieren.'); return; }
+  if (!confirm('Bestehende Zuweisungen werden überschrieben. Fortfahren?')) return;
+  function distribute(rooms) {
+    rooms.forEach((id, i) => {
+      const person = staff[i % staff.length].name;
+      state[id] = { ...getRoomState(id), staff: person };
+    });
+  }
+  distribute(checkoutRooms);
+  distribute(overnightRooms);
+  saveState(state);
+  renderRooms(); renderPersonal(); renderOverview();
+  alert('Verteilt: ' + checkoutRooms.length + ' Abreise + ' + overnightRooms.length + ' Overnight auf ' + staff.length + ' Personen.');
+}
+
 function renderPersonal() {
   const list = document.getElementById('personal-list');
   list.innerHTML = '';
