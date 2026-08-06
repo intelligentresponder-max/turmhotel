@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Alpha-Liste scannen — Housekeeping Manager</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,400;0,600;1,500&family=Spline+Sans+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/tesseract.js/5.0.5/tesseract.min.js"></script>
+<style>
+  :root{
+    --bg:#0a0a0a; --paper:#e8e4da; --gold:#c9a227; --muted:#8a8578;
+    --line:#2a2a26; --clean:#3a7d54; --checkout-col:#e67e22; --err:#c94a2a;
+  }
+  *{box-sizing:border-box;}
+  body{
+    background:var(--bg); color:var(--paper); margin:0;
+    font-family:'Spline Sans Mono',monospace; line-height:1.6;
+  }
+  .wrap{max-width:900px; margin:0 auto; padding:32px 20px 80px;}
+  .eyebrow{font-size:.7rem; letter-spacing:.15em; text-transform:uppercase; color:var(--gold); margin-bottom:8px;}
+  h1{font-family:'Fraunces',serif; font-weight:600; font-size:1.9rem; margin:0 0 4px;}
+  .sub{color:var(--muted); font-size:.85rem; margin-bottom:28px;}
+
+  .card{background:rgba(255,255,255,.03); border:1px solid var(--line); border-radius:6px; padding:20px; margin-bottom:20px;}
+  .card h2{font-family:'Fraunces',serif; font-size:1.1rem; font-weight:600; margin:0 0 10px; color:var(--paper);}
+
+  .dropzone{
+    border:2px dashed var(--line); border-radius:6px; padding:36px 20px; text-align:center;
+    cursor:pointer; transition:border-color .15s;
+  }
+  .dropzone:hover, .dropzone.drag{border-color:var(--gold);}
+  .dropzone input{display:none;}
+  .dz-title{color:var(--gold); font-family:'Fraunces',serif; font-size:1.15rem; margin:8px 0 4px;}
+  .dz-sub{color:var(--muted); font-size:.78rem;}
+
+  #preview-img{max-width:100%; border-radius:4px; border:1px solid var(--line); margin-top:14px; display:none;}
+
+  .progress-wrap{margin-top:14px; display:none;}
+  .progress-bar{height:6px; background:rgba(255,255,255,.07); border-radius:3px; overflow:hidden;}
+  .progress-fill{height:100%; width:0%; background:var(--gold); transition:width .2s;}
+  .progress-label{font-size:.75rem; color:var(--muted); margin-top:6px;}
+
+  table{width:100%; border-collapse:collapse; font-size:.82rem; margin-top:6px;}
+  th{text-align:left; color:var(--gold); font-weight:500; padding:8px 6px; border-bottom:1px solid var(--line); font-size:.72rem; letter-spacing:.05em; text-transform:uppercase;}
+  td{padding:6px; border-bottom:1px solid rgba(255,255,255,.04);}
+  td input{
+    width:100%; background:transparent; border:1px solid transparent; border-radius:3px;
+    color:var(--paper); font-family:'Spline Sans Mono',monospace; font-size:.82rem; padding:4px 6px;
+  }
+  td input:focus{border-color:var(--gold); outline:none; background:rgba(255,255,255,.03);}
+  .row-del{color:var(--err); cursor:pointer; background:none; border:none; font-size:1rem; padding:2px 8px;}
+  .row-del:hover{color:#ff6b4a;}
+
+  .add-row-btn{
+    margin-top:10px; background:none; border:1px dashed var(--line); color:var(--muted);
+    border-radius:4px; padding:8px 14px; font-family:'Spline Sans Mono',monospace; font-size:.78rem; cursor:pointer;
+  }
+  .add-row-btn:hover{border-color:var(--gold); color:var(--gold);}
+
+  .check-row{display:flex; align-items:center; gap:12px; flex-wrap:wrap; margin-top:14px;}
+  .check-row label{font-size:.8rem; color:var(--muted);}
+  .check-row input[type=number]{
+    width:70px; background:rgba(255,255,255,.03); border:1px solid var(--line); border-radius:4px;
+    color:var(--paper); font-family:'Spline Sans Mono',monospace; font-size:.9rem; padding:6px 8px; text-align:center;
+  }
+  .check-badge{
+    padding:5px 12px; border-radius:3px; font-size:.75rem; font-weight:700; letter-spacing:.03em;
+  }
+  .check-badge.ok{background:rgba(58,125,84,.15); color:#4ecb82; border:1px solid rgba(58,125,84,.4);}
+  .check-badge.bad{background:rgba(201,74,42,.15); color:#ff6b4a; border:1px solid rgba(201,74,42,.4);}
+  .check-badge.wait{background:rgba(255,255,255,.05); color:var(--muted); border:1px solid var(--line);}
+
+  .btn{
+    background:var(--gold); color:#0a0a0a; border:none; border-radius:4px; padding:12px 22px;
+    font-family:'Spline Sans Mono',monospace; font-weight:700; font-size:.85rem; letter-spacing:.03em;
+    cursor:pointer; text-transform:uppercase;
+  }
+  .btn:disabled{opacity:.35; cursor:not-allowed;}
+  .btn.secondary{background:transparent; border:1px solid var(--gold); color:var(--gold);}
+
+  .hint{font-size:.76rem; color:var(--muted); border-left:2px solid var(--gold); padding-left:10px; margin:10px 0;}
+  .empty-note{color:var(--muted); font-size:.8rem; text-align:center; padding:20px 0;}
+  footer{margin-top:40px; color:var(--muted); font-size:.72rem; text-align:center;}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="eyebrow">Digitalisierungsprojekt · Turmhotel Frankfurt</div>
+  <h1>Alpha-Liste <em style="color:var(--gold); font-style:italic;">scannen</em></h1>
+  <div class="sub">Foto der gedruckten Gästeliste hochladen — Zimmer und Abreisedaten werden automatisch erkannt und als CSV für den Housekeeping Manager erstellt.</div>
+
+  <div class="card">
+    <h2>1. Foto hochladen</h2>
+    <div class="dropzone" id="dropzone">
+      <input type="file" id="file-input" accept="image/*" capture="environment">
+      <div class="dz-title">📷 Foto der Alpha-Liste hier ablegen</div>
+      <div class="dz-sub">oder klicken zum Auswählen / Kamera öffnen</div>
+    </div>
+    <img id="preview-img">
+    <div class="progress-wrap" id="progress-wrap">
+      <div class="progress-bar"><div class="progress-fill" id="progress-fill"></div></div>
+      <div class="progress-label" id="progress-label">Wird gelesen …</div>
+    </div>
+  </div>
+
+  <div class="card" id="results-card" style="display:none;">
+    <h2>2. Erkannte Zimmer prüfen &amp; korrigieren</h2>
+    <div class="hint">Jede Zeile durchgehen — Zimmernummer und Abreisedatum müssen stimmen. Falsche Zeilen löschen, fehlende per „+ Zeile" ergänzen.</div>
+    <table>
+      <thead><tr><th style="width:35%">Zimmer</th><th style="width:45%">Abreise</th><th style="width:20%"></th></tr></thead>
+      <tbody id="rows-body"></tbody>
+    </table>
+    <button class="add-row-btn" id="add-row">+ Zeile</button>
+  </div>
+
+  <div class="card" id="check-card" style="display:none;">
+    <h2>3. Doppelcheck</h2>
+    <div class="hint">Von der Alpha-Liste unten die Gesamtsumme (Spalte „Anz.") ablesen und hier eintragen — besonders wichtig an ausgebuchten Tagen.</div>
+    <div class="check-row">
+      <label for="pms-total">Anzahl laut PMS-Summe:</label>
+      <input type="number" id="pms-total" min="0" placeholder="—">
+      <span class="check-badge wait" id="check-badge">wartet auf Eingabe</span>
+    </div>
+  </div>
+
+  <div class="card" id="export-card" style="display:none;">
+    <h2>4. CSV erstellen</h2>
+    <button class="btn" id="download-btn">⬇ CSV herunterladen</button>
+    <button class="btn secondary" id="reset-btn" style="margin-left:8px;">Neu beginnen</button>
+  </div>
+
+  <footer>Housekeeping Manager v3 — Entwickelt von André Schwarz, ASGlobal · Turmhotel Frankfurt<br>
+  Texterkennung läuft lokal im Browser, es werden keine Daten an einen Server gesendet.</footer>
+
+</div>
+
+<script>
+const dropzone = document.getElementById('dropzone');
+const fileInput = document.getElementById('file-input');
+const previewImg = document.getElementById('preview-img');
+const progressWrap = document.getElementById('progress-wrap');
+const progressFill = document.getElementById('progress-fill');
+const progressLabel = document.getElementById('progress-label');
+const resultsCard = document.getElementById('results-card');
+const checkCard = document.getElementById('check-card');
+const exportCard = document.getElementById('export-card');
+const rowsBody = document.getElementById('rows-body');
+const addRowBtn = document.getElementById('add-row');
+const pmsTotalInput = document.getElementById('pms-total');
+const checkBadge = document.getElementById('check-badge');
+const downloadBtn = document.getElementById('download-btn');
+const resetBtn = document.getElementById('reset-btn');
+
+let rows = [];
+
+dropzone.addEventListener('click', () => fileInput.click());
+dropzone.addEventListener('dragover', e => { e.preventDefault(); dropzone.classList.add('drag'); });
+dropzone.addEventListener('dragleave', () => dropzone.classList.remove('drag'));
+dropzone.addEventListener('drop', e => {
+  e.preventDefault(); dropzone.classList.remove('drag');
+  if (e.dataTransfer.files[0]) handleFile(e.dataTransfer.files[0]);
+});
+fileInput.addEventListener('change', e => { if (e.target.files[0]) handleFile(e.target.files[0]); });
+
+function handleFile(file) {
+  const url = URL.createObjectURL(file);
+  previewImg.src = url;
+  previewImg.style.display = 'block';
+  runOCR(file);
+}
+
+async function runOCR(file) {
+  progressWrap.style.display = 'block';
+  resultsCard.style.display = 'none';
+  checkCard.style.display = 'none';
+  exportCard.style.display = 'none';
+  progressFill.style.width = '0%';
+  progressLabel.textContent = 'Texterkennung startet …';
+
+  try {
+    const result = await Tesseract.recognize(file, 'deu', {
+      logger: m => {
+        if (m.status === 'recognizing text') {
+          const pct = Math.round(m.progress * 100);
+          progressFill.style.width = pct + '%';
+          progressLabel.textContent = 'Wird gelesen … ' + pct + '%';
+        } else {
+          progressLabel.textContent = m.status;
+        }
+      }
+    });
+    progressWrap.style.display = 'none';
+    parseText(result.data.text);
+  } catch (err) {
+    progressLabel.textContent = 'Fehler bei der Texterkennung — bitte Foto erneut versuchen.';
+    console.error(err);
+  }
+}
+
+function normalizeRoom(raw) {
+  raw = raw.padStart(3, '0');
+  if (raw.startsWith('0')) return String(parseInt(raw, 10));
+  return raw;
+}
+
+function parseText(text) {
+  // Zimmernummern: 3-stellige Zahl am Zeilenanfang (mit optionalen Leerzeichen)
+  const roomRe = /(?:^|\n)\s*(\d{3})\b/g;
+  const rooms = [];
+  let m;
+  while ((m = roomRe.exec(text)) !== null) rooms.push(m[1]);
+
+  // Datumspaare TT.MM.JJJJ TT.MM.JJJJ (Anreise, Abreise) — wir wollen das zweite (Abreise)
+  const dateRe = /(\d{2}\.\d{2}\.20\d{2})\D{0,15}(\d{2}\.\d{2}\.20\d{2})/g;
+  const departures = [];
+  while ((m = dateRe.exec(text)) !== null) departures.push(m[2]);
+
+  const count = Math.min(rooms.length, departures.length);
+  rows = [];
+  for (let i = 0; i < count; i++) {
+    rows.push({ zimmer: normalizeRoom(rooms[i]), abreise: departures[i] });
+  }
+  renderRows();
+  resultsCard.style.display = 'block';
+  checkCard.style.display = 'block';
+  exportCard.style.display = 'block';
+  updateCheck();
+}
+
+function renderRows() {
+  rowsBody.innerHTML = '';
+  if (rows.length === 0) {
+    rowsBody.innerHTML = '<tr><td colspan="3"><div class="empty-note">Keine Zeilen erkannt — bitte manuell über „+ Zeile" ergänzen.</div></td></tr>';
+  }
+  rows.forEach((r, i) => {
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td><input type="text" value="${r.zimmer}" data-i="${i}" data-f="zimmer" placeholder="z.B. 14"></td>
+      <td><input type="text" value="${r.abreise}" data-i="${i}" data-f="abreise" placeholder="TT.MM.JJJJ"></td>
+      <td><button class="row-del" data-i="${i}">✕</button></td>
+    `;
+    rowsBody.appendChild(tr);
+  });
+  rowsBody.querySelectorAll('input').forEach(inp => {
+    inp.addEventListener('input', e => {
+      const i = +e.target.dataset.i, f = e.target.dataset.f;
+      rows[i][f] = e.target.value;
+      updateCheck();
+    });
+  });
+  rowsBody.querySelectorAll('.row-del').forEach(btn => {
+    btn.addEventListener('click', e => {
+      rows.splice(+e.target.dataset.i, 1);
+      renderRows();
+      updateCheck();
+    });
+  });
+}
+
+addRowBtn.addEventListener('click', () => {
+  rows.push({ zimmer: '', abreise: '' });
+  renderRows();
+  updateCheck();
+});
+
+pmsTotalInput.addEventListener('input', updateCheck);
+
+function updateCheck() {
+  const pmsTotal = parseInt(pmsTotalInput.value, 10);
+  if (isNaN(pmsTotal)) {
+    checkBadge.textContent = 'wartet auf Eingabe';
+    checkBadge.className = 'check-badge wait';
+    return;
+  }
+  if (pmsTotal === rows.length) {
+    checkBadge.textContent = '✓ stimmt überein — ' + rows.length + ' Zimmer';
+    checkBadge.className = 'check-badge ok';
+  } else {
+    checkBadge.textContent = '✕ Abweichung — erkannt: ' + rows.length + ', PMS: ' + pmsTotal;
+    checkBadge.className = 'check-badge bad';
+  }
+}
+
+downloadBtn.addEventListener('click', () => {
+  const valid = rows.filter(r => r.zimmer.trim() && r.abreise.trim());
+  let csv = 'Zimmer;Abreise\n';
+  valid.forEach(r => { csv += r.zimmer.trim() + ';' + r.abreise.trim() + '\n'; });
+  const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  const today = new Date();
+  const dd = String(today.getDate()).padStart(2,'0');
+  const mm = String(today.getMonth()+1).padStart(2,'0');
+  const yyyy = today.getFullYear();
+  a.href = url;
+  a.download = `gaesteliste-${dd}${mm}${yyyy}.csv`;
+  a.click();
+  URL.revokeObjectURL(url);
+});
+
+resetBtn.addEventListener('click', () => {
+  rows = [];
+  previewImg.style.display = 'none';
+  resultsCard.style.display = 'none';
+  checkCard.style.display = 'none';
+  exportCard.style.display = 'none';
+  pmsTotalInput.value = '';
+  fileInput.value = '';
+});
+</script>
+</body>
+</html>
