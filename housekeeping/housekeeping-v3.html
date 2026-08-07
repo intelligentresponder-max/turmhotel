@@ -447,9 +447,9 @@ nav{
   </div>
 
   <!-- Nebenhaus -->
-  <div class="building-label">Vorderhaus (Nebenhaus)</div>
+  <div class="building-label">Vorderhaus (Haupthaus)</div>
   <div style="font-family:'Spline Sans Mono',monospace;font-size:.66rem;color:var(--muted);margin-bottom:12px;padding:8px 12px;background:rgba(255,255,255,.025);border-left:2px solid var(--line);border-radius:0 2px 2px 0;line-height:1.6;">
-    📍 Zugang: Rezeption EG → Verbindungsgang (~30 m) → Nebenhaus Block 1–5
+    📍 Zugang: rechts an der Rezeption vorbei
   </div>
   <div class="floor-label">Block 1 &nbsp;·&nbsp; 11 <span style="font-size:.58rem;background:rgba(42,122,75,.18);color:#4ecb82;border:1px solid rgba(42,122,75,.4);padding:1px 5px;border-radius:1px;">SDH</span> &nbsp;12 <span style="font-size:.58rem;background:rgba(26,111,168,.18);color:#5bb3e8;border:1px solid rgba(26,111,168,.4);padding:1px 5px;border-radius:1px;">SDS</span></div>
   <div class="room-grid" id="grid-n1-a"></div>
@@ -467,7 +467,7 @@ nav{
   <div class="room-grid" id="grid-n5"></div>
 
   <!-- Haupthaus -->
-  <div class="building-label">Haupthaus (Hinterhaus)</div>
+  <div class="building-label">Nebengebäude (Hinterhaus)</div>
   <div style="font-family:'Spline Sans Mono',monospace;font-size:.66rem;color:var(--muted);margin-bottom:12px;padding:8px 12px;background:rgba(255,255,255,.025);border-left:2px solid var(--line);border-radius:0 2px 2px 0;line-height:1.6;">
     📍 1. OG: Zimmer 101 Massageraum · Zimmer 102–110 · Etagen 2–5 folgen
   </div>
@@ -1203,11 +1203,11 @@ function applyCsvImport() {
   if (!csvParsed.length) return;
   ALL_ROOMS.forEach(id => {
     const old = getRoomState(id);
-    state[id] = { ...old, guestType: '' };
+    state[id] = { ...old, guestType: '', occupied: false };
   });
   csvParsed.forEach(({ room, guestType }) => {
     const rs = getRoomState(room);
-    state[room] = { ...rs, guestType };
+    state[room] = { ...rs, guestType, occupied: true };
   });
   saveState(state);
   renderRooms();
