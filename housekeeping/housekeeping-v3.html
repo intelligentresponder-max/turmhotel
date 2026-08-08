@@ -1098,7 +1098,7 @@ function parseCsv(text) {
     if (!cells.some(c => c)) continue;
 
     const roomRaw = colZimmer >= 0 ? cells[colZimmer] : '';
-    const room = roomRaw.trim();
+    const room = /^\d+$/.test(roomRaw.trim()) ? String(parseInt(roomRaw, 10)) : roomRaw.trim();
     if (!room || !ALL_ROOMS.includes(room)) continue;
 
     const abreiseRaw = colAbreise >= 0 ? cells[colAbreise] : '';
