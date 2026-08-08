@@ -69,6 +69,10 @@
   }
   .check-badge.ok{background:rgba(58,125,84,.15); color:#4ecb82; border:1px solid rgba(58,125,84,.4);}
   .check-badge.bad{background:rgba(201,74,42,.15); color:#ff6b4a; border:1px solid rgba(201,74,42,.4);}
+  .chip-grid{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px;}
+  .chip{font-family:'Spline Sans Mono',monospace;font-size:.75rem;padding:6px 10px;border-radius:4px;background:rgba(255,255,255,.04);color:var(--muted);border:1px solid var(--line);cursor:pointer;}
+  .chip.active{background:rgba(230,126,34,.18);color:#f0a15e;border-color:rgba(230,126,34,.55);}
+  .chip-count{font-size:.78rem;color:var(--muted);margin-top:12px;}
   .leer-tag{display:inline-block;font-size:.62rem;letter-spacing:.06em;padding:2px 6px;border-radius:3px;
     background:rgba(201,162,39,.15);color:var(--gold);border:1px solid rgba(201,162,39,.4);margin-right:8px;}
   .check-badge.wait{background:rgba(255,255,255,.05); color:var(--muted); border:1px solid var(--line);}
@@ -136,8 +140,15 @@
     </div>
   </div>
 
+  <div class="card" id="free-card" style="display:none;">
+    <h2>4. Leerstehende Anreisezimmer</h2>
+    <div class="hint">Zimmer, die nicht auf der Alpha-Liste stehen. Die antippen, in die heute jemand anreist.</div>
+    <div class="chip-grid" id="free-chips"></div>
+    <div class="chip-count" id="free-count"></div>
+  </div>
+
   <div class="card" id="export-card" style="display:none;">
-    <h2>4. CSV erstellen</h2>
+    <h2>5. CSV erstellen</h2>
     <button class="btn" id="download-btn">⬇ CSV herunterladen</button>
     <button class="btn secondary" id="reset-btn" style="margin-left:8px;">Neu beginnen</button>
   </div>
@@ -165,6 +176,13 @@ const addEmptyRowBtn = document.getElementById('add-empty-row');
 const pmsArrivalsInput = document.getElementById('pms-arrivals');
 const arrivalsBadge = document.getElementById('arrivals-badge');
 const dupeNote = document.getElementById('dupe-note');
+const freeCard = document.getElementById('free-card');
+const freeChips = document.getElementById('free-chips');
+const freeCount = document.getElementById('free-count');
+const ALLE_ZIMMER = (function(){var a=['11','12','14','15'],i,e;
+  for(e=20;e<=50;e+=10) for(i=1;i<=5;i++) a.push(String(e+i));
+  for(e=100;e<=500;e+=100) for(i=1;i<=10;i++){var n=e+i; if(n!==101) a.push(String(n));}
+  return a;})();
 const downloadBtn = document.getElementById('download-btn');
 const resetBtn = document.getElementById('reset-btn');
 
@@ -214,6 +232,23 @@ async function runOCR(file) {
   }
 }
 
+function renderFreeRooms(){
+  var belegt=rows.filter(function(r){return !r.leer;}).map(function(r){return r.zimmer.trim();});
+  var gew=rows.filter(function(r){return r.leer;}).map(function(r){return r.zimmer.trim();});
+  var frei=ALLE_ZIMMER.filter(function(z){return belegt.indexOf(z)===-1;});
+  freeChips.innerHTML='';
+  frei.forEach(function(z){var b=document.createElement('button');
+    b.className='chip'+(gew.indexOf(z)!==-1?' active':'');b.textContent=z;
+    b.addEventListener('click',function(){toggleFreeRoom(z);});freeChips.appendChild(b);});
+  freeCount.textContent=frei.length+' Zimmer frei \u00b7 '+gew.length+' als Anreise markiert';
+}
+
+function toggleFreeRoom(z){
+  var i=rows.findIndex(function(r){return r.leer && r.zimmer.trim()===z;});
+  if(i>=0) rows.splice(i,1); else rows.push({zimmer:z,abreise:heuteStr(),leer:true});
+  renderRows(); updateCheck();
+}
+
 function heuteStr() {
   const d = new Date();
   return String(d.getDate()).padStart(2,'0') + '.' + String(d.getMonth()+1).padStart(2,'0') + '.' + d.getFullYear();
@@ -256,6 +291,7 @@ function parseText(text) {
   renderRows();
   resultsCard.style.display = 'block';
   checkCard.style.display = 'block';
+  freeCard.style.display = 'block';
   exportCard.style.display = 'block';
   updateCheck();
 }
@@ -281,6 +317,7 @@ function renderRows() {
       updateCheck();
     });
   });
+  renderFreeRooms();
   rowsBody.querySelectorAll('.row-del').forEach(btn => {
     btn.addEventListener('click', e => {
       rows.splice(+e.target.dataset.i, 1);
