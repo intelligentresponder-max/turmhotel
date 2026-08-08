@@ -385,7 +385,7 @@ downloadBtn.addEventListener('click', () => {
   const heute = heuteStr();
   let csv = 'Zimmer;Abreise;Status\n';
   valid.forEach(r => {
-    const status = (r.leer || r.abreise.trim() === heute) ? 'Abreise' : 'Overnight';
+    const status = (!r.leer && r.abreise.trim() === heute) ? 'Abreise' : 'Overnight';
     csv += r.zimmer.trim() + ';' + r.abreise.trim() + ';' + status + '\n';
   });
   const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
