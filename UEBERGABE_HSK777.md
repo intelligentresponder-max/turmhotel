@@ -33,7 +33,7 @@ Bei „HSK777": diese Datei lesen, dann bei Abschnitt 3 weitermachen.
 
 ---
 
-## 2. Vier Dinge, die man wissen muss
+## 2. Was man wissen muss
 
 **2.1 Die Alpha-Liste kennt nur belegte Zimmer.**
 Leerstehende Zimmer mit Anreise stehen dort strukturell nie drin. Sie ergeben
@@ -44,14 +44,22 @@ laut PMS" und die Auswahlliste in Karte 4.
 auf **OOO** standen. Die kommen in den Verkauf zurück und sind *nicht*
 automatisch sauber. Weder Alpha-Liste noch Scan-Tool kennen sie bisher.
 
-**2.3 Doppelbuchungen kommen vor.** Zimmer 105 stand am 07.08. zweimal drin,
-im PMS nicht löschbar, einmal mit `Anz. 0`. Suite8 zählt diese Zeile bei „Erw."
-mit, bei „Anz." nicht — daher scheinbare Summenfehler. Das Scan-Tool
-dedupliziert beim Einlesen.
+**2.3 Doppelte Zimmerzeilen — zwei verschiedene Fälle.**
+*Fall 1 (Datenfehler):* Ein Zimmer wurde im PMS über das Kontextmenü zusätzlich
+angelegt und darauf gebucht. Physisch existiert es einmal, im System zweimal — der
+Gast wird doppelt gezählt. So am 07.08. bei Zimmer 105.
+*Fall 2 (Sharing):* Bei Messen und Geschäftskunden teilen sich zwei Personen ein
+Zimmer als gleichwertige Mieter. Zwei echte Buchungen auf einem echten Zimmer,
+völlig korrekt.
+Fürs Housekeeping ist beides gleich: ein Zimmer, einmal reinigen — das Scan-Tool
+dedupliziert. **Aber der Doppelcheck darf Fall 2 nicht als Fehler melden**, sonst
+steht die Badge grundlos auf rot. Geplant: Ausnahmeliste, in der die betroffene
+Zimmernummer mit dem jeweiligen Fall festgehalten wird.
 
-**2.4 Der Dienstplan taugt nicht als Zahlenquelle.** Der vom 31.07. nannte für
-Samstag 16 Abreisen und 32 Anreisen — tatsächlich 28 und 36. Für
-Reinigungszahlen immer die **aktuelle Verfügbarkeit** heranziehen.
+**2.4 Der Dienstplan ist ein Planungsstand, keine Ist-Zahl.**
+Der vom 31.07. nannte für Samstag 16 Abreisen und 32 Anreisen — tatsächlich
+wurden es 28 und 36. Nicht falsch, nur eine Woche älter. Für Reinigungszahlen
+immer die **aktuelle Verfügbarkeit** heranziehen.
 Notation im Plan: `K` = krank, `U` = Urlaub, `A` = frei.
 
 ---
