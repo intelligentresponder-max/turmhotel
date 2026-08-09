@@ -263,10 +263,15 @@ async function runOCR() {
   progressLabel.textContent = 'Texterkennung startet …';
 
   try {
+    const grad = await ausrichtungPruefen(pages[0], function(t){ progressLabel.textContent = t; });
+    if (grad !== 0) progressLabel.textContent = 'Aufnahme wird gedreht';
     let alles = '';
     for (let p = 0; p < pages.length; p++) {
       const bild = await bildAufbereiten(pages[p]);
       const result = await Tesseract.recognize(bild, 'deu', {
+        tessedit_pageseg_mode: '6',   // ein zusammenhaengender Textblock:
+                                      // erzwingt zeilenweises Lesen der Tabelle
+
         logger: m => {
           if (m.status === 'recognizing text') {
             const pct = Math.round(m.progress * 100);
@@ -296,6 +301,7 @@ function pruefStatus(kopf, summe, ungueltig) {
   if (pruefText) mangel.push(pruefText);
   if (ungueltig) hinweis.push(ungueltig + ' Fehlerkennung(en) verworfen');
   if (!summe) hinweis.push('Anz.-Summe nicht gefunden — bitte von Hand eintragen');
+  if (drehung !== 0) hinweis.push('Aufnahme war quer, automatisch gedreht');
 
   var el = document.getElementById('ampel');
   if (mangel.length) {
@@ -338,24 +344,62 @@ function datumAusKopf(text) {
   setHskDate(d);
 }
 
+let drehung = 0;   // wird einmal je Scan ermittelt und auf alle Seiten angewandt
+
+function alsBild(file) {
+  return new Promise(function(res, rej){
+    var img = new Image();
+    img.onload = function(){ res(img); };
+    img.onerror = rej;
+    img.src = URL.createObjectURL(file);
+  });
+}
+
+function aufCanvas(img, grad, faktor) {
+  var w = Math.round(img.width * faktor), h = Math.round(img.height * faktor);
+  var c = document.createElement('canvas');
+  if (grad % 180 === 0) { c.width = w; c.height = h; } else { c.width = h; c.height = w; }
+  var ctx = c.getContext('2d');
+  ctx.translate(c.width/2, c.height/2);
+  ctx.rotate(grad * Math.PI / 180);
+  ctx.drawImage(img, -w/2, -h/2, w, h);
+  var d = ctx.getImageData(0, 0, c.width, c.height);
+  for (var i = 0; i < d.data.length; i += 4) {
+    var g = 0.299*d.data[i] + 0.587*d.data[i+1] + 0.114*d.data[i+2];
+    d.data[i] = d.data[i+1] = d.data[i+2] = g;
+  }
+  ctx.putImageData(d, 0, 0);
+  return c;
+}
+
+// Probelauf an einer verkleinerten Kopie der ersten Seite: welche Drehung liefert
+// die meisten Zeilen, die mit einer Zimmernummer beginnen? Quer fotografierte
+// Blaetter brachten im Test 23 statt 63 Zeilen.
+async function ausrichtungPruefen(file, melde) {
+  var img = await alsBild(file);
+  var klein = Math.min(1, 1100 / Math.max(img.width, img.height));
+  var beste = 0, bestN = -1;
+  var winkel = [0, 90, -90];
+  for (var i = 0; i < winkel.length; i++) {
+    melde('Ausrichtung wird geprueft ... ' + (i+1) + '/' + winkel.length);
+    try {
+      var r = await Tesseract.recognize(aufCanvas(img, winkel[i], klein), 'deu');
+      var n = (r.data.text.match(/(?:^|\n)\s*\d{3}\b/g) || []).length;
+      if (n > bestN) { bestN = n; beste = winkel[i]; }
+      if (n >= 15) break;
+    } catch (e) { }
+  }
+  drehung = beste;
+  return beste;
+}
+
 function bildAufbereiten(file) {
   // Tesseract schaetzt Handyfotos auf ~270 dpi. Verdoppeln + Graustufen hebt die
   // Trefferquote deutlich (im Test von 9 auf 40 erkannte Zimmernummern pro Seite).
   return new Promise(function(res){
     var img = new Image();
     img.onload = function(){
-      var c = document.createElement('canvas');
-      var f2 = img.width < 2000 ? 2 : 1;
-      c.width = img.width * f2; c.height = img.height * f2;
-      var ctx = c.getContext('2d');
-      ctx.drawImage(img, 0, 0, c.width, c.height);
-      var d = ctx.getImageData(0,0,c.width,c.height);
-      for (var i=0;i<d.data.length;i+=4){
-        var g = 0.299*d.data[i] + 0.587*d.data[i+1] + 0.114*d.data[i+2];
-        d.data[i]=d.data[i+1]=d.data[i+2]=g;
-      }
-      ctx.putImageData(d,0,0);
-      res(c);
+      res(aufCanvas(img, drehung, img.width < 2000 ? 2 : 1));
     };
     img.onerror = function(){ res(file); };
     img.src = URL.createObjectURL(file);
@@ -383,7 +427,9 @@ function datumsTreffer(str, jahr) {
   // toleriert 09.08,202€ / 0708202 / 05.08:2026 — Jahr wird aus dem Listenkopf ergaenzt
   var re = /(\d{2})[.,:\s]?(\d{2})[.,:\s]?(\d{4}|\d{3}|\d{2})(?!\d)/g, out = [], m;
   while ((m = re.exec(str)) !== null) {
-    var j = (m[3].length === 4 && m[3].indexOf('20') === 0) ? m[3] : jahr;
+    // 2028 und 2022 sind haeufige Fehllesungen von 2026. Nur das Jahr der Liste
+    // und das Folgejahr sind moeglich - alles andere wird ersetzt.
+    var j = (m[3] === jahr || m[3] === String(Number(jahr) + 1)) ? m[3] : jahr;
     out.push(m[1] + '.' + m[2] + '.' + j);
   }
   return out;
@@ -391,7 +437,7 @@ function datumsTreffer(str, jahr) {
 
 function anzSumme(text) {
   // Fusszeile der letzten Seite: Erw / Kin / Anz — nur die dritte Zahl interessiert
-  var m = text.match(/(?:^|\n)\s*(\d{2,3})\s+(\d{1,2})\s+(\d{1,3})\s*(?:\n|$)/);
+  var m = text.match(/(?:^|\n)\s*(\d{2,3})\s+(\d{1,2})\s+(\d{1,3})\s*[^\d\n]{0,4}(?:\n|$)/);
   if (!m) return null;
   var anz = parseInt(m[3], 10);
   return (anz > 0 && anz <= 73) ? anz : null;
