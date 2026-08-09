@@ -16,6 +16,22 @@ Einstiegspunkt für die Weiterarbeit: **`UEBERGABE_HSK777.md`**
 
 ## Versionsverlauf
 
+### v3.7 — 09.08.2026 · Ausrichtung, Lesemodus, Team
+Nachbesserungen aus dem ersten Nachtbetrieb.
+- **Automatische Ausrichtung:** Das Werkzeug ermittelt an einer verkleinerten
+  Kopie der ersten Seite, ob das Blatt quer fotografiert wurde, und dreht alle
+  Seiten entsprechend. Im Test lieferte dieselbe Aufnahme ungedreht 23, gedreht
+  63 verwertbare Zeilen.
+- **Lesemodus der Texterkennung** auf einen zusammenhängenden Textblock
+  festgelegt. Zuvor zerlegte die Erkennung die Tabelle selbständig in Spalten,
+  wodurch Zimmernummer und Abreisedatum nie in derselben Zeile standen — die
+  Hauptursache für fehlerhafte Zuordnungen.
+- **Jahresprüfung verschärft:** Nur das Jahr der Liste und das Folgejahr sind
+  zulässig. `2028` und `2022` sind häufige Fehllesungen von `2026`.
+- **Summenzeile** wird auch erkannt, wenn Zeichenreste dahinterstehen.
+- **Team-Dienstplan** im Housekeeping Manager hinterlegt, mit Häkchen
+  „heute anwesend" statt Löschen und Neuanlegen bei Krankmeldungen.
+
 ### v3.6 — 09.08.2026 · Meine Zimmer
 Eigene Ansicht pro Arbeitskraft, auf Wunsch des Housekeeping-Teams.
 - Neuer Reiter **„Meine Zimmer"**: einmal den eigenen Namen antippen, das Gerät
@@ -91,17 +107,14 @@ durchlief. Seitdem lehnt das Werkzeug schlechte Aufnahmen aktiv ab.
 
 ## Als Nächstes
 
-1. Automatische Drehung der Aufnahme — quer fotografierte Seiten werden
-   derzeit deutlich schlechter erkannt
-2. Dateiweg abschaffen: Ergebnis direkt übergeben statt CSV herunterladen und
+1. Dateiweg abschaffen: Ergebnis direkt übergeben statt CSV herunterladen und
    wieder auswählen; auf Dauer beide Werkzeuge in einer Oberfläche
-3. Bettenzahl (Spalte `Erw.`) und Kinder (Spalte `Kin.`) mitführen — das
+2. Bettenzahl (Spalte `Erw.`) und Kinder (Spalte `Kin.`) mitführen — das
    Housekeeping muss wissen, wie viele Betten zu beziehen sind
-4. OOO-Rückläufer sichtbar machen
-5. Personal per Häkchen „heute nicht da" abwählen
-6. Ausnahmeliste für doppelte Zimmerzeilen, damit Zimmer-Sharing bei Messen
+3. OOO-Rückläufer sichtbar machen
+4. Ausnahmeliste für doppelte Zimmerzeilen, damit Zimmer-Sharing bei Messen
    nicht als Fehler gemeldet wird
-7. Aus der älteren Planung offen: Arbeitszeit-Tracking, Mängel-Report,
+5. Aus der älteren Planung offen: Arbeitszeit-Tracking, Mängel-Report,
    Technik-Report für den Hausmeister
 
 ---
