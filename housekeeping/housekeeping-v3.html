@@ -841,7 +841,7 @@ function renderRooms() {
         <div class="room-num">${r}</div>
         <div class="room-status-row">
           <span class="badge ${rs.clean ? 'badge-clean' : 'badge-dirty'}">${rs.clean ? 'Sauber' : 'Offen'}</span>
-          <span class="badge ${rs.occupied ? 'badge-occupied' : 'badge-free'}">${rs.occupied ? 'Belegt' : 'Frei'}</span>
+          <span class="badge ${(rs.occupied || rs.guestType) ? 'badge-occupied' : 'badge-free'}">${(rs.occupied || rs.guestType) ? 'Belegt' : 'Frei'}</span>
           ${sdhBdg}${typeBadge}${typBdg}
         </div>
         ${staffObj ? `<div class="room-staff"><span class="staff-chip" style="background:${staffObj.color}">${staffObj.abb}</span></div>` : ''}
@@ -869,7 +869,7 @@ function updateStats() {
     if (r === '101') return; // Massageraum — kein Gästezimmer
     const rs = getRoomState(r);
     if (rs.clean) clean++; else dirty++;
-    if (rs.occupied) occ++; else free++;
+    if (rs.occupied || rs.guestType) occ++; else free++;
     if (rs.guestType === 'checkout') checkout++;
     if (rs.guestType === 'overnight') overnight++;
   });
@@ -1352,7 +1352,8 @@ function applyManual() {
   const type = document.getElementById('manual-type').value;
   if (!room || !ALL_ROOMS.includes(room)) { alert('Zimmer nicht gefunden: ' + room); return; }
   const rs = getRoomState(room);
-  state[room] = { ...rs, guestType: type === 'none' ? '' : type };
+  const gt = type === 'none' ? '' : type;
+  state[room] = { ...rs, guestType: gt, occupied: gt ? true : rs.occupied };
   saveState(state);
   renderRooms();
   document.getElementById('manual-room').value = '';
@@ -1451,12 +1452,12 @@ function applyJsonImport() {
 
   // First clear all existing guestType
   ALL_ROOMS.forEach(r => {
-    if (state[r]) state[r].guestType = '';
+    if (state[r]) { state[r].guestType = ''; state[r].occupied = false; }
   });
 
   jsonParsed.forEach(({ room, type }) => {
     const rs = getRoomState(room);
-    state[room] = { ...rs, guestType: 'checkout', roomType: type };
+    state[room] = { ...rs, guestType: 'checkout', roomType: type, occupied: true };
   });
 
   saveState(state);
