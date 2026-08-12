@@ -433,7 +433,9 @@ function datumsTreffer(str, jahr) {
   // Listendatum liegen — ein kleinerer Monat bedeutet also das Folgejahr.
   var basisM = listenMonat || 0;
   var basisJ = listenJahr || Number(jahr);
-  var re = /(\d{2})[.,:\s]?(\d{2})[.,:\s]?(?:\d{4}|\d{3}|\d{2})(?!\d)/g, out = [], m;
+  // Trennzeichen bis zu 2-mal zulassen — Fotos aus der echten Praxis liefern auch
+  // ".," oder ": " statt eines einzelnen Punkts (z.B. "12.,08.202€" statt "12.08.2026").
+  var re = /(\d{2})[.,:\s]{0,2}(\d{2})[.,:\s]{0,2}(?:\d{4}|\d{3}|\d{2})(?!\d)/g, out = [], m;
   while ((m = re.exec(str)) !== null) {
     var mon = +m[2];
     if (mon < 1 || mon > 12) continue;          // offensichtlich falsch gelesen
@@ -612,15 +614,19 @@ function updateCheck() {
     arrivalsBadge.className = 'check-badge wait';
     return;
   }
-  const fehlend = anreisen - abreisenHeute - leere.length;
+  // Nur wenn mehr Zimmer ankommen als abreisen, braucht es zus\u00e4tzliche Leerstand-Zimmer.
+  // Reisen mehr Zimmer ab als an (Belegung sinkt), bleiben Abreise-Zimmer einfach leer \u2014 kein Fehler.
+  const benoetigt = Math.max(0, anreisen - abreisenHeute);
+  const fehlend = benoetigt - leere.length;
   if (fehlend > 0) {
     arrivalsBadge.textContent = '\u2715 ' + fehlend + ' leerstehende(s) Anreisezimmer fehlt/fehlen \u2014 bitte unten erg\u00e4nzen';
     arrivalsBadge.className = 'check-badge bad';
   } else if (fehlend === 0) {
-    arrivalsBadge.textContent = '\u2713 ' + anreisen + ' Anreisen gedeckt (' + abreisenHeute + ' Abreisen + ' + leere.length + ' Leerstand)';
+    arrivalsBadge.textContent = '\u2713 ' + anreisen + ' Anreisen gedeckt (' + abreisenHeute + ' Abreisen + ' + leere.length + ' Leerstand)'
+      + (abreisenHeute > anreisen ? ', ' + (abreisenHeute - anreisen) + ' Abreise-Zimmer bleiben heute leer' : '');
     arrivalsBadge.className = 'check-badge ok';
   } else {
-    arrivalsBadge.textContent = '\u2715 ' + Math.abs(fehlend) + ' Zimmer zu viel eingetragen';
+    arrivalsBadge.textContent = '\u2715 ' + Math.abs(fehlend) + ' Zimmer zu viel als Leerstand markiert';
     arrivalsBadge.className = 'check-badge bad';
   }
 }
