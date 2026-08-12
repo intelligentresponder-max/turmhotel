@@ -710,6 +710,10 @@ nav{
 </div>
 
 <script>
+// ══ CLOUD-SYNC (Firebase) — einzige Stelle für die Datenbank-URL.
+// Beim Konten-Umzug reicht es, diese eine Zeile zu ändern (siehe KONTEN_UMZUG.md).
+const FIREBASE_URL = 'https://turmhotel-hsk-default-rtdb.europe-west1.firebasedatabase.app';
+
 // ══ ROOM MAP ══
 const ROOMS = {
   'n1-a': ['11','12'],
@@ -747,8 +751,8 @@ let csvParsed = []; // {room, type: 'checkout'|'overnight'}
 // ══ PERSISTENCE ══
 function loadState()  { try { return JSON.parse(localStorage.getItem('hk_state3') || '{}'); } catch { return {}; } }
 function loadStaff()  { try { const s = JSON.parse(localStorage.getItem('hk_staff3') || '[]'); return s.length ? s : []; } catch { return []; } }
-function saveState(s) { localStorage.setItem('hk_state3', JSON.stringify(s)); fetch('https://turmhotel-hsk-default-rtdb.europe-west1.firebasedatabase.app/state.json', {method:'PUT', headers:{'Content-Type':'application/json'}, body: JSON.stringify(s)}).catch(function(e){console.warn('Sync state fehlgeschlagen', e);}); }
-function saveStaffData(s) { localStorage.setItem('hk_staff3', JSON.stringify(s)); fetch('https://turmhotel-hsk-default-rtdb.europe-west1.firebasedatabase.app/staff.json', {method:'PUT', headers:{'Content-Type':'application/json'}, body: JSON.stringify(s)}).catch(function(e){console.warn('Sync staff fehlgeschlagen', e);}); }
+function saveState(s) { localStorage.setItem('hk_state3', JSON.stringify(s)); fetch(FIREBASE_URL + '/state.json', {method:'PUT', headers:{'Content-Type':'application/json'}, body: JSON.stringify(s)}).catch(function(e){console.warn('Sync state fehlgeschlagen', e);}); }
+function saveStaffData(s) { localStorage.setItem('hk_staff3', JSON.stringify(s)); fetch(FIREBASE_URL + '/staff.json', {method:'PUT', headers:{'Content-Type':'application/json'}, body: JSON.stringify(s)}).catch(function(e){console.warn('Sync staff fehlgeschlagen', e);}); }
 
 let state = loadState();
 let staff = loadStaff();
@@ -1823,8 +1827,6 @@ function printHandoverReport() {
 }
 
 // == CLOUD-SYNC (Firebase) ==
-const FIREBASE_URL = 'https://turmhotel-hsk-default-rtdb.europe-west1.firebasedatabase.app';
-
 async function syncFromCloud() {
   try {
     const stateRes = await fetch(FIREBASE_URL + '/state.json');

@@ -12,6 +12,12 @@ GitHub Pages. Entwicklung und Betrieb: André Schwarz, Rezeption.
 
 Einstiegspunkt für die Weiterarbeit: **`UEBERGABE_HSK777.md`**
 
+Damit der Betrieb nicht an einer Person hängt:
+- **`ANLEITUNG_UPDATES.md`** — kleine Text-/Inhaltsänderungen selbst
+  veröffentlichen, ohne Entwickler
+- **`KONTEN_UMZUG.md`** — GitHub-Repo, Firebase-Projekt und bit.ly-Links auf
+  hoteleigene Konten umziehen
+
 ---
 
 ## Versionsverlauf
