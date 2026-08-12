@@ -7,6 +7,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..900;1,9..144,300..900&family=Spline+Sans+Mono:wght@400;500;600&family=Spline+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/tesseract.js/5.0.5/tesseract.min.js"></script>
 <style>
 :root {
   --ink: #0c0a08;
@@ -401,6 +402,38 @@ nav{
   .main{padding:16px;}
   .stats-bar{gap:12px;padding:8px 16px;}
 }
+
+/* ── FOTO-SCAN (Alpha-Liste per Foto einlesen) ── */
+.scan-hint{font-size:.72rem;color:var(--muted);border-left:2px solid var(--gold);padding-left:10px;margin:10px 0;font-family:'Spline Sans Mono',monospace;}
+.scan-thumbs{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px;}
+.scan-thumb{position:relative;width:70px;height:94px;border-radius:4px;overflow:hidden;border:1px solid var(--line);}
+.scan-thumb img{width:100%;height:100%;object-fit:cover;}
+.scan-thumb .scan-no{position:absolute;left:0;top:0;background:rgba(0,0,0,.65);color:#fff;font-size:.6rem;padding:1px 5px;}
+.scan-thumb .scan-x{position:absolute;right:0;top:0;background:rgba(0,0,0,.65);color:#fff;border:0;font-size:.7rem;padding:1px 5px;cursor:pointer;}
+.scan-progress-bar{height:6px;background:rgba(255,255,255,.07);border-radius:3px;overflow:hidden;margin-top:12px;}
+.scan-progress-fill{height:100%;width:0%;background:var(--gold);transition:width .2s;}
+.scan-progress-label{font-size:.72rem;color:var(--muted);margin-top:6px;font-family:'Spline Sans Mono',monospace;}
+.scan-table{width:100%;border-collapse:collapse;font-size:.8rem;margin-top:6px;font-family:'Spline Sans Mono',monospace;}
+.scan-table th{text-align:left;color:var(--gold);font-weight:500;padding:8px 6px;border-bottom:1px solid var(--line);font-size:.66rem;letter-spacing:.05em;text-transform:uppercase;}
+.scan-table td{padding:6px;border-bottom:1px solid rgba(255,255,255,.04);}
+.scan-table td input{width:100%;background:transparent;border:1px solid transparent;border-radius:3px;color:var(--paper);font-family:'Spline Sans Mono',monospace;font-size:.8rem;padding:4px 6px;}
+.scan-table td input:focus{border-color:var(--gold);outline:none;background:rgba(255,255,255,.03);}
+.scan-row-del{color:#e87070;cursor:pointer;background:none;border:none;font-size:1rem;padding:2px 8px;}
+.scan-check-row{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-top:14px;}
+.scan-check-row label{font-size:.78rem;color:var(--muted);font-family:'Spline Sans Mono',monospace;}
+.scan-check-row input[type=number],.scan-check-row input[type=date]{background:rgba(255,255,255,.06);border:1px solid var(--line);border-radius:2px;color:var(--paper);font-family:'Spline Sans Mono',monospace;font-size:.86rem;padding:6px 8px;text-align:center;}
+.scan-badge{padding:5px 12px;border-radius:3px;font-size:.7rem;font-weight:700;letter-spacing:.03em;font-family:'Spline Sans Mono',monospace;display:inline-block;}
+.scan-badge.ok{background:var(--clean-bg);color:#4ecb82;border:1px solid rgba(42,122,75,.4);}
+.scan-badge.bad{background:var(--occupied-bg);color:#ff6b4a;border:1px solid rgba(192,57,43,.4);}
+.scan-badge.wait{background:rgba(255,255,255,.05);color:var(--muted);border:1px solid var(--line);}
+.scan-chip-grid{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px;}
+.scan-chip{font-family:'Spline Sans Mono',monospace;font-size:.72rem;padding:6px 10px;border-radius:4px;background:rgba(255,255,255,.04);color:var(--muted);border:1px solid var(--line);cursor:pointer;}
+.scan-chip.active{background:var(--checkout-bg);color:var(--checkout-col);border-color:rgba(230,126,34,.55);}
+.scan-add-row-btn{margin-top:10px;background:none;border:1px dashed var(--line);color:var(--muted);border-radius:4px;padding:8px 14px;font-family:'Spline Sans Mono',monospace;font-size:.75rem;cursor:pointer;}
+.scan-add-row-btn:hover{border-color:var(--gold);color:var(--gold);}
+.scan-section{margin-top:22px;padding-top:18px;border-top:1px solid var(--line);}
+.scan-section h3{font-family:'Fraunces',serif;font-size:1rem;font-weight:600;margin:0 0 8px;color:var(--paper);}
+.scan-empty-note{color:var(--muted);font-size:.78rem;text-align:center;padding:16px 0;font-family:'Spline Sans Mono',monospace;}
 </style>
 </head>
 <body>
@@ -543,6 +576,7 @@ nav{
     <!-- Import Mode Toggle -->
     <div style="display:flex;gap:8px;margin-bottom:16px;">
       <button class="filter-btn active" id="mode-btn-csv" onclick="switchImportMode('csv')">📋 CSV-Datei</button>
+      <button class="filter-btn" id="mode-btn-scan" onclick="switchImportMode('scan')">📷 Foto-Scan</button>
       <button class="filter-btn" id="mode-btn-json" onclick="switchImportMode('json')">⚡ JSON-Funktion</button>
     </div>
 
@@ -557,6 +591,78 @@ nav{
         <div class="import-zone-hint">oder klicken zum Auswählen · PMS-Export, Excel-CSV</div>
       </div>
       <input type="file" id="csv-file-input" accept=".csv,.txt" style="display:none" onchange="handleCsvFile(event)">
+    </div>
+
+    <!-- Foto-Scan Mode -->
+    <div id="import-mode-scan" style="display:none;">
+      <div class="import-info-box" style="margin-bottom:14px;">
+        <div class="import-zone-hint">Foto der gedruckten Alpha-Liste — Zimmernummer und Abreisedatum werden automatisch erkannt. Texterkennung läuft lokal im Browser, es werden keine Daten an einen Server gesendet.</div>
+      </div>
+
+      <div class="import-zone" id="scan-dropzone">
+        <div class="import-zone-icon">📷</div>
+        <div class="import-zone-title">Seite der Alpha-Liste aufnehmen</div>
+        <div class="import-zone-hint">bis zu 3 Seiten · Kamera oder Datei · ausgewertet werden nur Zimmernummer und Abreisedatum</div>
+      </div>
+      <input type="file" id="scan-file-input" accept="image/*" capture="environment" style="display:none">
+
+      <div class="scan-thumbs" id="scan-thumbs"></div>
+      <div id="scan-page-actions" style="display:none;margin-top:14px;">
+        <button class="btn btn-save" id="scan-ocr-btn">Seiten auswerten</button>
+        <button class="btn btn-cancel" id="scan-more-btn" style="margin-left:8px;">Weitere Seite</button>
+      </div>
+      <div id="scan-progress-wrap" style="display:none;margin-top:14px;">
+        <div class="scan-progress-bar"><div class="scan-progress-fill" id="scan-progress-fill"></div></div>
+        <div class="scan-progress-label" id="scan-progress-label">Wird gelesen …</div>
+      </div>
+
+      <div id="scan-results-section" class="scan-section" style="display:none;">
+        <h3>Erkannte Zimmer prüfen &amp; korrigieren</h3>
+        <div class="scan-hint">Jede Zeile durchgehen — Zimmernummer und Abreisedatum müssen stimmen. Falsche Zeilen löschen, fehlende per „+ Zeile" ergänzen.</div>
+        <table class="scan-table">
+          <thead><tr><th style="width:35%">Zimmer</th><th style="width:45%">Abreise</th><th style="width:20%"></th></tr></thead>
+          <tbody id="scan-rows-body"></tbody>
+        </table>
+        <div class="scan-hint" id="scan-dupe-note" style="display:none;"></div>
+        <button class="scan-add-row-btn" id="scan-add-row">+ Zeile</button>
+        <button class="scan-add-row-btn" id="scan-add-empty-row">+ Leerstehendes Anreisezimmer</button>
+      </div>
+
+      <div id="scan-check-section" class="scan-section" style="display:none;">
+        <h3>Doppelcheck</h3>
+        <div class="scan-check-row" style="margin-bottom:8px;">
+          <label for="scan-hsk-date">Housekeeping-Tag:</label>
+          <input type="date" id="scan-hsk-date">
+          <span class="scan-badge wait" id="scan-date-badge">Tag der Reinigung</span>
+        </div>
+        <div class="scan-hint">Wird aus dem Kopf der Liste gesetzt (Listendatum + 1 Tag). Nach 18 Uhr sonst automatisch auf morgen. Nur ändern, wenn eine ältere Liste nachgetragen wird.</div>
+        <div class="scan-hint">Von der Alpha-Liste unten die Gesamtsumme (Spalte „Anz.") ablesen und hier eintragen — besonders wichtig an ausgebuchten Tagen.</div>
+        <div class="scan-check-row">
+          <label for="scan-pms-total">Anzahl laut PMS-Summe:</label>
+          <input type="number" id="scan-pms-total" min="0" placeholder="—">
+          <span class="scan-badge wait" id="scan-check-badge">wartet auf Eingabe</span>
+        </div>
+        <div class="scan-hint" style="margin-top:14px;">Aus der Verfügbarkeit (Suite8) die Zeile „Anreisen Zimmer" für heute ablesen. Sind mehr Anreisen als Abreisen geplant, kommen die restlichen Zimmer aus dem Leerstand — die stehen auf keiner Alpha-Liste und müssen ergänzt werden.</div>
+        <div class="scan-check-row">
+          <label for="scan-pms-arrivals">Anreisen Zimmer laut PMS:</label>
+          <input type="number" id="scan-pms-arrivals" min="0" placeholder="—">
+          <span class="scan-badge wait" id="scan-arrivals-badge">wartet auf Eingabe</span>
+        </div>
+      </div>
+
+      <div id="scan-free-section" class="scan-section" style="display:none;">
+        <h3>Leerstehende Anreisezimmer</h3>
+        <div class="scan-hint">Zimmer, die nicht auf der Alpha-Liste stehen. Die antippen, in die heute jemand anreist.</div>
+        <div class="scan-chip-grid" id="scan-free-chips"></div>
+        <div class="scan-hint" id="scan-free-count"></div>
+      </div>
+
+      <div id="scan-export-section" class="scan-section" style="display:none;">
+        <h3>Übernehmen</h3>
+        <div id="scan-ampel" class="scan-badge wait" style="display:block;margin-bottom:14px;">noch keine Auswertung</div>
+        <button class="btn btn-save" id="scan-uebernehmen-btn">✓ Auf Zimmer übertragen</button>
+        <button class="btn btn-cancel" id="scan-reset-btn" style="margin-left:8px;">Neu beginnen</button>
+      </div>
     </div>
 
     <!-- JSON Mode -->
@@ -1437,9 +1543,467 @@ function applyManual() {
 function switchImportMode(mode) {
   document.getElementById('import-mode-csv').style.display = mode === 'csv' ? '' : 'none';
   document.getElementById('import-mode-json').style.display = mode === 'json' ? '' : 'none';
+  document.getElementById('import-mode-scan').style.display = mode === 'scan' ? '' : 'none';
   document.getElementById('mode-btn-csv').classList.toggle('active', mode === 'csv');
   document.getElementById('mode-btn-json').classList.toggle('active', mode === 'json');
+  document.getElementById('mode-btn-scan').classList.toggle('active', mode === 'scan');
 }
+
+// ══ FOTO-SCAN (übernommen aus alpha-scan.html, damit ein Gerät für Scan + Verteilung reicht) ══
+const scanDropzone = document.getElementById('scan-dropzone');
+const scanFileInput = document.getElementById('scan-file-input');
+const scanProgressWrap = document.getElementById('scan-progress-wrap');
+const scanProgressFill = document.getElementById('scan-progress-fill');
+const scanProgressLabel = document.getElementById('scan-progress-label');
+const scanResultsSection = document.getElementById('scan-results-section');
+const scanCheckSection = document.getElementById('scan-check-section');
+const scanFreeSection = document.getElementById('scan-free-section');
+const scanExportSection = document.getElementById('scan-export-section');
+const scanRowsBody = document.getElementById('scan-rows-body');
+const scanAddRowBtn = document.getElementById('scan-add-row');
+const scanAddEmptyRowBtn = document.getElementById('scan-add-empty-row');
+const scanPmsTotalInput = document.getElementById('scan-pms-total');
+const scanCheckBadge = document.getElementById('scan-check-badge');
+const scanPmsArrivalsInput = document.getElementById('scan-pms-arrivals');
+const scanArrivalsBadge = document.getElementById('scan-arrivals-badge');
+const scanDupeNote = document.getElementById('scan-dupe-note');
+const scanFreeChips = document.getElementById('scan-free-chips');
+const scanFreeCount = document.getElementById('scan-free-count');
+const scanUebernehmenBtn = document.getElementById('scan-uebernehmen-btn');
+const scanResetBtn = document.getElementById('scan-reset-btn');
+const scanThumbs = document.getElementById('scan-thumbs');
+const scanPageActions = document.getElementById('scan-page-actions');
+const scanOcrBtn = document.getElementById('scan-ocr-btn');
+const scanMoreBtn = document.getElementById('scan-more-btn');
+const scanHskDate = document.getElementById('scan-hsk-date');
+const scanDateBadge = document.getElementById('scan-date-badge');
+// Nur die 73 vermietbaren Zimmer — Massageraum und Tagungsräume stehen nie auf der Gästeliste.
+const SCAN_ZIMMER = ALL_ROOMS.filter(function(z){ return z !== '101' && !/^Tagungsraum/.test(z); });
+let scanPages = [];
+let scanRows = [];
+let scanListenMonat = 0, scanListenJahr = 0;
+let scanDrehung = 0;
+let scanPruefText = '';
+
+function scanSetHskDate(d) {
+  scanHskDate.value = d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
+  scanDateBadge.textContent = 'Tag der Reinigung: ' + scanHeuteStr();
+}
+(function(){ var d = new Date(); if (d.getHours() >= 18) d.setDate(d.getDate()+1); scanSetHskDate(d); })();
+
+scanDropzone.addEventListener('click', () => scanFileInput.click());
+scanDropzone.addEventListener('dragover', e => { e.preventDefault(); scanDropzone.style.borderColor = 'var(--gold)'; });
+scanDropzone.addEventListener('dragleave', () => scanDropzone.style.borderColor = '');
+scanDropzone.addEventListener('drop', e => {
+  e.preventDefault(); scanDropzone.style.borderColor = '';
+  if (e.dataTransfer.files[0]) scanHandleFile(e.dataTransfer.files[0]);
+});
+scanFileInput.addEventListener('change', e => {
+  for (var i = 0; i < e.target.files.length; i++) scanHandleFile(e.target.files[i]);
+  scanFileInput.value = '';
+});
+scanMoreBtn.addEventListener('click', () => scanFileInput.click());
+scanOcrBtn.addEventListener('click', () => scanRunOCR());
+
+function scanHandleFile(file) {
+  if (scanPages.length >= 3) { alert('Mehr als 3 Seiten sind nicht vorgesehen.'); return; }
+  scanPages.push(file);
+  scanRenderThumbs();
+}
+
+function scanRenderThumbs() {
+  scanThumbs.innerHTML = '';
+  scanPages.forEach(function(file, i){
+    var d = document.createElement('div'); d.className = 'scan-thumb';
+    var img = document.createElement('img'); img.src = URL.createObjectURL(file);
+    var no = document.createElement('span'); no.className = 'scan-no'; no.textContent = 'S.' + (i+1);
+    var x = document.createElement('button'); x.className = 'scan-x'; x.textContent = '×';
+    x.addEventListener('click', function(){ scanPages.splice(i,1); scanRenderThumbs(); });
+    d.appendChild(img); d.appendChild(no); d.appendChild(x); scanThumbs.appendChild(d);
+  });
+  scanPageActions.style.display = scanPages.length ? 'block' : 'none';
+  scanOcrBtn.textContent = scanPages.length === 1 ? 'Seite auswerten' : scanPages.length + ' Seiten auswerten';
+  scanMoreBtn.style.display = scanPages.length >= 3 ? 'none' : 'inline-block';
+}
+
+async function scanRunOCR() {
+  if (!scanPages.length) return;
+  scanProgressWrap.style.display = 'block';
+  scanResultsSection.style.display = 'none';
+  scanCheckSection.style.display = 'none';
+  scanExportSection.style.display = 'none';
+  scanProgressFill.style.width = '0%';
+  scanProgressLabel.textContent = 'Texterkennung startet …';
+
+  try {
+    const grad = await scanAusrichtungPruefen(scanPages[0], function(t){ scanProgressLabel.textContent = t; });
+    if (grad !== 0) scanProgressLabel.textContent = 'Aufnahme wird gedreht';
+    let alles = '';
+    for (let p = 0; p < scanPages.length; p++) {
+      const bild = await scanBildAufbereiten(scanPages[p]);
+      const result = await Tesseract.recognize(bild, 'deu', {
+        tessedit_pageseg_mode: '6',
+        logger: m => {
+          if (m.status === 'recognizing text') {
+            const pct = Math.round(m.progress * 100);
+            scanProgressFill.style.width = pct + '%';
+            scanProgressLabel.textContent = 'Seite ' + (p+1) + ' von ' + scanPages.length + ' … ' + pct + '%';
+          } else {
+            scanProgressLabel.textContent = 'Seite ' + (p+1) + ': ' + m.status;
+          }
+        }
+      });
+      alles += result.data.text + '\n';
+    }
+    scanProgressWrap.style.display = 'none';
+    scanDatumAusKopf(alles);
+    scanParseText(alles);
+  } catch (err) {
+    scanProgressLabel.textContent = 'Fehler bei der Texterkennung — bitte Foto erneut versuchen.';
+    console.error(err);
+  }
+}
+
+function scanPruefStatus(kopf, summe, ungueltig) {
+  var mangel = [], hinweis = [];
+  if (!kopf) mangel.push('Kopfzeile mit Listendatum nicht erkannt');
+  if (summe && summe !== scanRows.length) mangel.push('Anz.-Summe ' + summe + ', erkannt ' + scanRows.length);
+  if (!scanRows.length) mangel.push('keine Zimmer erkannt');
+  if (scanPruefText) mangel.push(scanPruefText);
+  if (ungueltig) hinweis.push(ungueltig + ' Fehlerkennung(en) verworfen');
+  if (!summe) hinweis.push('Anz.-Summe nicht gefunden — bitte von Hand eintragen');
+  if (scanDrehung !== 0) hinweis.push('Aufnahme war quer, automatisch gedreht');
+
+  var el = document.getElementById('scan-ampel');
+  if (mangel.length) {
+    el.className = 'scan-badge bad';
+    el.textContent = '✕ Aufnahme unvollständig: ' + mangel.join(' · ') + ' — bitte neu aufnehmen';
+    scanUebernehmenBtn.disabled = true; scanUebernehmenBtn.style.opacity = '.4';
+  } else if (hinweis.length) {
+    el.className = 'scan-badge wait';
+    el.textContent = '! ' + scanRows.length + ' Zimmer erkannt · ' + hinweis.join(' · ');
+    scanUebernehmenBtn.disabled = false; scanUebernehmenBtn.style.opacity = '1';
+  } else {
+    el.className = 'scan-badge ok';
+    el.textContent = '✓ ' + scanRows.length + ' Zimmer, Listendatum und Anz.-Summe stimmen überein';
+    scanUebernehmenBtn.disabled = false; scanUebernehmenBtn.style.opacity = '1';
+  }
+}
+
+function scanRenderFreeRooms() {
+  var belegt = scanRows.filter(function(r){ return !r.leer; }).map(function(r){ return r.zimmer.trim(); });
+  var gew = scanRows.filter(function(r){ return r.leer; }).map(function(r){ return r.zimmer.trim(); });
+  var frei = SCAN_ZIMMER.filter(function(z){ return belegt.indexOf(z) === -1; });
+  scanFreeChips.innerHTML = '';
+  frei.forEach(function(z){
+    var b = document.createElement('button');
+    b.className = 'scan-chip' + (gew.indexOf(z) !== -1 ? ' active' : '');
+    b.textContent = z;
+    b.addEventListener('click', function(){ scanToggleFreeRoom(z); });
+    scanFreeChips.appendChild(b);
+  });
+  scanFreeCount.textContent = frei.length + ' Zimmer frei · ' + gew.length + ' als Anreise markiert';
+}
+
+function scanToggleFreeRoom(z) {
+  var i = scanRows.findIndex(function(r){ return r.leer && r.zimmer.trim() === z; });
+  if (i >= 0) scanRows.splice(i,1); else scanRows.push({ zimmer: z, abreise: scanHeuteStr(), leer: true });
+  scanRenderRows(); scanUpdateCheck();
+}
+
+function scanDatumAusKopf(text) {
+  var m = text.match(/am\s+(\d{2})\.(\d{2})\.(\d{4})/);
+  if (!m) return;
+  scanListenMonat = +m[2]; scanListenJahr = +m[3];
+  var d = new Date(+m[3], +m[2]-1, +m[1]);
+  d.setDate(d.getDate() + 1);
+  scanSetHskDate(d);
+}
+
+function scanAlsBild(file) {
+  return new Promise(function(res, rej){
+    var img = new Image();
+    img.onload = function(){ res(img); };
+    img.onerror = rej;
+    img.src = URL.createObjectURL(file);
+  });
+}
+
+function scanAufCanvas(img, grad, faktor) {
+  var w = Math.round(img.width * faktor), h = Math.round(img.height * faktor);
+  var c = document.createElement('canvas');
+  if (grad % 180 === 0) { c.width = w; c.height = h; } else { c.width = h; c.height = w; }
+  var ctx = c.getContext('2d');
+  ctx.translate(c.width/2, c.height/2);
+  ctx.rotate(grad * Math.PI / 180);
+  ctx.drawImage(img, -w/2, -h/2, w, h);
+  var d = ctx.getImageData(0, 0, c.width, c.height);
+  for (var i = 0; i < d.data.length; i += 4) {
+    var g = 0.299*d.data[i] + 0.587*d.data[i+1] + 0.114*d.data[i+2];
+    d.data[i] = d.data[i+1] = d.data[i+2] = g;
+  }
+  ctx.putImageData(d, 0, 0);
+  return c;
+}
+
+async function scanAusrichtungPruefen(file, melde) {
+  var img = await scanAlsBild(file);
+  var klein = Math.min(1, 1100 / Math.max(img.width, img.height));
+  var beste = 0, bestN = -1;
+  var winkel = [0, 90, -90];
+  for (var i = 0; i < winkel.length; i++) {
+    melde('Ausrichtung wird geprueft ... ' + (i+1) + '/' + winkel.length);
+    try {
+      var r = await Tesseract.recognize(scanAufCanvas(img, winkel[i], klein), 'deu');
+      var n = (r.data.text.match(/(?:^|\n)\s*\d{3}\b/g) || []).length;
+      if (n > bestN) { bestN = n; beste = winkel[i]; }
+      if (n >= 15) break;
+    } catch (e) { }
+  }
+  scanDrehung = beste;
+  return beste;
+}
+
+function scanBildAufbereiten(file) {
+  return new Promise(function(res){
+    var img = new Image();
+    img.onload = function(){
+      res(scanAufCanvas(img, scanDrehung, img.width < 2000 ? 2 : 1));
+    };
+    img.onerror = function(){ res(file); };
+    img.src = URL.createObjectURL(file);
+  });
+}
+
+function scanHeuteStr() {
+  if (scanHskDate && scanHskDate.value) {
+    var p = scanHskDate.value.split('-');
+    return p[2] + '.' + p[1] + '.' + p[0];
+  }
+  var n = new Date();
+  return String(n.getDate()).padStart(2,'0') + '.' + String(n.getMonth()+1).padStart(2,'0') + '.' + n.getFullYear();
+}
+
+function scanNormalizeRoom(raw) {
+  raw = raw.padStart(3, '0');
+  if (raw.startsWith('0')) return String(parseInt(raw, 10));
+  return raw;
+}
+
+function scanDatumsTreffer(str, jahr) {
+  var basisM = scanListenMonat || 0;
+  var basisJ = scanListenJahr || Number(jahr);
+  var re = /(\d{2})[.,:\s]{0,2}(\d{2})[.,:\s]{0,2}(?:\d{4}|\d{3}|\d{2})(?!\d)/g, out = [], m;
+  while ((m = re.exec(str)) !== null) {
+    var mon = +m[2];
+    if (mon < 1 || mon > 12) continue;
+    var j = (basisM && mon < basisM) ? basisJ + 1 : basisJ;
+    out.push(m[1] + '.' + m[2] + '.' + j);
+  }
+  return out;
+}
+
+function scanAnzSumme(text) {
+  var m = text.match(/(?:^|\n)\s*(\d{2,3})\s+(\d{1,2})\s+(\d{1,3})\s*[^\d\n]{0,4}(?:\n|$)/);
+  if (!m) return null;
+  var anz = parseInt(m[3], 10);
+  return (anz > 0 && anz <= 73) ? anz : null;
+}
+
+function scanZimmerAmZeilenanfang(zeile, belegt) {
+  var m = zeile.match(/^[\s\-–—.·:]*([0-9SsOoIlB§|]{3,4})\b/);
+  if (!m) return null;
+  var roh = m[1]
+    .replace(/[Ss§]/g, '5').replace(/[Oo]/g, '0')
+    .replace(/[Il|]/g, '1').replace(/B/g, '8');
+  if (!/^\d{3,4}$/.test(roh)) return null;
+
+  var kandidaten = roh.length === 3 ? [roh] : [roh.slice(1), roh.slice(0, 3)];
+  var gueltig = kandidaten
+    .map(function(k){ return String(parseInt(k, 10)); })
+    .filter(function(k){ return SCAN_ZIMMER.indexOf(k) !== -1; });
+
+  var frei = gueltig.filter(function(k){ return !belegt[k]; });
+  if (frei.length !== 1) return null;
+  return { zimmer: frei[0], laenge: m[0].length };
+}
+
+function scanParseText(text) {
+  const jahr = scanHskDate.value ? scanHskDate.value.split('-')[0] : String(new Date().getFullYear());
+  const rooms = [];
+  const departures = [];
+  let m;
+
+  const belegt = {};
+  text.split('\n').forEach(function(zeile){
+    var mz = scanZimmerAmZeilenanfang(zeile, belegt);
+    if (!mz) return;
+    var d = scanDatumsTreffer(zeile.slice(mz.laenge), jahr);
+    if (d.length >= 2) { rooms.push(mz.zimmer); departures.push(d[1]); belegt[mz.zimmer] = 1; }
+  });
+
+  if (rooms.length < 5) {
+    const roomRe = /(?:^|\n)\s*(\d{3})\b/g;
+    while ((m = roomRe.exec(text)) !== null) rooms.push(m[1]);
+    const alle = scanDatumsTreffer(text, jahr);
+    for (let i = 1; i < alle.length; i += 2) departures.push(alle[i]);
+    scanPruefText = 'spaltenweise gelesen — Zuordnung unsicher, bitte jede Zeile pruefen';
+  } else {
+    scanPruefText = '';
+  }
+
+  const count = Math.min(rooms.length, departures.length);
+  scanRows = [];
+  const gesehen = new Set();
+  let dubletten = 0;
+  for (let i = 0; i < count; i++) {
+    const z = scanNormalizeRoom(rooms[i]);
+    if (gesehen.has(z)) { dubletten++; continue; }
+    gesehen.add(z);
+    scanRows.push({ zimmer: z, abreise: departures[i], leer: false });
+  }
+  const ungueltig = scanRows.filter(function(r){ return SCAN_ZIMMER.indexOf(r.zimmer) === -1; });
+  scanRows = scanRows.filter(function(r){ return SCAN_ZIMMER.indexOf(r.zimmer) !== -1; });
+
+  const kopf = text.match(/am\s+(\d{2})[.,:\s](\d{2})[.,:\s](\d{4})/);
+  if (kopf) { var kd = new Date(+kopf[3], +kopf[2]-1, +kopf[1]); kd.setDate(kd.getDate()+1); scanSetHskDate(kd); }
+
+  const summe = scanAnzSumme(text);
+  if (summe && !scanPmsTotalInput.value) scanPmsTotalInput.value = summe;
+
+  scanPruefStatus(kopf, summe, ungueltig.length);
+
+  if (dubletten > 0) {
+    scanDupeNote.textContent = dubletten + ' doppelte Zimmernummer(n) entfernt — im PMS kann dasselbe Zimmer zweimal gebucht sein, gereinigt wird es trotzdem nur einmal.';
+    scanDupeNote.style.display = 'block';
+  } else {
+    scanDupeNote.style.display = 'none';
+  }
+  scanRenderRows();
+  scanResultsSection.style.display = 'block';
+  scanCheckSection.style.display = 'block';
+  scanFreeSection.style.display = 'block';
+  scanExportSection.style.display = 'block';
+  scanUpdateCheck();
+}
+
+function scanRenderRows() {
+  scanRowsBody.innerHTML = '';
+  if (scanRows.length === 0) {
+    scanRowsBody.innerHTML = '<tr><td colspan="3"><div class="scan-empty-note">Keine Zeilen erkannt — bitte manuell über „+ Zeile" ergänzen.</div></td></tr>';
+  }
+  scanRows.forEach((r, i) => {
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td><input type="text" value="${r.zimmer}" data-i="${i}" data-f="zimmer" placeholder="z.B. 14"></td>
+      <td><input type="text" value="${r.abreise}" data-i="${i}" data-f="abreise" placeholder="TT.MM.JJJJ"></td>
+      <td>${r.leer ? '<span class="scan-leer-tag">LEER</span>' : ''}<button class="scan-row-del" data-i="${i}">✕</button></td>
+    `;
+    scanRowsBody.appendChild(tr);
+  });
+  scanRowsBody.querySelectorAll('input').forEach(inp => {
+    inp.addEventListener('input', e => {
+      const i = +e.target.dataset.i, f = e.target.dataset.f;
+      scanRows[i][f] = e.target.value;
+      scanUpdateCheck();
+    });
+  });
+  scanRenderFreeRooms();
+  scanRowsBody.querySelectorAll('.scan-row-del').forEach(btn => {
+    btn.addEventListener('click', e => {
+      scanRows.splice(+e.target.dataset.i, 1);
+      scanRenderRows();
+      scanUpdateCheck();
+    });
+  });
+}
+
+scanAddRowBtn.addEventListener('click', () => {
+  scanRows.push({ zimmer: '', abreise: '', leer: false });
+  scanRenderRows();
+  scanUpdateCheck();
+});
+
+scanAddEmptyRowBtn.addEventListener('click', () => {
+  scanRows.push({ zimmer: '', abreise: scanHeuteStr(), leer: true });
+  scanRenderRows();
+  scanUpdateCheck();
+});
+
+scanPmsTotalInput.addEventListener('input', scanUpdateCheck);
+scanPmsArrivalsInput.addEventListener('input', scanUpdateCheck);
+scanHskDate.addEventListener('change', function(){
+  scanDateBadge.textContent = 'Tag der Reinigung: ' + scanHeuteStr();
+  scanRenderRows(); scanUpdateCheck();
+});
+
+function scanUpdateCheck() {
+  const belegte = scanRows.filter(r => !r.leer && r.zimmer.trim());
+  const leere = scanRows.filter(r => r.leer && r.zimmer.trim());
+
+  const pmsTotal = parseInt(scanPmsTotalInput.value, 10);
+  if (isNaN(pmsTotal)) {
+    scanCheckBadge.textContent = 'wartet auf Eingabe';
+    scanCheckBadge.className = 'scan-badge wait';
+  } else if (pmsTotal === belegte.length) {
+    scanCheckBadge.textContent = '✓ stimmt überein — ' + belegte.length + ' belegte Zimmer';
+    scanCheckBadge.className = 'scan-badge ok';
+  } else {
+    scanCheckBadge.textContent = '✕ Abweichung — erkannt: ' + belegte.length + ', PMS: ' + pmsTotal;
+    scanCheckBadge.className = 'scan-badge bad';
+  }
+
+  const anreisen = parseInt(scanPmsArrivalsInput.value, 10);
+  const heute = scanHeuteStr();
+  const abreisenHeute = belegte.filter(r => r.abreise.trim() === heute).length;
+
+  if (isNaN(anreisen)) {
+    scanArrivalsBadge.textContent = 'wartet auf Eingabe';
+    scanArrivalsBadge.className = 'scan-badge wait';
+    return;
+  }
+  const benoetigt = Math.max(0, anreisen - abreisenHeute);
+  const fehlend = benoetigt - leere.length;
+  if (fehlend > 0) {
+    scanArrivalsBadge.textContent = '✕ ' + fehlend + ' leerstehende(s) Anreisezimmer fehlt/fehlen — bitte unten ergänzen';
+    scanArrivalsBadge.className = 'scan-badge bad';
+  } else if (fehlend === 0) {
+    scanArrivalsBadge.textContent = '✓ ' + anreisen + ' Anreisen gedeckt (' + abreisenHeute + ' Abreisen + ' + leere.length + ' Leerstand)'
+      + (abreisenHeute > anreisen ? ', ' + (abreisenHeute - anreisen) + ' Abreise-Zimmer bleiben heute leer' : '');
+    scanArrivalsBadge.className = 'scan-badge ok';
+  } else {
+    scanArrivalsBadge.textContent = '✕ ' + Math.abs(fehlend) + ' Zimmer zu viel als Leerstand markiert';
+    scanArrivalsBadge.className = 'scan-badge bad';
+  }
+}
+
+// Direktübernahme statt CSV-Download: erzeugt dieselbe {room, guestType}-Form wie
+// parseCsv() und speist sie in dieselbe Vorschau + denselben Übertragen-Knopf ein.
+scanUebernehmenBtn.addEventListener('click', () => {
+  const heute = scanHeuteStr();
+  const valid = scanRows.filter(r => r.zimmer.trim() && r.abreise.trim());
+  if (!valid.length) { alert('Keine gültigen Zeilen zum Übernehmen.'); return; }
+  const results = valid.map(r => ({
+    room: r.zimmer.trim(),
+    guestType: (!r.leer && r.abreise.trim() === heute) ? 'checkout' : 'overnight'
+  }));
+  showCsvPreview(results);
+  document.getElementById('import-preview').scrollIntoView({ behavior: 'smooth', block: 'start' });
+});
+
+scanResetBtn.addEventListener('click', () => {
+  scanRows = [];
+  scanPages = [];
+  scanRenderThumbs();
+  scanResultsSection.style.display = 'none';
+  scanCheckSection.style.display = 'none';
+  scanFreeSection.style.display = 'none';
+  scanExportSection.style.display = 'none';
+  scanPmsTotalInput.value = '';
+  scanPmsArrivalsInput.value = '';
+  scanDupeNote.style.display = 'none';
+  scanFileInput.value = '';
+});
 
 // ══ JSON IMPORT ══
 let jsonParsed = [];

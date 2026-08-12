@@ -6,9 +6,13 @@ GitHub Pages. Entwicklung und Betrieb: André Schwarz, Rezeption.
 
 | Werkzeug | Zweck | Link |
 |---|---|---|
-| Housekeeping Manager v3 | Zimmerverteilung, Fertigmeldung, Übergabebericht | `bit.ly/turm7` |
-| Alpha-Scan | Gästeliste per Foto einlesen, prüfen, exportieren | `bit.ly/turmhsk` |
+| Housekeeping Manager v3 | Gästeliste per Foto einlesen, Zimmerverteilung, Fertigmeldung, Übergabebericht, Verlauf | `bit.ly/turm7` |
 | Gästeportal / Handbücher | Gästeinformation, Personalanweisungen | im Repo |
+
+Der Foto-Scan der Alpha-Liste (früher eigene Seite `alpha-scan.html` / `bit.ly/turmhsk`)
+ist seit v3.9 ein Reiter im Housekeeping Manager selbst („Gästeliste" → „📷 Foto-Scan") —
+eine Seite für den ganzen Ablauf, kein CSV-Download/-Import mehr nötig.
+`alpha-scan.html` bleibt im Repo erhalten, ist aber nicht mehr der empfohlene Weg.
 
 Einstiegspunkt für die Weiterarbeit: **`UEBERGABE_HSK777.md`**
 
