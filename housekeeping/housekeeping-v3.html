@@ -446,6 +446,7 @@ nav{
   <button class="tab" id="tab-btn-uebersicht" onclick="showTab('uebersicht')">Übersicht</button>
   <button class="tab" id="tab-btn-gaeste" onclick="showTab('gaeste')">Gästeliste</button>
   <button class="tab" id="tab-btn-personal" onclick="showTab('personal')">Personal</button>
+  <button class="tab" id="tab-btn-verlauf" onclick="showTab('verlauf')">Verlauf</button>
 </div>
 
 <div class="main">
@@ -643,6 +644,24 @@ nav{
       <button class="btn btn-add" onclick="addStaff()">+ Hinzufügen</button>
     </div>
   </div>
+</div>
+
+<!-- ══ TAB: VERLAUF ══ -->
+<div id="tab-verlauf" style="display:none">
+  <div class="building-label" style="margin-top:4px">Vergangene Tage</div>
+  <p style="font-family:'Spline Sans Mono',monospace;font-size:.72rem;color:var(--muted);margin:0 0 16px;">
+    Jeder Tag wird beim Klick auf „Zimmerstatus zurücksetzen" automatisch archiviert, bevor er überschrieben wird.
+    Hier lässt sich der Übergabebericht eines vergangenen Tages erneut ansehen.
+  </p>
+  <div class="form-row">
+    <select class="staff-select" id="verlauf-datum" style="flex:1;margin-bottom:0;">
+      <option value="">Lade Verlauf …</option>
+    </select>
+    <button class="btn btn-save" onclick="verlaufBerichtAnzeigen()" style="white-space:nowrap;">Bericht ansehen</button>
+  </div>
+  <p style="font-family:'Spline Sans Mono',monospace;font-size:.68rem;color:var(--muted);margin-top:14px;">
+    Zeigt den archivierten Zimmerstatus (Reinigung, Zuteilung, Notizen) im selben Format wie der aktuelle Übergabebericht.
+  </p>
 </div>
 
 </div><!-- /main -->
@@ -1167,13 +1186,14 @@ function deleteStaff(i) {
 
 // ══ TABS ══
 function showTab(tab) {
-  ['zimmer','meine','uebersicht','gaeste','personal'].forEach(id => {
+  ['zimmer','meine','uebersicht','gaeste','personal','verlauf'].forEach(id => {
     document.getElementById('tab-' + id).style.display = id === tab ? '' : 'none';
     document.getElementById('tab-btn-' + id).classList.toggle('active', id === tab);
   });
   if (tab === 'meine') renderMine();
   if (tab === 'uebersicht') renderOverview();
   if (tab === 'personal') renderPersonal();
+  if (tab === 'verlauf') ladeVerlaufListe();
 }
 
 // ══ CSV IMPORT ══
@@ -1314,6 +1334,7 @@ function showCsvPreview(results) {
 
 function resetRoomStatus() {
   if (!confirm('Alle Zimmerstatus zuruecksetzen (Belegung, Reinigung, Zuweisung)? Personal bleibt erhalten.')) return;
+  archiveBeforeReset();
   state = {};
   saveState(state);
   csvParsed = [];
@@ -1321,6 +1342,58 @@ function resetRoomStatus() {
   if (banner) banner.classList.remove('show');
   renderRooms(); renderPersonal(); renderOverview();
   alert('Zimmerstatus wurde zurueckgesetzt.');
+}
+
+// ══ VERLAUF (Tages-Archiv) ══
+// state.__tag haelt fest, fuer welchen Kalendertag der aktuelle Stand gilt (gesetzt
+// beim CSV-Import). Beim naechsten "Zimmerstatus zuruecksetzen" wird der Stand unter
+// diesem Datum archiviert, bevor er ueberschrieben wird — so bleibt der Vortag abrufbar.
+function ddmmyyyyZuIso(d) {
+  var p = String(d || '').split('.');
+  if (p.length !== 3) return null;
+  return p[2] + '-' + p[1].padStart(2,'0') + '-' + p[0].padStart(2,'0');
+}
+function isoZuAnzeige(iso) {
+  var p = iso.split('-');
+  var dt = new Date(+p[0], +p[1]-1, +p[2]);
+  return dt.toLocaleDateString('de-DE', {weekday:'short', day:'2-digit', month:'2-digit', year:'numeric'});
+}
+function archiveBeforeReset() {
+  var hatDaten = ALL_ROOMS.some(function(id){
+    var rs = state[id];
+    return rs && (rs.guestType || rs.occupied || rs.clean || rs.staff);
+  });
+  if (!hatDaten) return;
+  var key = ddmmyyyyZuIso(state.__tag) || ddmmyyyyZuIso(todayStr());
+  if (!key) return;
+  fetch(FIREBASE_URL + '/history/' + key + '.json', {
+    method: 'PUT', headers: {'Content-Type':'application/json'}, body: JSON.stringify(state)
+  }).catch(function(e){ console.warn('Verlauf-Archivierung fehlgeschlagen', e); });
+}
+async function ladeVerlaufListe() {
+  var sel = document.getElementById('verlauf-datum');
+  sel.innerHTML = '<option value="">Lade Verlauf …</option>';
+  try {
+    var res = await fetch(FIREBASE_URL + '/history.json?shallow=true');
+    var data = await res.json();
+    var keys = data ? Object.keys(data).sort().reverse() : [];
+    if (!keys.length) { sel.innerHTML = '<option value="">Noch kein Verlauf vorhanden</option>'; return; }
+    sel.innerHTML = keys.map(function(k){ return '<option value="' + k + '">' + isoZuAnzeige(k) + '</option>'; }).join('');
+  } catch (e) {
+    sel.innerHTML = '<option value="">Verlauf konnte nicht geladen werden</option>';
+  }
+}
+async function verlaufBerichtAnzeigen() {
+  var key = document.getElementById('verlauf-datum').value;
+  if (!key) return;
+  try {
+    var res = await fetch(FIREBASE_URL + '/history/' + key + '.json');
+    var snap = await res.json();
+    if (!snap) { alert('Keine Daten fuer diesen Tag gefunden.'); return; }
+    printHandoverReport(snap, isoZuAnzeige(key));
+  } catch (e) {
+    alert('Verlauf konnte nicht geladen werden: ' + e.message);
+  }
 }
 
 function applyCsvImport() {
@@ -1333,6 +1406,7 @@ function applyCsvImport() {
     const rs = getRoomState(room);
     state[room] = { ...rs, guestType, occupied: true };
   });
+  state.__tag = todayStr();
   saveState(state);
   renderRooms();
 
@@ -1731,11 +1805,13 @@ renderRooms();
 renderPersonal();
 updateStats();
 
-function printHandoverReport() {
+function printHandoverReport(historicalState, historicalLabel) {
+  var quelle = historicalState || state;
+  function rsOf(id) { return quelle[id] || { clean:false, occupied:false, staff:'', note:'', guestType:'' }; }
   var skip = ['Tagungsraum Mailand', 'Tagungsraum Barcelona', '101'];
   var rooms = ALL_ROOMS.filter(function(id){ return skip.indexOf(id) === -1; });
   var rows = rooms.map(function(id){
-    var rs = getRoomState(id);
+    var rs = rsOf(id);
     return {
       id: id,
       type: ROOM_TYPES[id] || '',
@@ -1787,10 +1863,12 @@ function printHandoverReport() {
   var openRooms = rows.filter(function(r){ return !r.clean; }).map(function(r){ return r.id; }).join(', ') || 'Keine';
 
   var now = new Date();
-  var dateStr = now.toLocaleDateString('de-DE') + ' ' + now.toLocaleTimeString('de-DE', {hour:'2-digit', minute:'2-digit'});
+  var dateStr = historicalLabel
+    ? ('Archivierter Tag: ' + historicalLabel)
+    : ('Erstellt: ' + now.toLocaleDateString('de-DE') + ' ' + now.toLocaleTimeString('de-DE', {hour:'2-digit', minute:'2-digit'}));
 
   var html = '<!DOCTYPE html><html lang="de"><head><meta charset="UTF-8">' +
-    '<title>Uebergabebericht - Turmhotel</title>' +
+    '<title>Uebergabebericht' + (historicalLabel ? ' - ' + historicalLabel : '') + ' - Turmhotel</title>' +
     '<style>' +
     'body{font-family:Arial,sans-serif;color:#111;padding:24px;font-size:13px;}' +
     'h1{font-size:20px;margin-bottom:4px;}' +
@@ -1803,7 +1881,7 @@ function printHandoverReport() {
     '@media print{ body{padding:0;} }' +
     '</style></head><body>' +
     '<h1>Turmhotel Frankfurt - Uebergabebericht</h1>' +
-    '<div class="meta">Erstellt: ' + dateStr + '</div>' +
+    '<div class="meta">' + dateStr + '</div>' +
     '<div class="summary">' +
       '<span><strong>' + totalRooms + '</strong> Zimmer gesamt</span>' +
       '<span><strong>' + cleanedCount + '</strong> gereinigt</span>' +
