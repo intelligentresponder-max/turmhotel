@@ -179,6 +179,62 @@ footer{
 .foot-links a{color:var(--muted);margin-left:1rem}
 .staff-link{font-size:.75rem;letter-spacing:.1em;text-transform:uppercase;opacity:.7}
 @media(max-width:680px){.foot-inner{flex-direction:column}.foot-links a{margin:0 1rem 0 0}}
+
+/* ---- Gäste-Fragen Widget ---- */
+.guest-fab{
+  position:fixed;right:1.4rem;bottom:1.4rem;z-index:80;
+  width:3.4rem;height:3.4rem;border-radius:50%;
+  background:var(--ink);color:var(--cream);border:1px solid var(--brass);
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;box-shadow:0 8px 24px -8px rgba(42,38,34,.45);
+  transition:transform .15s ease,background .15s ease;
+}
+.guest-fab:hover{background:var(--brass-deep);transform:scale(1.05)}
+.guest-fab svg{width:1.5rem;height:1.5rem}
+.guest-fab .dot{
+  position:absolute;top:-2px;right:-2px;width:.6rem;height:.6rem;border-radius:50%;
+  background:var(--brass);border:2px solid var(--cream);
+}
+
+.guest-panel{
+  position:fixed;right:1.4rem;bottom:5.4rem;z-index:80;
+  width:min(21rem,calc(100vw - 2.8rem));max-height:min(30rem,calc(100vh - 8rem));
+  background:var(--white);border:1px solid var(--line);border-radius:6px;
+  box-shadow:0 24px 60px -20px rgba(42,38,34,.5);
+  display:none;flex-direction:column;overflow:hidden;
+}
+.guest-panel.open{display:flex}
+.guest-panel-head{
+  background:var(--ink);color:var(--cream);padding:1rem 1.2rem;
+  display:flex;align-items:center;justify-content:space-between;gap:.6rem;
+}
+.guest-panel-head h3{font-size:1.15rem;margin:0;color:var(--cream)}
+.guest-panel-head p{font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;color:var(--brass);margin-top:.15rem}
+.guest-panel-close{
+  background:none;border:0;color:var(--cream);opacity:.7;cursor:pointer;font-size:1.3rem;line-height:1;
+  padding:.2rem .3rem;
+}
+.guest-panel-close:hover{opacity:1}
+.guest-panel-body{padding:1rem 1.2rem 1.2rem;overflow-y:auto;flex:1}
+.guest-panel-body .intro{color:var(--muted);font-size:.9rem;margin-bottom:.9rem}
+.guest-q{
+  display:block;width:100%;text-align:left;font:inherit;font-size:.88rem;
+  background:var(--cream-2);border:1px solid var(--line);border-radius:4px;
+  padding:.65rem .9rem;margin-bottom:.55rem;cursor:pointer;color:var(--ink);
+  transition:border-color .15s ease,background .15s ease;
+}
+.guest-q:hover{border-color:var(--brass);background:var(--white)}
+.guest-a{
+  background:var(--cream-2);border-left:2px solid var(--brass);
+  padding:.8rem 1rem;margin-bottom:.9rem;font-size:.88rem;color:var(--ink);line-height:1.55;
+}
+.guest-a a{color:var(--brass-deep)}
+.guest-back{
+  font-family:inherit;font-size:.78rem;letter-spacing:.04em;text-transform:uppercase;
+  background:none;border:0;color:var(--brass-deep);cursor:pointer;padding:.2rem 0;margin-bottom:.4rem;
+}
+.guest-back:hover{text-decoration:underline}
+@media(prefers-reduced-motion:reduce){.guest-fab{transition:none}}
 </style>
 </head>
 <body>
@@ -316,6 +372,100 @@ footer{
     </div>
   </div>
 </footer>
+
+<!-- ===== Gäste-Fragen Widget =====
+     Reine Vorauswahl-Antworten aus den echten Inhalten dieser Seite,
+     kein Backend, kein KI-Modell, keine erfundenen Personen/Fakten. -->
+<button class="guest-fab" id="guestFab" aria-haspopup="dialog" aria-expanded="false" aria-controls="guestPanel" aria-label="Fragen zu Ihrem Aufenthalt">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+  <span class="dot" aria-hidden="true"></span>
+</button>
+
+<div class="guest-panel" id="guestPanel" role="dialog" aria-modal="false" aria-labelledby="guestPanelTitle">
+  <div class="guest-panel-head">
+    <div>
+      <p>Turm Hotel</p>
+      <h3 id="guestPanelTitle" class="serif">Fragen zu Ihrem Aufenthalt</h3>
+    </div>
+    <button class="guest-panel-close" id="guestClose" aria-label="Schließen">×</button>
+  </div>
+  <div class="guest-panel-body" id="guestBody">
+    <p class="intro">Kurze Antworten auf die häufigsten Fragen. Für alles andere sind wir rund um die Uhr telefonisch da.</p>
+    <div id="guestQuestions"></div>
+  </div>
+</div>
+
+<script>
+(function(){
+  var GUEST_FAQ = [
+    { q: "Check-in / Check-out?",
+      a: "Check-in ab 15:00 Uhr, Check-out bis 11:00 Uhr. Die Rezeption ist täglich von 6:45 bis 22:30 Uhr besetzt." },
+    { q: "Frühstückszeiten?",
+      a: "Mo–Fr 6:30–10:00 Uhr, Sa–So 7:00–11:00 Uhr. 18,– € pro Person, Kinder bis 8 Jahre zum halben Preis. Eierspeisen bereiten wir gerne nach Wunsch zu." },
+    { q: "Ich komme nach 22:30 Uhr an",
+      a: "Kein Problem: Mit Ihrer aktivierten Schlüsselkarte kommen Sie über die Nachteingangstür jederzeit ins Haus. Die drei Schritte dazu stehen weiter unten auf dieser Seite. <a href=\"#nacht\">Zum Nachteingang →</a>" },
+    { q: "Wie finde ich mein Zimmer?",
+      a: "Unser Wegweiser führt Sie in 15 Sprachen zum Zimmer. <a href=\"wegweiser.html\">Wegweiser öffnen →</a>" },
+    { q: "Rezeption kontaktieren",
+      a: "Wir sind rund um die Uhr erreichbar: <a href=\"tel:+4969154050\">+49 (0)69 15 40 50</a> oder <a href=\"mailto:rooms@turmhotel-fra.de\">rooms@turmhotel-fra.de</a>." },
+    { q: "Etwas anderes",
+      a: "Rufen Sie uns gerne direkt an — wir sind rund um die Uhr für Sie da: <a href=\"tel:+4969154050\">+49 (0)69 15 40 50</a>." }
+  ];
+
+  var fab = document.getElementById('guestFab');
+  var panel = document.getElementById('guestPanel');
+  var closeBtn = document.getElementById('guestClose');
+  var body = document.getElementById('guestBody');
+  var qWrap = document.getElementById('guestQuestions');
+
+  function renderQuestions(){
+    qWrap.innerHTML = '';
+    GUEST_FAQ.forEach(function(item, i){
+      var btn = document.createElement('button');
+      btn.className = 'guest-q';
+      btn.type = 'button';
+      btn.textContent = item.q;
+      btn.addEventListener('click', function(){ showAnswer(i); });
+      qWrap.appendChild(btn);
+    });
+  }
+
+  function showAnswer(i){
+    var item = GUEST_FAQ[i];
+    qWrap.innerHTML = '';
+    var back = document.createElement('button');
+    back.className = 'guest-back';
+    back.type = 'button';
+    back.textContent = '← Zurück zu den Fragen';
+    back.addEventListener('click', renderQuestions);
+    var a = document.createElement('div');
+    a.className = 'guest-a';
+    a.innerHTML = item.a;
+    qWrap.appendChild(back);
+    qWrap.appendChild(a);
+    qWrap.appendChild(back.cloneNode(true));
+    qWrap.lastChild.addEventListener('click', renderQuestions);
+  }
+
+  function openPanel(){
+    panel.classList.add('open');
+    fab.setAttribute('aria-expanded', 'true');
+    renderQuestions();
+  }
+  function closePanel(){
+    panel.classList.remove('open');
+    fab.setAttribute('aria-expanded', 'false');
+  }
+
+  fab.addEventListener('click', function(){
+    panel.classList.contains('open') ? closePanel() : openPanel();
+  });
+  closeBtn.addEventListener('click', closePanel);
+  document.addEventListener('keydown', function(e){
+    if(e.key === 'Escape' && panel.classList.contains('open')) closePanel();
+  });
+})();
+</script>
 
 </body>
 </html>
