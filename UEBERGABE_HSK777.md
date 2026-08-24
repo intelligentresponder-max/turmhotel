@@ -12,7 +12,7 @@ Bei „HSK777": diese Datei lesen, dann bei Abschnitt 3 weitermachen.
 
 ## Hotel-Stammdaten
 - Turmhotel Frankfurt, Eschersheimer Landstraße 20, 60322 Frankfurt
-- Check-in 15:00 / Check-out 11:00 · Kontakt: rooms@turmhotel-fra.de
+- Check-in 15:00 / Check-out 11:00 · Kontakt: rooms@turmhotel-frankfurt.de
 - PMS: Oracle Suite8 (End-of-Life, Ablösung durch Mews war Thema für Tanja)
 - 73 vermietbare Zimmer: Vorderhaus 11–55 (zweistellig), Hinterhaus 102–510
   (101 = Massageraum, dazu zwei Tagungsräume)
