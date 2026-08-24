@@ -391,6 +391,7 @@ footer{
   </div>
   <div class="guest-panel-body" id="guestBody">
     <p class="intro">Kurze Antworten auf die häufigsten Fragen. Für alles andere sind wir rund um die Uhr telefonisch da.</p>
+    <input type="text" id="guestSearch" placeholder="Stichwort eingeben, z. B. 'Parken' oder 'Sauna'…" style="width:100%;padding:.6rem .8rem;margin-bottom:.8rem;border:1px solid var(--line, #ccc);border-radius:8px;font-size:.95rem;box-sizing:border-box;">
     <div id="guestQuestions"></div>
   </div>
 </div>
@@ -412,6 +413,16 @@ footer{
       a: "Unsere Boutique-Sauna im Gartenhaus ist auf Anfrage buchbar — sprechen Sie uns einfach an der Rezeption darauf an: <a href=\"tel:+4969154050\">+49 (0)69 15 40 50</a>." },
     { q: "Was ist in der Nähe sehenswert?",
       a: "Der historische Eschenheimer Turm liegt nur wenige Schritte entfernt — ein Spaziergang lohnt sich besonders am Abend." },
+    { q: "Gibt es Parkplätze?",
+      a: "Einige kostenlose Parkplätze stehen direkt am Hotel zur Verfügung (nicht reservierbar). Alternativ das CONTIPARK Parkhaus Turmcenter direkt nebenan, Querstraße 7-9, kostenpflichtig." },
+    { q: "Kann ich mein Haustier mitbringen?",
+      a: "Leider nein — wir können in unserem Haus keine Haustiere aufnehmen." },
+    { q: "Kann ich mein Gepäck aufbewahren lassen?",
+      a: "Ja, gerne — sprechen Sie uns einfach an der Rezeption darauf an: <a href=\\\"tel:+4969154050\\\">+49 (0)69 15 40 50</a>." },
+    { q: "Gibt es Konferenzräume?",
+      a: "Ja, zwei Konferenzräume für bis zu 35 Personen, mit WLAN und moderner Technik. Details und Anfrage über die Rezeption." },
+    { q: "Kann ich ein Fahrrad leihen?",
+      a: "Ja, ein Fahrradverleih ist auf Wunsch verfügbar — fragen Sie einfach an der Rezeption nach." },
     { q: "Etwas anderes",
       a: "Rufen Sie uns gerne direkt an — wir sind rund um die Uhr für Sie da: <a href=\"tel:+4969154050\">+49 (0)69 15 40 50</a>." }
   ];
@@ -421,10 +432,26 @@ footer{
   var closeBtn = document.getElementById('guestClose');
   var body = document.getElementById('guestBody');
   var qWrap = document.getElementById('guestQuestions');
+  var searchInput = document.getElementById('guestSearch');
 
   function renderQuestions(){
+    var term = (searchInput.value || '').trim().toLowerCase();
+    var list = term
+      ? GUEST_FAQ.filter(function(item){
+          return item.q.toLowerCase().indexOf(term) !== -1 ||
+                 item.a.toLowerCase().indexOf(term) !== -1;
+        })
+      : GUEST_FAQ;
     qWrap.innerHTML = '';
-    GUEST_FAQ.forEach(function(item, i){
+    if (list.length === 0){
+      var none = document.createElement('p');
+      none.className = 'intro';
+      none.textContent = 'Dazu haben wir nichts Passendes gefunden — rufen Sie uns gerne direkt an.';
+      qWrap.appendChild(none);
+      return;
+    }
+    list.forEach(function(item){
+      var i = GUEST_FAQ.indexOf(item);
       var btn = document.createElement('button');
       btn.className = 'guest-q';
       btn.type = 'button';
@@ -433,6 +460,7 @@ footer{
       qWrap.appendChild(btn);
     });
   }
+  searchInput.addEventListener('input', renderQuestions);
 
   function showAnswer(i){
     var item = GUEST_FAQ[i];
