@@ -6,5 +6,9 @@
     <changefreq>monthly</changefreq>
     <priority>1.0</priority>
   </url>
-  <!-- wegweiser.html bewusst NICHT gelistet: nur per Empfangs-QR-Code erreichbar, nicht über Suchmaschinen -->
+  <!-- Bewusst NICHT gelistet, nur per QR-Code/direktem Link erreichbar: -->
+  <!-- wegweiser.html, speakingchat.html (Gäste, noindex) -->
+  <!-- facility.html, handbuch.html, housekeeping/housekeeping-v3.html, -->
+  <!-- housekeeping/alpha-scan.html, onboarding-checkliste.html (Personal, noindex) -->
+  <!-- personal.html: im Footer verlinkt, Datei existiert noch nicht im Repo (24.08.2026) -->
 </urlset>
