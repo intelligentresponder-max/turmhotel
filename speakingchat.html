@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gäste-Portal Login — Turm Hotel Frankfurt</title>
+    <title>Gäste-Wegweiser — Turm Hotel Frankfurt</title>
+    <meta name="robots" content="noindex, nofollow">
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Google Fonts: Inter & Playfair Display -->
@@ -77,44 +78,14 @@
     <main class="flex-grow flex items-center justify-center p-6 relative">
         <div class="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-hotelgreen/60 via-transparent to-transparent opacity-70 pointer-events-none"></div>
 
-        <!-- 1. LOGIN WALL (Wird standardmäßig angezeigt) -->
-        <div id="login-wall" class="w-full max-w-md bg-hotelgreen border border-stone-800 p-8 rounded-2xl green-glow space-y-8 relative z-10 transition-all duration-500">
-            <div class="text-center space-y-3">
-                <span class="inline-block px-3 py-1 text-[10px] font-mono tracking-widest text-gold uppercase border border-gold/30 rounded-full">
-                    Gäste-Portal Login
-                </span>
-                <h2 class="text-3xl font-serif text-white">Herzlich willkommen</h2>
-                <p class="text-xs text-stone-400 max-w-xs mx-auto leading-relaxed">
-                    Bitte geben Sie das Passwort ein, das Sie auf Ihrem Zimmeraufsteller, per E-Mail oder auf der Einladungskarte finden.
-                </p>
-            </div>
-
-            <!-- Password Form -->
-            <div class="space-y-4">
-                <div class="space-y-1.5">
-                    <label for="password-input" class="text-[10px] font-mono tracking-widest text-stone-400 uppercase font-bold">Passwort</label>
-                    <div class="relative">
-                        <input type="password" id="password-input" class="w-full bg-hotelgreen-dark border border-stone-700/60 px-4 py-3.5 rounded-lg text-sm text-white focus:outline-none focus:border-gold/80 transition-all tracking-widest text-center" placeholder="••••••••" autocomplete="current-password">
-                    </div>
-                    <!-- Fehlermeldung -->
-                    <p id="error-message" class="text-xs text-red-400 text-center hidden"></p>
-                </div>
-
-                <!-- Fehler-Vermeidungs-Tipp für Gäste -->
-                <div class="bg-hotelgreen-dark/60 p-3.5 border border-stone-800/80 rounded-lg text-center space-y-1">
-                    <p class="text-[11px] text-stone-400">
-                        💡 <strong class="text-gold">Tipp:</strong> Das Passwort enthält keine Sonderzeichen oder Punkte am Ende. Groß- und Kleinschreibung beachten.
-                    </p>
-                </div>
-
-                <button onclick="checkPassword()" class="w-full py-4 bg-gold text-hotelgreen-dark font-bold text-xs uppercase tracking-widest hover:bg-gold-light hover:scale-[1.01] transition-all duration-300 rounded shadow-md font-sans">
-                    Foyer Betreten
-                </button>
-            </div>
-        </div>
+        <!-- 1. LOGIN WALL entfernt (24.08.2026): Kein Passwort-Gate — Klartext-Passwörter im
+             Quellcode sind keine echte Sicherheit, nur bei öffentlichem Repo dauerhaft in der
+             Git-Historie sichtbar. Zugriffssteuerung stattdessen über noindex + kein Sitemap-
+             Eintrag (nur per Empfangs-QR-Code erreichbar), siehe wegweiser.html. -->
+        <div id="login-wall" class="hidden"></div>
 
         <!-- 2. SIMULIERTER SPEAKING CHAT & WEGWEISER (Nach Login sichtbar) -->
-        <div id="portal-content" class="w-full max-w-4xl bg-hotelgreen border border-stone-800 rounded-2xl green-glow overflow-hidden hidden transition-all duration-500 relative z-10 grid grid-cols-1 lg:grid-cols-12">
+        <div id="portal-content" class="w-full max-w-4xl bg-hotelgreen border border-stone-800 rounded-2xl green-glow overflow-hidden transition-all duration-500 relative z-10 grid grid-cols-1 lg:grid-cols-12">
             
             <!-- Linke Spalte: Infos & Ehrliche Ankündigung (BanglaHilfe Prinzip) -->
             <div class="lg:col-span-5 p-8 border-b lg:border-b-0 lg:border-r border-stone-800/80 space-y-6 bg-hotelgreen-dark/40 flex flex-col justify-between">
@@ -210,8 +181,12 @@
                     <p class="text-xs text-stone-500 font-light flex-grow leading-tight">
                         Für Buchungen, Zimmerservice oder individuelle Wünsche leiten wir Sie sofort zu unserem echten Team auf WhatsApp weiter.
                     </p>
-                    <a href="https://wa.me/491634692255?text=Hallo%20Turmhotel-Team,%20ich%20wohne%20in%20Zimmer%20und%20habe%20eine%20Frage:" target="_blank" class="px-4 py-3 bg-[#25D366] hover:bg-[#128C7E] text-white text-xs font-bold uppercase tracking-wider transition-colors rounded-lg flex items-center gap-2 shrink-0 shadow-sm">
-                        <span>💬 WhatsApp</span>
+                    <!-- WICHTIG: 491634692255 war André's private Sneaks4seek-Nummer, nicht das
+                         Hotel — am 24.08.2026 korrigiert. Die echte Hotel-WhatsApp-Nummer steht
+                         noch nicht fest (Rezeptions-Handy noch nicht eingerichtet). Bis dahin
+                         Verweis auf die 24h-Telefonhotline. -->
+                    <a href="tel:+4969154050" class="px-4 py-3 bg-gold hover:bg-gold-light text-hotelgreen-dark text-xs font-bold uppercase tracking-wider transition-colors rounded-lg flex items-center gap-2 shrink-0 shadow-sm">
+                        <span>☎️ Rezeption anrufen</span>
                     </a>
                 </div>
             </div>
@@ -223,48 +198,17 @@
     <footer class="py-6 px-6 md:px-12 border-t border-stone-800/60 flex flex-col sm:flex-row justify-between items-center text-[10px] text-stone-500 font-mono bg-hotelgreen/10">
         <p>&copy; 2026 TURM HOTEL FRANKFURT. Alle Rechte vorbehalten. 100% Statisch &amp; Sicher.</p>
         <div class="flex gap-4 mt-3 sm:mt-0">
-            <a href="#" class="hover:text-stone-300">Impressum</a>
-            <a href="#" class="hover:text-stone-300">Datenschutz</a>
+            <a href="https://www.turmhotel-frankfurt.de/" class="hover:text-stone-300">Impressum</a>
+            <a href="https://www.turmhotel-frankfurt.de/" class="hover:text-stone-300">Datenschutz</a>
+            <!-- TODO: echtes Impressum/Datenschutz-Modal einbauen (Text bereits bekannt,
+                 siehe guestportal/README.md-Notizen); bis dahin Verweis auf Hauptseite,
+                 wo beide per Klick im Footer erreichbar sind. -->
         </div>
     </footer>
 
     <!-- INTERACTIVE SCRIPTS -->
     <script>
-        // Password Protection & Correction (Prevent copy-paste spaces causing errors)
-        function checkPassword() {
-            const input = document.getElementById('password-input');
-            const errorMsg = document.getElementById('error-message');
-            
-            // Clean the input: remove leading/trailing spaces and whitespaces
-            const cleanedPassword = input.value.trim();
-            
-            if (cleanedPassword === 'Blau7777') {
-                // Correct Password
-                document.getElementById('login-wall').classList.add('hidden');
-                document.getElementById('portal-content').classList.remove('hidden');
-                
-                // Welcome Speech synthesis
-                setTimeout(() => {
-                    speakText('msg-welcome');
-                }, 500);
-            } else {
-                // Incorrect Password
-                errorMsg.classList.remove('hidden');
-                if (input.value !== cleanedPassword) {
-                    errorMsg.innerHTML = '❌ Passwort falsch. Bitte Leerzeichen am Anfang/Ende entfernen!';
-                } else {
-                    errorMsg.innerHTML = '❌ Falsches Passwort. Bitte versuchen Sie es erneut.';
-                }
-                input.focus();
-            }
-        }
-
-        // Add Enter Key event listener
-        document.getElementById('password-input').addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                checkPassword();
-            }
-        });
+        // Passwort-Gate entfernt (24.08.2026) — siehe Kommentar bei login-wall oben.
 
         // Predefined FAQ content (No fake personas, pure verified facts [3, 6])
         const faqDatabase = {
@@ -274,8 +218,10 @@
             },
             breakfast: {
                 title: "Frühstück & Innenhof-Garten",
-                text: "Unser reichhaltiges Frühstücksbuffet servieren wir Ihnen täglich von 07:00 bis 10:30 Uhr im Erdgeschoss. Bei gutem Wetter können Sie Ihr Frühstück auch sehr gerne in unserem ruhigen, grünen Innenhof-Garten genießen, der unsere beiden Häuser harmonisch miteinander verbindet."
+                text: "Unser reichhaltiges Frühstücksbuffet servieren wir Ihnen Montag bis Freitag von 6:30 bis 10:00 Uhr, am Wochenende von 7:00 bis 11:00 Uhr. Bei gutem Wetter können Sie Ihr Frühstück auch sehr gerne in unserem ruhigen, grünen Innenhof-Garten genießen, der unsere beiden Häuser harmonisch miteinander verbindet."
             },
+            // ACHTUNG (24.08.2026): Öffnungszeiten und Details unten sind NICHT mit der
+            // Rezeption verifiziert — vor Live-Schaltung bestätigen lassen.
             sauna: {
                 title: "Boutique-Sauna im Gartenhaus",
                 text: "Unsere finnische Boutique-Sauna befindet sich im Erdgeschoss des ruhigen Gartenhauses. Sie ist täglich von 16:00 bis 22:00 Uhr für Sie aufgeheizt. Bademäntel und Saunatücher finden Sie direkt auf Ihrem Zimmer. Auf Wunsch reservieren wir Ihnen auch gerne einen privaten Zeitslot für pure Entspannung."
