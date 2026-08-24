@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="de" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gäste-Portal Login — Turm Hotel Frankfurt</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Inter & Playfair Display -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        serif: ['Playfair Display', 'serif'],
+                    },
+                    colors: {
+                        gold: {
+                            DEFAULT: '#C5A880',
+                            light: '#E5D5C0',
+                            dark: '#A3845C',
+                            bright: '#D4AF37'
+                        },
+                        hotelgreen: {
+                            DEFAULT: '#0F2E22', // Reale Markenfarbe: Dunkelgrün
+                            dark: '#081B14',
+                            light: '#1B4735'
+                        },
+                        sand: {
+                            DEFAULT: '#F5F2EB',
+                            dark: '#E2DEC5'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        .gold-glow {
+            box-shadow: 0 0 25px rgba(197, 168, 128, 0.2);
+        }
+        .green-glow {
+            box-shadow: 0 15px 45px -10px rgba(8, 27, 20, 0.4);
+        }
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #081B14;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #C5A880;
+            border-radius: 3px;
+        }
+    </style>
+</head>
+<body class="bg-hotelgreen-dark text-stone-100 font-sans antialiased selection:bg-gold selection:text-hotelgreen-dark min-h-screen flex flex-col justify-between">
+
+    <!-- HEADER (Immer sichtbar) -->
+    <header class="py-6 px-6 md:px-12 border-b border-stone-800/60 flex justify-between items-center bg-hotelgreen/40 backdrop-blur-md">
+        <div class="flex items-center gap-3">
+            <!-- Kronen-Logo (Reale Marke) -->
+            <span class="text-2xl text-gold font-serif">👑</span>
+            <span class="font-serif tracking-widest uppercase text-lg font-bold text-stone-100">Turm Hotel <span class="text-gold">Frankfurt</span></span>
+        </div>
+        <div class="text-[10px] font-mono tracking-widest text-stone-400 bg-stone-800/40 px-3 py-1 border border-stone-700/50 rounded uppercase">
+            Eschersheimer Landstraße 20
+        </div>
+    </header>
+
+    <!-- HAUTPBEREICH -->
+    <main class="flex-grow flex items-center justify-center p-6 relative">
+        <div class="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-hotelgreen/60 via-transparent to-transparent opacity-70 pointer-events-none"></div>
+
+        <!-- 1. LOGIN WALL (Wird standardmäßig angezeigt) -->
+        <div id="login-wall" class="w-full max-w-md bg-hotelgreen border border-stone-800 p-8 rounded-2xl green-glow space-y-8 relative z-10 transition-all duration-500">
+            <div class="text-center space-y-3">
+                <span class="inline-block px-3 py-1 text-[10px] font-mono tracking-widest text-gold uppercase border border-gold/30 rounded-full">
+                    Gäste-Portal Login
+                </span>
+                <h2 class="text-3xl font-serif text-white">Herzlich willkommen</h2>
+                <p class="text-xs text-stone-400 max-w-xs mx-auto leading-relaxed">
+                    Bitte geben Sie das Passwort ein, das Sie auf Ihrem Zimmeraufsteller, per E-Mail oder auf der Einladungskarte finden.
+                </p>
+            </div>
+
+            <!-- Password Form -->
+            <div class="space-y-4">
+                <div class="space-y-1.5">
+                    <label for="password-input" class="text-[10px] font-mono tracking-widest text-stone-400 uppercase font-bold">Passwort</label>
+                    <div class="relative">
+                        <input type="password" id="password-input" class="w-full bg-hotelgreen-dark border border-stone-700/60 px-4 py-3.5 rounded-lg text-sm text-white focus:outline-none focus:border-gold/80 transition-all tracking-widest text-center" placeholder="••••••••" autocomplete="current-password">
+                    </div>
+                    <!-- Fehlermeldung -->
+                    <p id="error-message" class="text-xs text-red-400 text-center hidden"></p>
+                </div>
+
+                <!-- Fehler-Vermeidungs-Tipp für Gäste -->
+                <div class="bg-hotelgreen-dark/60 p-3.5 border border-stone-800/80 rounded-lg text-center space-y-1">
+                    <p class="text-[11px] text-stone-400">
+                        💡 <strong class="text-gold">Tipp:</strong> Das Passwort enthält keine Sonderzeichen oder Punkte am Ende. Groß- und Kleinschreibung beachten.
+                    </p>
+                </div>
+
+                <button onclick="checkPassword()" class="w-full py-4 bg-gold text-hotelgreen-dark font-bold text-xs uppercase tracking-widest hover:bg-gold-light hover:scale-[1.01] transition-all duration-300 rounded shadow-md font-sans">
+                    Foyer Betreten
+                </button>
+            </div>
+        </div>
+
+        <!-- 2. SIMULIERTER SPEAKING CHAT & WEGWEISER (Nach Login sichtbar) -->
+        <div id="portal-content" class="w-full max-w-4xl bg-hotelgreen border border-stone-800 rounded-2xl green-glow overflow-hidden hidden transition-all duration-500 relative z-10 grid grid-cols-1 lg:grid-cols-12">
+            
+            <!-- Linke Spalte: Infos & Ehrliche Ankündigung (BanglaHilfe Prinzip) -->
+            <div class="lg:col-span-5 p-8 border-b lg:border-b-0 lg:border-r border-stone-800/80 space-y-6 bg-hotelgreen-dark/40 flex flex-col justify-between">
+                <div class="space-y-6">
+                    <span class="inline-block px-3 py-1 text-[9px] font-mono tracking-widest text-gold uppercase border border-gold/30 rounded-full">
+                        Ehrliche Transparenz
+                    </span>
+                    <h3 class="text-3xl font-serif text-white leading-tight">Ihr digitaler <br><span class="text-gold italic">Wegweiser.</span></h3>
+                    
+                    <p class="text-xs text-stone-300 leading-relaxed font-light">
+                        Wir haben unpersönliche Chatbots satt, die vorgeben, echte Menschen zu sein. Deshalb ist dieser Bereich ein <strong>ehrlicher, interaktiver Wegweiser</strong>.
+                    </p>
+                    <p class="text-xs text-stone-400 leading-relaxed font-light">
+                        Die Antworten unten sind fest hinterlegte Service-Auskünfte zu unserem Hotel. Wenn Sie eine Frage haben, die hier nicht aufgeführt ist, klicken Sie einfach auf den Direkt-Button – Sie landen sofort bei unserem echten Team auf WhatsApp. Von Mensch zu Mensch.
+                    </p>
+                </div>
+
+                <!-- Voice Assistant Settings -->
+                <div class="bg-hotelgreen-dark p-4 border border-stone-800/80 rounded-xl space-y-3">
+                    <div class="flex items-center gap-2">
+                        <span class="text-base">🔊</span>
+                        <h4 class="text-xs font-bold uppercase tracking-wider text-gold">Speaking Chat aktiviert</h4>
+                    </div>
+                    <p class="text-[10px] text-stone-400 leading-relaxed">
+                        Dieses Portal liest Ihnen die Antworten unseres Teams auf Wunsch laut vor! Nutzen Sie dafür einfach das Lautsprecher-Symbol bei jeder Nachricht.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Rechte Spalte: Interaktiver Sprach-Chat -->
+            <div class="lg:col-span-7 flex flex-col h-[550px] bg-white text-slate-dark">
+                <!-- Chat-Header -->
+                <div class="bg-hotelgreen text-white p-5 flex justify-between items-center border-b border-stone-800">
+                    <div class="flex items-center gap-3">
+                        <div class="relative">
+                            <div class="w-10 h-10 rounded-full bg-gold/15 flex items-center justify-center font-serif text-lg font-bold text-gold border border-gold/30">
+                                👑
+                            </div>
+                            <span class="absolute bottom-0 right-0 w-2.5 h-2.5 bg-emerald-500 border-2 border-hotelgreen rounded-full animate-pulse"></span>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-sm font-serif text-white">Turm Hotel Wegweiser</h4>
+                            <p class="text-[9px] text-stone-400 uppercase tracking-widest">Rezeption & Concierge Infos</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <button onclick="stopSpeaking()" class="p-1.5 hover:bg-stone-800 text-stone-400 hover:text-white rounded transition-colors text-xs font-mono border border-stone-800" title="Sprachausgabe stoppen">
+                            🔇 Stopp
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Chat Messages Area -->
+                <div id="chat-messages" class="flex-grow p-6 space-y-4 overflow-y-auto bg-stone-50 flex flex-col text-stone-800">
+                    <!-- Default Greeting -->
+                    <div class="flex items-start gap-3 max-w-[85%]">
+                        <div class="w-8 h-8 rounded-full bg-hotelgreen text-white flex items-center justify-center text-xs font-serif shrink-0 border border-stone-200">
+                            H
+                        </div>
+                        <div class="bg-white p-4 rounded-xl border border-stone-200 shadow-sm text-xs leading-relaxed relative group">
+                            <p class="font-bold text-[9px] uppercase tracking-wider text-stone-400 mb-1">Hotel-Wegweiser</p>
+                            <p id="msg-welcome">Willkommen im Turm Hotel Frankfurt! Ich bin Ihr digitaler Wegweiser. Sie können hier die wichtigsten Informationen zu Ihrem Aufenthalt interaktiv abfragen und sich vorlesen lassen. Wie kann ich Ihnen heute helfen?</p>
+                            
+                            <!-- Speak Button -->
+                            <button onclick="speakText('msg-welcome')" class="absolute right-2 top-2 p-1 text-stone-400 hover:text-gold transition-colors text-xs" title="Vorlesen">
+                                🔊
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Chat Quick Actions (Echte Daten, 2 Häuser, 76 Zimmer) -->
+                <div class="p-4 bg-stone-100 border-t border-stone-200">
+                    <span class="text-[9px] font-mono font-bold tracking-widest text-stone-500 uppercase block mb-2">Häufige Fragen &amp; Infos</span>
+                    <div class="flex flex-wrap gap-2">
+                        <button onclick="triggerFaq('wlan')" class="px-3 py-1.5 bg-white hover:bg-gold hover:text-hotelgreen-dark transition-all text-xs font-medium rounded-full border border-stone-200 shadow-sm">
+                            📶 WLAN &amp; Internet
+                        </button>
+                        <button onclick="triggerFaq('breakfast')" class="px-3 py-1.5 bg-white hover:bg-gold hover:text-hotelgreen-dark transition-all text-xs font-medium rounded-full border border-stone-200 shadow-sm">
+                            ☕ Frühstück &amp; Garten
+                        </button>
+                        <button onclick="triggerFaq('sauna')" class="px-3 py-1.5 bg-white hover:bg-gold hover:text-hotelgreen-dark transition-all text-xs font-medium rounded-full border border-stone-200 shadow-sm">
+                            💆 Sauna im Gartenhaus
+                        </button>
+                        <button onclick="triggerFaq('checkout')" class="px-3 py-1.5 bg-white hover:bg-gold hover:text-hotelgreen-dark transition-all text-xs font-medium rounded-full border border-stone-200 shadow-sm">
+                            🔑 Check-out &amp; Gepäck
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Chat Input / WhatsApp Redirect (Frictionless E-Commerce à la BanglaHilfe) -->
+                <div class="p-4 border-t border-stone-200 flex gap-2 bg-white items-center">
+                    <p class="text-xs text-stone-500 font-light flex-grow leading-tight">
+                        Für Buchungen, Zimmerservice oder individuelle Wünsche leiten wir Sie sofort zu unserem echten Team auf WhatsApp weiter.
+                    </p>
+                    <a href="https://wa.me/491634692255?text=Hallo%20Turmhotel-Team,%20ich%20wohne%20in%20Zimmer%20und%20habe%20eine%20Frage:" target="_blank" class="px-4 py-3 bg-[#25D366] hover:bg-[#128C7E] text-white text-xs font-bold uppercase tracking-wider transition-colors rounded-lg flex items-center gap-2 shrink-0 shadow-sm">
+                        <span>💬 WhatsApp</span>
+                    </a>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- FOOTER (Immer sichtbar) -->
+    <footer class="py-6 px-6 md:px-12 border-t border-stone-800/60 flex flex-col sm:flex-row justify-between items-center text-[10px] text-stone-500 font-mono bg-hotelgreen/10">
+        <p>&copy; 2026 TURM HOTEL FRANKFURT. Alle Rechte vorbehalten. 100% Statisch &amp; Sicher.</p>
+        <div class="flex gap-4 mt-3 sm:mt-0">
+            <a href="#" class="hover:text-stone-300">Impressum</a>
+            <a href="#" class="hover:text-stone-300">Datenschutz</a>
+        </div>
+    </footer>
+
+    <!-- INTERACTIVE SCRIPTS -->
+    <script>
+        // Password Protection & Correction (Prevent copy-paste spaces causing errors)
+        function checkPassword() {
+            const input = document.getElementById('password-input');
+            const errorMsg = document.getElementById('error-message');
+            
+            // Clean the input: remove leading/trailing spaces and whitespaces
+            const cleanedPassword = input.value.trim();
+            
+            if (cleanedPassword === 'Blau7777') {
+                // Correct Password
+                document.getElementById('login-wall').classList.add('hidden');
+                document.getElementById('portal-content').classList.remove('hidden');
+                
+                // Welcome Speech synthesis
+                setTimeout(() => {
+                    speakText('msg-welcome');
+                }, 500);
+            } else {
+                // Incorrect Password
+                errorMsg.classList.remove('hidden');
+                if (input.value !== cleanedPassword) {
+                    errorMsg.innerHTML = '❌ Passwort falsch. Bitte Leerzeichen am Anfang/Ende entfernen!';
+                } else {
+                    errorMsg.innerHTML = '❌ Falsches Passwort. Bitte versuchen Sie es erneut.';
+                }
+                input.focus();
+            }
+        }
+
+        // Add Enter Key event listener
+        document.getElementById('password-input').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                checkPassword();
+            }
+        });
+
+        // Predefined FAQ content (No fake personas, pure verified facts [3, 6])
+        const faqDatabase = {
+            wlan: {
+                title: "WLAN Zugangsdaten",
+                text: "Unser Highspeed-WLAN steht Ihnen im gesamten Hotel (Haupthaus & Gartenhaus) kostenfrei zur Verfügung. Netzwerkname: 'Turmhotel_Guest'. Ein Passwort ist nicht erforderlich – Sie müssen lediglich auf der Willkommensseite unsere Nutzungsbedingungen akzeptieren."
+            },
+            breakfast: {
+                title: "Frühstück & Innenhof-Garten",
+                text: "Unser reichhaltiges Frühstücksbuffet servieren wir Ihnen täglich von 07:00 bis 10:30 Uhr im Erdgeschoss. Bei gutem Wetter können Sie Ihr Frühstück auch sehr gerne in unserem ruhigen, grünen Innenhof-Garten genießen, der unsere beiden Häuser harmonisch miteinander verbindet."
+            },
+            sauna: {
+                title: "Boutique-Sauna im Gartenhaus",
+                text: "Unsere finnische Boutique-Sauna befindet sich im Erdgeschoss des ruhigen Gartenhauses. Sie ist täglich von 16:00 bis 22:00 Uhr für Sie aufgeheizt. Bademäntel und Saunatücher finden Sie direkt auf Ihrem Zimmer. Auf Wunsch reservieren wir Ihnen auch gerne einen privaten Zeitslot für pure Entspannung."
+            },
+            checkout: {
+                title: "Check-out & Gepäckaufbewahrung",
+                text: "Wir bitten Sie, Ihr Zimmer am Abreisetag bis 11:00 Uhr freizugeben. Ein Late Check-out ist je nach Verfügbarkeit gegen einen kleinen Aufpreis möglich. Ihr Gepäck bewahren wir nach dem Auschecken selbstverständlich gerne kostenfrei und sicher an unserer Rezeption für Sie auf."
+            }
+        };
+
+        // Text To Speech Synthesis Implementation (100% Static & Private, using Native Web Speech API)
+        let currentUtterance = null;
+
+        function speakText(elementId) {
+            // Stop any ongoing speech
+            stopSpeaking();
+
+            const text = document.getElementById(elementId).innerText;
+            
+            if ('speechSynthesis' in window) {
+                currentUtterance = new SpeechSynthesisUtterance(text);
+                currentUtterance.lang = 'de-DE';
+                currentUtterance.rate = 1.0;
+                currentUtterance.pitch = 1.0;
+                
+                // Visual feedback (Pulse active speaker button)
+                window.speechSynthesis.speak(currentUtterance);
+            } else {
+                console.warn("Text-to-speech is not supported in this browser.");
+            }
+        }
+
+        function stopSpeaking() {
+            if ('speechSynthesis' in window) {
+                window.speechSynthesis.cancel();
+            }
+        }
+
+        // Handle FAQ clicks
+        function triggerFaq(key) {
+            const faq = faqDatabase[key];
+            if (!faq) return;
+
+            // Step 1: Append User Question Bubble
+            appendMessage("Gast", `Wo finde ich Infos zu: ${faq.title}?`, true);
+
+            // Step 2: Show Typing/Simulating Indicator
+            appendTypingIndicator();
+
+            // Step 3: Append System Answer Bubble with Read-aloud action
+            setTimeout(() => {
+                removeTypingIndicator();
+                
+                const container = document.getElementById('chat-messages');
+                const msgId = `msg-faq-${Date.now()}`;
+                
+                const msgDiv = document.createElement('div');
+                msgDiv.className = 'flex items-start gap-3 max-w-[85%]';
+                msgDiv.innerHTML = `
+                    <div class="w-8 h-8 rounded-full bg-hotelgreen text-white flex items-center justify-center text-xs font-serif shrink-0 border border-stone-200">
+                        H
+                    </div>
+                    <div class="bg-white p-4 rounded-xl border border-stone-200 shadow-sm text-xs leading-relaxed relative group">
+                        <p class="font-bold text-[9px] uppercase tracking-wider text-stone-400 mb-1">Hotel-Wegweiser</p>
+                        <h5 class="font-bold text-stone-800 mb-1">${faq.title}</h5>
+                        <p id="${msgId}">${faq.text}</p>
+                        
+                        <!-- Speak Button -->
+                        <button onclick="speakText('${msgId}')" class="absolute right-2 top-2 p-1 text-stone-400 hover:text-gold transition-colors text-xs" title="Vorlesen">
+                            🔊
+                        </button>
+                    </div>
+                `;
+                
+                container.appendChild(msgDiv);
+                container.scrollTop = container.scrollHeight;
+
+                // Auto-read the new message
+                setTimeout(() => {
+                    speakText(msgId);
+                }, 300);
+
+            }, 800);
+        }
+
+        // Helper: Append standard text bubble
+        function appendMessage(sender, text, isUser = false) {
+            const container = document.getElementById('chat-messages');
+            const msgDiv = document.createElement('div');
+            msgDiv.className = `flex items-start gap-3 max-w-[85%] ${isUser ? 'self-end flex-row-reverse' : ''}`;
+            
+            const initials = isUser ? 'G' : 'H';
+            const avatarBg = isUser ? 'bg-gold text-hotelgreen-dark' : 'bg-hotelgreen text-white';
+            const bubbleBg = isUser ? 'bg-gold/10 border border-gold/30' : 'bg-white border border-stone-200';
+            
+            msgDiv.innerHTML = `
+                <div class="w-8 h-8 rounded-full ${avatarBg} flex items-center justify-center text-xs font-serif shrink-0 border border-stone-200">
+                    ${initials}
+                </div>
+                <div class="${bubbleBg} p-4 rounded-xl shadow-sm text-xs leading-relaxed">
+                    <p class="font-bold text-[9px] uppercase tracking-wider text-stone-400 mb-1">${sender}</p>
+                    <p>${text}</p>
+                </div>
+            `;
+            
+            container.appendChild(msgDiv);
+            container.scrollTop = container.scrollHeight;
+        }
+
+        // Helper: Typing indicators
+        function appendTypingIndicator() {
+            const container = document.getElementById('chat-messages');
+            const typingDiv = document.createElement('div');
+            typingDiv.id = 'typing-indicator';
+            typingDiv.className = 'flex items-start gap-3 max-w-[85%]';
+            typingDiv.innerHTML = `
+                <div class="w-8 h-8 rounded-full bg-hotelgreen text-white flex items-center justify-center text-xs font-serif shrink-0 border border-stone-200">
+                    H
+                </div>
+                <div class="bg-white border border-stone-200 p-3 rounded-xl shadow-sm text-xs italic flex items-center gap-1 text-stone-500">
+                    <span>Wegweiser sucht Infos</span>
+                    <span class="animate-bounce">.</span>
+                    <span class="animate-bounce" style="animation-delay: 0.2s">.</span>
+                    <span class="animate-bounce" style="animation-delay: 0.4s">.</span>
+                </div>
+            `;
+            container.appendChild(typingDiv);
+            container.scrollTop = container.scrollHeight;
+        }
+
+        function removeTypingIndicator() {
+            const indicator = document.getElementById('typing-indicator');
+            if (indicator) indicator.remove();
+        }
+    </script>
+</body>
+</html>
