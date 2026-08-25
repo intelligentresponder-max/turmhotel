@@ -120,8 +120,10 @@ footer{border-top:1px solid var(--line);background:var(--cream-2);margin-top:1re
 
 <div class="hero">
   <div class="crown-big">♔</div>
-  <span class="eyebrow" id="eyebrow">Nach dem Check-in</span>
+  <span class="eyebrow" id="eyebrow">Nach dem Check-in, nach Erhalt der Zimmerkarte</span>
+  <p style="font-size:.85rem;color:var(--muted);margin-bottom:.3rem" id="location-note">Sie befinden sich im Erdgeschoss an der Rezeption.</p>
   <h1 id="page-title">Wegweiser zum Zimmer</h1>
+  <p style="font-weight:600;margin-bottom:.2rem" id="page-question">Wie finde ich mein Zimmer?</p>
   <p class="lead" id="page-lead">Wählen Sie Ihre Sprache und folgen Sie der Wegbeschreibung.</p>
   <div class="creative">… Creative Moments</div>
 </div>
@@ -172,10 +174,12 @@ const ROOMS = {
 };
 
 const L = {
-  de:{name:"Deutsch", title:"Wegweiser zum Zimmer", lead:"Wählen Sie Ihre Sprache und folgen Sie der Wegbeschreibung.", eyebrow:"Nach dem Check-in",
+  de:{name:"Deutsch", title:"Wegweiser zum Zimmer", lead:"Wählen Sie Ihre Sprache und folgen Sie der Wegbeschreibung.", eyebrow:"Nach dem Check-in, nach Erhalt der Zimmerkarte",
+    locationNote:"Sie befinden sich im Erdgeschoss an der Rezeption.",
+    question:"Wie finde ich mein Zimmer?",
     guide:"So gelangen Sie zu Ihrem Zimmer",
     mainH:"Im Hauptgebäude",
-    main:["Gehen Sie durch die Glastür direkt neben der Rezeption und biegen Sie rechts ab.","Dort finden Sie den Aufzug.","Bitte drücken Sie die Aufzugtür wieder fest zu, wenn Sie oben aussteigen."],
+    main:["Gehen Sie durch die Glastür direkt neben der Rezeption und biegen Sie rechts ab.","Dort finden Sie den Aufzug oder das Treppenhaus.","Achten Sie auf die Größe des Aufzugs — Ihr Koffer sollte die Metallkabine nicht berühren.","Zimmer 11–55 befinden sich im Vorderhaus.","Bitte drücken Sie die Aufzugtür wieder fest zu, wenn Sie oben aussteigen."],
     annexH:"Im Nebengebäude",
     annex:["Gehen Sie neben dem Spiegel die Treppe hinunter, durch den Gang mit den roten Kinosesseln.","Am Ende des Ganges biegen Sie rechts ab und gehen durch die offene Glastür.","Neben dem Notausgang befindet sich auf der linken Seite der Aufzug.","Bitte biegen Sie oben noch einmal links ab, wenn Sie aussteigen."],
     f1:"1. Etage", f2:"2. Etage",
@@ -328,6 +332,14 @@ function render(code){
   document.getElementById("page-title").textContent = d.title;
   document.getElementById("page-lead").textContent = d.lead;
   document.getElementById("guide-title").textContent = d.guide;
+
+  const locationNoteEl = document.getElementById("location-note");
+  if (d.locationNote) { locationNoteEl.textContent = d.locationNote; locationNoteEl.style.display = ""; }
+  else { locationNoteEl.style.display = "none"; }
+
+  const questionEl = document.getElementById("page-question");
+  if (d.question) { questionEl.textContent = d.question; questionEl.style.display = ""; }
+  else { questionEl.style.display = "none"; }
 
   document.getElementById("main-h").textContent = d.mainH;
   document.getElementById("main-steps").innerHTML = d.main.map(s=>`<li><span class="arr">→</span><span>${s}</span></li>`).join("");
