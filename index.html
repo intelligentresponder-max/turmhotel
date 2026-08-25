@@ -351,6 +351,38 @@ footer{
   <p style="margin-top:1.4rem"><a href="wegweiser.html">→ Wegweiser zum Zimmer (in 15 Sprachen)</a></p>
 </section>
 
+<section class="block" id="fruehstueck-buchen" style="padding-top:0">
+  <span class="eyebrow">Für morgen früh</span>
+  <h2>Frühstück &amp; Zimmerservice anmelden</h2>
+  <p style="color:var(--muted);max-width:38rem">Unkompliziert für morgen vorbestellen — Ihre Anfrage geht direkt als E-Mail an die Rezeption. Eine automatische Bestätigung erhalten Sie nicht; bei Fragen rufen Sie uns gerne an.</p>
+  <div class="card" style="max-width:32rem;margin-top:1.2rem">
+    <form id="fsForm" onsubmit="return sendFruehstueckAnfrage(event)" style="display:flex;flex-direction:column;gap:.8rem">
+      <label style="font-size:.85rem">Zimmernummer
+        <input type="text" id="fsZimmer" required style="width:100%;padding:.5rem .7rem;margin-top:.25rem;border:1px solid var(--line);border-radius:6px;box-sizing:border-box">
+      </label>
+      <label style="font-size:.85rem">Personenanzahl
+        <input type="number" id="fsPersonen" min="1" value="1" required style="width:100%;padding:.5rem .7rem;margin-top:.25rem;border:1px solid var(--line);border-radius:6px;box-sizing:border-box">
+      </label>
+      <label style="font-size:.85rem">Ernährungsoption
+        <select id="fsOption" style="width:100%;padding:.5rem .7rem;margin-top:.25rem;border:1px solid var(--line);border-radius:6px;box-sizing:border-box">
+          <option>Standard</option>
+          <option>Vegetarisch</option>
+          <option>Laktosefrei</option>
+          <option>Glutenfrei (auf Anfrage)</option>
+        </select>
+      </label>
+      <label style="font-size:.85rem">Gewünschte Uhrzeit
+        <input type="time" id="fsZeit" min="06:30" max="11:00" style="width:100%;padding:.5rem .7rem;margin-top:.25rem;border:1px solid var(--line);border-radius:6px;box-sizing:border-box">
+      </label>
+      <label style="font-size:.85rem;display:flex;align-items:center;gap:.5rem">
+        <input type="checkbox" id="fsZimmerservice" style="width:auto">
+        Zimmerservice gewünscht (+5,00 € pro Person)
+      </label>
+      <button type="submit" style="padding:.7rem 1.2rem;background:var(--ink);color:var(--cream);border:1px solid var(--brass);border-radius:8px;cursor:pointer;font-size:.9rem">Anfrage per E-Mail senden</button>
+    </form>
+  </div>
+</section>
+
 <section class="block" id="kontakt" style="padding-top:0">
   <span class="eyebrow">Wir sind für Sie da</span>
   <h2>Kontakt</h2>
@@ -403,9 +435,11 @@ footer{
 (function(){
   var GUEST_FAQ = [
     { q: "Check-in / Check-out?",
-      a: "Check-in ab 15:00 Uhr, Check-out bis 11:00 Uhr. Die Rezeption ist täglich von 6:45 bis 22:30 Uhr besetzt." },
+      a: "Check-in ab 15:00 Uhr, Check-out bis 11:00 Uhr. Die Rezeption ist täglich von 6:45 bis 22:30 Uhr besetzt. Kommen Sie nach 22:30 Uhr an, teilen Sie uns das bitte vorab mit — dann stellen wir Ihnen rechtzeitig die Zugangsdaten für die Nachteingangstür zur Verfügung." },
+    { q: "Wie funktioniert der Late Check-in genau?",
+      a: "In drei Schritten: 1. Sie gelangen über die Nachteingangstür ins Haus — haben Sie bereits eine Schlüsselkarte, halten Sie diese einfach an das Lesegerät (der PIN ist darauf bereits hinterlegt); haben Sie noch keine Karte, geben Sie stattdessen Ihren persönlichen PIN direkt am Lesegerät ein. Diesen PIN erhalten Sie ausschließlich für den Late Check-in nach Rezeptionsschluss. 2. Ihre Zimmerkarte holen Sie aus dem Schlüsselsafe im Bereich der Nachteingangstür, neben dem Aufzug — auch hier öffnet die Eingabe Ihres persönlichen PINs den Safe. 3. Vom Schlüsselsafe aus geht es weiter: Für Zimmer 11–55 im Vorderhaus nehmen Sie einfach die Treppe direkt neben dem Schlüsselsafe nach oben — das ist bereits die richtige Treppe in die Obergeschosse. Alternativ steht Ihnen rechter Hand auch ein Aufzug zur Verfügung. Für Zimmer 102–505 im Hinterhaus gehen Sie durch die Glastür an der Rezeption vorbei, durch den Gang mit den roten Kinosesseln und biegen dort rechts ab — dort finden Sie den Aufzug in die Obergeschosse." },
     { q: "Frühstückszeiten?",
-      a: "Mo–Fr 6:30–10:00 Uhr, Sa–So 7:00–11:00 Uhr. 18,– € pro Person, Kinder bis 8 Jahre zum halben Preis. Eierspeisen bereiten wir gerne nach Wunsch zu." },
+      a: "Mo–Fr 6:30–10:00 Uhr, Sa–So 7:00–11:00 Uhr. 18,– € pro Person, Kinder bis 8 Jahre zum halben Preis. Eierspeisen bereiten wir gerne nach Wunsch zu. Neben dem Buffet bieten wir auch vegetarische und laktosefreie Optionen an, auf Anfrage gerne auch glutenfrei. <a href=\"#fruehstueck-buchen\">Frühstück für morgen anmelden →</a>" },
     { q: "Ich komme nach 22:30 Uhr an",
       a: "Kein Problem: Mit Ihrer aktivierten Schlüsselkarte kommen Sie über die Nachteingangstür jederzeit ins Haus. Die drei Schritte dazu stehen weiter unten auf dieser Seite. <a href=\"#nacht\">Zum Nachteingang →</a>" },
     { q: "Wie finde ich mein Zimmer?",
@@ -502,6 +536,26 @@ footer{
     if(e.key === 'Escape' && panel.classList.contains('open')) closePanel();
   });
 })();
+
+function sendFruehstueckAnfrage(e){
+  e.preventDefault();
+  var zimmer = document.getElementById('fsZimmer').value.trim();
+  var personen = document.getElementById('fsPersonen').value;
+  var option = document.getElementById('fsOption').value;
+  var zeit = document.getElementById('fsZeit').value || 'keine Angabe';
+  var zimmerservice = document.getElementById('fsZimmerservice').checked;
+  var betreff = 'Fruehstuecksanmeldung Zimmer ' + zimmer + ' fuer morgen';
+  var body = 'Zimmernummer: ' + zimmer + '\n' +
+             'Personenanzahl: ' + personen + '\n' +
+             'Ernaehrungsoption: ' + option + '\n' +
+             'Gewuenschte Uhrzeit: ' + zeit + '\n' +
+             'Zimmerservice gewuenscht (+5,00 EUR pro Person): ' + (zimmerservice ? 'Ja' : 'Nein');
+  var mailto = 'mailto:rooms@turmhotel-frankfurt.de'
+    + '?subject=' + encodeURIComponent(betreff)
+    + '&body=' + encodeURIComponent(body);
+  window.location.href = mailto;
+  return false;
+}
 </script>
 
 </body>
