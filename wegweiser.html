@@ -1,413 +1,438 @@
 <!DOCTYPE html>
-<html lang="de">
+<html lang="de" class="scroll-smooth">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Wegweiser zum Zimmer · Turm Hotel Frankfurt</title>
-<meta name="description" content="So finden Sie nach dem Check-in Ihr Zimmer im Turm Hotel Frankfurt – Wegbeschreibung für Haupt- und Nebengebäude in 15 Sprachen.">
-<meta name="robots" content="noindex, nofollow">
-<link rel="canonical" href="https://intelligentresponder-max.github.io/turmhotel/wegweiser.html">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Turm Hotel Frankfurt Zimmer Wegweiser: Hauptgebäude & Anbau</title>
+    <meta name="description" content="Turm Hotel Frankfurt Zimmer Wegweiser: Finden Sie nach dem Check-in Ihr Zimmer von der Rezeption aus – inklusive Wege für Hauptgebäude (11–55) und Anbau.">
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Playfair Display & Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght=0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        serif: ['Playfair Display', 'serif'],
+                    },
+                    colors: {
+                        gold: {
+                            DEFAULT: '#C5A880',
+                            light: '#E5D5C0',
+                            dark: '#A3845C'
+                        },
+                        emerald: {
+                            dark: '#122018',
+                            deep: '#1A2E22',
+                            light: '#2D4A37'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
 
-<meta property="og:type" content="website">
-<meta property="og:locale" content="de_DE">
-<meta property="og:site_name" content="Turm Hotel Frankfurt">
-<meta property="og:title" content="Wegweiser zum Zimmer · Turm Hotel Frankfurt">
-<meta property="og:description" content="Wegbeschreibung zu Ihrem Zimmer in 15 Sprachen.">
-<meta property="og:url" content="https://intelligentresponder-max.github.io/turmhotel/wegweiser.html">
-
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
-
-<style>
-:root{
-  --green:#2e6b4f;       /* Turm Hotel green */
-  --green-deep:#234f3a;
-  --green-soft:#e4ede7;
-  --ink:#2a2622;
-  --cream:#f6f2ea;
-  --cream-2:#efe8db;
-  --line:#d6d0c2;
-  --muted:#6f665b;
-  --white:#fffdf8;
-  --gold:#c8a24a;
-}
-*{box-sizing:border-box;margin:0;padding:0}
-html{scroll-behavior:smooth}
-body{font-family:'Jost',sans-serif;font-weight:300;color:var(--ink);background:var(--cream);line-height:1.65;-webkit-font-smoothing:antialiased}
-h1,h2,h3,.serif{font-family:'Cormorant Garamond',serif;font-weight:500;letter-spacing:.01em}
-a{color:var(--green-deep)}
-.eyebrow{font-weight:500;text-transform:uppercase;letter-spacing:.3em;font-size:.7rem;color:var(--green)}
-
-/* Header with green logo */
-header{position:sticky;top:0;z-index:50;background:rgba(246,242,234,.94);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
-.nav{max-width:920px;margin:0 auto;padding:.8rem 1.5rem;display:flex;align-items:center;justify-content:space-between;gap:1rem}
-.brand{display:flex;align-items:center;gap:.7rem;text-decoration:none}
-.logo{
-  width:42px;height:52px;background:var(--green);border-radius:3px;
-  display:flex;flex-direction:column;align-items:center;justify-content:flex-end;
-  padding-bottom:5px;flex-shrink:0;position:relative;
-}
-.logo .crown{color:#fff;font-size:.85rem;line-height:1;margin-bottom:2px}
-.logo b{color:#fff;font-family:'Cormorant Garamond',serif;font-size:.62rem;letter-spacing:.14em;line-height:1;text-align:center}
-.brand .txt b{display:block;font-family:'Cormorant Garamond',serif;font-weight:600;font-size:1.2rem;color:var(--ink);letter-spacing:.03em;line-height:1.1}
-.brand .txt small{font-size:.58rem;letter-spacing:.26em;text-transform:uppercase;color:var(--muted)}
-.back{font-size:.78rem;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);text-decoration:none}
-.back:hover{color:var(--green-deep)}
-
-/* Hero */
-.hero{max-width:920px;margin:0 auto;padding:3rem 1.5rem 1rem;text-align:center}
-.hero .crown-big{color:var(--green);font-size:1.6rem}
-.hero h1{font-size:clamp(2.1rem,5.5vw,3.2rem);margin:.4rem 0 .2rem}
-.hero p.lead{color:var(--muted);max-width:32rem;margin:.4rem auto 0}
-.creative{font-family:'Cormorant Garamond',serif;font-style:italic;color:var(--green);font-size:1.1rem;margin-top:.3rem}
-
-/* Language switcher */
-.lang-wrap{max-width:920px;margin:1.6rem auto 0;padding:0 1.5rem}
-.lang-label{font-size:.72rem;text-transform:uppercase;letter-spacing:.18em;color:var(--muted);text-align:center;margin-bottom:.7rem}
-.lang-grid{display:flex;flex-wrap:wrap;justify-content:center;gap:.4rem}
-.lang-btn{
-  font-family:'Jost',sans-serif;font-size:.82rem;
-  padding:.45rem .85rem;border:1px solid var(--line);background:var(--white);
-  color:var(--ink);border-radius:40px;cursor:pointer;transition:all .15s;
-}
-.lang-btn:hover{border-color:var(--green)}
-.lang-btn.active{background:var(--green);color:#fff;border-color:var(--green)}
-
-/* Content card */
-.guide{max-width:920px;margin:2rem auto;padding:0 1.5rem}
-.title-line{font-size:clamp(1.5rem,4vw,2rem);text-align:center;margin-bottom:1.6rem;color:var(--green-deep)}
-.building{
-  background:var(--white);border:1px solid var(--line);border-radius:3px;
-  padding:1.8rem 1.8rem;margin-bottom:1.2rem;
-}
-.building h2{font-size:1.5rem;color:var(--green-deep);display:flex;align-items:center;gap:.6rem;margin-bottom:1rem}
-.building h2 .dot{width:9px;height:9px;background:var(--green);border-radius:50%;display:inline-block}
-.steps{list-style:none;display:grid;gap:.7rem}
-.steps li{display:flex;gap:.9rem;align-items:flex-start;font-size:1rem}
-.steps li .arr{color:var(--green);font-weight:500;flex-shrink:0;margin-top:.15rem}
-.rooms{margin-top:1.1rem;display:flex;flex-wrap:wrap;gap:.6rem}
-.room-chip{
-  background:var(--green-soft);color:var(--green-deep);
-  border-radius:30px;padding:.4rem 1rem;font-size:.92rem;
-}
-.room-chip b{font-weight:500}
-.closing{
-  text-align:center;font-family:'Cormorant Garamond',serif;font-size:1.3rem;
-  color:var(--green-deep);margin:1.8rem 0 .6rem;
-}
-
-footer{border-top:1px solid var(--line);background:var(--cream-2);margin-top:1rem}
-.foot-inner{max-width:920px;margin:0 auto;padding:2rem 1.5rem;display:flex;flex-wrap:wrap;justify-content:space-between;gap:1rem;font-size:.85rem;color:var(--muted)}
-.foot-inner .crown{color:var(--green)}
-.foot-links a{color:var(--muted);margin-left:1rem}
-@media(max-width:600px){.foot-inner{flex-direction:column}.foot-links a{margin:0 1rem 0 0}.building{padding:1.4rem}}
-[dir="rtl"] .steps li{flex-direction:row-reverse;text-align:right}
-[dir="rtl"] .building h2{flex-direction:row-reverse}
-</style>
+    <style>
+        .gold-glow {
+            box-shadow: 0 0 20px rgba(197, 168, 128, 0.2);
+        }
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #122018;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #C5A880;
+            border-radius: 3px;
+        }
+    </style>
 </head>
-<body>
+<body class="bg-emerald-dark text-stone-100 font-sans antialiased selection:bg-gold selection:text-emerald-dark min-h-screen flex flex-col justify-between">
 
-<header>
-  <div class="nav">
-    <a class="brand" href="index.html">
-      <span class="logo"><span class="crown">♔</span><b>TURM<br>HOTEL</b></span>
-      <span class="txt"><b>Turm Hotel</b><small>Frankfurt am Main</small></span>
-    </a>
-    <a class="back" href="index.html">← Übersicht</a>
-  </div>
-</header>
+    <!-- PASSWORD GATE -->
+    <div id="password-gate" class="fixed inset-0 z-50 flex items-center justify-center bg-emerald-deep px-6 transition-opacity duration-500">
+        <div class="max-w-md w-full bg-emerald-dark border border-gold/30 p-8 rounded-2xl shadow-2xl text-center space-y-6">
+            <div class="flex justify-center">
+                <span class="text-4xl">👑</span>
+            </div>
+            <h2 class="text-2xl font-serif text-gold tracking-wide uppercase">Turm Hotel Frankfurt</h2>
+            <p class="text-stone-300 text-sm font-light">Bitte geben Sie das Passwort aus Ihrem Gäste-Anschreiben ein:</p>
+            
+            <div class="space-y-3">
+                <input type="password" id="gate-password-input" 
+                       class="w-full bg-emerald-deep border border-stone-700 focus:border-gold px-4 py-3 rounded-lg text-white text-center tracking-widest focus:outline-none" 
+                       placeholder="Passwort eingeben">
+                <p id="password-error" class="text-red-400 text-xs hidden">Falsches Passwort. Bitte versuchen Sie es erneut.</p>
+            </div>
 
-<div class="hero">
-  <div class="crown-big">♔</div>
-  <span class="eyebrow" id="eyebrow">Nach dem Check-in, nach Erhalt der Zimmerkarte</span>
-  <p style="font-size:.85rem;color:var(--muted);margin-bottom:.3rem" id="location-note">Sie befinden sich im Erdgeschoss an der Rezeption.</p>
-  <h1 id="page-title">Wegweiser zum Zimmer</h1>
-  <p style="font-weight:600;margin-bottom:.2rem" id="page-question">Wie finde ich mein Zimmer?</p>
-  <p class="lead" id="page-lead">Wählen Sie Ihre Sprache und folgen Sie der Wegbeschreibung.</p>
-  <div class="creative">… Creative Moments</div>
-</div>
-
-<div class="lang-wrap">
-  <div class="lang-label" id="lang-label">Sprache wählen · Choose your language</div>
-  <div class="lang-grid" id="langGrid"></div>
-</div>
-
-<div class="guide">
-  <div class="title-line" id="guide-title"></div>
-
-  <div class="building">
-    <h2><span class="dot"></span><span id="main-h"></span></h2>
-    <ul class="steps" id="main-steps"></ul>
-    <div class="rooms" id="main-rooms"></div>
-  </div>
-
-  <div class="building">
-    <h2><span class="dot"></span><span id="annex-h"></span></h2>
-    <ul class="steps" id="annex-steps"></ul>
-    <div class="rooms" id="annex-rooms"></div>
-  </div>
-
-  <div class="closing" id="closing"></div>
-</div>
-
-<footer>
-  <div class="foot-inner">
-    <div>
-      <span class="crown">♔</span> <b class="serif" style="font-size:1.1rem">Turm Hotel Frankfurt</b><br>
-      Eschersheimer Landstraße 20 · 60322 Frankfurt am Main<br>
-      © 2026 Turm Hotel GmbH · Raum für Möglichkeiten
+            <button onclick="checkGatePassword()" 
+                    class="w-full py-3 bg-gold text-emerald-dark font-bold uppercase tracking-widest text-xs hover:bg-gold-dark transition-colors rounded">
+                Anmelden
+            </button>
+        </div>
     </div>
-    <div class="foot-links">
-      <a href="index.html">Gäste-Info</a>
-      <a href="https://www.turmhotel-frankfurt.de/">Hauptseite</a>
+
+    <!-- MAIN CONTAINER (Hidden until authenticated) -->
+    <div id="main-content" class="max-w-3xl mx-auto px-6 py-12 space-y-12 w-full">
+        
+        <!-- HEADER -->
+        <header class="text-center space-y-4">
+            <div class="flex justify-center items-center gap-3">
+                <span class="text-3xl text-gold">👑</span>
+            </div>
+            <h1 class="text-3xl md:text-4xl font-serif tracking-tight text-gold uppercase mt-2">Turm Hotel Frankfurt</h1>
+            <p class="text-xs tracking-widest text-stone-400 uppercase font-mono border-b border-stone-800 pb-4">Creative Moments</p>
+        </header>
+
+        <!-- LANGUAGE SELECTOR -->
+        <section class="space-y-3 bg-emerald-deep/40 p-5 rounded-xl border border-stone-800/80">
+            <h3 class="text-xs tracking-widest text-gold uppercase font-mono text-center mb-4" id="lang-label">Sprache wählen · Choose your language</h3>
+            <div class="flex flex-wrap justify-center gap-2">
+                <button onclick="setLanguage('de')" id="lang-btn-de" class="px-3.5 py-1.5 rounded-full text-xs font-semibold bg-gold text-emerald-dark transition-all">Deutsch</button>
+                <button onclick="setLanguage('en')" id="lang-btn-en" class="px-3.5 py-1.5 rounded-full text-xs font-semibold bg-emerald-deep border border-stone-700 text-stone-300 hover:border-gold/50 transition-all">English</button>
+                <button onclick="setLanguage('it')" id="lang-btn-it" class="px-3.5 py-1.5 rounded-full text-xs font-semibold bg-emerald-deep border border-stone-700 text-stone-300 hover:border-gold/50 transition-all">Italiano</button>
+                <button onclick="setLanguage('es')" id="lang-btn-es" class="px-3.5 py-1.5 rounded-full text-xs font-semibold bg-emerald-deep border border-stone-700 text-stone-300 hover:border-gold/50 transition-all">Español</button>
+                <button onclick="setLanguage('fr')" id="lang-btn-fr" class="px-3.5 py-1.5 rounded-full text-xs font-semibold bg-emerald-deep border border-stone-700 text-stone-300 hover:border-gold/50 transition-all">Français</button>
+                <button onclick="setLanguage('pl')" id="lang-btn-pl" class="px-3.5 py-1.5 rounded-full text-xs font-semibold bg-emerald-deep border border-stone-700 text-stone-300 hover:border-gold/50 transition-all">Polski</button>
+            </div>
+        </section>
+
+        <!-- INTRO CONTENT -->
+        <main class="space-y-12">
+            <div class="space-y-4">
+                <h2 class="text-xl md:text-2xl font-serif text-white tracking-wide" id="intro-title">Zimmer Wegweiser: Zimmer finden nach Check-in</h2>
+                <p class="text-stone-300 text-sm font-light leading-relaxed" id="intro-desc">
+                    Mit diesem Turm Hotel Frankfurt Zimmer Wegweiser finden Sie nach dem Check-in (Zimmerschlüssel erhalten) den Weg von der Rezeption im Erdgeschoss zu Ihrem Hotelzimmer – je nach Zimmernummer im Hauptgebäude oder im Anbau.
+                </p>
+                <div class="bg-emerald-deep p-4 rounded-lg border-l-2 border-gold text-xs text-stone-300 font-mono flex items-center justify-between">
+                    <div>
+                        <span class="block text-gold uppercase font-bold text-[10px] mb-1">WLAN-Passwort</span>
+                        <span id="wifi-pass">Gruen3209!</span>
+                    </div>
+                    <button onclick="speakText('wifi-label')" class="p-2 bg-emerald-dark hover:bg-emerald-light rounded text-gold transition-colors">🔊</button>
+                </div>
+            </div>
+
+            <!-- MAIN BUILDING (Rooms 11-55) -->
+            <section class="space-y-6">
+                <div class="border-b border-stone-800 pb-2 flex justify-between items-center">
+                    <h3 class="font-serif text-lg text-gold flex items-center gap-2" id="building-main-title">🏢 Im Hauptgebäude (Rooms 11–55)</h3>
+                    <button onclick="speakSection('main-building-list')" class="px-2.5 py-1.5 bg-emerald-deep hover:bg-emerald-light rounded text-xs text-gold transition-colors flex items-center gap-1.5">🔊 Vorlesen</button>
+                </div>
+                
+                <ul class="space-y-3.5 text-sm font-light text-stone-300" id="main-building-list">
+                    <li class="flex items-start gap-3"><span class="text-gold shrink-0 mt-0.5">→</span> <span data-key="main_step1">Gehen Sie durch die Glastür neben der Rezeption und biegen Sie rechts ab.</span></li>
+                    <li class="flex items-start gap-3"><span class="text-gold shrink-0 mt-0.5">→</span> <span data-key="main_step2">Dort finden Sie den Aufzug oder das Treppenhaus.</span></li>
+                    <li class="flex items-start gap-3"><span class="text-gold shrink-0 mt-0.5">→</span> <span data-key="main_step3">Bitte beachten Sie die Größe des Aufzugs: Ihr Koffer sollte die Metallkabine nicht berühren.</span></li>
+                    <li class="flex items-start gap-3"><span class="text-gold shrink-0 mt-0.5">→</span> <span data-key="main_step4">Die Zimmer 11–55 befinden sich im Hauptgebäude.</span></li>
+                    <li class="flex items-start gap-3"><span class="text-gold shrink-0 mt-0.5">→</span> <span data-key="main_step5">Es gibt kein Zimmer 13; dort befindet sich der Milan-Konferenzraum.</span></li>
+                    <li class="flex items-start gap-3"><span class="text-gold shrink-0 mt-0.5">→</span> <span data-key="main_step6">Bitte schließen Sie die Aufzugtüren beim Ausstieg im obersten Stockwerk fest.</span></li>
+                </ul>
+
+                <div class="grid grid-cols-1 md:grid-cols-5 gap-3 pt-2 text-center text-xs font-mono text-stone-300">
+                    <div class="bg-emerald-deep p-2 rounded border border-stone-800/80"><span class="text-gold block mb-1">1. OG</span>11 · 12 · 14 · 15</div>
+                    <div class="bg-emerald-deep p-2 rounded border border-stone-800/80"><span class="text-gold block mb-1">2. OG</span>21 · 22 · 23 · 24 · 25</div>
+                    <div class="bg-emerald-deep p-2 rounded border border-stone-800/80"><span class="text-gold block mb-1">3. OG</span>31 · 32 · 33 · 34 · 35</div>
+                    <div class="bg-emerald-deep p-2 rounded border border-stone-800/80"><span class="text-gold block mb-1">4. OG</span>41 · 42 · 43 · 44 · 45</div>
+                    <div class="bg-emerald-deep p-2 rounded border border-stone-800/80"><span class="text-gold block mb-1">5. OG</span>51 · 52 · 53 · 54 · 55</div>
+                </div>
+            </section>
+
+            <!-- ANNEX (Rooms 102-510) -->
+            <section class="space-y-6">
+                <div class="border-b border-stone-800 pb-2 flex justify-between items-center">
+                    <h3 class="font-serif text-lg text-gold flex items-center gap-2" id="building-annex-title">🌿 Im Anbau (Rooms 102–110 bis 502–510)</h3>
+                    <button onclick="speakSection('annex-building-list')" class="px-2.5 py-1.5 bg-emerald-deep hover:bg-emerald-light rounded text-xs text-gold transition-colors flex items-center gap-1.5">🔊 Vorlesen</button>
+                </div>
+                
+                <ul class="space-y-3.5 text-sm font-light text-stone-300" id="annex-building-list">
+                    <li class="flex items-start gap-3"><span class="text-gold shrink-0 mt-0.5">→</span> <span data-key="annex_step1">Gehen Sie die Treppe neben dem Spiegel hinunter, durch den Flur mit den roten Kinositzen.</span></li>
+                    <li class="flex items-start gap-3"><span class="text-gold shrink-0 mt-0.5">→</span> <span data-key="annex_step2">Am Ende des Flurs biegen Sie rechts ab und gehen durch die offene Glastür.</span></li>
+                    <li class="flex items-start gap-3"><span class="text-gold shrink-0 mt-0.5">→</span> <span data-key="annex_step3">Neben dem Notausgang finden Sie links den Aufzug.</span></li>
+                    <li class="flex items-start gap-3"><span class="text-gold shrink-0 mt-0.5">→</span> <span data-key="annex_step4">Bitte biegen Sie beim Ausstieg im obersten Stockwerk erneut links ab.</span></li>
+                </ul>
+
+                <div class="grid grid-cols-1 md:grid-cols-5 gap-3 pt-2 text-center text-xs font-mono text-stone-300">
+                    <div class="bg-emerald-deep p-2 rounded border border-stone-800/80"><span class="text-gold block mb-1">1. OG</span>102 – 110</div>
+                    <div class="bg-emerald-deep p-2 rounded border border-stone-800/80"><span class="text-gold block mb-1">2. OG</span>202 – 210</div>
+                    <div class="bg-emerald-deep p-2 rounded border border-stone-800/80"><span class="text-gold block mb-1">3. OG</span>302 – 310</div>
+                    <div class="bg-emerald-deep p-2 rounded border border-stone-800/80"><span class="text-gold block mb-1">4. OG</span>402 – 410</div>
+                    <div class="bg-emerald-deep p-2 rounded border border-stone-800/80"><span class="text-gold block mb-1">5. OG</span>502 – 510</div>
+                </div>
+            </section>
+        </main>
+
+        <!-- FOOTER IN CONTAINER -->
+        <footer class="border-t border-stone-800 pt-8 text-center space-y-4 text-xs font-light text-stone-400">
+            <p id="wish-text">Wir wünschen Ihnen einen angenehmen Aufenthalt im Turm Hotel Frankfurt!</p>
+            <p class="font-serif text-stone-300">👑 Turm Hotel Frankfurt</p>
+            <p class="font-mono text-[10px]">Eschersheimer Landstraße 20 · 60322 Frankfurt am Main</p>
+            <p class="font-mono text-[9px] text-stone-500 pt-2">© 2026 Turm Hotel GmbH · Raum für Möglichkeiten</p>
+            <div class="flex justify-center gap-4 text-gold pt-2">
+                <a href="https://intelligentresponder-max.github.io/turmhotel/index.html" class="hover:underline" id="back-link">Gäste-Info Hauptseite</a>
+                <span>·</span>
+                <a href="mailto:rooms@turmhotel-frankfurt.de" class="hover:underline">rooms@turmhotel-frankfurt.de</a>
+            </div>
+        </footer>
+
     </div>
-  </div>
-</footer>
 
-<script>
-// ===== Wegweiser-Daten · 15 Sprachen =====
-// Zimmer sind identisch in allen Sprachen, daher zentral:
-const ROOMS = {
-  main:  {f1:"11 · 12 · 14 · 15", f2:"21 · 22 · 23 · 24 · 25", f3:"31 · 32 · 33 · 34 · 35", f4:"41 · 42 · 43 · 44 · 45", f5:"51 · 52 · 53 · 54 · 55"},
-  annex: {f1:"102 – 110", f2:"202 – 210", f3:"302 – 310", f4:"402 – 410", f5:"502 – 510"}
-};
+    <!-- AUDIO LABELS FOR SCREEN READERS AND TEXT-TO-SPEECH (Hidden) -->
+    <div class="hidden" id="wifi-label">Das WLAN Passwort lautet Gruen3209! Bitte achten Sie auf die korrekte Schreibweise und verwenden Sie keine Leerzeichen am Ende.</div>
 
-const L = {
-  de:{name:"Deutsch", title:"Wegweiser zum Zimmer", lead:"Wählen Sie Ihre Sprache und folgen Sie der Wegbeschreibung.", eyebrow:"Nach dem Check-in, nach Erhalt der Zimmerkarte",
-    locationNote:"Sie befinden sich im Erdgeschoss an der Rezeption.",
-    question:"Wie finde ich mein Zimmer?",
-    guide:"So gelangen Sie zu Ihrem Zimmer",
-    mainH:"Im Hauptgebäude",
-    main:["Gehen Sie durch die Glastür direkt neben der Rezeption und biegen Sie rechts ab.","Dort finden Sie den Aufzug oder das Treppenhaus.","Achten Sie auf die Größe des Aufzugs — Ihr Koffer sollte die Metallkabine nicht berühren.","Zimmer 11–55 befinden sich im Vorderhaus.","Zimmer 13 gibt es nicht — dort befindet sich der Konferenzraum Mailand.","Bitte drücken Sie die Aufzugtür wieder fest zu, wenn Sie oben aussteigen."],
-    annexH:"Im Nebengebäude",
-    annex:["Gehen Sie neben dem Spiegel die Treppe hinunter, durch den Gang mit den roten Kinosesseln.","Am Ende des Ganges biegen Sie rechts ab und gehen durch die offene Glastür.","Neben dem Notausgang befindet sich auf der linken Seite der Aufzug.","Bitte biegen Sie oben noch einmal links ab, wenn Sie aussteigen."],
-    f1:"1. Etage", f2:"2. Etage", f3:"3. Etage", f4:"4. Etage", f5:"5. Etage",
-    closing:"Wir wünschen Ihnen einen angenehmen Aufenthalt!"},
+    <!-- INTERACTIVE SCRIPT -->
+    <script>
+        // Real-time language dictionaries matching user's exact content
+        const translations = {
+            de: {
+                lang_label: "Sprache wählen · Choose your language",
+                intro_title: "Zimmer Wegweiser: Zimmer finden nach Check-in",
+                intro_desc: "Mit diesem Turm Hotel Frankfurt Zimmer Wegweiser finden Sie nach dem Check-in (Zimmerschlüssel erhalten) den Weg von der Rezeption im Erdgeschoss zu Ihrem Hotelzimmer – je nach Zimmernummer im Hauptgebäude oder im Anbau.",
+                building_main_title: "🏢 Im Hauptgebäude (Rooms 11–55)",
+                building_annex_title: "🌿 Im Anbau (Rooms 102–110 bis 502–510)",
+                main_step1: "Gehen Sie durch die Glastür neben der Rezeption und biegen Sie rechts ab.",
+                main_step2: "Dort finden Sie den Aufzug oder das Treppenhaus.",
+                main_step3: "Bitte beachten Sie die Größe des Aufzugs: Ihr Koffer sollte die Metallkabine nicht berühren.",
+                main_step4: "Die Zimmer 11–55 befinden sich im Hauptgebäude.",
+                main_step5: "Es gibt kein Zimmer 13; dort befindet sich der Milan-Konferenzraum.",
+                main_step6: "Bitte schließen Sie die Aufzugtüren beim Ausstieg im obersten Stockwerk fest.",
+                annex_step1: "Gehen Sie die Treppe neben dem Spiegel hinunter, durch den Flur mit den roten Kinositzen.",
+                annex_step2: "Am Ende des Flurs biegen Sie rechts ab und gehen durch die offene Glastür.",
+                annex_step3: "Neben dem Notausgang finden Sie links den Aufzug.",
+                annex_step4: "Bitte biegen Sie beim Ausstieg im obersten Stockwerk erneut links ab.",
+                wish_text: "Wir wünschen Ihnen einen angenehmen Aufenthalt im Turm Hotel Frankfurt!",
+                back_link: "Gäste-Info Hauptseite"
+            },
+            en: {
+                lang_label: "Choose your language · Sprache wählen",
+                intro_title: "Room Directory: Finding your room after Check-In",
+                intro_desc: "With this Turm Hotel Frankfurt room directory, you will easily find the way from the reception desk on the ground floor to your room – depending on your room number either in the main building or in the annex.",
+                building_main_title: "🏢 In the Main Building (Rooms 11–55)",
+                building_annex_title: "🌿 In the Annex (Rooms 102–110 to 502–510)",
+                main_step1: "Go through the glass door next to the reception and turn right.",
+                main_step2: "There you will find the elevator or the staircase.",
+                main_step3: "Please note the size of the elevator: your suitcase should not touch the metal cabin.",
+                main_step4: "Rooms 11–55 are located in the main building.",
+                main_step5: "There is no room 13; the Milan conference room is located there.",
+                main_step6: "Please make sure to close the elevator doors firmly when exiting on the top floor.",
+                annex_step1: "Go down the stairs next to the mirror, through the hallway with the red cinema seats.",
+                annex_step2: "At the end of the hallway, turn right and go through the open glass door.",
+                annex_step3: "Next to the emergency exit, you will find the elevator on the left side.",
+                annex_step4: "Please turn left again when exiting on the top floor.",
+                wish_text: "We wish you a pleasant stay at the Turm Hotel Frankfurt!",
+                back_link: "Guest Info Home Page"
+            },
+            it: {
+                lang_label: "Scegli la tua lingua",
+                intro_title: "Guida alle Camere: Trovare la stanza dopo il Check-in",
+                intro_desc: "Con questa guida del Turm Hotel Frankfurt troverete facilmente la strada dalla reception al piano terra alla vostra camera – nel palazzo principale o nell'edificio annesso.",
+                building_main_title: "🏢 Nel Palazzo Principale (Camere 11–55)",
+                building_annex_title: "🌿 Nell'Annesso (Camere 102–110 a 502–510)",
+                main_step1: "Attraversare la porta a vetri accanto alla reception e svoltare a destra.",
+                main_step2: "Lì troverete l'ascensore o la tromba delle scale.",
+                main_step3: "Si prega di notare le dimensioni dell'ascensore: la valigia non deve urtare la cabina di metallo.",
+                main_step4: "Le camere da 11 a 55 si trovano nel palazzo principale.",
+                main_step5: "Non c'è la camera 13; lì si trova la sala conferenze Milano.",
+                main_step6: "Si prega di chiudere saldamente le porte dell'ascensore quando si esce all'ultimo piano.",
+                annex_step1: "Scendere le scale accanto allo specchio, attraversando il corridoio con le poltrone rosse da cinema.",
+                annex_step2: "Alla fine del corridoio, girare a destra e oltrepassare la porta a vetri aperta.",
+                annex_step3: "Accanto all'uscita di emergenza, troverete l'ascensore sulla sinistra.",
+                annex_step4: "Si prega di svoltare nuovamente a sinistra quando si esce all'ultimo piano.",
+                wish_text: "Vi auguriamo un piacevole soggiorno al Turm Hotel Frankfurt!",
+                back_link: "Pagina Principale Info Ospiti"
+            },
+            es: {
+                lang_label: "Selecciona tu idioma",
+                intro_title: "Guía de Habitaciones: Cómo encontrar su habitación",
+                intro_desc: "Con esta guía del Turm Hotel Frankfurt, encontrará fácilmente el camino desde la recepción en la planta baja hasta su habitación – ya sea en el edificio principal o en el anexo.",
+                building_main_title: "🏢 En el Edificio Principal (Habitaciones 11–55)",
+                building_annex_title: "🌿 En el Anexo (Habitaciones 102–110 a 502–510)",
+                main_step1: "Pase por la puerta de vidrio al lado de la recepción y gire a la derecha.",
+                main_step2: "Allí encontrará el ascensor o las escaleras.",
+                main_step3: "Tenga en cuenta el tamaño del ascensor: su maleta no debe tocar la cabina de metal.",
+                main_step4: "Las habitaciones 11 a 55 se encuentran en el edificio principal.",
+                main_step5: "No hay habitación 13; la sala de conferencias Milán se encuentra allí.",
+                main_step6: "Por favor, cierre firmemente las puertas del ascensor al salir en el piso superior.",
+                annex_step1: "Baje las escaleras al lado del espejo, pasando por el pasillo con los asientos de cine rojos.",
+                annex_step2: "Al final del pasillo, gire a la derecha y pase por la puerta de vidrio abierta.",
+                annex_step3: "Al lado de la salida de emergencia, encontrará el ascensor a la izquierda.",
+                annex_step4: "Por favor, gire a la izquierda nuevamente al salir en el piso superior.",
+                wish_text: "¡Le deseamos una agradable estancia en el Turm Hotel Frankfurt!",
+                back_link: "Página de Información"
+            },
+            fr: {
+                lang_label: "Choisissez votre langue",
+                intro_title: "Guide des Chambres: Trouver votre chambre après l'enregistrement",
+                intro_desc: "Grâce à ce guide du Turm Hotel Frankfurt, vous trouverez facilement le chemin de la réception au rez-de-chaussée jusqu'à votre chambre.",
+                building_main_title: "🏢 Dans le Bâtiment Principal (Chambres 11–55)",
+                building_annex_title: "🌿 Dans l'Annexe (Chambres 102–110 à 502–510)",
+                main_step1: "Passez la porte vitrée à côté de la réception et tournez à droite.",
+                main_step2: "Vous y trouverez l'ascenseur ou la cage d'escalier.",
+                main_step3: "Attention à la taille de l'ascenseur : votre valise ne doit pas toucher la cabine métallique.",
+                main_step4: "Les chambres 11 à 55 se trouvent dans le bâtiment principal.",
+                main_step5: "Il n'y a pas de chambre 13 ; la salle de conférence Milan s'y trouve.",
+                main_step6: "Veuillez refermer fermement les portes de l'ascenseur en sortant au dernier étage.",
+                annex_step1: "Descendez les escaliers à côté du miroir, traversez le couloir aux sièges de cinéma rouges.",
+                annex_step2: "Au bout du couloir, tournez à droite et passez la porte vitrée ouverte.",
+                annex_step3: "À côté de la sortie de secours, l'ascenseur se trouve sur la gauche.",
+                annex_step4: "Veuillez tourner à gauche en sortant au dernier étage.",
+                wish_text: "Nous vous souhaitons un agréable séjour au Turm Hotel Frankfurt !",
+                back_link: "Page d'Accueil Infos Invités"
+            },
+            pl: {
+                lang_label: "Wybierz swój język",
+                intro_title: "Przewodnik po Pokojach: Jak znaleźć swój pokój",
+                intro_desc: "Dzięki temu przewodnikowi po pokojach Turm Hotel Frankfurt z łatwością znajdziesz drogę z recepcji na parterze do swojego pokoju – w budynku głównym lub w aneksie.",
+                building_main_title: "🏢 W Budynku Głównym (Pokoje 11–55)",
+                building_annex_title: "🌿 W Aneksie (Pokoje 102–110 do 502–510)",
+                main_step1: "Przejdź przez szklane drzwi obok recepcji i skręć w prawo.",
+                main_step2: "Tam znajdziesz windę lub klatkę schodową.",
+                main_step3: "Zwróć uwagę na wielkość windy: Twoja walizka nie powinna dotykać metalowej kabiny.",
+                main_step4: "Pokoje 11–55 znajdują się w budynku głównym.",
+                main_step5: "Nie ma pokoju 13; znajduje się tam sala konferencyjna Mediolan.",
+                main_step6: "Proszę mocno zamknąć drzwi windy po wyjściu na najwyższym piętrze.",
+                annex_step1: "Zejdź po schodach obok lustra, przechodząc przez korytarz z czerwonymi fotelami kinowymi.",
+                annex_step2: "Na końcu korytarza skręć w prawo i przejdź przez otwarte szklane drzwi.",
+                annex_step3: "Obok wyjścia ewakuacyjnego po lewej stronie znajduje się winda.",
+                annex_step4: "Po wyjściu na najwyższym piętrze skręć ponownie w lewo.",
+                wish_text: "Życzymy miłego pobytu w Turm Hotel Frankfurt!",
+                back_link: "Strona Główna Informacji dla Gości"
+            }
+        };
 
-  en:{name:"English", title:"Finding your room", lead:"Choose your language and follow the directions.", eyebrow:"After check-in, once you have received your room key",
-    locationNote:"You are on the ground floor, at reception.",
-    question:"How do I find my room?",
-    guide:"How to get to your room",
-    mainH:"In the main building",
-    main:["Go through the glass door next to the reception and turn right.","There you will find the elevator or the staircase.","Please mind the size of the elevator — your suitcase should not touch the metal cabin.","Rooms 11–55 are located in the main building.","There is no room 13 — that space is the Milan conference room.","Please close the elevator doors firmly when you exit on the top floor."],
-    annexH:"In the annex",
-    annex:["Go down the stairs next to the mirror, through the hallway with the red cinema seats.","At the end of the hallway, turn right and go through the open glass door.","Next to the emergency exit, you will find the elevator on the left side.","Please turn left again when you exit on the top floor."],
-    f1:"1st floor", f2:"2nd floor", f3:"3rd floor", f4:"4th floor", f5:"5th floor",
-    closing:"We wish you a pleasant stay!"},
+        let currentLang = 'de';
 
-  es:{name:"Español", title:"Cómo llegar a su habitación", lead:"Elija su idioma y siga las indicaciones.", eyebrow:"Después del check-in, tras recibir la tarjeta de la habitación",
-    locationNote:"Se encuentra en la planta baja, en la recepción.",
-    question:"¿Cómo encuentro mi habitación?",
-    guide:"Cómo llegar a su habitación",
-    mainH:"En el edificio principal",
-    main:["Pase por la puerta de vidrio al lado de la recepción y gire a la derecha.","Allí encontrará el ascensor o la escalera.","Tenga cuidado con el tamaño del ascensor: su maleta no debe tocar la cabina metálica.","Las habitaciones 11–55 se encuentran en el edificio principal.","No existe la habitación 13 — allí se encuentra la sala de conferencias Milán.","Por favor, cierre bien las puertas del ascensor cuando salga en la planta superior."],
-    annexH:"En el edificio anexo",
-    annex:["Baje las escaleras junto al espejo, por el pasillo con los asientos de cine rojos.","Al final del pasillo, gire a la derecha y pase por la puerta de vidrio abierta.","Junto a la salida de emergencia, encontrará el ascensor a la izquierda.","Por favor, gire de nuevo a la izquierda al salir en la planta superior."],
-    f1:"1er piso", f2:"2º piso", f3:"3er piso", f4:"4º piso", f5:"5º piso",
-    closing:"¡Le deseamos una agradable estancia!"},
+        // Password Security with automatic space trimming
+        function checkGatePassword() {
+            const inputField = document.getElementById('gate-password-input');
+            const errorMsg = document.getElementById('password-error');
+            
+            // .trim() cuts off accidental leading/trailing spaces dynamically
+            const enteredPassword = inputField.value.trim(); 
+            const correctPassword = "Blau7777"; 
 
-  it:{name:"Italiano", title:"Come raggiungere la tua stanza", lead:"Scegli la tua lingua e segui le indicazioni.", eyebrow:"Dopo il check-in, una volta ricevuta la chiave della camera",
-    locationNote:"Si trova al piano terra, alla reception.",
-    question:"Come trovo la mia camera?",
-    guide:"Come raggiungere la tua stanza",
-    mainH:"Nel corpo principale",
-    main:["Attraversa la porta di vetro accanto alla reception e gira a destra.","Lì troverà l'ascensore o le scale.","Attenzione alle dimensioni dell'ascensore — la valigia non dovrebbe toccare la cabina in metallo.","Le camere 11–55 si trovano nell'edificio principale.","La camera 13 non esiste — al suo posto si trova la sala conferenze Milano.","Ti preghiamo di chiudere bene le porte dell'ascensore quando esci al piano superiore."],
-    annexH:"Nell'edificio annesso",
-    annex:["Scendi le scale accanto allo specchio, attraverso il corridoio con le poltrone da cinema rosse.","Alla fine del corridoio, gira a destra e passa attraverso la porta di vetro aperta.","Accanto all'uscita di emergenza, troverai l'ascensore sulla sinistra.","Ti preghiamo di girare di nuovo a sinistra quando esci al piano superiore."],
-    f1:"1° piano", f2:"2° piano", f3:"3° piano", f4:"4° piano", f5:"5° piano",
-    closing:"Ti auguriamo un soggiorno piacevole!"},
+            if (enteredPassword === correctPassword) {
+                localStorage.setItem('foyer_authenticated', 'true');
+                document.getElementById('password-gate').classList.add('opacity-0', 'pointer-events-none');
+                setTimeout(() => {
+                    document.getElementById('password-gate').remove();
+                }, 500);
+            } else {
+                errorMsg.classList.remove('hidden');
+                inputField.classList.add('border-red-500');
+            }
+        }
 
-  fr:{name:"Français", title:"Comment accéder à votre chambre", lead:"Choisissez votre langue et suivez les indications.", eyebrow:"Après l'enregistrement, une fois la carte de chambre reçue",
-    locationNote:"Vous êtes au rez-de-chaussée, à la réception.",
-    question:"Comment trouver ma chambre ?",
-    guide:"Comment accéder à votre chambre",
-    mainH:"Dans le bâtiment principal",
-    main:["Passez par la porte en verre à côté de la réception et tournez à droite.","Vous y trouverez l'ascenseur ou l'escalier.","Attention à la taille de l'ascenseur — votre valise ne doit pas toucher la cabine métallique.","Les chambres 11–55 se trouvent dans le bâtiment principal.","La chambre 13 n'existe pas — c'est la salle de conférence Milan qui s'y trouve.","Veuillez bien fermer les portes de l'ascenseur lorsque vous sortez à l'étage supérieur."],
-    annexH:"Dans le bâtiment annexe",
-    annex:["Descendez les escaliers à côté du miroir, par le couloir avec les fauteuils de cinéma rouges.","Au bout du couloir, tournez à droite et passez par la porte en verre ouverte.","À côté de la sortie de secours, vous trouverez l'ascenseur sur la gauche.","Veuillez tourner à gauche à nouveau lorsque vous sortez à l'étage supérieur."],
-    f1:"1er étage", f2:"2ème étage", f3:"3ème étage", f4:"4ème étage", f5:"5ème étage",
-    closing:"Nous vous souhaitons un agréable séjour !"},
+        // Keep session persistent if already logged in
+        window.addEventListener('DOMContentLoaded', () => {
+            if (localStorage.getItem('foyer_authenticated') === 'true') {
+                const gate = document.getElementById('password-gate');
+                if (gate) gate.remove();
+            }
+        });
 
-  ru:{name:"Русский", title:"Как добраться до вашего номера", lead:"Выберите язык и следуйте указаниям.", eyebrow:"После заселения, после получения карты номера",
-    locationNote:"Вы находитесь на первом этаже, на ресепшене.",
-    question:"Как найти мой номер?",
-    guide:"Как добраться до вашего номера",
-    mainH:"В главном здании",
-    main:["Пройдите через стеклянную дверь рядом с рецепцией и поверните направо.","Там вы найдете лифт или лестницу.","Обратите внимание на размер лифта — чемодан не должен касаться металлической кабины.","Номера 11–55 находятся в главном здании.","Номера 13 не существует — там находится конференц-зал «Милан».","Пожалуйста, плотно закрывайте двери лифта при выходе на верхнем этаже."],
-    annexH:"В пристройке",
-    annex:["Спуститесь по лестнице рядом с зеркалом, через коридор с красными кинокреслами.","В конце коридора поверните направо и пройдите через открытую стеклянную дверь.","Слева от аварийного выхода вы найдете лифт.","Пожалуйста, ещё раз поверните налево при выходе на верхнем этаже."],
-    f1:"1-й этаж", f2:"2-й этаж", f3:"3-й этаж", f4:"4-й этаж", f5:"5-й этаж",
-    closing:"Желаем вам приятного проживания!"},
+        // Set language & dynamically update translations
+        function setLanguage(lang) {
+            currentLang = lang;
+            
+            // Toggle active styling for language buttons
+            const languages = ['de', 'en', 'it', 'es', 'fr', 'pl'];
+            languages.forEach(l => {
+                const btn = document.getElementById(`lang-btn-${l}`);
+                if (l === lang) {
+                    btn.classList.add('bg-gold', 'text-emerald-dark');
+                    btn.classList.remove('bg-emerald-deep', 'border', 'border-stone-700', 'text-stone-300');
+                } else {
+                    btn.classList.remove('bg-gold', 'text-emerald-dark');
+                    btn.classList.add('bg-emerald-deep', 'border', 'border-stone-700', 'text-stone-300');
+                }
+            });
 
-  uk:{name:"Українська", title:"Як дістатися до вашого номера", lead:"Виберіть мову та дотримуйтесь вказівок.", eyebrow:"Після реєстрації заїзду, після отримання картки номера",
-    locationNote:"Ви перебуваєте на першому поверсі, на рецепції.",
-    question:"Як знайти мій номер?",
-    guide:"Як дістатися до вашого номера",
-    mainH:"В основній будівлі",
-    main:["Пройдіть через скляні двері поруч з рецепцією та поверніть праворуч.","Там ви знайдете ліфт або сходи.","Зверніть увагу на розмір ліфта — валіза не повинна торкатися металевої кабіни.","Номери 11–55 розташовані в головному будинку.","Номера 13 не існує — там знаходиться конференц-зал «Мілан».","Будь ласка, щільно зачиняйте двері ліфта при виході на верхньому поверсі."],
-    annexH:"У прибудові",
-    annex:["Спустіться сходами поруч із дзеркалом, через коридор із червоними кінокріслами.","В кінці коридору поверніть праворуч і пройдіть через відкриті скляні двері.","Зліва від аварійного виходу ви знайдете ліфт.","Будь ласка, ще раз поверніть ліворуч при виході на верхньому поверсі."],
-    f1:"1-й поверх", f2:"2-й поверх", f3:"3-й поверх", f4:"4-й поверх", f5:"5-й поверх",
-    closing:"Бажаємо вам приємного перебування!"},
+            // Update content elements
+            const dict = translations[lang];
+            if (!dict) return;
 
-  ja:{name:"日本語", title:"お部屋までの行き方", lead:"言語を選んで案内に従ってください。", eyebrow:"チェックイン後、ルームカードを受け取ってから",
-    locationNote:"現在、1階のフロントにいます。",
-    question:"部屋はどうやって見つけますか？",
-    guide:"お部屋までの行き方",
-    mainH:"メインビルの場合",
-    main:["受付の横にあるガラスのドアを通り、右に曲がってください。","そこにエレベーターまたは階段があります。","エレベーターのサイズにご注意ください—スーツケースが金属製の壁に触れないようにしてください。","11～55号室は本館にあります。","13号室はありません—その場所はミラノ会議室です。","上の階で降りるときは、エレベーターのドアをしっかり閉めてください。"],
-    annexH:"別棟の場合",
-    annex:["鏡の横の階段を下り、赤いシネマシートのある廊下を通り抜けてください。","廊下の終わりで右に曲がり、開いているガラスのドアを通ります。","非常口の横、左側にエレベーターがあります。","上の階で降りるときは、もう一度左に曲がってください。"],
-    f1:"1階", f2:"2階", f3:"3階", f4:"4階", f5:"5階",
-    closing:"快適なご滞在をお祈りいたします！"},
+            document.getElementById('lang-label').textContent = dict.lang_label;
+            document.getElementById('intro-title').textContent = dict.intro_title;
+            document.getElementById('intro-desc').textContent = dict.intro_desc;
+            document.getElementById('building-main-title').textContent = dict.building_main_title;
+            document.getElementById('building-annex-title').textContent = dict.building_annex_title;
+            document.getElementById('wish-text').textContent = dict.wish_text;
+            document.getElementById('back-link').textContent = dict.back_link;
 
-  zh:{name:"中文", title:"如何前往您的房间", lead:"请选择语言并按照指示前往。", eyebrow:"办理入住并领取房卡后",
-    locationNote:"您现在位于一楼前台。",
-    question:"如何找到我的房间？",
-    guide:"如何前往您的房间",
-    mainH:"在主楼",
-    main:["请通过接待处旁的玻璃门，向右转。","那里有电梯或楼梯。","请注意电梯的大小 — 您的行李箱不应碰到金属轿厅。","11–55号房间位于主楼。","没有13号房间 — 那里是米兰会议室。","上楼时请确保电梯门关紧。"],
-    annexH:"在附楼",
-    annex:["请从镜子旁的楼梯下去，穿过有红色影院座椅的走廊。","在走廊尽头向右转，经过打开的玻璃门。","在紧急出口旁，您会在左侧找到电梯。","上楼时请再向左转。"],
-    f1:"1楼", f2:"2楼", f3:"3楼", f4:"4楼", f5:"5楼",
-    closing:"祝您住宿愉快！"},
+            // Update step elements using data-keys
+            const mainSteps = document.querySelectorAll('#main-building-list [data-key]');
+            mainSteps.forEach((el, index) => {
+                const key = el.getAttribute('data-key');
+                if (dict[key]) el.textContent = dict[key];
+            });
 
-  ro:{name:"Română", title:"Cum să ajungeți la camera dumneavoastră", lead:"Alegeți limba și urmați indicațiile.", eyebrow:"După check-in, după primirea cardului de cameră",
-    locationNote:"Vă aflați la parter, la recepție.",
-    question:"Cum îmi găsesc camera?",
-    guide:"Cum să ajungeți la camera dumneavoastră",
-    mainH:"În clădirea principală",
-    main:["Mergeți prin ușa de sticlă de lângă recepție și virați la dreapta.","Acolo veți găsi liftul sau scările.","Aveți grijă la dimensiunea liftului — valiza dumneavoastră nu ar trebui să atingă cabina metalică.","Camerele 11–55 se află în clădirea principală.","Camera 13 nu există — acolo se află sala de conferințe Milano.","Vă rugăm să închideți bine ușile liftului când ieșiți la etajul superior."],
-    annexH:"În anexă",
-    annex:["Coborâți scările de lângă oglindă, pe coridorul cu fotolii de cinema roșii.","La capătul coridorului, virați la dreapta și treceți prin ușa de sticlă deschisă.","Lângă ieșirea de urgență, găsiți liftul pe partea stângă.","Vă rugăm să virați din nou la stânga când ieșiți la etajul superior."],
-    f1:"Etajul 1", f2:"Etajul 2", f3:"Etajul 3", f4:"Etajul 4", f5:"Etajul 5",
-    closing:"Vă dorim o ședere plăcută!"},
+            const annexSteps = document.querySelectorAll('#annex-building-list [data-key]');
+            annexSteps.forEach((el, index) => {
+                const key = el.getAttribute('data-key');
+                if (dict[key]) el.textContent = dict[key];
+            });
+        }
 
-  pl:{name:"Polski", title:"Jak dotrzeć do swojego pokoju", lead:"Wybierz język i postępuj zgodnie ze wskazówkami.", eyebrow:"Po zameldowaniu, po otrzymaniu karty do pokoju",
-    locationNote:"Znajdują się Państwo na parterze, przy recepcji.",
-    question:"Jak znaleźć mój pokój?",
-    guide:"Jak dotrzeć do swojego pokoju",
-    mainH:"W głównym budynku",
-    main:["Przejdź przez szklane drzwi obok recepcji i skręć w prawo.","Tam znajdą Państwo windę lub schody.","Proszę zwrócić uwagę na rozmiar windy — walizka nie powinna dotykać metalowej kabiny.","Pokoje 11–55 znajdują się w budynku głównym.","Pokój 13 nie istnieje — w tym miejscu znajduje się sala konferencyjna Mediolan.","Proszę dokładnie zamykać drzwi windy przy wyjściu na górnym piętrze."],
-    annexH:"W budynku aneksu",
-    annex:["Zejdź po schodach obok lustra, przez korytarz z czerwonymi fotelami kinowymi.","Na końcu korytarza skręć w prawo i przejdź przez otwarte szklane drzwi.","Obok wyjścia awaryjnego znajdziesz windę po lewej stronie.","Proszę skręcić jeszcze raz w lewo przy wyjściu na górnym piętrze."],
-    f1:"1. piętro", f2:"2. piętro", f3:"3. piętro", f4:"4. piętro", f5:"5. piętro",
-    closing:"Życzymy przyjemnego pobytu!"},
+        // SpeechSynthesis Functions (Static voice output, zero cost, completely offline-safe)
+        function speakText(elementId) {
+            const el = document.getElementById(elementId);
+            if (!el) return;
+            
+            window.speechSynthesis.cancel();
+            const text = el.textContent;
+            const utterance = new SpeechSynthesisUtterance(text);
+            
+            const langCodes = {
+                de: 'de-DE',
+                en: 'en-US',
+                it: 'it-IT',
+                es: 'es-ES',
+                fr: 'fr-FR',
+                pl: 'pl-PL'
+            };
+            
+            utterance.lang = langCodes[currentLang] || 'de-DE';
+            window.speechSynthesis.speak(utterance);
+        }
 
-  cs:{name:"Čeština", title:"Jak se dostat do vašeho pokoje", lead:"Vyberte jazyk a postupujte podle pokynů.", eyebrow:"Po registraci, po obdržení karty k pokoji",
-    locationNote:"Nacházíte se v přízemí, na recepci.",
-    question:"Jak najdu svůj pokoj?",
-    guide:"Jak se dostat do vašeho pokoje",
-    mainH:"V hlavní budově",
-    main:["Projděte skleněnými dveřmi vedle recepce a zahněte doprava.","Tam najdete výtah nebo schodiště.","Dbejte na velikost výtahu — kufr by se neměl dotýkat kovové kabiny.","Pokoje 11–55 se nacházejí v hlavní budově.","Pokoj číslo 13 neexistuje — na jeho místě je konferenční místnost Milán.","Prosím, zavírejte dveře výtahu pevně při odchodu z horního patra."],
-    annexH:"V přístavbě",
-    annex:["Sestupte po schodech vedle zrcadla, chodbou s červenými kinosedadly.","Na konci chodby zahněte doprava a projděte otevřenými skleněnými dveřmi.","Vedle nouzového východu najdete výtah po levé straně.","Prosím, zahněte znovu vlevo při odchodu z horního patra."],
-    f1:"1. patro", f2:"2. patro", f3:"3. patro", f4:"4. patro", f5:"5. patro",
-    closing:"Přejeme vám příjemný pobyt!"},
+        function speakSection(listId) {
+            const list = document.getElementById(listId);
+            if (!list) return;
 
-  sr:{name:"Srpski", title:"Kako doći do vaše sobe", lead:"Izaberite jezik i pratite uputstva.", eyebrow:"Nakon prijave, nakon prijema kartice za sobu",
-    locationNote:"Nalazite se u prizemlju, na recepciji.",
-    question:"Kako da pronađem svoju sobu?",
-    guide:"Kako doći do vaše sobe",
-    mainH:"U glavnoj zgradi",
-    main:["Prođite kroz staklena vrata pored recepcije i skrenite desno.","Tamo ćete pronaći lift ili stepenište.","Obratite pažnju na veličinu lifta — kofer ne bi trebalo da dodiruje metalnu kabinu.","Sobe 11–55 nalaze se u glavnoj zgradi.","Soba 13 ne postoji — tu se nalazi konferencijska sala Milano.","Molimo vas da dobro zatvorite vrata lifta kada izađete na gornjem spratu."],
-    annexH:"U aneksu",
-    annex:["Siđite niz stepenice pored ogledala, kroz hodnik sa crvenim bioskopskim stolicama.","Na kraju hodnika skrenite desno i prođite kroz otvorena staklena vrata.","Pored izlaza za hitne slučajeve, lift se nalazi s leve strane.","Molimo vas da ponovo skrenete levo kada izađete na gornjem spratu."],
-    f1:"Prvi sprat", f2:"Drugi sprat", f3:"Treći sprat", f4:"Četvrti sprat", f5:"Peti sprat",
-    closing:"Želimo vam prijatan boravak!"},
+            window.speechSynthesis.cancel();
+            
+            // Gather all textual items in the list
+            let textToSpeak = "";
+            const items = list.querySelectorAll('[data-key]');
+            items.forEach(item => {
+                textToSpeak += item.textContent + " ";
+            });
 
-  hr:{name:"Hrvatski", title:"Kako doći do vaše sobe", lead:"Odaberite jezik i slijedite upute.", eyebrow:"Nakon prijave, nakon što primite karticu sobe",
-    locationNote:"Nalazite se u prizemlju, na recepciji.",
-    question:"Kako pronaći svoju sobu?",
-    guide:"Kako doći do vaše sobe",
-    mainH:"U glavnoj zgradi",
-    main:["Prođite kroz staklena vrata pored recepcije i skrenite desno.","Tamo ćete pronaći dizalo ili stubište.","Pazite na veličinu dizala — kofer ne bi smio dodirivati metalnu kabinu.","Sobe 11–55 nalaze se u glavnoj zgradi.","Soba 13 ne postoji — na tom mjestu nalazi se konferencijska dvorana Milano.","Molimo vas da dobro zatvorite vrata lifta kada izlazite na gornjem katu."],
-    annexH:"U aneksu",
-    annex:["Siđite niz stepenice pored ogledala, kroz hodnik s crvenim kino sjedalima.","Na kraju hodnika skrenite desno i prođite kroz otvorena staklena vrata.","Pored izlaza za hitne slučajeve, lift se nalazi s lijeve strane.","Molimo vas da ponovno skrenete lijevo kada izlazite na gornjem katu."],
-    f1:"Prvi kat", f2:"Drugi kat", f3:"Treći kat", f4:"Četvrti kat", f5:"Peti kat",
-    closing:"Želimo vam ugodan boravak!"},
+            const utterance = new SpeechSynthesisUtterance(textToSpeak);
+            const langCodes = {
+                de: 'de-DE',
+                en: 'en-US',
+                it: 'it-IT',
+                es: 'es-ES',
+                fr: 'fr-FR',
+                pl: 'pl-PL'
+            };
 
-  pt:{name:"Português", title:"Como chegar ao seu quarto", lead:"Escolha o seu idioma e siga as indicações.", eyebrow:"Após o check-in, depois de receber o cartão do quarto",
-    locationNote:"Encontra-se no rés-do-chão, na receção.",
-    question:"Como encontro o meu quarto?",
-    guide:"Como chegar ao seu quarto",
-    mainH:"No prédio principal",
-    main:["Passe pela porta de vidro ao lado da receção e vire à direita.","Aí encontrará o elevador ou a escada.","Tenha atenção ao tamanho do elevador — a sua mala não deve tocar na cabine metálica.","Os quartos 11–55 encontram-se no edifício principal.","O quarto 13 não existe — nesse local encontra-se a sala de conferências Milão.","Por favor, feche bem as portas do elevador ao sair no andar superior."],
-    annexH:"No anexo",
-    annex:["Desça as escadas ao lado do espelho, pelo corredor com os assentos de cinema vermelhos.","No final do corredor, vire à direita e passe pela porta de vidro aberta.","Ao lado da saída de emergência, você encontrará o elevador à esquerda.","Por favor, vire à esquerda novamente ao sair no andar superior."],
-    f1:"1º andar", f2:"2º andar", f3:"3º andar", f4:"4º andar", f5:"5º andar",
-    closing:"Desejamos a você uma estadia agradável!"},
+            utterance.lang = langCodes[currentLang] || 'de-DE';
+            window.speechSynthesis.speak(utterance);
+        }
 
-  ar:{name:"العربية", rtl:true, title:"كيفية الوصول إلى غرفتك", lead:"اختر لغتك واتبع الإرشادات.", eyebrow:"بعد تسجيل الوصول، بعد استلام بطاقة الغرفة",
-    locationNote:"أنت الآن في الطابق الأرضي، عند الاستقبال.",
-    question:"كيف أجد غرفتي؟",
-    guide:"كيفية الوصول إلى غرفتك",
-    mainH:"في المبنى الرئيسي",
-    main:["اذهب عبر الباب الزجاجي بجوار الاستقبال وانعطف إلى اليمين.","ستجد هناك المصعد أو الدرج.","يرجى الانتباه لحجم المصعد — يجب ألا تلامس حقيبتك جدار المصعد المعدني.","تقع الغرف من 11 إلى 55 في المبنى الرئيسي.","لا توجد غرفة رقم 13 — يوجد في مكانها قاعة اجتماعات ميلانو.","يرجى إغلاق أبواب المصعد بإحكام عند الخروج في الطابق العلوي."],
-    annexH:"في المبنى الملحق",
-    annex:["انزل الدرج بجانب المرآة، عبر الممر الذي يحتوي على كراسي السينما الحمراء.","في نهاية الممر، انعطف إلى اليمين وادخل عبر الباب الزجاجي المفتوح.","بجانب مخرج الطوارئ، ستجد المصعد على اليسار.","يرجى الانعطاف إلى اليسار مرة أخرى عند الخروج في الطابق العلوي."],
-    f1:"الطابق الأول", f2:"الطابق الثاني", f3:"الطابق الثالث", f4:"الطابق الرابع", f5:"الطابق الخامس",
-    closing:"نتمنى لك إقامة ممتعة!"}
-};
-
-const order = ["de","en","es","it","fr","ru","uk","ja","zh","ro","pl","cs","sr","hr","pt","ar"];
-
-function renderFloors(d, roomsForBuilding){
-  let html = "";
-  for (let n = 1; n <= 5; n++){
-    const label = d["f" + n];
-    const nums = roomsForBuilding["f" + n];
-    if (label && nums){
-      html += `<span class="room-chip"><b>${label}:</b> ${nums}</span>`;
-    }
-  }
-  return html;
-}
-
-function render(code){
-  const d = L[code];
-  document.documentElement.lang = code;
-  document.documentElement.dir = d.rtl ? "rtl" : "ltr";
-
-  document.getElementById("eyebrow").textContent = d.eyebrow;
-  document.getElementById("page-title").textContent = d.title;
-  document.getElementById("page-lead").textContent = d.lead;
-  document.getElementById("guide-title").textContent = d.guide;
-
-  const locationNoteEl = document.getElementById("location-note");
-  if (d.locationNote) { locationNoteEl.textContent = d.locationNote; locationNoteEl.style.display = ""; }
-  else { locationNoteEl.style.display = "none"; }
-
-  const questionEl = document.getElementById("page-question");
-  if (d.question) { questionEl.textContent = d.question; questionEl.style.display = ""; }
-  else { questionEl.style.display = "none"; }
-
-  document.getElementById("main-h").textContent = d.mainH;
-  document.getElementById("main-steps").innerHTML = d.main.map(s=>`<li><span class="arr">→</span><span>${s}</span></li>`).join("");
-  document.getElementById("main-rooms").innerHTML = renderFloors(d, ROOMS.main);
-
-  document.getElementById("annex-h").textContent = d.annexH;
-  document.getElementById("annex-steps").innerHTML = d.annex.map(s=>`<li><span class="arr">→</span><span>${s}</span></li>`).join("");
-  document.getElementById("annex-rooms").innerHTML = renderFloors(d, ROOMS.annex);
-
-  document.getElementById("closing").textContent = d.closing;
-
-  document.querySelectorAll(".lang-btn").forEach(b=>b.classList.toggle("active", b.dataset.code===code));
-}
-
-// build language buttons
-const grid = document.getElementById("langGrid");
-order.forEach(code=>{
-  const b=document.createElement("button");
-  b.className="lang-btn";b.dataset.code=code;b.textContent=L[code].name;
-  b.onclick=()=>render(code);
-  grid.appendChild(b);
-});
-
-// auto-detect browser language, fallback de
-const nav=(navigator.language||"de").slice(0,2).toLowerCase();
-render(L[nav]?nav:"de");
-</script>
+        // Support pressing 'Enter' key on password field
+        document.getElementById('gate-password-input')?.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                checkGatePassword();
+            }
+        });
+    </script>
 </body>
 </html>
