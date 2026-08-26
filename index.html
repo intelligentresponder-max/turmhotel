@@ -1,626 +1,560 @@
 <!DOCTYPE html>
-<html lang="de" class="scroll-smooth">
+<html lang="de">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Turm Hotel Frankfurt — Stilvolles Boutique-Hotel & Digitales Foyer</title>
-    <!-- SEO Meta Tags -->
-    <meta name="title" content="Turm Hotel Frankfurt — Stilvolles Boutique-Hotel & Digitales Foyer">
-    <meta name="description" content="Willkommen im Turm Hotel Frankfurt an der Eschersheimer Landstraße. Erleben Sie 76 stilvolle Zimmer, grüne Ruhe im Gartenhaus und unser unkompliziertes digitales Foyer.">
-    
-    <!-- Tailwind CSS CDN -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Google Fonts: Playfair Display & Inter -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght=0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
-    
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    fontFamily: {
-                        sans: ['Inter', 'sans-serif'],
-                        serif: ['Playfair Display', 'serif'],
-                    },
-                    colors: {
-                        gold: {
-                            DEFAULT: '#C5A880',
-                            light: '#E5D5C0',
-                            dark: '#A3845C'
-                        },
-                        emerald: {
-                            dark: '#122018',
-                            medium: '#1A2E22',
-                            light: '#243F2F'
-                        },
-                        sand: {
-                            DEFAULT: '#F5F2EB',
-                            dark: '#E2DEC5',
-                            light: '#FAF8F5'
-                        }
-                    }
-                }
-            }
-        }
-    </script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gäste-Information · Turm Hotel Frankfurt | Boutique Hotel im Zentrum</title>
+<meta name="description" content="Gäste-Infoportal des Turm Hotel Frankfurt: Rezeptionszeiten, Frühstück, Kontakt und Anleitung zum Nachteingang. Eschersheimer Landstraße 20, 60322 Frankfurt am Main.">
+<meta name="robots" content="index, follow, max-image-preview:large">
+<link rel="canonical" href="https://intelligentresponder-max.github.io/turmhotel/">
 
-    <style>
-        .gold-border-glow {
-            box-shadow: 0 0 15px rgba(197, 168, 128, 0.15);
-        }
-        .bg-pattern {
-            background-color: #122018;
-            background-image: radial-gradient(rgba(197, 168, 128, 0.08) 1px, transparent 0);
-            background-size: 24px 24px;
-        }
-        /* Custom scrollbar */
-        ::-webkit-scrollbar {
-            width: 8px;
-        }
-        ::-webkit-scrollbar-track {
-            background: #122018;
-        }
-        ::-webkit-scrollbar-thumb {
-            background: #C5A880;
-            border-radius: 4px;
-        }
-    </style>
+<!-- Open Graph -->
+<meta property="og:type" content="website">
+<meta property="og:locale" content="de_DE">
+<meta property="og:site_name" content="Turm Hotel Frankfurt">
+<meta property="og:title" content="Gäste-Information · Turm Hotel Frankfurt">
+<meta property="og:description" content="Alle wichtigen Informationen für Ihren Aufenthalt im Turm Hotel Frankfurt – Rezeption, Frühstück, Kontakt und Nachteingang.">
+<meta property="og:url" content="https://intelligentresponder-max.github.io/turmhotel/">
+<meta name="twitter:card" content="summary_large_image">
+
+<!-- Structured data: Hotel -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Hotel",
+  "name": "Turm Hotel Frankfurt",
+  "description": "Privat geführtes Boutique Hotel im Zentrum Frankfurts.",
+  "url": "https://www.turmhotel-frankfurt.de/",
+  "telephone": "+49 69 1540 50",
+  "email": "rooms@turmhotel-frankfurt.de",
+  "checkinTime": "15:00",
+  "checkoutTime": "11:00",
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": "Eschersheimer Landstraße 20",
+    "postalCode": "60322",
+    "addressLocality": "Frankfurt am Main",
+    "addressCountry": "DE"
+  },
+  "geo": { "@type": "GeoCoordinates", "latitude": 50.119942, "longitude": 8.677814 }
+}
+</script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+
+<style>
+:root{
+  --ink:#2a2622;        /* warm near-black text */
+  --cream:#f6f2ea;      /* warm paper background */
+  --cream-2:#efe8db;    /* slightly deeper panel */
+  --brass:#a8854a;      /* warm brass accent */
+  --brass-deep:#8a6a37;
+  --line:#ddd2bf;       /* hairline */
+  --muted:#6f665b;
+  --white:#fffdf8;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:'Jost',sans-serif;
+  font-weight:300;
+  color:var(--ink);
+  background:var(--cream);
+  line-height:1.65;
+  -webkit-font-smoothing:antialiased;
+}
+h1,h2,h3,.serif{font-family:'Cormorant Garamond',serif;font-weight:500;letter-spacing:.01em}
+a{color:var(--brass-deep);text-decoration:none}
+a:hover{text-decoration:underline}
+
+.eyebrow{
+  font-family:'Jost',sans-serif;font-weight:500;
+  text-transform:uppercase;letter-spacing:.32em;
+  font-size:.7rem;color:var(--brass);
+}
+
+/* ---- Header ---- */
+header{
+  position:sticky;top:0;z-index:50;
+  background:rgba(246,242,234,.92);
+  backdrop-filter:blur(8px);
+  border-bottom:1px solid var(--line);
+}
+.nav{
+  max-width:1080px;margin:0 auto;padding:.9rem 1.5rem;
+  display:flex;align-items:center;justify-content:space-between;gap:1rem;
+}
+.brand{display:flex;align-items:center;gap:.7rem;line-height:1}
+.brand .crown{font-size:1.3rem;color:var(--brass)}
+.brand b{font-family:'Cormorant Garamond',serif;font-weight:600;font-size:1.25rem;letter-spacing:.04em}
+.brand small{display:block;font-size:.6rem;letter-spacing:.28em;text-transform:uppercase;color:var(--muted)}
+.nav-links{display:flex;gap:1.4rem;font-size:.82rem;letter-spacing:.06em;text-transform:uppercase}
+.nav-links a{color:var(--ink)}
+.nav-links a:hover{color:var(--brass-deep);text-decoration:none}
+@media(max-width:680px){.nav-links{display:none}}
+
+/* ---- Hero ---- */
+.hero{
+  max-width:1080px;margin:0 auto;padding:5rem 1.5rem 3.5rem;
+  text-align:center;
+}
+.hero .eyebrow{display:block;margin-bottom:1.2rem}
+.hero h1{
+  font-size:clamp(2.6rem,7vw,4.6rem);line-height:1.04;font-weight:500;
+}
+.hero h1 .accent{color:var(--brass);font-style:italic}
+.hero p.lead{
+  max-width:34rem;margin:1.4rem auto 0;color:var(--muted);font-size:1.05rem;
+}
+.rule{width:54px;height:1px;background:var(--brass);margin:2.2rem auto}
+
+/* ---- RAUM signature strip ---- */
+.raum{
+  border-top:1px solid var(--line);border-bottom:1px solid var(--line);
+  background:var(--cream-2);
+}
+.raum-inner{
+  max-width:1080px;margin:0 auto;padding:1.1rem 1.5rem;
+  display:flex;flex-wrap:wrap;justify-content:center;gap:.4rem 1.6rem;
+  font-family:'Cormorant Garamond',serif;font-size:1.15rem;color:var(--muted);
+}
+.raum-inner span b{color:var(--brass-deep);font-weight:600}
+
+/* ---- Sections ---- */
+section.block{max-width:1080px;margin:0 auto;padding:3.4rem 1.5rem}
+.block h2{font-size:clamp(1.8rem,4vw,2.5rem);margin:.4rem 0 1.4rem}
+
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:1.1rem}
+.card{
+  background:var(--white);border:1px solid var(--line);
+  padding:1.6rem 1.5rem;border-radius:2px;
+}
+.card .ico{font-size:1.4rem;color:var(--brass);margin-bottom:.5rem}
+.card h3{font-size:1.4rem;margin-bottom:.5rem}
+.card .big{font-family:'Cormorant Garamond',serif;font-size:1.5rem;color:var(--ink)}
+.card p{color:var(--muted);font-size:.95rem}
+.card .times{margin-top:.4rem}
+.card .times div{display:flex;justify-content:space-between;border-bottom:1px dotted var(--line);padding:.25rem 0;font-size:.92rem}
+.card .times div span:last-child{color:var(--ink)}
+
+/* ---- Night entrance steps ---- */
+.steps{counter-reset:step;display:grid;gap:1rem;margin-top:1.4rem}
+.step{
+  display:flex;gap:1.2rem;align-items:flex-start;
+  background:var(--white);border:1px solid var(--line);padding:1.3rem 1.5rem;border-radius:2px;
+}
+.step::before{
+  counter-increment:step;content:counter(step);
+  font-family:'Cormorant Garamond',serif;font-size:1.6rem;color:var(--brass);
+  border:1px solid var(--brass);border-radius:50%;
+  width:2.4rem;height:2.4rem;min-width:2.4rem;
+  display:flex;align-items:center;justify-content:center;
+}
+.step h3{font-size:1.25rem;margin-bottom:.2rem}
+.step p{color:var(--muted);font-size:.95rem}
+
+.note{
+  margin-top:1.4rem;padding:1rem 1.3rem;
+  background:var(--cream-2);border-left:2px solid var(--brass);
+  font-size:.92rem;color:var(--muted);
+}
+
+/* ---- Contact ---- */
+.contact-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1.1rem;margin-top:1rem}
+.contact-grid .card a{font-size:1.05rem}
+
+/* ---- Footer ---- */
+footer{
+  border-top:1px solid var(--line);background:var(--cream-2);
+  margin-top:2rem;
+}
+.foot-inner{
+  max-width:1080px;margin:0 auto;padding:2.4rem 1.5rem;
+  display:flex;flex-wrap:wrap;justify-content:space-between;gap:1.4rem;
+  font-size:.85rem;color:var(--muted);
+}
+.foot-inner .crown{color:var(--brass);font-size:1.1rem}
+.foot-links a{color:var(--muted);margin-left:1rem}
+.staff-link{font-size:.75rem;letter-spacing:.1em;text-transform:uppercase;opacity:.7}
+@media(max-width:680px){.foot-inner{flex-direction:column}.foot-links a{margin:0 1rem 0 0}}
+
+/* ---- Gäste-Fragen Widget ---- */
+.guest-fab{
+  position:fixed;right:1.4rem;bottom:1.4rem;z-index:80;
+  width:3.4rem;height:3.4rem;border-radius:50%;
+  background:var(--ink);color:var(--cream);border:1px solid var(--brass);
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;box-shadow:0 8px 24px -8px rgba(42,38,34,.45);
+  transition:transform .15s ease,background .15s ease;
+}
+.guest-fab:hover{background:var(--brass-deep);transform:scale(1.05)}
+.guest-fab svg{width:1.5rem;height:1.5rem}
+.guest-fab .dot{
+  position:absolute;top:-2px;right:-2px;width:.6rem;height:.6rem;border-radius:50%;
+  background:var(--brass);border:2px solid var(--cream);
+}
+
+.guest-panel{
+  position:fixed;right:1.4rem;bottom:5.4rem;z-index:80;
+  width:min(21rem,calc(100vw - 2.8rem));max-height:min(30rem,calc(100vh - 8rem));
+  background:var(--white);border:1px solid var(--line);border-radius:6px;
+  box-shadow:0 24px 60px -20px rgba(42,38,34,.5);
+  display:none;flex-direction:column;overflow:hidden;
+}
+.guest-panel.open{display:flex}
+.guest-panel-head{
+  background:var(--ink);color:var(--cream);padding:1rem 1.2rem;
+  display:flex;align-items:center;justify-content:space-between;gap:.6rem;
+}
+.guest-panel-head h3{font-size:1.15rem;margin:0;color:var(--cream)}
+.guest-panel-head p{font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;color:var(--brass);margin-top:.15rem}
+.guest-panel-close{
+  background:none;border:0;color:var(--cream);opacity:.7;cursor:pointer;font-size:1.3rem;line-height:1;
+  padding:.2rem .3rem;
+}
+.guest-panel-close:hover{opacity:1}
+.guest-panel-body{padding:1rem 1.2rem 1.2rem;overflow-y:auto;flex:1}
+.guest-panel-body .intro{color:var(--muted);font-size:.9rem;margin-bottom:.9rem}
+.guest-q{
+  display:block;width:100%;text-align:left;font:inherit;font-size:.88rem;
+  background:var(--cream-2);border:1px solid var(--line);border-radius:4px;
+  padding:.65rem .9rem;margin-bottom:.55rem;cursor:pointer;color:var(--ink);
+  transition:border-color .15s ease,background .15s ease;
+}
+.guest-q:hover{border-color:var(--brass);background:var(--white)}
+.guest-a{
+  background:var(--cream-2);border-left:2px solid var(--brass);
+  padding:.8rem 1rem;margin-bottom:.9rem;font-size:.88rem;color:var(--ink);line-height:1.55;
+}
+.guest-a a{color:var(--brass-deep)}
+.guest-back{
+  font-family:inherit;font-size:.78rem;letter-spacing:.04em;text-transform:uppercase;
+  background:none;border:0;color:var(--brass-deep);cursor:pointer;padding:.2rem 0;margin-bottom:.4rem;
+}
+.guest-back:hover{text-decoration:underline}
+@media(prefers-reduced-motion:reduce){.guest-fab{transition:none}}
+</style>
 </head>
-<body class="bg-emerald-dark text-stone-100 font-sans antialiased selection:bg-gold selection:text-emerald-dark min-h-screen flex flex-col justify-between">
+<body>
 
-    <!-- NAVIGATION HEADER -->
-    <header class="sticky top-0 z-40 bg-emerald-dark/95 backdrop-blur-md border-b border-stone-800 py-4 px-6 md:px-12 lg:px-24 flex justify-between items-center">
-        <!-- Brand Logo -->
-        <a href="#hero" class="flex items-center gap-3">
-            <span class="text-2xl">👑</span>
-            <div class="flex flex-col">
-                <span class="font-serif tracking-widest uppercase text-lg font-bold text-white leading-none">Turm Hotel</span>
-                <span class="text-[10px] uppercase tracking-[0.25em] text-gold font-bold leading-none mt-1">Frankfurt</span>
-            </div>
-        </a>
-        
-        <!-- Center Nav Links -->
-        <nav class="hidden lg:flex items-center gap-10 text-[11px] font-bold uppercase tracking-widest text-stone-300">
-            <a href="#how-it-works" class="hover:text-gold transition-colors">Onboarding</a>
-            <a href="#upgrades" class="hover:text-gold transition-colors text-gold">Persönliche Upgrades</a>
-            <a href="#about-us" class="hover:text-gold transition-colors">Das Hotel</a>
-            <a href="wegweiser.html" class="hover:text-gold transition-colors">Zimmer-Wegweiser</a>
-        </nav>
+<header>
+  <div class="nav">
+    <div class="brand">
+      <span class="crown">♔</span>
+      <div><b>Turm Hotel</b><small>Frankfurt am Main</small></div>
+    </div>
+    <nav class="nav-links">
+      <a href="#ankunft">Ankunft</a>
+      <a href="#zeiten">Zeiten</a>
+      <a href="#nacht">Nachteingang</a>
+      <a href="#kontakt">Kontakt</a>
+    </nav>
+  </div>
+</header>
 
-        <!-- Right CTA / Action -->
-        <div class="flex items-center gap-4">
-            <a href="https://wa.me/491634692255?text=Hallo%20Rezeptions-Team%2C%20ich%20habe%20eine%20Frage%20zu%20meiner%20Buchung." 
-               class="px-5 py-2.5 bg-emerald-medium text-white text-[11px] font-bold uppercase tracking-widest hover:bg-gold transition-all duration-300 rounded shadow-sm flex items-center gap-2 border border-gold/30">
-                <span>💬 WhatsApp</span>
-            </a>
-        </div>
-    </header>
+<div class="hero">
+  <span class="eyebrow">Willkommen im</span>
+  <h1>Turm Hotel<br><span class="accent">… Creative Moments</span></h1>
+  <p class="lead">Schön, dass Sie da sind. Auf dieser Seite finden Sie alle wichtigen Informationen für Ihren Aufenthalt in unserem privat geführten Boutique Hotel im Zentrum Frankfurts.</p>
+  <button type="button" onclick="document.getElementById('guestFab').click()" style="margin-top:1rem;padding:.55rem 1.1rem;background:var(--ink);color:var(--cream);border:1px solid var(--brass);border-radius:8px;font-size:.9rem;cursor:pointer;display:inline-flex;align-items:center;gap:.5rem;">
+    💬 Häufige Fragen? Chat öffnen
+  </button>
+  <div class="rule"></div>
+</div>
 
-    <!-- SECTION 1: HERO (ELEGANT EDITORIAL INTRODUCTION) -->
-    <section id="hero" class="relative min-h-[85vh] flex items-center py-20 px-6 md:px-12 lg:px-24 bg-gradient-to-b from-emerald-dark to-emerald-medium overflow-hidden bg-pattern">
-        <div class="absolute -top-40 -right-40 w-96 h-96 bg-gold/10 rounded-full blur-3xl pointer-events-none"></div>
-        <div class="absolute -bottom-40 -left-40 w-96 h-96 bg-emerald-light/10 rounded-full blur-3xl pointer-events-none"></div>
-        
-        <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-16 items-center w-full relative z-10">
-            <!-- Left Side copywriting -->
-            <div class="lg:col-span-7 space-y-8">
-                <span class="inline-block px-4 py-1 text-[10px] font-mono font-bold tracking-widest text-gold uppercase border border-gold/40 rounded-full bg-emerald-medium/50">
-                    Boutique Hotel · Frankfurt am Main
-                </span>
-                
-                <h1 class="text-4xl md:text-6xl font-serif tracking-tight leading-[1.1] text-white">
-                    Echte Herzlichkeit <br>
-                    <span class="text-gold italic">ohne Bürokratie.</span>
-                </h1>
-                
-                <p class="text-stone-300 text-lg leading-relaxed max-w-xl font-light">
-                    Willkommen an der Eschersheimer Landstraße 20. Das Turm Hotel Frankfurt vereint den Charme von zwei historisch gewachsenen Gebäuden mit einem radikal einfachen, digitalisierten Servicekonzept. Kein App-Zwang, keine nervigen Check-in-Automaten — alles läuft entspannt per WhatsApp.
-                </p>
-                
-                <div class="flex flex-col sm:flex-row gap-4 pt-4">
-                    <a href="#how-it-works" class="px-8 py-4 bg-gold text-emerald-dark text-xs font-bold uppercase tracking-widest transition-all duration-300 hover:bg-gold-light rounded shadow-md text-center">
-                        So einfach geht's
-                    </a>
-                    <a href="#upgrades" class="px-8 py-4 bg-transparent text-gold border border-gold/40 text-xs font-bold uppercase tracking-widest transition-all duration-300 hover:bg-gold hover:text-emerald-dark rounded text-center">
-                        Frühstück zusammenstellen
-                    </a>
-                </div>
-            </div>
+<div class="raum">
+  <div class="raum-inner">
+    <span>Lebens<b>RAUM</b></span>
+    <span>Traum<b>RAUM</b></span>
+    <span>Zeit<b>RAUM</b></span>
+    <span>Gesprächs<b>RAUM</b></span>
+    <span>Frei<b>RAUM</b></span>
+  </div>
+</div>
 
-            <!-- Right Side Visual Showcase Card -->
-            <div class="lg:col-span-5 bg-emerald-medium p-8 md:p-10 rounded-2xl text-stone-100 space-y-8 shadow-2xl border border-gold/20 relative overflow-hidden">
-                <!-- Golden Status Banner -->
-                <div class="flex justify-between items-center border-b border-stone-800 pb-6">
-                    <div>
-                        <h3 class="font-serif text-2xl text-gold">Digitales Foyer</h3>
-                        <p class="text-xs text-stone-400 font-mono tracking-wider mt-1">TURMHOTEL FRANKFURT</p>
-                    </div>
-                    <span class="px-2.5 py-1 bg-gold/15 border border-gold/40 rounded text-[9px] text-gold font-mono uppercase font-bold tracking-wider flex items-center gap-1.5">
-                        <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse shrink-0"></span>
-                        Live Connected
-                    </span>
-                </div>
+<section class="block" id="ankunft">
+  <span class="eyebrow">Ihr Aufenthalt</span>
+  <h2>Das Wichtigste auf einen Blick</h2>
+  <div class="cards">
+    <div class="card">
+      <div class="ico">☎</div>
+      <h3>Rund um die Uhr erreichbar</h3>
+      <p>Sie erreichen uns jederzeit telefonisch:</p>
+      <p class="big"><a href="tel:+4969154050">+49 (0)69 15 40 50</a></p>
+    </div>
+    <div class="card">
+      <div class="ico">✉</div>
+      <h3>Schreiben Sie uns</h3>
+      <p>Gerne per E-Mail:</p>
+      <p class="big"><a href="mailto:rooms@turmhotel-frankfurt.de">rooms@turmhotel-frankfurt.de</a></p>
+    </div>
+    <div class="card">
+      <div class="ico">⌖</div>
+      <h3>So finden Sie uns</h3>
+      <p>Eschersheimer Landstraße 20<br>60322 Frankfurt am Main</p>
+      <p style="margin-top:.5rem"><a href="https://maps.google.com/?q=Eschersheimer+Landstraße+20,+60322+Frankfurt">In Google Maps öffnen →</a></p>
+    </div>
+  </div>
+</section>
 
-                <!-- Core Details list -->
-                <div class="grid grid-cols-2 gap-6">
-                    <div class="space-y-1">
-                        <span class="text-[10px] text-stone-400 font-mono tracking-wider block">UNSER HAUS</span>
-                        <p class="text-xl font-bold font-serif text-white">74 Zimmer</p>
-                        <p class="text-[11px] text-stone-300 font-medium">2 Konferenzräume</p>
-                        <p class="text-[10px] text-stone-500 italic">2 Gebäude / Oase</p>
-                    </div>
-                    <div class="space-y-1">
-                        <span class="text-[10px] text-stone-400 font-mono tracking-wider block">WLAN PASSWORT</span>
-                        <p class="text-xl font-bold font-serif text-gold">Gruen3209!</p>
-                        <p class="text-[10px] text-stone-500 italic">Highspeed-Flatrate</p>
-                    </div>
-                </div>
+<section class="block" id="zeiten" style="padding-top:0">
+  <div class="cards">
+    <div class="card">
+      <div class="ico">⌚</div>
+      <h3>Rezeption</h3>
+      <div class="times">
+        <div><span>Täglich</span><span>6.45 – 22.30 Uhr</span></div>
+        <div><span>Check-in</span><span>ab 15.00 Uhr</span></div>
+        <div><span>Check-out</span><span>bis 11.00 Uhr</span></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="ico">☕</div>
+      <h3>Frühstücksbuffet</h3>
+      <div class="times">
+        <div><span>Mo – Fr</span><span>6.30 – 10.00 Uhr</span></div>
+        <div><span>Sa – So</span><span>7.00 – 11.00 Uhr</span></div>
+        <div><span>Preis p. P.</span><span>18,– €</span></div>
+      </div>
+      <p style="margin-top:.6rem">Kinder bis 8 Jahre zum halben Preis. Eierspeisen bereiten wir gerne nach Wunsch zu.</p>
+    </div>
+  </div>
+</section>
 
-                <!-- Quick info block -->
-                <div class="space-y-4 pt-2">
-                    <h4 class="text-xs font-mono font-bold tracking-widest text-gold uppercase">AKTUELLES</h4>
-                    <div class="space-y-3 text-sm">
-                        <div class="flex items-start gap-3 bg-emerald-dark/50 p-3 border border-stone-800 rounded-lg">
-                            <span class="text-gold font-mono text-xs shrink-0">ab 07:00 Uhr</span>
-                            <div>
-                                <h5 class="font-bold text-white text-xs leading-snug">Frankfurter Frühstückskorb auf's Zimmer bestellen</h5>
-                                <p class="text-[11px] text-stone-400 mt-1">Individuell zusammengestellt & serviert</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
+<section class="block" id="nacht">
+  <span class="eyebrow">Späte Anreise</span>
+  <h2>Zugang zur Nachteingangstür</h2>
+  <p style="color:var(--muted);max-width:38rem">Sie kommen nach Rezeptionsschluss an? Kein Problem. Mit Ihrer aktivierten Schlüsselkarte gelangen Sie jederzeit ins Haus – in drei einfachen Schritten.</p>
+  <div class="steps">
+    <div class="step">
+      <div>
+        <h3>Schlüsselkarte aktivieren</h3>
+        <p>Stellen Sie sicher, dass Ihre Karte bei der Anmeldung am Empfang aktiviert wurde, und halten Sie sie bereit, bevor Sie zur Nachteingangstür gehen.</p>
+      </div>
+    </div>
+    <div class="step">
+      <div>
+        <h3>Karte an das Lesegerät halten</h3>
+        <p>Halten Sie die Karte vor der Tür vorsichtig an das elektronische Lesegerät. Achten Sie auf die richtige Position der Karte.</p>
+      </div>
+    </div>
+    <div class="step">
+      <div>
+        <h3>Tür öffnen</h3>
+        <p>Warten Sie auf den Piepton bzw. das grüne Licht – beides bestätigt, dass die Karte erkannt wurde. Ziehen Sie die Tür leicht zu sich und treten Sie ein.</p>
+      </div>
+    </div>
+  </div>
+  <div class="note">Sollte die Karte nicht erkannt werden, rufen Sie uns einfach an – wir sind rund um die Uhr für Sie erreichbar: +49 (0)69 15 40 50.</div>
+  <p style="margin-top:1.4rem"><a href="wegweiser.html">→ Wegweiser zum Zimmer (in 15 Sprachen)</a></p>
+</section>
 
-    <!-- SECTION 2: HOW IT WORKS (BANGLAHILFE-INSPIRED 3-STEP SYSTEM) -->
-    <section id="how-it-works" class="py-24 px-6 md:px-12 lg:px-24 bg-emerald-medium border-t border-b border-stone-800">
-        <div class="max-w-7xl mx-auto space-y-16">
-            <div class="text-center max-w-2xl mx-auto space-y-4">
-                <span class="text-xs font-mono font-bold tracking-widest text-gold uppercase">UNKOMPLIZIERT REISEN</span>
-                <h2 class="text-3xl md:text-5xl font-serif tracking-tight text-white">
-                    3 Schritte — und Sie sind <span class="text-gold italic">startklar</span>
-                </h2>
-                <p class="text-stone-300 font-light text-base max-w-lg mx-auto">
-                    Keine Lust auf mühsames Ausfüllen am Empfang? Bei uns läuft die Gästereise so einfach wie eine Nachricht an gute Freunde.
-                </p>
-            </div>
+<section class="block" id="fruehstueck-buchen" style="padding-top:0">
+  <span class="eyebrow">Für morgen früh</span>
+  <h2>Frühstück &amp; Zimmerservice anmelden</h2>
+  <p style="color:var(--muted);max-width:38rem">Unkompliziert für morgen vorbestellen — Ihre Anfrage geht direkt als E-Mail an die Rezeption. Eine automatische Bestätigung erhalten Sie nicht; bei Fragen rufen Sie uns gerne an.</p>
+  <div class="card" style="max-width:32rem;margin-top:1.2rem">
+    <form id="fsForm" onsubmit="return sendFruehstueckAnfrage(event)" style="display:flex;flex-direction:column;gap:.8rem">
+      <label style="font-size:.85rem">Zimmernummer
+        <input type="text" id="fsZimmer" required style="width:100%;padding:.5rem .7rem;margin-top:.25rem;border:1px solid var(--line);border-radius:6px;box-sizing:border-box">
+      </label>
+      <label style="font-size:.85rem">Personenanzahl
+        <input type="number" id="fsPersonen" min="1" value="1" required style="width:100%;padding:.5rem .7rem;margin-top:.25rem;border:1px solid var(--line);border-radius:6px;box-sizing:border-box">
+      </label>
+      <label style="font-size:.85rem">Ernährungsoption
+        <select id="fsOption" style="width:100%;padding:.5rem .7rem;margin-top:.25rem;border:1px solid var(--line);border-radius:6px;box-sizing:border-box">
+          <option>Standard</option>
+          <option>Vegetarisch</option>
+          <option>Laktosefrei</option>
+          <option>Glutenfrei (auf Anfrage)</option>
+        </select>
+      </label>
+      <label style="font-size:.85rem">Gewünschte Uhrzeit
+        <input type="time" id="fsZeit" min="06:30" max="11:00" style="width:100%;padding:.5rem .7rem;margin-top:.25rem;border:1px solid var(--line);border-radius:6px;box-sizing:border-box">
+      </label>
+      <label style="font-size:.85rem;display:flex;align-items:center;gap:.5rem">
+        <input type="checkbox" id="fsZimmerservice" style="width:auto">
+        Zimmerservice gewünscht (+5,00 € pro Person)
+      </label>
+      <button type="submit" style="padding:.7rem 1.2rem;background:var(--ink);color:var(--cream);border:1px solid var(--brass);border-radius:8px;cursor:pointer;font-size:.9rem">Anfrage per E-Mail senden</button>
+    </form>
+  </div>
+</section>
 
-            <!-- The 3 Steps Grid -->
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-12 relative">
-                <!-- Step 1 -->
-                <div class="space-y-6 relative p-6 bg-emerald-dark/40 rounded-xl border border-stone-800 hover:scale-[1.02] transition-transform duration-300">
-                    <div class="w-12 h-12 bg-gold text-emerald-dark flex items-center justify-center text-lg font-bold rounded-lg font-serif">
-                        1
-                    </div>
-                    <h3 class="text-xl font-serif font-bold text-white">Schreiben Sie uns auf WhatsApp</h3>
-                    <p class="text-stone-300 text-sm font-light leading-relaxed">
-                        Senden Sie uns einfach kurz Ihre ungefähre Ankunftszeit per WhatsApp an <strong class="text-gold">+49 163 4692255</strong>. Kein langes Formular, keine steifen Abläufe. Wir bereiten alles persönlich vor.
-                    </p>
-                </div>
+<section class="block" id="kontakt" style="padding-top:0">
+  <span class="eyebrow">Wir sind für Sie da</span>
+  <h2>Kontakt</h2>
+  <div class="contact-grid">
+    <div class="card"><h3>Telefon</h3><p><a href="tel:+4969154050">+49 (0)69 15 40 50</a><br>rund um die Uhr</p></div>
+    <div class="card"><h3>E-Mail</h3><p><a href="mailto:rooms@turmhotel-frankfurt.de">rooms@turmhotel-frankfurt.de</a></p></div>
+    <div class="card"><h3>Reservierung</h3><p><a href="https://www.secure-hotel-booking.com/smart/Turm-Hotel/21PC/de/">Zimmer online reservieren →</a></p></div>
+    <div class="card"><h3>Website</h3><p><a href="https://www.turmhotel-frankfurt.de/">turmhotel-frankfurt.de →</a></p></div>
+  </div>
+</section>
 
-                <!-- Step 2 -->
-                <div class="space-y-6 relative p-6 bg-emerald-dark/40 rounded-xl border border-stone-800 hover:scale-[1.02] transition-transform duration-300">
-                    <div class="w-12 h-12 bg-gold text-emerald-dark flex items-center justify-center text-lg font-bold rounded-lg font-serif">
-                        2
-                    </div>
-                    <h3 class="text-xl font-serif font-bold text-white">Holen Sie Ihr Gäste-Paket</h3>
-                    <p class="text-stone-300 text-sm font-light leading-relaxed">
-                        Sie erhalten umgehend Ihren digitalen Zimmercode, das Highspeed-WLAN-Passwort (<strong class="text-gold">Gruen3209!</strong>) und den Zugang zum Zimmer-Wegweiser direkt aufs Handy. Kein Warten an der Rezeption.
-                    </p>
-                </div>
+<footer>
+  <div class="foot-inner">
+    <div>
+      <span class="crown">♔</span> <b class="serif" style="font-size:1.1rem">Turm Hotel Frankfurt</b><br>
+      Eschersheimer Landstraße 20 · 60322 Frankfurt am Main<br>
+      © 2026 Turm Hotel GmbH · Raum für Möglichkeiten
+    </div>
+    <div class="foot-links">
+      <a href="https://www.turmhotel-frankfurt.de/">Hauptseite</a>
+      <a href="manager.html" class="staff-link">Manager Platform</a>
+    </div>
+  </div>
+</footer>
 
-                <!-- Step 3 -->
-                <div class="space-y-6 relative p-6 bg-emerald-dark/40 rounded-xl border border-stone-800 hover:scale-[1.02] transition-transform duration-300">
-                    <div class="w-12 h-12 bg-gold text-emerald-dark flex items-center justify-center text-lg font-bold rounded-lg font-serif">
-                        3
-                    </div>
-                    <h3 class="text-xl font-serif font-bold text-white">Ankommen & genießen</h3>
-                    <p class="text-stone-300 text-sm font-light leading-relaxed">
-                        Sollten während Ihres Aufenthalts Fragen auftauchen, sind wir jederzeit für Sie da. Wir sind echte Menschen vor Ort in Frankfurt — kein Chatbot, keine Warteschleife.
-                    </p>
-                </div>
-            </div>
-        </div>
-    </section>
+<!-- ===== Gäste-Fragen Widget =====
+     Reine Vorauswahl-Antworten aus den echten Inhalten dieser Seite,
+     kein Backend, kein KI-Modell, keine erfundenen Personen/Fakten. -->
+<button class="guest-fab" id="guestFab" aria-haspopup="dialog" aria-expanded="false" aria-controls="guestPanel" aria-label="Fragen zu Ihrem Aufenthalt">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+  <span class="dot" aria-hidden="true"></span>
+</button>
 
-    <!-- SECTION 3: UPGRADES & INTERACTIVE BREAKFAST CONFIGURATOR -->
-    <section id="upgrades" class="py-24 px-6 md:px-12 lg:px-24 bg-gradient-to-b from-emerald-medium to-emerald-dark">
-        <div class="max-w-7xl mx-auto space-y-16">
-            <div class="text-center max-w-2xl mx-auto space-y-4">
-                <span class="text-xs font-mono font-bold tracking-widest text-gold uppercase">GÄSTE-SERVICES</span>
-                <h2 class="text-3xl md:text-5xl font-serif tracking-tight text-white">
-                    Persönliche <span class="text-gold italic">Upgrades</span>
-                </h2>
-                <p class="text-stone-300 font-light text-base">
-                    Stellen Sie sich Ihren Aufenthalt nach Ihren persönlichen Wünschen zusammen. Mit unserem interaktiven Konfigurator senden Sie Ihre Bestellung direkt per WhatsApp an die Rezeption.
-                </p>
-            </div>
+<div class="guest-panel" id="guestPanel" role="dialog" aria-modal="false" aria-labelledby="guestPanelTitle">
+  <div class="guest-panel-head">
+    <div>
+      <p>Turm Hotel</p>
+      <h3 id="guestPanelTitle" class="serif">Fragen zu Ihrem Aufenthalt</h3>
+    </div>
+    <button class="guest-panel-close" id="guestClose" aria-label="Schließen">×</button>
+  </div>
+  <div class="guest-panel-body" id="guestBody">
+    <p class="intro">Kurze Antworten auf die häufigsten Fragen. Für alles andere sind wir rund um die Uhr telefonisch da.</p>
+    <input type="text" id="guestSearch" placeholder="Stichwort eingeben, z. B. 'Parken' oder 'Frühstück'…" style="width:100%;padding:.6rem .8rem;margin-bottom:.8rem;border:1px solid var(--line, #ccc);border-radius:8px;font-size:.95rem;box-sizing:border-box;">
+    <div id="guestQuestions"></div>
+  </div>
+</div>
 
-            <!-- The Custom Upgrade UI Wrapper -->
-            <div class="bg-emerald-medium/80 border border-gold/20 rounded-2xl shadow-2xl p-6 md:p-10 max-w-4xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-10">
-                
-                <!-- Left Column: Description -->
-                <div class="lg:col-span-5 space-y-6 flex flex-col justify-between">
-                    <div class="space-y-4">
-                        <span class="text-4xl">🧺</span>
-                        <h3 class="text-2xl font-serif text-white tracking-wide">Frankfurter Frühstückskorb</h3>
-                        <p class="text-stone-300 text-sm leading-relaxed font-light">
-                            Wir glauben nicht an langweilige, unpersönliche Frühstücksbuffets. Bei uns erhalten Sie Ihren ganz persönlichen Frühstückskorb direkt vor Ihre Zimmertür gestellt oder serviert im idyllischen Innenhof-Garten.
-                        </p>
-                        <p class="text-stone-300 text-sm leading-relaxed font-light">
-                            <strong>So läuft es ab:</strong> Wählen Sie rechts genau die Produkte aus, auf die Sie heute Lust haben. Klicken Sie auf den WhatsApp-Button, und unser Rezeptions-Team bereitet Ihren Korb liebevoll für Sie vor.
-                        </p>
-                    </div>
+<script>
+(function(){
+  var GUEST_FAQ = [
+    { q: "Check-in / Check-out?",
+      a: "Check-in ab 15:00 Uhr, Check-out bis 11:00 Uhr. Die Rezeption ist täglich von 6:45 bis 22:30 Uhr besetzt. Kommen Sie nach 22:30 Uhr an, teilen Sie uns das bitte vorab mit — dann stellen wir Ihnen rechtzeitig die Zugangsdaten für die Nachteingangstür zur Verfügung." },
+    { q: "Ich komme nach 22:30 Uhr an / Wie funktioniert der Late Check-in genau?",
+      a: "In drei Schritten: 1. Sie gelangen über die Nachteingangstür ins Haus — haben Sie bereits eine Schlüsselkarte, halten Sie diese einfach an das Lesegerät (der PIN ist darauf bereits hinterlegt); haben Sie noch keine Karte, geben Sie stattdessen Ihren persönlichen PIN direkt am Lesegerät ein. Diesen PIN erhalten Sie ausschließlich für den Late Check-in nach Rezeptionsschluss. 2. Ihre Zimmerkarte holen Sie aus dem Schlüsselsafe im Bereich der Nachteingangstür, neben dem Aufzug — auch hier öffnet die Eingabe Ihres persönlichen PINs den Safe. 3. Vom Schlüsselsafe aus geht es weiter: Für Zimmer 11–55 im Vorderhaus nehmen Sie einfach die Treppe direkt neben dem Schlüsselsafe nach oben — das ist bereits die richtige Treppe in die Obergeschosse. Alternativ steht Ihnen rechter Hand auch ein Aufzug zur Verfügung. Für Zimmer 102–510 im Hinterhaus gehen Sie durch die Glastür an der Rezeption vorbei, durch den Gang mit den roten Kinosesseln und biegen dort rechts ab — dort finden Sie den Aufzug in die Obergeschosse." },
+    { q: "Frühstückszeiten?",
+      a: "Mo–Fr 6:30–10:00 Uhr, Sa–So 7:00–11:00 Uhr. 18,– € pro Person, Kinder bis 8 Jahre zum halben Preis. Eierspeisen bereiten wir gerne nach Wunsch zu. Neben dem Buffet bieten wir auch vegetarische und laktosefreie Optionen an, auf Anfrage gerne auch glutenfrei. <a href=\"#fruehstueck-buchen\">Frühstück für morgen anmelden →</a>" },
+    { q: "Wie finde ich mein Zimmer?",
+      a: "Unser Wegweiser führt Sie in 15 Sprachen zum Zimmer. <a href=\"wegweiser.html\">Wegweiser öffnen →</a>" },
+    { q: "Rezeption kontaktieren",
+      a: "Wir sind rund um die Uhr erreichbar: <a href=\"tel:+4969154050\">+49 (0)69 15 40 50</a> oder <a href=\"mailto:rooms@turmhotel-frankfurt.de\">rooms@turmhotel-frankfurt.de</a>." },
+    { q: "Was ist in der Nähe sehenswert?",
+      a: "Der historische Eschenheimer Turm liegt nur wenige Schritte entfernt — ein Spaziergang lohnt sich besonders am Abend." },
+    { q: "Gibt es Parkplätze?",
+      a: "Einige kostenlose Parkplätze stehen direkt am Hotel zur Verfügung (nicht reservierbar) — Zufahrt über die Eschersheimer Landstraße 20. <a href=\"https://earth.google.com/earth/d/1-n5A6hHWrqOlDwZdA92QEH9K27ufq9zV?usp=sharing\" target=\"_blank\">Lage auf der Karte ansehen →</a> Bitte nur hinter dem Haus parken, nicht in der Feuerwehrzufahrt. Alternativ das CONTIPARK Parkhaus Turmcenter direkt nebenan, Querstraße 7-9, kostenpflichtig." },
+    { q: "Kann ich mein Haustier mitbringen?",
+      a: "Leider nein — wir können in unserem Haus keine Haustiere aufnehmen." },
+    { q: "Kann ich mein Gepäck aufbewahren lassen?",
+      a: "Ja, gerne — sprechen Sie uns einfach an der Rezeption darauf an: <a href=\"tel:+4969154050\">+49 (0)69 15 40 50</a>." },
+    { q: "Gibt es Konferenzräume?",
+      a: "Ja, zwei Konferenzräume für bis zu 35 Personen, mit WLAN und moderner Technik. Details und Anfrage über die Rezeption." },
+    { q: "Kann ich ein Fahrrad leihen?",
+      a: "Ja, ein Fahrradverleih ist auf Wunsch verfügbar — fragen Sie einfach an der Rezeption nach." },
+    { q: "Ich habe nachts ein Problem — was tue ich?",
+      a: "Rufen Sie einfach die Hotel-Telefonnummer an — Sie werden auf jeden Fall weitergeleitet: <a href=\"tel:+4969154050\">+49 (0)69 15 40 50</a>. Bei einem medizinischen oder sonstigen Notfall wählen Sie bitte direkt den Notruf <a href=\"tel:112\">112</a>." },
+    { q: "Ich möchte meine Buchung um einen Tag verlängern — was kann ich tun?",
+      a: "Endet Ihre Buchung morgen, buchen Sie am besten jetzt gleich die zusätzliche Nacht über unsere offizielle Buchungsseite — so sichern Sie sich Ihr Zimmer, bevor es jemand anderes bucht. <a href=\"https://www.secure-hotel-booking.com/smart/Turm-Hotel/21PC/de/\" target=\"_blank\">Zur Buchungsseite →</a>. Sie zahlen dort dieselben Preise wie an der Rezeption. Sehen Sie kein freies Zimmer mehr, sprechen Sie uns morgens vor Ihrem Check-out direkt an der Rezeption an — unser Team hat Ihre Buchung bereits zu Dienstbeginn vorliegen und hilft Ihnen gerne persönlich weiter." },
+    { q: "Etwas anderes",
+      a: "Rufen Sie uns gerne direkt an — wir sind rund um die Uhr für Sie da: <a href=\"tel:+4969154050\">+49 (0)69 15 40 50</a>. Für eine Zimmerbuchung geht's direkt hier entlang: <a href=\"https://www.secure-hotel-booking.com/smart/Turm-Hotel/21PC/de/\" target=\"_blank\">Zur Buchungsseite →</a>" }
+  ];
 
-                    <div class="bg-emerald-dark/50 p-4 rounded-xl border border-stone-800">
-                        <p class="text-xs text-stone-400 font-mono uppercase">Preise & Konditionen</p>
-                        <div class="mt-2 space-y-1 text-sm">
-                            <div class="flex justify-between"><span class="text-stone-300">Frühstück pro Korb:</span><span class="text-gold font-bold">18,00 €</span></div>
-                            <div class="flex justify-between"><span class="text-stone-300">Zimmerservice (einmalig):</span><span class="text-gold font-bold">5,00 €</span></div>
-                        </div>
-                    </div>
-                </div>
+  var fab = document.getElementById('guestFab');
+  var panel = document.getElementById('guestPanel');
+  var closeBtn = document.getElementById('guestClose');
+  var body = document.getElementById('guestBody');
+  var qWrap = document.getElementById('guestQuestions');
+  var searchInput = document.getElementById('guestSearch');
 
-                <!-- Right Column: Interactive Configurator -->
-                <div class="lg:col-span-7 bg-emerald-dark p-6 md:p-8 rounded-xl border border-stone-800/80 space-y-6">
-                    <h4 class="font-serif text-lg text-gold border-b border-stone-800 pb-3 flex items-center gap-2">
-                        <span>🛠️</span> Korb nach Ihren Wünschen zusammenstellen
-                    </h4>
+  function renderQuestions(){
+    var term = (searchInput.value || '').trim().toLowerCase();
+    var list = term
+      ? GUEST_FAQ.filter(function(item){
+          return item.q.toLowerCase().indexOf(term) !== -1 ||
+                 item.a.toLowerCase().indexOf(term) !== -1;
+        })
+      : GUEST_FAQ;
+    qWrap.innerHTML = '';
+    if (list.length === 0){
+      var none = document.createElement('p');
+      none.className = 'intro';
+      none.textContent = 'Dazu haben wir nichts Passendes gefunden — rufen Sie uns gerne direkt an.';
+      qWrap.appendChild(none);
+      return;
+    }
+    list.forEach(function(item){
+      var i = GUEST_FAQ.indexOf(item);
+      var btn = document.createElement('button');
+      btn.className = 'guest-q';
+      btn.type = 'button';
+      btn.textContent = item.q;
+      btn.addEventListener('click', function(){ showAnswer(i); });
+      qWrap.appendChild(btn);
+    });
+  }
+  searchInput.addEventListener('input', renderQuestions);
 
-                    <!-- Room, Time, Quantity, & Notes Grid -->
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                        <div class="space-y-2">
-                            <label class="text-xs text-stone-400 font-mono uppercase block">Ihre Zimmernummer</label>
-                            <input type="text" id="breakfast-room" placeholder="z.B. Zimmer 24" 
-                                   class="w-full bg-emerald-medium border border-stone-700 focus:border-gold px-3.5 py-2 rounded text-sm text-white focus:outline-none">
-                        </div>
-                        <div class="space-y-2">
-                            <label class="text-xs text-stone-400 font-mono uppercase block">Wunschuhrzeit</label>
-                            <input type="text" id="breakfast-time" placeholder="z.B. 08:30 Uhr" 
-                                   class="w-full bg-emerald-medium border border-stone-700 focus:border-gold px-3.5 py-2 rounded text-sm text-white focus:outline-none">
-                        </div>
-                    </div>
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                        <div class="space-y-2">
-                            <label class="text-xs text-stone-400 font-mono uppercase block">Anzahl Körbe</label>
-                            <div class="flex items-center bg-emerald-medium border border-stone-700 rounded overflow-hidden">
-                                <button onclick="adjustCount(-1)" class="px-3.5 py-2 text-stone-400 hover:text-white transition-colors font-bold">-</button>
-                                <span id="breakfast-qty" class="flex-1 text-center text-sm font-bold text-white">1</span>
-                                <button onclick="adjustCount(1)" class="px-3.5 py-2 text-stone-400 hover:text-white transition-colors font-bold">+</button>
-                            </div>
-                        </div>
-                        <div class="space-y-2">
-                            <label class="text-xs text-stone-400 font-mono uppercase block">Bemerkungen & sonstige Wünsche</label>
-                            <input type="text" id="breakfast-notes" placeholder="z.B. Allergien, Besteck, laktosefrei..." 
-                                   class="w-full bg-emerald-medium border border-stone-700 focus:border-gold px-3.5 py-2 rounded text-sm text-white focus:outline-none">
-                        </div>
-                    </div>
+  function showAnswer(i){
+    var item = GUEST_FAQ[i];
+    qWrap.innerHTML = '';
+    var back = document.createElement('button');
+    back.className = 'guest-back';
+    back.type = 'button';
+    back.textContent = '← Zurück zu den Fragen';
+    back.addEventListener('click', renderQuestions);
+    var a = document.createElement('div');
+    a.className = 'guest-a';
+    a.innerHTML = item.a;
+    qWrap.appendChild(back);
+    qWrap.appendChild(a);
+    qWrap.appendChild(back.cloneNode(true));
+    qWrap.lastChild.addEventListener('click', renderQuestions);
+  }
 
-                    <!-- Configurator options -->
-                    <div class="space-y-4">
-                        <!-- Option Group 1: Getränke -->
-                        <div class="space-y-2.5">
-                            <p class="text-[10px] text-gold font-mono uppercase tracking-widest border-b border-stone-800/40 pb-1">Getränke (Wählen Sie Ihre Favoriten)</p>
-                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
-                                <label class="flex items-center gap-3 bg-emerald-medium/30 p-2.5 rounded border border-stone-800/60 cursor-pointer hover:border-gold/30 transition-all">
-                                    <input type="checkbox" name="drink-option" value="Orangensaft" onchange="updateTotal()" class="accent-gold h-4 w-4 rounded">
-                                    <span class="text-stone-300">🍊 Orangensaft</span>
-                                </label>
-                                <label class="flex items-center gap-3 bg-emerald-medium/30 p-2.5 rounded border border-stone-800/60 cursor-pointer hover:border-gold/30 transition-all">
-                                    <input type="checkbox" name="drink-option" value="Multivitaminsaft" onchange="updateTotal()" class="accent-gold h-4 w-4 rounded">
-                                    <span class="text-stone-300">🍹 Multivitaminsaft</span>
-                                </label>
-                                <label class="flex items-center gap-3 bg-emerald-medium/30 p-2.5 rounded border border-stone-800/60 cursor-pointer hover:border-gold/30 transition-all">
-                                    <input type="checkbox" name="drink-option" value="Kuhmilch 1,5% Fett" onchange="updateTotal()" class="accent-gold h-4 w-4 rounded">
-                                    <span class="text-stone-300">🥛 Kuhmilch 1,5% Fettgehalt (Kaffeeautomat)</span>
-                                </label>
-                                <label class="flex items-center gap-3 bg-emerald-medium/30 p-2.5 rounded border border-stone-800/60 cursor-pointer hover:border-gold/30 transition-all">
-                                    <input type="checkbox" name="drink-option" value="Latte Macchiato" onchange="updateTotal()" class="accent-gold h-4 w-4 rounded">
-                                    <span class="text-stone-300">☕ Latte Macchiato (Kaffeeautomat)</span>
-                                </label>
-                                <label class="flex items-center gap-3 bg-emerald-medium/30 p-2.5 rounded border border-stone-800/60 cursor-pointer hover:border-gold/30 transition-all">
-                                    <input type="checkbox" name="drink-option" value="Café Crema (schwarz)" onchange="updateTotal()" class="accent-gold h-4 w-4 rounded">
-                                    <span class="text-stone-300">☕ Café Crema (schwarz, Kaffeeautomat)</span>
-                                </label>
-                                <label class="flex items-center gap-3 bg-emerald-medium/30 p-2.5 rounded border border-stone-800/60 cursor-pointer hover:border-gold/30 transition-all">
-                                    <input type="checkbox" name="drink-option" value="Café Crema mit Milch" onchange="updateTotal()" class="accent-gold h-4 w-4 rounded">
-                                    <span class="text-stone-300">☕ Café Crema mit Milch (Kaffeeautomat)</span>
-                                </label>
-                                <label class="flex items-center gap-3 bg-emerald-medium/30 p-2.5 rounded border border-stone-800/60 cursor-pointer hover:border-gold/30 transition-all">
-                                    <input type="checkbox" name="drink-option" value="Café Crema mit Milch & Zucker" onchange="updateTotal()" class="accent-gold h-4 w-4 rounded">
-                                    <span class="text-stone-300">☕ Café Crema mit Milch & Zucker</span>
-                                </label>
-                                <label class="flex items-center gap-3 bg-emerald-medium/30 p-2.5 rounded border border-stone-800/60 cursor-pointer hover:border-gold/30 transition-all">
-                                    <input type="checkbox" name="drink-option" value="Heißer Kakao" onchange="updateTotal()" class="accent-gold h-4 w-4 rounded">
-                                    <span class="text-stone-300">🍫 Heißer Kakao (Kaffeeautomat)</span>
-                                </label>
-                                <label class="flex items-center gap-3 bg-emerald-medium/30 p-2.5 rounded border border-stone-800/60 cursor-pointer hover:border-gold/30 transition-all">
-                                    <input type="checkbox" name="drink-option" value="Espresso" onchange="updateTotal()" class="accent-gold h-4 w-4 rounded">
-                                    <span class="text-stone-300">☕ Espresso (Kaffeeautomat)</span>
-                                </label>
-                                <label class="flex items-center gap-3 bg-emerald-medium/30 p-2.5 rounded border border-stone-800/60 cursor-pointer hover:border-gold/30 transition-all">
-                                    <input type="checkbox" name="drink-option" value="Doppelter Espresso" onchange="updateTotal()" class="accent-gold h-4 w-4 rounded">
-                                    <span class="text-stone-300">☕ Doppelter Espresso (Kaffeeautomat)</span>
-                                </label>
-                                <label class="flex items-center gap-3 bg-emerald-medium/30 p-2.5 rounded border border-stone-800/60 cursor-pointer hover:border-gold/30 transition-all">
-                                    <input type="checkbox" name="drink-option" value="Espresso mit Milch" onchange="updateTotal()" class="accent-gold h-4 w-4 rounded">
-                                    <span class="text-stone-300">☕ Espresso mit Milch (Optional, Kaffeeautomat)</span>
-                                </label>
-                                <label class="flex items-center gap-3 bg-emerald-medium/30 p-2.5 rounded border border-stone-800/60 cursor-pointer hover:border-gold/30 transition-all">
-                                    <input type="checkbox" name="drink-option" value="Hafermilch" onchange="updateTotal()" class="accent-gold h-4 w-4 rounded">
-                                    <span class="text-stone-300">🥛 Hafermilch (Option für Kaffee)</span>
-                                </label>
-                                <label class="flex items-center gap-3 bg-emerald-medium/30 p-2.5 rounded border border-stone-800/60 cursor-pointer hover:border-gold/30 transition-all">
-                                    <input type="checkbox" name="drink-option" value="Sojamilch" onchange="updateTotal()" class="accent-gold h-4 w-4 rounded">
-                                    <span class="text-stone-300">🥛 Sojamilch (Option für Kaffee)</span>
-                                </label>
-                                <label class="flex items-center gap-3 bg-emerald-medium/30 p-2.5 rounded border border-stone-800/60 cursor-pointer hover:border-gold/30 transition-all">
-                                    <input type="checkbox" name="drink-option" value="Filterkaffee" onchange="updateTotal()" class="accent-gold h-4 w-4 rounded">
-                                    <span class="text-stone-300">☕ Filterkaffee (Frisch aus der Küche)</span>
-                                </label>
-                            </div>
-                        </div>
+  function openPanel(){
+    panel.classList.add('open');
+    fab.setAttribute('aria-expanded', 'true');
+    renderQuestions();
+  }
+  function closePanel(){
+    panel.classList.remove('open');
+    fab.setAttribute('aria-expanded', 'false');
+  }
 
-                        <!-- Option Group 2: Brot & Backwaren -->
-                        <div class="space-y-2.5">
-                            <p class="text-[10px] text-gold font-mono uppercase tracking-widest border-b border-stone-800/40 pb-1">Brot & Backwaren (Wählen Sie aus)</p>
-                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
-                                <label class="flex items-center gap-3 bg-emerald-medium/30 p-2.5 rounded border border-stone-800/60 cursor-pointer hover:border-gold/30 transition-all">
-                                    <input type="checkbox" name="bread-option" value="Weizenbrötchen" onchange="updateTotal()" class="accent-gold h-4 w-4 rounded">
-                                    <span class="text-stone-300">🥖 Weizenbrötchen</span>
-                                </label>
-                                <label class="flex items-center gap-3 bg-emerald-medium/30 p-2.5 rounded border border-stone-800/60 cursor-pointer hover:border-gold/30 transition-all">
-                                    <input type="checkbox" name="bread-option" value="Vollkornbrötchen" onchange="updateTotal()" class="accent-gold h-4 w-4 rounded">
-                                    <span class="text-stone-300">🥖 Vollkornbrötchen</span>
-                                </label>
-                                <label class="flex items-center gap-3 bg-emerald-medium/30 p-2.5 rounded border border-stone-800/60 cursor-pointer hover:border-gold/30 transition-all">
-                                    <input type="checkbox" name="bread-option" value="Frische Buttercroissants" onchange="updateTotal()" class="accent-gold h-4 w-4 rounded">
-                                    <span class="text-stone-300">🥐 Frische Buttercroissants</span>
-                                </label>
-                                <label class="flex items-center gap-3 bg-emerald-medium/30 p-2.5 rounded border border-stone-800/60 cursor-pointer hover:border-gold/30 transition-all">
-                                    <input type="checkbox" name="bread-option" value="Körniges Vollkornbrot" onchange="updateTotal()" class="accent-gold h-4 w-4 rounded">
-                                    <span class="text-stone-300">🍞 Körniges Vollkornbrot</span>
-                                </label>
-                            </div>
-                        </div>
+  fab.addEventListener('click', function(){
+    panel.classList.contains('open') ? closePanel() : openPanel();
+  });
+  closeBtn.addEventListener('click', closePanel);
+  document.addEventListener('keydown', function(e){
+    if(e.key === 'Escape' && panel.classList.contains('open')) closePanel();
+  });
+})();
 
-                        <!-- Option Group 3: Aufstriche, Eier & Cerealien -->
-                        <div class="space-y-2.5">
-                            <p class="text-[10px] text-gold font-mono uppercase tracking-widest border-b border-stone-800/40 pb-1">Aufstriche, Eier & Cerealien</p>
-                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
-                                <label class="flex items-center gap-3 bg-emerald-medium/30 p-2.5 rounded border border-stone-800/60 cursor-pointer hover:border-gold/30 transition-all">
-                                    <input type="checkbox" name="spread-option" value="Körnermix zum Einweichen" onchange="updateTotal()" class="accent-gold h-4 w-4 rounded">
-                                    <span class="text-stone-300">🌾 Körnermix zum Einweichen (diverse)</span>
-                                </label>
-                                <label class="flex items-center gap-3 bg-emerald-medium/30 p-2.5 rounded border border-stone-800/60 cursor-pointer hover:border-gold/30 transition-all">
-                                    <input type="checkbox" name="spread-option" value="Feine Auswahl Käse/Wurst" onchange="updateTotal()" class="accent-gold h-4 w-4 rounded">
-                                    <span class="text-stone-300">🧀 Portion Käse & Wurst (Feine Auswahl)</span>
-                                </label>
-                                <label class="flex items-center gap-3 bg-emerald-medium/30 p-2.5 rounded border border-stone-800/60 cursor-pointer hover:border-gold/30 transition-all">
-                                    <input type="checkbox" name="spread-option" value="Butter & Imker-Honig" onchange="updateTotal()" class="accent-gold h-4 w-4 rounded">
-                                    <span class="text-stone-300">🍯 Butter & Imker-Honig</span>
-                                </label>
-                                <label class="flex items-center gap-3 bg-emerald-medium/30 p-2.5 rounded border border-stone-800/60 cursor-pointer hover:border-gold/30 transition-all">
-                                    <input type="checkbox" name="spread-option" value="Gekochte Eier" onchange="updateTotal()" class="accent-gold h-4 w-4 rounded">
-                                    <span class="text-stone-300">🥚 Gekochte Eier</span>
-                                </label>
-                                <label class="flex items-center gap-3 bg-emerald-medium/30 p-2.5 rounded border border-stone-800/60 cursor-pointer hover:border-gold/30 transition-all">
-                                    <input type="checkbox" name="spread-option" value="Spiegeleier" onchange="updateTotal()" class="accent-gold h-4 w-4 rounded">
-                                    <span class="text-stone-300">🍳 Spiegeleier</span>
-                                </label>
-                                <label class="flex items-center gap-3 bg-emerald-medium/30 p-2.5 rounded border border-stone-800/60 cursor-pointer hover:border-gold/30 transition-all">
-                                    <input type="checkbox" name="spread-option" value="Rühreier" onchange="updateTotal()" class="accent-gold h-4 w-4 rounded">
-                                    <span class="text-stone-300">🍳 Rühreier</span>
-                                </label>
-                            </div>
-                        </div>
-                    </div>
+function sendFruehstueckAnfrage(e){
+  e.preventDefault();
+  var zimmer = document.getElementById('fsZimmer').value.trim();
+  var personen = document.getElementById('fsPersonen').value;
+  var option = document.getElementById('fsOption').value;
+  var zeit = document.getElementById('fsZeit').value || 'keine Angabe';
+  var zimmerservice = document.getElementById('fsZimmerservice').checked;
+  var betreff = 'Fruehstuecksanmeldung Zimmer ' + zimmer + ' fuer morgen';
+  var body = 'Zimmernummer: ' + zimmer + '\n' +
+             'Personenanzahl: ' + personen + '\n' +
+             'Ernaehrungsoption: ' + option + '\n' +
+             'Gewuenschte Uhrzeit: ' + zeit + '\n' +
+             'Zimmerservice gewuenscht (+5,00 EUR pro Person): ' + (zimmerservice ? 'Ja' : 'Nein');
+  var mailto = 'mailto:rooms@turmhotel-frankfurt.de'
+    + '?subject=' + encodeURIComponent(betreff)
+    + '&body=' + encodeURIComponent(body);
+  window.location.href = mailto;
+  return false;
+}
+</script>
 
-                    <!-- Price calculation footer inside the card -->
-                    <div class="bg-emerald-medium/50 p-4 border border-stone-800/80 rounded-lg flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                        <div>
-                            <p class="text-[10px] text-stone-400 font-mono uppercase">Ihre Berechnung</p>
-                            <p class="text-xl font-serif font-bold text-white mt-1" id="calculated-total-display">Gesamtpreis: 23,00 €</p>
-                            <span class="text-[9px] text-stone-500 font-mono block">Berechnung: (Anzahl * 18,00 €) + 5,00 € Zimmerservice</span>
-                        </div>
-                        <button onclick="sendBreakfastOrder()" 
-                                class="px-6 py-3 bg-gold text-emerald-dark font-bold uppercase tracking-widest text-[11px] hover:bg-gold-light transition-colors rounded shadow-md flex items-center justify-center gap-2">
-                            <span>💬 Per WhatsApp ordern</span>
-                        </button>
-                    </div>
-                </div>
-
-            </div>
-        </div>
-    </section>
-
-    <!-- SECTION 4: ABOUT US (HONEST, TRANSPARENT, NO-BULLSHIT EMERALD BRAND BLOCK) -->
-    <section id="about-us" class="py-24 px-6 md:px-12 lg:px-24 bg-emerald-dark text-stone-200 relative overflow-hidden bg-pattern border-t border-stone-800">
-        <div class="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-gold/15 via-transparent to-transparent opacity-60 pointer-events-none"></div>
-
-        <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-16 items-center relative z-10">
-            <!-- Left Side copy -->
-            <div class="lg:col-span-6 space-y-8">
-                <span class="inline-block px-3 py-1 text-xs font-bold tracking-widest text-gold uppercase border border-gold">
-                    WIR SIND KEIN HYPER-LUXUSCONCERN
-                </span>
-                
-                <h2 class="text-3xl md:text-5xl font-serif tracking-tight text-white leading-tight">
-                    Wir sind echte Gastgeber. <br>
-                    <span class="text-gold italic">Wie Sie und ich.</span>
-                </h2>
-                
-                <p class="text-stone-300 font-light leading-relaxed">
-                    Wir haben unpersönliche Check-in-Automaten, stundenlanges Suchen nach dem WLAN-Passwort und künstliche Support-Chatbots selbst satt. Genau deshalb machen wir es anders: Wir versprechen Ihnen keine unpersönlichen Goldpaläste, sondern echten, schnellen und herzlichen Service direkt über WhatsApp auf Augenhöhe. 
-                </p>
-
-                <p class="text-stone-300 font-light leading-relaxed">
-                    Unser traditionsreiches Haus in Frankfurt am Main verfügt über 76 individuell gestaltete Zimmer, die sich auf das lebendige Vorderhaus und das extrem ruhige Gartenhaus aufteilen. Verbunden werden beide Häuser durch unseren idyllischen, grünen Innenhof-Garten — eine Oase der Ruhe mitten in der Frankfurter Innenstadt.
-                </p>
-
-                <!-- Value Props grid -->
-                <div class="grid grid-cols-2 gap-4 pt-4 text-xs font-mono tracking-wider font-bold text-white uppercase">
-                    <div class="flex items-center gap-3">
-                        <span class="text-gold">✔</span> 2 Häuser, 1 Oase
-                    </div>
-                    <div class="flex items-center gap-3">
-                        <span class="text-gold">✔</span> 76 Unikate Zimmer
-                    </div>
-                    <div class="flex items-center gap-3">
-                        <span class="text-gold">✔</span> Echte Ansprechpartner
-                    </div>
-                    <div class="flex items-center gap-3">
-                        <span class="text-gold">✔</span> Keine versteckten Kosten
-                    </div>
-                </div>
-            </div>
-
-            <!-- Right Side Visual / Trust Block -->
-            <div class="lg:col-span-6 bg-emerald-medium/60 p-8 rounded-2xl border border-stone-800 space-y-6">
-                <h3 class="font-serif text-xl text-white">Ihr Ansprechpartner vor Ort</h3>
-                <p class="text-stone-300 text-sm font-light">
-                    Haben Sie Fragen zur Anreise, zu den Zimmern oder möchten Sie direkt ein Zimmer buchen? Unser Rezeptions-Team hilft Ihnen innerhalb kürzester Zeit weiter – ganz unkompliziert.
-                </p>
-                <div class="flex items-center gap-4 bg-emerald-dark/60 p-4 border border-stone-800 rounded-lg">
-                    <span class="text-3xl">📱</span>
-                    <div>
-                        <p class="text-xs text-stone-400 font-mono">WhatsApp Hotine</p>
-                        <p class="text-sm font-bold text-gold font-mono">+49 163 4692255</p>
-                    </div>
-                </div>
-                <div class="flex items-center gap-4 bg-emerald-dark/60 p-4 border border-stone-800 rounded-lg">
-                    <span class="text-3xl">📧</span>
-                    <div>
-                        <p class="text-xs text-stone-400 font-mono">E-Mail für Anfragen & Buchungen</p>
-                        <p class="text-sm font-bold text-gold font-mono">rooms@turmhotel-frankfurt.de</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- SECTION 5: CALL TO ACTION FOR THE DIGITAL WAYFINDER -->
-    <section class="py-20 px-6 md:px-12 lg:px-24 bg-gold text-emerald-dark text-center font-bold">
-        <div class="max-w-3xl mx-auto space-y-8">
-            <span class="text-4xl">🔑</span>
-            <h2 class="text-3xl md:text-4xl font-serif font-bold leading-tight uppercase">Sie haben bereits eingecheckt?</h2>
-            <p class="text-emerald-dark/85 font-light text-base max-w-xl mx-auto font-sans">
-                Nutzen Sie unseren sprachgesteuerten Zimmer-Wegweiser, um fehlerfrei und entspannt von der Rezeption direkt zu Ihrem Zimmer im Hauptgebäude oder Anbau zu finden.
-            </p>
-            <div class="pt-2">
-                <a href="wegweiser.html" class="inline-block px-8 py-4 bg-emerald-dark text-white text-xs font-bold uppercase tracking-widest transition-all duration-300 hover:bg-emerald-medium rounded shadow-md">
-                    Zum Zimmer-Wegweiser →
-                </a>
-            </div>
-        </div>
-    </section>
-
-    <!-- FOOTER AND LEGAL -->
-    <footer class="bg-emerald-dark text-stone-400 py-16 px-6 md:px-12 lg:px-24 border-t border-stone-800">
-        <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 text-sm font-light">
-            
-            <div class="space-y-4">
-                <span class="font-serif tracking-widest uppercase text-lg text-white font-bold">Turm Hotel</span>
-                <p class="text-xs text-stone-500 leading-relaxed">
-                    Unser inhabergeführtes Boutique-Hotel im Herzen Frankfurts steht für authentischen, unkomplizierten Service auf Augenhöhe. Wir verbinden historischen Charme mit modernen Digitalstrukturen.
-                </p>
-            </div>
-
-            <div class="space-y-4">
-                <h4 class="text-xs font-mono font-bold tracking-widest text-white uppercase">Kontakt</h4>
-                <ul class="space-y-2 text-xs text-stone-500 font-mono">
-                    <li>Turm Hotel GmbH</li>
-                    <li>Eschersheimer Landstraße 20</li>
-                    <li>60322 Frankfurt am Main</li>
-                    <li>Tel: +49 163 4692255</li>
-                    <li>rooms@turmhotel-frankfurt.de</li>
-                </ul>
-            </div>
-
-            <div class="space-y-4">
-                <h4 class="text-xs font-mono font-bold tracking-widest text-white uppercase">Navigation</h4>
-                <ul class="space-y-2 text-xs text-stone-500">
-                    <li><a href="#how-it-works" class="hover:text-gold transition-colors">Digitales Onboarding</a></li>
-                    <li><a href="#upgrades" class="hover:text-gold transition-colors">Persönliche Upgrades</a></li>
-                    <li><a href="#about-us" class="hover:text-gold transition-colors">Über uns</a></li>
-                    <li><a href="wegweiser.html" class="hover:text-gold transition-colors">Zimmer-Wegweiser</a></li>
-                </ul>
-            </div>
-
-            <div class="space-y-4">
-                <h4 class="text-xs font-mono font-bold tracking-widest text-white uppercase">Disclaimer</h4>
-                <p class="text-[11px] text-stone-500 leading-relaxed">
-                    Dieses Portal dient zur Orientierung der Gäste während ihres Aufenthalts. Alle Buchungsbestätigungen unterliegen den AGB der Turm Hotel GmbH.
-                </p>
-            </div>
-
-        </div>
-
-        <div class="max-w-7xl mx-auto border-t border-stone-800 mt-12 pt-8 flex flex-col sm:flex-row justify-between items-center text-[10px] text-stone-600 font-mono">
-            <p>&copy; 2026 Turm Hotel Frankfurt. Alle Rechte vorbehalten. Generiert im Rahmen Ihres Vertical-Coding-Business.</p>
-            <div class="flex gap-4 mt-4 sm:mt-0">
-                <a href="#" class="hover:text-stone-400">Impressum</a>
-                <a href="#" class="hover:text-stone-400">Datenschutz</a>
-            </div>
-        </div>
-    </footer>
-
-    <!-- INTERACTIVE BREAKFAST LOGIC -->
-    <script>
-        let quantity = 1;
-        const basePrice = 18.0;
-        const serviceFee = 5.0;
-
-        function adjustCount(change) {
-            quantity += change;
-            if (quantity < 1) quantity = 1;
-            document.getElementById('breakfast-qty').textContent = quantity;
-            updateTotal();
-        }
-
-        function updateTotal() {
-            const price = (quantity * basePrice) + serviceFee;
-            document.getElementById('calculated-total-display').textContent = `Gesamtpreis: ${price.toFixed(2).replace('.', ',')} €`;
-        }
-
-        function sendBreakfastOrder() {
-            const roomNum = document.getElementById('breakfast-room').value.trim() || 'Nicht angegeben';
-            const timeVal = document.getElementById('breakfast-time').value.trim() || 'Keine Angabe';
-            const notesVal = document.getElementById('breakfast-notes').value.trim() || 'Keine';
-            
-            // Get selected options
-            let selectedOptions = [];
-            
-            // Drinks
-            const drinks = document.querySelectorAll('input[name="drink-option"]:checked');
-            drinks.forEach(d => selectedOptions.push(d.value));
-            
-            // Bread
-            const bread = document.querySelectorAll('input[name="bread-option"]:checked');
-            bread.forEach(b => selectedOptions.push(b.value));
-            
-            // Spreads
-            const spreads = document.querySelectorAll('input[name="spread-option"]:checked');
-            spreads.forEach(s => selectedOptions.push(s.value));
-
-            // Generate message content
-            const finalPrice = (quantity * basePrice) + serviceFee;
-            let optionsText = selectedOptions.length > 0 ? selectedOptions.join(', ') : 'Keine spezifischen Wünsche ausgewählt';
-
-            const message = `Hallo Rezeptions-Team! Ich möchte den Frankfurter Frühstückskorb bestellen.\n\n` +
-                            `• Zimmernummer: ${roomNum}\n` +
-                            `• Wunschuhrzeit: ${timeVal}\n` +
-                            `• Anzahl Frühstückskörbe: ${quantity}\n` +
-                            `• Meine Zusammenstellung: ${optionsText}\n` +
-                            `• Bemerkungen & Wünsche: ${notesVal}\n\n` +
-                            `Gesamtpreis: ${finalPrice.toFixed(2).replace('.', ',')} € (inkl. Zimmerservice)`;
-
-            // WhatsApp link construction
-            const encodedText = encodeURIComponent(message);
-            const waUrl = `https://wa.me/491634692255?text=${encodedText}`;
-            
-            window.open(waUrl, '_blank');
-        }
-    </script>
 </body>
 </html>
