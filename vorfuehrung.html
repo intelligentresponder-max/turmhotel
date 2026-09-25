@@ -80,6 +80,12 @@ nav{position:sticky;top:0;z-index:200;background:rgba(12,10,8,.95);backdrop-filt
 .testbox ul{padding-left:20px;color:#cabfb0;font-size:.88rem;line-height:1.8;}
 .testbox ul strong{color:var(--paper);}
 
+.addressed{background:rgba(201,162,39,.06);border:1px solid var(--line);border-left:3px solid var(--gold);border-radius:0 var(--radius) var(--radius) 0;padding:14px 18px;margin:0 0 20px;font-size:.9rem;color:#cabfb0;line-height:1.7;}
+.addressed strong{color:var(--gold-bright);}
+.shot{margin:20px 0;border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;background:rgba(255,255,255,.02);}
+.shot img{display:block;width:100%;height:auto;max-height:560px;object-fit:cover;object-position:top;}
+.shot-caption{padding:10px 16px;font-family:'Spline Sans Mono',monospace;font-size:.72rem;color:var(--muted);border-top:1px solid var(--line);}
+
 .table-wrap{overflow-x:auto;margin:20px 0;border:1px solid var(--line);border-radius:var(--radius);}
 .pms-table{width:100%;border-collapse:collapse;font-family:'Spline Sans Mono',monospace;font-size:.78rem;white-space:nowrap;}
 .pms-table th{text-align:left;color:var(--gold);font-weight:500;padding:10px 14px;border-bottom:1px solid var(--line);font-size:.65rem;letter-spacing:.08em;text-transform:uppercase;background:rgba(255,255,255,.02);}
@@ -123,6 +129,7 @@ nav{position:sticky;top:0;z-index:200;background:rgba(12,10,8,.95);backdrop-filt
       <li><a href="#ablauf">Klick-Anleitung für heute</a></li>
       <li><a href="#getestet">Mit der echten Liste von heute getestet</a></li>
       <li><a href="#verfuegbarkeit">Verfügbarkeit diese Woche (Suite8)</a></li>
+      <li><a href="#wegweiser">Wegweiser zum Zimmer (an Dario, Tanja, Nicole)</a></li>
       <li><a href="#unterlagen">Unterlagen</a></li>
     </ol>
   </div>
@@ -237,6 +244,11 @@ nav{position:sticky;top:0;z-index:200;background:rgba(12,10,8,.95);backdrop-filt
     </div>
 
     <div class="warn"><strong>Ehrlich dazugesagt:</strong> Getestet wurde die Auswerte-Logik mit dem Text der beiden Fotos — nicht die Kamera-Texterkennung selbst, die aus der Testumgebung heraus nicht erreichbar war. Die Texterkennung (Tesseract) läuft unverändert und bewährt; sollte eine einzelne Zeile bei der Aufnahme unscharf gelesen werden, ist die Tabelle in Schritt 4 direkt editierbar.</div>
+
+    <div class="shot">
+      <img src="img/screenshot-alpha-liste-uebernehmen.jpg" alt="Housekeeping Manager: Übernehmen-Bildschirm mit grüner Meldung „71 Zimmer, Listendatum und Anz.-Summe stimmen überein" und Button „Auf Zimmer übertragen"" loading="lazy">
+      <div class="shot-caption">Screenshot vom Gerät, heute (25.09.) — genau der Stand, der oben beschrieben ist.</div>
+    </div>
   </div>
 
   <!-- 4. VERFÜGBARKEIT -->
@@ -270,9 +282,28 @@ nav{position:sticky;top:0;z-index:200;background:rgba(12,10,8,.95);backdrop-filt
     <div class="tip"><strong>Ruhigster Tag der Woche: So 27.09. mit 65,75 % Belegung</strong> (25 freie Zimmer) — relevant für die Personalplanung.</div>
   </div>
 
-  <!-- 5. UNTERLAGEN -->
+  <!-- 6. WEGWEISER (an Dario, Tanja, Nicole) -->
+  <div class="section" id="wegweiser">
+    <div class="sec-num">06</div>
+    <h2>Wegweiser zum Zimmer</h2>
+    <div class="addressed"><strong>Direkt an Dario, Tanja und Nicole:</strong> Das hier ist kein Housekeeping-Thema, aber da ihr heute alle im Raum seid, kurz mitgezeigt — Rückmeldung dazu ist ausdrücklich erwünscht, gerade von der Rezeption.</div>
+    <p><code style="font-family:'Spline Sans Mono',monospace;color:var(--gold)">wegweiser.html</code> führt Gäste nach dem Check-in in 15 Sprachen vom Empfang zum Zimmer — gedacht zum Öffnen per <strong>QR-Code</strong> (z. B. auf der Zimmerkarte oder an der Rezeption), bereits verlinkt in <code style="font-family:'Spline Sans Mono',monospace;color:var(--gold)">manager.html</code> und im Gästeportal (<code style="font-family:'Spline Sans Mono',monospace;color:var(--gold)">index.html</code>).</p>
+
+    <div class="shot">
+      <img src="img/screenshot-wegweiser-sprachwahl.jpg" alt="Wegweiser zum Zimmer: Sprachauswahl mit Turmhotel-Logo, Titel „Wegweiser zum Zimmer" und Sprachkacheln (Deutsch, English, Español, …)" loading="lazy">
+      <div class="shot-caption">Screenshot vom Gerät, heute — Sprachauswahl nach dem Öffnen per QR-Code.</div>
+    </div>
+
+    <div class="warn"><strong>Entwurf — muss noch überarbeitet werden.</strong> Die Seite ist live und per QR-Code erreichbar, aber inhaltlich noch nicht final. Feedback von Dario, Tanja und Nicole (Rezeption) fließt in die Überarbeitung ein, bevor sie fest ausgerollt wird.</div>
+
+    <div class="hero-links" style="margin-top:6px">
+      <a class="tool-link" href="wegweiser.html">→ Wegweiser öffnen</a>
+    </div>
+  </div>
+
+  <!-- 7. UNTERLAGEN -->
   <div class="section" id="unterlagen">
-    <div class="sec-num">05</div>
+    <div class="sec-num">07</div>
     <h2>Unterlagen</h2>
     <p>Zum Nachlesen und Weitergeben:</p>
 
