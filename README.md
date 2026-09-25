@@ -30,6 +30,13 @@ Damit der Betrieb nicht an einer Person hängt:
 
 ## Versionsverlauf
 
+### v3.12 — 25.09.2026 · Upload Foto oder PDF
+- Gästeliste als PDF (Suite8 → „Microsoft Print to PDF") wird ohne Texterkennung exakt gelesen
+- Fotos (JPG, PNG, WEBP, HEIC) aller Handys: Ausrichtung je Seite inkl. kopfüber,
+  Blatt wird aus dunklem Hintergrund ausgeschnitten, Abendlicht aufgehellt
+- Galerie- und Dateiauswahl am Handy wieder möglich (Kamerazwang entfernt)
+- „Als PDF speichern": saubere A4-PDF aus Handyfotos
+
 ### v3.11 — 25.09.2026 · alpha-scan.html abgeschaltet
 - Eigenständige OCR-Logik entfernt; die Datei leitet jetzt automatisch auf
   `housekeeping-v3.html` weiter (`bit.ly/turmhsk` bleibt dadurch gültig)

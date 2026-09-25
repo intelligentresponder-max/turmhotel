@@ -158,6 +158,16 @@ dieser Runde — folgendes bleibt aus der alten Roadmap liegen:
   als Fallback gekennzeichnet.
 
 ### Erledigt seit 25.09. (diese Übergabe)
+- ~~Foto-Scan-Upload auf PDF erweitern (v3.12)~~ → Alpha-Liste kann jetzt als
+  Text-PDF (Suite8 → „Microsoft Print to PDF") ohne OCR gelesen werden, dazu
+  weiterhin als Foto (JPG/PNG/WEBP/HEIC) mit automatischer Ausrichtung je Seite,
+  Blattzuschnitt und Kontrastaufhellung; Kamerazwang am Datei-Input entfernt
+  (Galerie/Dateiauswahl wieder möglich); neuer Export „Als PDF speichern".
+  Getestet mit echtem Chromium-Browser (Playwright) gegen die anonymisierte
+  Alpha-Liste vom 25.09.: 70 Zimmer, 47 Abreise, 23 Overnight, Anz. 70, Erw. 96,
+  Kin. 3, HK-Tag 26.09.2026 — alle Werte stimmen. PDF-Export liefert eine
+  gültige A4-PDF (595×842 pt). **Noch nicht getestet:** echte Handyfotos/HEIC
+  im Browser (kein Testgerät in dieser Sitzung verfügbar, siehe F14–F16).
 - ~~`alpha-scan.html` abschalten~~ → eigenständige OCR-Logik entfernt, Datei
   leitet automatisch auf `housekeeping-v3.html` weiter, `bit.ly/turmhsk` bleibt
   dadurch gültig. Kachel aus `manager.html` entfernt.
@@ -222,6 +232,10 @@ dieser Runde — folgendes bleibt aus der alten Roadmap liegen:
 | F10 | Erw./Kin.-Regex (25.09.) hatte `\b` am Zeilenende — bei OCR-Fehlerkennung klebt die Anz.-Ziffer oft ohne Leerzeichen an der nächsten Fehlerkennung (z.B. „1 0 14." statt „1 0 1 LGS") | Bei ca. 10 % der Zeilen (7 von 71 im Echttest) blieb Erw. leer, obwohl die Ziffer im Text stand | `\b` entfernt (25.09., zweiter Fix) → nur noch 4 von 71 Zeilen betroffen, siehe 3.1. Getestet mit `tesseract-ocr-deu` (Ubuntu-Paket) gegen die echten Fotos vom 25.09., nicht nur mit sauberem Text |
 | F11 | `scanBildAufbereiten` verdoppelte jedes Foto mit Breite < 2000px ungedeckelt — ein normales Handyfoto einer vollen A4-Seite (z.B. 1475×2048) wurde zu einem 2950×4096-Graustufen-Canvas (~12 MP) samt eigener ImageData-Kopie und Tesseract-WASM-Speicher fürs selbe Bild | Handy lief nach korrekt eingelesenen Zimmer-/Abreisedaten in ein Speicherlimit, Tab lud neu, komplette Auswertung (noch nicht übertragen) war weg | Lange Kante nach Verdoppelung auf max. 3000px gedeckelt (25.09.). Mit den echten Fotos erneut getestet: Zimmer/Abreise weiter 71/71 bzw. 38/38 korrekt, Erw.-Erkennung minimal schwächer (6 statt 4 von 71 offen) — vertretbarer Tausch gegen die Speicherersparnis (~12 MP → ~6,5 MP beim großen Foto) |
 | F12 | Firebase-Testregeln vom 06.08. nach 30 Tagen abgelaufen (25.09.) → DB liefert `Permission denied`. `fetch()` lehnt ein Promise nur bei echten Netzwerkfehlern ab, nicht bei HTTP-Fehlerstatus (401/403) — das `.catch()` in `saveState`/`syncFromCloud` griff also gar nicht. Zusätzlich: `syncFromCloud` prüfte nur `Object.keys(cloudState).length`, und `{error:"Permission denied"}` hat genau 1 Key → wurde als gültiger Zustand übernommen | Sync zwischen Handys lief seit 25.09. komplett ohne Fehlermeldung ins Leere; bei jedem Poll (alle 8 s) wäre zusätzlich der komplette lokale Zimmerstand durch das Firebase-Fehlerobjekt überschrieben worden, sobald der GET-Request eine Antwort bekam | `res.ok` explizit prüfen (`checkFirebaseResponse`), Fehlerobjekt in `syncFromCloud` erkennen und verwerfen statt übernehmen, rotes Banner „Offline – …" bei jedem fehlgeschlagenen Sync. Zusätzlich: die vier Einzelzimmer-Aktionen schreiben jetzt per `PATCH` nur das eine Zimmer statt den ganzen Stand per `PUT` zu ersetzen (Last-Writer-wins entschärft). Verifiziert mit einem Mock-Fetch-Test (kein echter Firebase-Zugriff aus dieser Sandbox möglich, siehe unten) — **noch nicht mit echten Handys getestet**. Firebase-Regeln selbst + Anonymous Auth bleiben offen, dafür fehlt der Web-API-Key aus der Konsole (`4d5435b`) |
+| F13 | Handys synchronisieren nicht (25.09., weiterhin offen) | Firebase-Regeln abgelaufen (401), App fängt Fehler still ab (siehe F12) | offen: Regeln + rotes Offline-Banner — **erst mit André abstimmen** (Konten-Umzug laut `KONTEN_UMZUG.md`), nicht in Eigenregie auf `true` zurücksetzen |
+| F14 | Erste Zuschnitt-Version des Foto-Scan-Uploads (v3.12) hätte Kopfzeile und Zimmerspalte abgeschnitten | Schwelle trennte bei formatfüllenden Fotos nur Randschatten vom Papier, nicht den echten Blattrand | `scanPapierRahmen` schneidet nur noch bei echtem dunklem Hintergrund zu (Mittelwert dunkler Bereich < 80, Abstand hell/dunkel > 90) |
+| F15 | v3.12-Patch wurde zunächst gegen den Stand vor v3.10/v3.11 vorbereitet | Anker hätten bei blindem Einspielen nicht mehr gepasst | Regel: vor jedem Patch `git pull`, alle Anker vor dem Einspielen per `grep -c` auf genau 1 Treffer prüfen |
+| F16 | Ein Testfoto der Alpha-Liste enthielt zusätzlich die Safe-/Tür-PIN-Liste (zweites Blatt im Bild) | PINs wären im Klartext auf dem Handy/als Export gelandet | Hinweis direkt im Tool ergänzt („Nur die Gästeliste fotografieren — keine Schlüssel-/PIN-Listen im Bild"); betroffenes Foto löschen |
 
 ---
 

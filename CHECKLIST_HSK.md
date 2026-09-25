@@ -23,6 +23,14 @@ Reihenfolge = Priorität. Erledigtes mit Commit-Hash abhaken.
 - [ ] Spalten `Erw.` / `Kin.` mitführen (Bettenzahl, Kinderbett).
 - [ ] OOO-Rückläufer als eigener Status (brauchen Reinigung).
 - [ ] Ausnahmeliste Zimmer-Sharing (Doppelzeile ≠ Fehler).
+- [x] **Datei-Upload ohne Kamerazwang (v3.12).** `capture="environment"` entfernt —
+      `<input>` erlaubt jetzt Galerie/Dateiauswahl + mehrere Dateien statt nur die
+      Kamera. Zusätzlich: PDF-Weg (Suite8 → „Microsoft Print to PDF") wird ohne
+      OCR exakt gelesen; Fotos (JPG/PNG/WEBP/HEIC) werden je Seite ausgerichtet,
+      zugeschnitten und aufgehellt; neuer Export „Als PDF speichern". Getestet mit
+      echtem Chromium-Browser (Playwright) gegen die anonymisierte Alpha-Liste vom
+      25.09.: 70/47/23, Anz. 70, Erw. 96, Kin. 3 — stimmt. Siehe README v3.12.
+      **Noch offen:** echte Handyfotos/HEIC im Browser (kein Testgerät verfügbar).
 
 ## 3. Paritätische Verteilung (`autoAssignStaff`)
 
@@ -51,6 +59,9 @@ Jeder Fehler: **Datum · Symptom · Ursache · Fix · Commit**
 | 08.08. | `024` ≠ `24` | führende Nullen | Import gehärtet | `945fdb7` |
 | 25.09. | Kein Sync zwischen Handys | Firebase-Regeln abgelaufen | Regeln/Auth offen (Web-API-Key fehlt) | — |
 | 25.09. | `syncFromCloud` hätte bei `Permission denied` die Fehlerantwort als gültigen Zustand übernommen und den kompletten lokalen Stand überschrieben | `fetch()` lehnt Promise nur bei Netzwerkfehlern ab, nicht bei HTTP 401/403; `Object.keys({error:'...'}).length` ist truthy | `res.ok` prüfen, Fehlerobjekt erkennen und verwerfen, Banner statt stillem Datenverlust | `4d5435b` |
+| 25.09. | Erste Zuschnitt-Version des Foto-Scan-Uploads (v3.12) hätte Kopfzeile und Zimmerspalte abgeschnitten | Schwelle trennte bei formatfüllenden Fotos nur Randschatten vom Papier, nicht den echten Blattrand | Nur zuschneiden bei echtem dunklem Hintergrund (Mittelwert < 80, Abstand hell/dunkel > 90) | — |
+| 25.09. | v3.12-Patch zunächst gegen älteren Stand vorbereitet | Repo war parallel auf v3.10/v3.11 gelaufen | Regel: vor jedem Patch `git pull`, Anker vorher per `grep -c` auf genau 1 Treffer prüfen | — |
+| 25.09. | Testfoto der Alpha-Liste enthielt zusätzlich die Safe-/Tür-PIN-Liste | Zweites Blatt im Bild | Hinweis im Tool ergänzt; Foto löschen, nur die Gästeliste fotografieren | — |
 
 Einträge zusätzlich in `UEBERGABE_HSK777.md` spiegeln.
 
