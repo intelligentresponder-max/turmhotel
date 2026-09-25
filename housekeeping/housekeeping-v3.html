@@ -142,6 +142,14 @@ nav{
 .import-banner-text{font-family:'Spline Sans Mono',monospace;font-size:.76rem;color:var(--checkout-col);flex:1;}
 .import-banner-text strong{color:var(--gold-bright);}
 
+/* ── SYNC-STATUS BANNER ── */
+.sync-offline-banner{
+  background:rgba(232,112,112,.1);border-bottom:1px solid rgba(232,112,112,.35);
+  padding:8px 24px;display:none;align-items:center;gap:8px;
+  font-family:'Spline Sans Mono',monospace;font-size:.72rem;letter-spacing:.02em;color:#e87070;
+}
+.sync-offline-banner.show{display:flex;}
+
 /* ── SECTION LABELS ── */
 .building-label{
   font-family:'Spline Sans Mono',monospace;font-size:.66rem;letter-spacing:.3em;text-transform:uppercase;
@@ -452,6 +460,8 @@ nav{
     <button class="lang-btn" onclick="printHandoverReport()">🖨️ Übergabebericht</button>
   </div>
 </nav>
+
+<div class="sync-offline-banner" id="sync-offline-banner">⚠️ Offline – Änderungen werden nur lokal gespeichert, nicht mit anderen Geräten abgeglichen.</div>
 
 <div class="tool-header">
   <p class="eyebrow" id="lbl-eyebrow">Digitalisierungsprojekt · Turmhotel Frankfurt</p>
@@ -894,8 +904,37 @@ let csvParsed = []; // {room, type: 'checkout'|'overnight'}
 // ══ PERSISTENCE ══
 function loadState()  { try { return JSON.parse(localStorage.getItem('hk_state3') || '{}'); } catch { return {}; } }
 function loadStaff()  { try { const s = JSON.parse(localStorage.getItem('hk_staff3') || '[]'); return s.length ? s : []; } catch { return []; } }
-function saveState(s) { localStorage.setItem('hk_state3', JSON.stringify(s)); fetch(FIREBASE_URL + '/state.json', {method:'PUT', headers:{'Content-Type':'application/json'}, body: JSON.stringify(s)}).catch(function(e){console.warn('Sync state fehlgeschlagen', e);}); }
-function saveStaffData(s) { localStorage.setItem('hk_staff3', JSON.stringify(s)); fetch(FIREBASE_URL + '/staff.json', {method:'PUT', headers:{'Content-Type':'application/json'}, body: JSON.stringify(s)}).catch(function(e){console.warn('Sync staff fehlgeschlagen', e);}); }
+// Sichtbarer Sync-Status (F12, 25.09.): fetch() lehnt ein Promise nur bei
+// Netzwerkfehlern ab, nicht bei HTTP-Fehlerstatus wie 401/403 (z.B. bei
+// abgelaufenen Firebase-Regeln) — darum res.ok explizit prüfen, sonst bleibt
+// ein "Permission denied" unbemerkt und syncFromCloud könnte sogar die
+// Fehlerantwort als gültigen Stand übernehmen.
+function setSyncStatus(ok) {
+  const banner = document.getElementById('sync-offline-banner');
+  if (banner) banner.classList.toggle('show', !ok);
+}
+function checkFirebaseResponse(res) {
+  if (!res.ok) throw new Error('Firebase HTTP ' + res.status);
+  return res;
+}
+function saveState(s, changedRoom) {
+  localStorage.setItem('hk_state3', JSON.stringify(s));
+  // Einzelzimmer-Aktionen (changedRoom gesetzt) schreiben per PATCH nur das
+  // betroffene Zimmer, damit ein zeitgleiches "Fertig" auf einem anderen
+  // Handy nicht überschrieben wird (F12). Massenaktionen (Import, Reset,
+  // Verteilen) sollen weiterhin den kompletten Stand ersetzen -> PUT.
+  const singleRoom = changedRoom && s[changedRoom] !== undefined;
+  const body = singleRoom ? { [changedRoom]: s[changedRoom] } : s;
+  fetch(FIREBASE_URL + '/state.json', {method: singleRoom ? 'PATCH' : 'PUT', headers:{'Content-Type':'application/json'}, body: JSON.stringify(body)})
+    .then(checkFirebaseResponse).then(function(){ setSyncStatus(true); })
+    .catch(function(e){ console.warn('Sync state fehlgeschlagen', e); setSyncStatus(false); });
+}
+function saveStaffData(s) {
+  localStorage.setItem('hk_staff3', JSON.stringify(s));
+  fetch(FIREBASE_URL + '/staff.json', {method:'PUT', headers:{'Content-Type':'application/json'}, body: JSON.stringify(s)})
+    .then(checkFirebaseResponse).then(function(){ setSyncStatus(true); })
+    .catch(function(e){ console.warn('Sync staff fehlgeschlagen', e); setSyncStatus(false); });
+}
 
 let state = loadState();
 let staff = loadStaff();
@@ -1096,7 +1135,7 @@ function saveRoom() {
     kinderbett: existing.kinderbett || false,
     ooo: !!tempState.ooo,
   };
-  saveState(state);
+  saveState(state, currentRoom);
   renderRooms();
   renderOverview();
   closeModalDirect();
@@ -1113,7 +1152,7 @@ function setMeinName(n)  { localStorage.setItem('hk_me', n); renderMine(); }
 function toggleFertig(id) {
   const rs = getRoomState(id);
   state[id] = { ...rs, clean: !rs.clean };
-  saveState(state);
+  saveState(state, id);
   renderMine(); renderRooms(); renderOverview();
 }
 
@@ -1568,7 +1607,7 @@ function applyManual() {
   const rs = getRoomState(room);
   const gt = type === 'none' ? '' : type;
   state[room] = { ...rs, guestType: gt, occupied: gt ? true : rs.occupied };
-  saveState(state);
+  saveState(state, room);
   renderRooms();
   document.getElementById('manual-room').value = '';
 }
@@ -2360,7 +2399,7 @@ function confirmChecklist() {
   const rs = getRoomState(checklistRoom);
   state[checklistRoom] = { ...rs, clean: true };
   createTechTicket(checklistRoom);
-  saveState(state);
+  saveState(state, checklistRoom);
   renderRooms();
   renderOverview();
   closeChecklistDirect();
@@ -2608,19 +2647,28 @@ async function syncFromCloud() {
   try {
     const stateRes = await fetch(FIREBASE_URL + '/state.json');
     const staffRes = await fetch(FIREBASE_URL + '/staff.json');
+    checkFirebaseResponse(stateRes);
+    checkFirebaseResponse(staffRes);
     const cloudState = await stateRes.json();
     const cloudStaff = await staffRes.json();
-    if (cloudState && Object.keys(cloudState).length) {
+    // F12: Firebase antwortet bei abgelehnten Regeln manchmal mit HTTP 200
+    // und einem Body wie {"error":"Permission denied"} — das ist kein
+    // gültiger Zustand und darf weder den lokalen Stand überschreiben, noch
+    // stillschweigend als "synchron" durchgehen.
+    if (cloudState && typeof cloudState === 'object' && cloudState.error) throw new Error(cloudState.error);
+    if (cloudState && typeof cloudState === 'object' && Object.keys(cloudState).length) {
       state = cloudState;
       localStorage.setItem('hk_state3', JSON.stringify(state));
     }
-    if (cloudStaff && cloudStaff.length) {
+    if (cloudStaff && Array.isArray(cloudStaff) && cloudStaff.length) {
       staff = cloudStaff;
       localStorage.setItem('hk_staff3', JSON.stringify(staff));
     }
     renderRooms(); renderPersonal(); renderOverview();
+    setSyncStatus(true);
   } catch (e) {
     console.warn('Cloud-Sync fehlgeschlagen, nutze lokalen Stand', e);
+    setSyncStatus(false);
   }
 }
 syncFromCloud();

@@ -161,6 +161,12 @@ dieser Runde — folgendes bleibt aus der alten Roadmap liegen:
 - ~~`alpha-scan.html` abschalten~~ → eigenständige OCR-Logik entfernt, Datei
   leitet automatisch auf `housekeeping-v3.html` weiter, `bit.ly/turmhsk` bleibt
   dadurch gültig. Kachel aus `manager.html` entfernt.
+- ~~Sync-Fehler unsichtbar~~ → rotes Banner + Last-Writer-wins bei Einzelzimmern
+  entschärft (F12, `4d5435b`). **Weiterhin offen:** Firebase-Regeln selbst
+  erneuern + Anonymous Auth einbauen — dafür fehlt der Web-API-Key aus der
+  Firebase-Konsole (Project Settings → General), ohne den kann diese Session
+  kein Sign-in-Request bauen. Sobald der Key da ist, siehe `CHECKLIST_HSK.md`
+  Punkt 1.
 
 ### Worauf beim Import zu achten ist
 - **Immer zuerst „Zimmerstatus zurücksetzen"**, sonst addiert sich der Vortag.
@@ -196,6 +202,7 @@ dieser Runde — folgendes bleibt aus der alten Roadmap liegen:
 | 25.09. | `c27db12` | Suite8-Wochenübersicht zusätzlich sichtbar auf `vorfuehrung.html` ergänzt |
 | 25.09. | `a271cef` | Erw./Kin.-Regex robuster gegen OCR-Fehlerkennungen (F10), mit echten Fotos von der Vorführung getestet |
 | 25.09. | `53b6735` | Foto-Scan-Speicherverbrauch bei großen Fotos begrenzt — behebt Tab-Reload/Datenverlust nach dem Scan (F11) |
+| 25.09. | `4d5435b` | Firebase-Sync-Fehler sichtbar gemacht (rotes Banner), stillen Datenverlust bei `Permission denied` behoben (F12), PATCH statt PUT für die vier Einzelzimmer-Aktionen (Last-Writer-wins entschärft) |
 
 ---
 
@@ -214,6 +221,7 @@ dieser Runde — folgendes bleibt aus der alten Roadmap liegen:
 | F8 | Scan vor Mitternacht mit Gerätedatum | Abreise/Overnight vertauscht | HK-Tag aus Listenkopf (v3.8) |
 | F10 | Erw./Kin.-Regex (25.09.) hatte `\b` am Zeilenende — bei OCR-Fehlerkennung klebt die Anz.-Ziffer oft ohne Leerzeichen an der nächsten Fehlerkennung (z.B. „1 0 14." statt „1 0 1 LGS") | Bei ca. 10 % der Zeilen (7 von 71 im Echttest) blieb Erw. leer, obwohl die Ziffer im Text stand | `\b` entfernt (25.09., zweiter Fix) → nur noch 4 von 71 Zeilen betroffen, siehe 3.1. Getestet mit `tesseract-ocr-deu` (Ubuntu-Paket) gegen die echten Fotos vom 25.09., nicht nur mit sauberem Text |
 | F11 | `scanBildAufbereiten` verdoppelte jedes Foto mit Breite < 2000px ungedeckelt — ein normales Handyfoto einer vollen A4-Seite (z.B. 1475×2048) wurde zu einem 2950×4096-Graustufen-Canvas (~12 MP) samt eigener ImageData-Kopie und Tesseract-WASM-Speicher fürs selbe Bild | Handy lief nach korrekt eingelesenen Zimmer-/Abreisedaten in ein Speicherlimit, Tab lud neu, komplette Auswertung (noch nicht übertragen) war weg | Lange Kante nach Verdoppelung auf max. 3000px gedeckelt (25.09.). Mit den echten Fotos erneut getestet: Zimmer/Abreise weiter 71/71 bzw. 38/38 korrekt, Erw.-Erkennung minimal schwächer (6 statt 4 von 71 offen) — vertretbarer Tausch gegen die Speicherersparnis (~12 MP → ~6,5 MP beim großen Foto) |
+| F12 | Firebase-Testregeln vom 06.08. nach 30 Tagen abgelaufen (25.09.) → DB liefert `Permission denied`. `fetch()` lehnt ein Promise nur bei echten Netzwerkfehlern ab, nicht bei HTTP-Fehlerstatus (401/403) — das `.catch()` in `saveState`/`syncFromCloud` griff also gar nicht. Zusätzlich: `syncFromCloud` prüfte nur `Object.keys(cloudState).length`, und `{error:"Permission denied"}` hat genau 1 Key → wurde als gültiger Zustand übernommen | Sync zwischen Handys lief seit 25.09. komplett ohne Fehlermeldung ins Leere; bei jedem Poll (alle 8 s) wäre zusätzlich der komplette lokale Zimmerstand durch das Firebase-Fehlerobjekt überschrieben worden, sobald der GET-Request eine Antwort bekam | `res.ok` explizit prüfen (`checkFirebaseResponse`), Fehlerobjekt in `syncFromCloud` erkennen und verwerfen statt übernehmen, rotes Banner „Offline – …" bei jedem fehlgeschlagenen Sync. Zusätzlich: die vier Einzelzimmer-Aktionen schreiben jetzt per `PATCH` nur das eine Zimmer statt den ganzen Stand per `PUT` zu ersetzen (Last-Writer-wins entschärft). Verifiziert mit einem Mock-Fetch-Test (kein echter Firebase-Zugriff aus dieser Sandbox möglich, siehe unten) — **noch nicht mit echten Handys getestet**. Firebase-Regeln selbst + Anonymous Auth bleiben offen, dafür fehlt der Web-API-Key aus der Konsole (`4d5435b`) |
 
 ---
 
