@@ -96,6 +96,9 @@ header{position:sticky;top:0;z-index:50;background:rgba(246,242,234,.94);backdro
   text-align:center;font-family:'Cormorant Garamond',serif;font-size:1.3rem;
   color:var(--green-deep);margin:1.8rem 0 .6rem;
 }
+.help-note{text-align:center;font-size:.85rem;color:var(--muted);margin-bottom:.4rem}
+.help-note a{color:var(--green-deep);font-weight:500;text-decoration:none}
+.help-note a:hover{text-decoration:underline}
 
 footer{border-top:1px solid var(--line);background:var(--cream-2);margin-top:1rem}
 .foot-inner{max-width:920px;margin:0 auto;padding:2rem 1.5rem;display:flex;flex-wrap:wrap;justify-content:space-between;gap:1rem;font-size:.85rem;color:var(--muted)}
@@ -110,10 +113,10 @@ footer{border-top:1px solid var(--line);background:var(--cream-2);margin-top:1re
 
 <header>
   <div class="nav">
-    <a class="brand" href="index.html">
+    <div class="brand">
       <span class="logo"><span class="crown">♔</span><b>TURM<br>HOTEL</b></span>
       <span class="txt"><b>Turm Hotel</b><small>Frankfurt am Main</small></span>
-    </a>
+    </div>
     <a class="back" href="index.html">← Übersicht</a>
   </div>
 </header>
@@ -130,7 +133,7 @@ footer{border-top:1px solid var(--line);background:var(--cream-2);margin-top:1re
 
 <div class="lang-wrap">
   <div class="lang-label" id="lang-label">Sprache wählen · Choose your language</div>
-  <div class="lang-grid" id="langGrid"></div>
+  <div class="lang-grid" id="langGrid" role="group" aria-label="Sprache wählen · Choose your language"></div>
 </div>
 
 <div class="guide">
@@ -149,6 +152,7 @@ footer{border-top:1px solid var(--line);background:var(--cream-2);margin-top:1re
   </div>
 
   <div class="closing" id="closing"></div>
+  <div class="help-note">Fragen? / Questions? <a href="tel:+4969154050">☎ +49 (0)69 15 40 50</a></div>
 </div>
 
 <footer>
@@ -393,7 +397,11 @@ function render(code){
 
   document.getElementById("closing").textContent = d.closing;
 
-  document.querySelectorAll(".lang-btn").forEach(b=>b.classList.toggle("active", b.dataset.code===code));
+  document.querySelectorAll(".lang-btn").forEach(b=>{
+    const isActive = b.dataset.code===code;
+    b.classList.toggle("active", isActive);
+    b.setAttribute("aria-pressed", isActive ? "true" : "false");
+  });
 }
 
 // build language buttons
@@ -401,6 +409,7 @@ const grid = document.getElementById("langGrid");
 order.forEach(code=>{
   const b=document.createElement("button");
   b.className="lang-btn";b.dataset.code=code;b.textContent=L[code].name;
+  b.type="button";b.setAttribute("aria-pressed","false");b.lang=code;
   b.onclick=()=>render(code);
   grid.appendChild(b);
 });
