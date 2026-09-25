@@ -9,10 +9,11 @@ Reihenfolge = Priorität. Erledigtes mit Commit-Hash abhaken.
 
 - [ ] **Firebase-Regeln erneuern.** Stand 25.09.: DB antwortet `Permission denied` (Testregeln vom 06.08. vermutlich nach 30 Tagen abgelaufen).
       Nicht wieder `".read": true` / `".write": true`, sondern Anonymous Auth + `auth != null`.
-- [ ] **Sync-Fehler sichtbar machen.** Aktuell nur `console.warn` → rotes Banner „Offline – nicht synchron".
-- [ ] **`PUT /state.json` → `PATCH` pro Zimmer.** Heute gewinnt der letzte Schreiber; Fertig-Meldungen anderer Handys können überschrieben werden.
-- [ ] **Polling (8 s) → Firebase-Listener (`onValue`).** Sofort aktuell, weniger Akku.
-- [ ] Nach Fix: Test mit 2 Handys gleichzeitig „Fertig" tippen → beide Meldungen bleiben erhalten.
+      **Blockiert auf:** Firebase Web-API-Key aus der Konsole (Project Settings → General → „Web API Key") — ohne den kann das Anonymous-Sign-in nicht clientseitig eingebaut werden. Regeltext zum Einfügen liegt in `KONTEN_UMZUG.md` bereit, sobald der Key da ist.
+- [x] **Sync-Fehler sichtbar machen.** `4d5435b` (25.09.): rotes Banner „Offline – …" bei jedem fehlgeschlagenen Sync (Netzwerk- **und** HTTP-Fehler, z.B. 401/403 bei abgelaufenen Regeln — `fetch()` lehnt bei HTTP-Fehlerstatus das Promise nicht ab, das musste extra geprüft werden).
+- [x] **`PUT /state.json` → `PATCH` pro Zimmer.** `4d5435b` (25.09.): für die vier Einzelzimmer-Aktionen (`saveRoom`, `toggleFertig`, `applyManual`, `confirmChecklist`) umgestellt. Massenaktionen (Import, Reset, Verteilen) bleiben bewusst bei PUT, da dort ein vollständiges Ersetzen gewollt ist.
+- [ ] **Polling (8 s) → Firebase-Listener (`onValue`).** Sofort aktuell, weniger Akku. Zurückgestellt: erfordert entweder das Firebase JS-SDK oder REST-Streaming (SSE) — beides ließ sich aus dieser Sandbox nicht gegen die echte DB testen (Netzwerk-Policy blockiert den Host), daher nicht blind in die Live-Datei gebaut.
+- [ ] Nach Fix: Test mit 2 Handys gleichzeitig „Fertig" tippen → beide Meldungen bleiben erhalten. **Noch nicht mit echten Geräten getestet** (nur mit einem Mock-Fetch-Harness verifiziert, siehe Fehlerprotokoll F12 in `UEBERGABE_HSK777.md`).
 
 ## 2. Upload per Handy
 
@@ -48,7 +49,8 @@ Jeder Fehler: **Datum · Symptom · Ursache · Fix · Commit**
 | 05.08. | Vortag + neue Liste addiert | Import ersetzte nicht | Reset-Button | — |
 | 08.08. | Abreise/Overnight vertauscht | Scan vor Mitternacht, Systemdatum | Feld Housekeeping-Tag | `a1977ca` |
 | 08.08. | `024` ≠ `24` | führende Nullen | Import gehärtet | `945fdb7` |
-| 25.09. | Kein Sync zwischen Handys | Firebase-Regeln abgelaufen | offen | — |
+| 25.09. | Kein Sync zwischen Handys | Firebase-Regeln abgelaufen | Regeln/Auth offen (Web-API-Key fehlt) | — |
+| 25.09. | `syncFromCloud` hätte bei `Permission denied` die Fehlerantwort als gültigen Zustand übernommen und den kompletten lokalen Stand überschrieben | `fetch()` lehnt Promise nur bei Netzwerkfehlern ab, nicht bei HTTP 401/403; `Object.keys({error:'...'}).length` ist truthy | `res.ok` prüfen, Fehlerobjekt erkennen und verwerfen, Banner statt stillem Datenverlust | `4d5435b` |
 
 Einträge zusätzlich in `UEBERGABE_HSK777.md` spiegeln.
 
