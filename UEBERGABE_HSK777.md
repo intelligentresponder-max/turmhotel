@@ -1,14 +1,21 @@
 # TURMHOTEL HOUSEKEEPING — ÜBERGABE (Trigger: HSK777)
 
-Stand: **08.08.2026, 03:30** · Letzter Commit: `f957979`
+Stand: **25.09.2026** · Letzter Commit: `5467ab9` (25.09.2026, Branch `claude/hsk777-aufraeumen-features`)
 Diese Datei ist der Einstiegspunkt — egal ob am PC (Git Bash) oder am Handy (Termux).
 Bei „HSK777": diese Datei lesen, dann bei Abschnitt 3 weitermachen.
 
+> **Pflicht:** Wer pusht, aktualisiert hier das Datum „Stand" und den letzten
+> Commit. Zwischen 08.08. und 25.09. wurde das versäumt (siehe Abschnitt 5, F1).
+
 ## Wo alles liegt
 - Repo: `github.com/intelligentresponder-max/turmhotel`
-- Verteil-Tool: `https://bit.ly/turm7` → `housekeeping/housekeeping-v3.html`
-- Scan-Tool: `https://bit.ly/turmhsk` → `housekeeping/alpha-scan.html`
-- Cloud-Sync: Firebase RTDB, `state.json` / `staff.json`
+- Verteil-Tool (**Hauptwerkzeug**, enthält seit v3.9 auch den Foto-Scan):
+  `https://bit.ly/turm7` → `housekeeping/housekeeping-v3.html`
+- Scan-Tool (nur noch **Fallback**): `https://bit.ly/turmhsk` → `housekeeping/alpha-scan.html`
+- Team-Anleitung: `Gebrauchsanweisung-Housekeeping-App.pdf` (DE/EN/HR/HU/AF)
+- Cloud-Sync: Firebase RTDB, `state.json` / `staff.json`, Archiv unter `/history/<Datum>.json`
+- Konto-Umzug und Updates: `KONTEN_UMZUG.md`, `ANLEITUNG_UPDATES.md`
+- Alte Patch-Skripte: `scripts/` · alte Backups: `archiv/`
 
 ## Hotel-Stammdaten
 - Turmhotel Frankfurt, Eschersheimer Landstraße 20, 60322 Frankfurt
@@ -17,19 +24,33 @@ Bei „HSK777": diese Datei lesen, dann bei Abschnitt 3 weitermachen.
 - 73 vermietbare Zimmer: Vorderhaus 11–55 (zweistellig), Hinterhaus 102–510
   (101 = Massageraum, dazu zwei Tagungsräume)
 
+## Status Einführung
+Tool inkl. Scan ist mit dem Team getestet und einsatzbereit. Die **offizielle
+Einführung steht aus**, bis Tanja wieder ansprechbar ist.
+
 ---
 
-## 1. Der tägliche Ablauf (so ist er gedacht)
+## 1. Der tägliche Ablauf (Stand v3.9)
 
 1. Rezeption druckt am Ende der Spätschicht die **Alpha-Liste** („Gäste im Haus
    inkl. Anreisen"). Spätanreisen sind dann bereits erfasst.
-2. Foto der Liste ins **Scan-Tool**. OCR liest Zimmer + Abreisedatum.
-3. Doppelcheck: **Anz.-Summe** der Alpha-Liste und **Anreisen Zimmer** aus der
+2. `bit.ly/turm7` öffnen → **Zimmerstatus zurücksetzen** (archiviert den
+   Vortag automatisch in den Verlauf).
+3. Reiter „Gästeliste" → **Foto-Scan**: bis zu 3 Seiten fotografieren.
+   Der **Housekeeping-Tag** wird aus dem Listenkopf gesetzt (Listendatum + 1),
+   manuell überschreibbar.
+4. Doppelcheck: **Anz.-Summe** der Alpha-Liste und **Anreisen Zimmer** aus der
    Suite8-Verfügbarkeit eintragen. Beide Badges müssen grün sein.
-4. Leerstehende Anreisezimmer in Karte 4 antippen (siehe 2.1).
-5. CSV herunterladen → im Verteil-Tool: *Zimmerstatus zurücksetzen* → importieren
-   → Personal prüfen → automatisch verteilen.
-6. Zuteilung landet per Cloud-Sync auf den Handys der Zimmermädchen.
+5. Leerstehende Anreisezimmer über die Chips antippen (siehe 2.1), jetzt nach
+   Vorder-/Hinterhaus gruppiert. Ex-OOO-Rückläufer stehen separat, rot markiert
+   (siehe 2.2).
+6. **Auf Zimmer übertragen** → Vorschau prüfen → übertragen. Kein CSV mehr nötig.
+7. Personal prüfen (**„heute nicht da"** statt löschen) → automatisch verteilen.
+8. Zuteilung landet per Cloud-Sync auf den Handys („Meine Zimmer").
+
+### Referenzwerte letzte geprüfte Liste (24.09. → HK-Tag 25.09.)
+71 Zimmer · 80 Erwachsene · 0 Kinder · 38 Abreisen · 33 Overnight.
+Summenzeile der Liste = Zeilenzahl → Scan-Grundlage stimmt.
 
 ---
 
@@ -37,113 +58,121 @@ Bei „HSK777": diese Datei lesen, dann bei Abschnitt 3 weitermachen.
 
 **2.1 Die Alpha-Liste kennt nur belegte Zimmer.**
 Leerstehende Zimmer mit Anreise stehen dort strukturell nie drin. Sie ergeben
-sich nur aus `Anreisen − Abreisen`. Dafür gibt es das Feld „Anreisen Zimmer
-laut PMS" und die Auswahlliste in Karte 4.
+sich nur aus der Suite8-Zahl „Anreisen Zimmer". Dafür gibt es das Feld
+„Anreisen Zimmer laut PMS" und die Leerstand-Chips.
 
 **2.2 Zimmer aus dem Leerstand sind bereits sauber** — Ausnahme: Zimmer, die
 auf **OOO** standen. Die kommen in den Verkauf zurück und sind *nicht*
-automatisch sauber. Weder Alpha-Liste noch Scan-Tool kennen sie bisher.
+automatisch sauber. **Seit `5467ab9` kennt das Tool sie:** Zimmer-Modal hat
+einen Betriebsstatus-Toggle (Im Verkauf / Außer Betrieb), im Foto-Scan gibt
+es eine eigene, rot markierte Chip-Gruppe „Ex-OOO-Rückläufer" unterhalb der
+normalen Leerstand-Chips. Auswahl dort erzwingt beim Übertragen `checkout`
+(= braucht Reinigung) statt `overnight` (= gilt als sauber) und löscht das
+OOO-Flag automatisch.
 
 **2.3 Doppelte Zimmerzeilen — zwei verschiedene Fälle.**
-*Fall 1 (Datenfehler):* Ein Zimmer wurde im PMS über das Kontextmenü zusätzlich
-angelegt und darauf gebucht. Physisch existiert es einmal, im System zweimal — der
-Gast wird doppelt gezählt. So am 07.08. bei Zimmer 105.
-*Fall 2 (Sharing):* Bei Messen und Geschäftskunden teilen sich zwei Personen ein
-Zimmer als gleichwertige Mieter. Zwei echte Buchungen auf einem echten Zimmer,
-völlig korrekt.
-Fürs Housekeeping ist beides gleich: ein Zimmer, einmal reinigen — das Scan-Tool
-dedupliziert. **Aber der Doppelcheck darf Fall 2 nicht als Fehler melden**, sonst
-steht die Badge grundlos auf rot. Geplant: Ausnahmeliste, in der die betroffene
-Zimmernummer mit dem jeweiligen Fall festgehalten wird.
+*Fall 1 (Datenfehler):* Zimmer im PMS über das Kontextmenü zusätzlich angelegt
+und darauf gebucht — Gast doppelt gezählt (07.08., Zimmer 105).
+*Fall 2 (Sharing):* Messe-/Geschäftskunden teilen sich ein Zimmer als
+gleichwertige Mieter — korrekt.
+Fürs Housekeeping beides: ein Zimmer, einmal reinigen (Tool dedupliziert).
+**Seit `5467ab9` meldet der Doppelcheck das nicht mehr als Fehler:** die
+Anz.-Summe wird gegen `erkannte Zimmer + entfernte Dubletten` geprüft statt
+gegen `erkannte Zimmer` allein. Bewusst **keine statische Ausnahmeliste** mit
+Zimmernummern gebaut — Sharing-Partner wechseln laufend, eine feste Liste
+wäre in ein paar Wochen veraltet und müsste manuell gepflegt werden.
 
 **2.4 Der Dienstplan ist ein Planungsstand, keine Ist-Zahl.**
-Der vom 31.07. nannte für Samstag 16 Abreisen und 32 Anreisen — tatsächlich
-wurden es 28 und 36. Nicht falsch, nur eine Woche älter. Für Reinigungszahlen
-immer die **aktuelle Verfügbarkeit** heranziehen.
+Für Reinigungszahlen immer die **aktuelle Verfügbarkeit** heranziehen.
 Notation im Plan: `K` = krank, `U` = Urlaub, `A` = frei.
+
+**2.5 `occupied` und `guestType` gehören zusammen.**
+Bug vom 12.08. (243d5d5): JSON- und manueller Import setzten nur `guestType`,
+die Statusleiste zeigte „0 belegt". Behoben auf Schreib- *und* Leseseite.
+Neue Importwege müssen beide Felder setzen.
 
 ---
 
 ## 3. Offene Punkte (Reihenfolge = Priorität)
 
-**1. Feld „Housekeeping-Tag" — kritisch.**
-Das Scan-Tool bestimmt „Abreise heute" über das Systemdatum des Geräts. Die
-Alpha-Liste wird aber gegen **23:30 gedruckt und oft vor Mitternacht
-gescannt**. Dann ist „heute" noch der Vortag, und alle Abreisen des Folgetages
-werden als `Overnight` exportiert — die Verteilung wäre komplett verdreht.
-Nach Mitternacht stimmt es zufällig, davor nicht.
-Lösung: eigenes Datumsfeld, vorbelegt mit **morgen**, wenn es nach 18 Uhr ist.
-Alles andere im Tool hängt an diesem Datum.
+Alle fünf Punkte aus der letzten Übergabe sind mit `5467ab9` erledigt (Details
+siehe 2.2/2.3 und Verlauf-Tabelle). Aktuell keine neuen offenen Punkte aus
+dieser Runde — folgendes bleibt aus der alten Roadmap liegen:
 
-**2. Den Dateiweg abschaffen.**
-CSV herunterladen und wieder auswählen ist ein PC-Ablauf. Am Handy findet der
-Browser die Dateien nicht zuverlässig wieder. Beide Tools sind Webseiten — die
-Datei ist eine Krücke.
-- *Kurzfristig:* Button „Ergebnis kopieren" im Scan-Tool. Das Verteil-Tool hat
-  unter „⚡ JSON-Funktion" bereits ein Einfügefeld samt Zwischenablage-Button.
-- *Sauber:* Button „Direkt übernehmen", der das Ergebnis in dieselbe Firebase-DB
-  schreibt, über die ohnehin synchronisiert wird. Das Verteil-Tool meldet dann
-  „Neue Liste vom Scan-Tool — übernehmen?".
-- *Langfristig:* beide Seiten zu einem Reiter zusammenlegen, dann entfällt die
-  Übergabe ganz.
+- Alte Roadmap: Arbeitszeit-Tracking, Mängel-Report, Technik-Report Hausmeister.
+- `alpha-scan.html` ist jetzt klar als Fallback gekennzeichnet (Banner) —
+  langfristiges Abschalten steht weiter aus, bis niemand mehr darauf angewiesen ist.
+- Bettenzahl/Kinder werden nur bei der zeilenweisen OCR-Erkennung (≥5 Zimmer
+  pro Aufnahme) mitgelesen, nicht im „spaltenweise gelesen"-Fallback-Pfad bei
+  schlechten Aufnahmen — dort bleiben Erw./Kin. leer und müssen von Hand
+  nachgetragen werden (Tabelle ist dafür editierbar).
 
-**3. Bettenzahl mitführen.**
-Die Alpha-Liste hat die Spalte `Erw.` (1/2/3). Das Zimmermädchen muss wissen,
-wie viele Betten zu beziehen sind. Der JSON-Weg im Verteil-Tool kann das
-bereits (`type`: E/D/T), der CSV-Weg wirft die Information weg.
+### Erledigt seit 08.08. (aus der alten Liste)
+- ~~Housekeeping-Tag-Feld~~ → v3.8 / v3.9 (Datum aus Listenkopf, überschreibbar)
+- ~~Dateiweg abschaffen~~ → v3.9, Scan direkt im Manager
+- ~~Personal „heute nicht da"~~ → v3.7 Team-Dienstplan
+- ~~Vergangene Tage weg nach Reset~~ → Verlauf-Tab mit Firebase-Archiv
 
-**4. Kinder erfassen.**
-Spalte `Kin.` der Alpha-Liste — Zusatz- oder Kinderbett. Wird derzeit gar nicht
-gelesen.
-
-**5. OOO-Rückläufer sichtbar machen.**
-Am 07.08. stand ein Zimmer auf OOO, am 08.08. nicht mehr. Solche Zimmer
-brauchen eine Reinigung, tauchen aber nirgends auf.
-
-**6. Personal schnell abwählen.**
-Häkchen „heute nicht da" statt Löschen und Neuanlegen. Am 08.08. fielen zwei
-Kräfte kurzfristig krank aus.
-
-**7. Kleineres**
-- Verfügbarkeitszahlen in den Übergabebericht des Tools ziehen, damit die
-  Hausdame Spitzentage früh sieht (z. B. 48 Abreisen am 09.08.).
-- Chips in Karte 4 nach Vorder-/Hinterhaus gruppieren — bei 23 freien Zimmern
-  derzeit unübersichtlich.
-- Handbuch-Kapitel „Vorbereitung" kennt die neuen Karten 4 und 5 noch nicht.
-- Aus der alten Roadmap offen: Arbeitszeit-Tracking, Mängel-Report,
-  Technik-Report für den Hausmeister.
+### Erledigt seit 07.09. (diese Übergabe, `5467ab9`)
+- ~~Bettenzahl mitführen~~ → Erw.-Spalte wird im Foto-Scan gelesen, Zimmertyp-
+  Badge E/D/T wie beim JSON-Import, editierbar in der Zeilen-Tabelle.
+- ~~Kinder erfassen~~ → Kin.-Spalte wird gelesen, „+Kind"-Badge am Zimmer.
+- ~~OOO-Rückläufer sichtbar machen~~ → Betriebsstatus-Toggle im Zimmer-Modal +
+  eigene „Ex-OOO"-Chip-Gruppe im Foto-Scan, erzwingt Reinigung.
+- ~~Ausnahmeliste Sharing~~ → Doppelcheck rechnet entfernte Dubletten automatisch
+  mit ein statt eine Ausnahmeliste zu pflegen (siehe 2.3).
+- ~~Kleineres~~ → Verfügbarkeitszahlen im Übergabebericht, Leerstand-Chips nach
+  Vorder-/Hinterhaus gruppiert, Handbuch Kapitel 1 umgeschrieben, `alpha-scan.html`
+  als Fallback gekennzeichnet.
 
 ### Worauf beim Import zu achten ist
-- **Immer zuerst „Zimmerstatus zurücksetzen"**, sonst addiert sich der Vortag
-  dazu (war ein echter Bug, behoben am 05.08. — der Reset ist seitdem Pflicht).
-- **Anz.-Summe und Anreisenzahl gegenprüfen**, bevor verteilt wird. Beide
-  Badges grün, dann erst verteilen.
-- **Der JSON-Import setzt jedes Zimmer auf `checkout`.** Für die reine
-  Abreiseliste richtig, aber Overnight-Zimmer kommen darüber nicht ins Tool.
-  Solange das so ist, bleibt CSV der Weg für den vollständigen Tag.
-- **Zimmernummern ohne führende Null.** Das Verteil-Tool kennt `24`, nicht
-  `024`. Scan-Tool und `parseCsv()` schneiden sie inzwischen ab, fremde
-  CSV-Dateien nicht unbedingt.
+- **Immer zuerst „Zimmerstatus zurücksetzen"**, sonst addiert sich der Vortag.
+- **Beide Badges grün**, dann erst verteilen.
+- **Der JSON-Import setzt jedes Zimmer auf `checkout`** — Overnight kommt darüber
+  nicht ins Tool. Für den vollständigen Tag: Foto-Scan oder CSV.
+- **Zimmernummern ohne führende Null.** `24`, nicht `024`. Scan und `parseCsv()`
+  schneiden sie ab, fremde CSV-Dateien nicht unbedingt.
 
 ---
 
-## 4. Was in der Nacht 07./08.08. gemacht wurde
+## 4. Verlauf der Arbeiten
 
-| Commit | Inhalt |
-|---|---|
-| `d36486d` | Gebäude-Label `Vorderhaus (Nebenhaus)` → `(Haupthaus)` |
-| `945fdb7` | Anreisen-Abgleich, Dubletten-Filter, Status-Spalte im CSV; CSV-Import in `housekeeping-v3.html` gegen führende Nullen gehärtet |
-| `d0944e9` | Auswahlliste der freien Zimmer (73 Zimmer hinterlegt) |
-| `f957979` | Leerstandszimmer als `Overnight` statt `Abreise` |
-
-Erster Echttest des Scan-Tools mit zwei Fotos einer Alpha-Liste (07.08.2026)
-plus Verfügbarkeits-Auszug. Kontrollsummen gingen auf: 80 Erwachsene,
-2 Kinder, 50 Zimmer; 28 Abreisen — identisch mit der Zeile „Abreisen Zimmer"
-in Suite8.
+| Datum | Commit | Inhalt |
+|---|---|---|
+| 08.08. | `d36486d`–`f957979` | Anreisen-Abgleich, Dubletten-Filter, Leerstand-Chips, Leerstand = Overnight |
+| 08.08. | `a1977ca` | Kamera: bis zu 3 Seiten, Datum aus Listenkopf |
+| 09.08. | `4eaf153` | v3.5 Prüfung + Ampel, v3.6 „Meine Zimmer" |
+| 09.08. | `d6a8641` | v3.7 Ausrichtung, Seitenmodus, Team-Dienstplan |
+| 09.08. | `75b0985` | v3.8 Jahr aus Listenkopf, Zeilenanfang repariert |
+| 12.08. | `6871e33` | Update- und Konten-Umzugsanleitung, Firebase-URL konsolidiert |
+| 12.08. | `babfcd2`, `f420595` | Scan: Anreisen/Abreisen-Formel, OCR-Trennzeichen-Toleranz |
+| 12.08. | `243d5d5` | Fix „0 belegt" (occupied/guestType) |
+| 12.08. | `f11d75a` | Verlauf-Tab, Archiv beim Reset |
+| 12.08. | `526d1f8` | **v3.9** Foto-Scan direkt im Manager |
+| 12.08. | `d614e01` | Team-Gebrauchsanweisung DE/EN/HR/HU/AF |
+| 26.08. | `7120c6e`, `bfe730e`, `59b1cea` | Gästeportal: Revert WLAN-Leak, Late Check-in, Impressum |
+| 07.09. | `1c9466c` | Merge PR #1 (Gebrauchsanweisung-PDF) |
+| 25.09. | `5467ab9` | Aufräumen (Skripte → `scripts/`, Backup → `archiv/`, `main` gelöscht) + Bettenzahl/Kinder im Foto-Scan + OOO-Rückläufer-Chips + Doppelcheck-Fix für Sharing + Verfügbarkeit im Übergabebericht + Vorder-/Hinterhaus-Gruppierung + Handbuch v3.9 |
 
 ---
 
-## 5. Arbeitsregeln
+## 5. Fehlerprotokoll (einmal gemachte Fehler — nicht wiederholen)
+
+| # | Fehler | Folge | Gegenmaßnahme |
+|---|---|---|---|
+| F1 | UEBERGABE nach Sessions vom 09.08./12.08. nicht aktualisiert | HSK777 zeigte 6 Wochen alten Stand, erledigte Punkte als offen | Datum/Commit hier vor dem letzten Push prüfen (Pflicht, auch in DEPLOY-ROUTINE) |
+| F2 | Escaped Backticks (`\``, `\${`) im Script | ganzes Script stirbt lautlos | Syntaxcheck vor jedem Push; Fix: `sed -i 's/\\`/`/g; s/\\${/${/g'` |
+| F3 | `housekeeping-v3.backup.html` enthielt F2 | irreführende tote Kopie im Live-Ordner | Backups nie in `housekeeping/`, sondern `archiv/`; besser: Git-Historie statt Backup-Datei |
+| F4 | CSV-Import addierte statt zu ersetzen (05.08.) | Vortagszimmer doppelt | Reset ist Pflichtschritt, Reset archiviert jetzt |
+| F5 | `occupied`/`guestType` getrennt gesetzt (12.08.) | „0 belegt" trotz Zuteilung | siehe 2.5 |
+| F6 | WLAN-Passwort öffentlich im Gästeportal (26.08.) | Sicherheitsleck | Revert; vor Push `grep -i "passw\|wlan" *.html` |
+| F7 | Blindes `git reset --hard` (08.08.) | Label-Commit fast verloren | erst `git log`/`git show`, dann `pull --rebase` |
+| F9 | Leere Datei `main` im Repo-Root (seit 12.07., vermutlich Tippfehler bei `git push … main` mit `>`) | Ballast, verwirrt | gelöscht 25.09.; vor `git add -A` immer `git status` lesen |
+| F8 | Scan vor Mitternacht mit Gerätedatum | Abreise/Overnight vertauscht | HK-Tag aus Listenkopf (v3.8) |
+
+---
+
+## 6. Arbeitsregeln
 
 Vor **jedem** Push die Syntaxprüfung:
 
