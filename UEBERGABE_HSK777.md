@@ -1,6 +1,6 @@
 # TURMHOTEL HOUSEKEEPING — ÜBERGABE (Trigger: HSK777)
 
-Stand: **25.09.2026** · Letzter Commit: `6c6118b` (25.09.2026, Branch `claude/vorfuehrung-seite`)
+Stand: **25.09.2026** · Letzter Commit: `0388e22` (25.09.2026, Branch `claude/alpha-scan-abschalten`)
 Diese Datei ist der Einstiegspunkt — egal ob am PC (Git Bash) oder am Handy (Termux).
 Bei „HSK777": diese Datei lesen, dann bei Abschnitt 3 weitermachen.
 
@@ -11,7 +11,9 @@ Bei „HSK777": diese Datei lesen, dann bei Abschnitt 3 weitermachen.
 - Repo: `github.com/intelligentresponder-max/turmhotel`
 - Verteil-Tool (**Hauptwerkzeug**, enthält seit v3.9 auch den Foto-Scan):
   `https://bit.ly/turm7` → `housekeeping/housekeeping-v3.html`
-- Scan-Tool (nur noch **Fallback**): `https://bit.ly/turmhsk` → `housekeeping/alpha-scan.html`
+- Scan-Tool (**abgeschaltet seit 25.09.2026**): `https://bit.ly/turmhsk` →
+  `housekeeping/alpha-scan.html` leitet automatisch auf `housekeeping-v3.html`
+  weiter (Link bleibt so gültig, OCR-Logik dort ist entfernt)
 - Team-Anleitung: `Gebrauchsanweisung-Housekeeping-App.pdf` (DE/EN/HR/HU/AF)
 - Vorführungs-/Demo-Seite: `vorfuehrung.html` — Klick-Anleitung, Neuerungen,
   Verlinkung der Unterlagen; verlinkt in `manager.html`
@@ -102,8 +104,6 @@ siehe 2.2/2.3 und Verlauf-Tabelle). Aktuell keine neuen offenen Punkte aus
 dieser Runde — folgendes bleibt aus der alten Roadmap liegen:
 
 - Alte Roadmap: Arbeitszeit-Tracking, Mängel-Report, Technik-Report Hausmeister.
-- `alpha-scan.html` ist jetzt klar als Fallback gekennzeichnet (Banner) —
-  langfristiges Abschalten steht weiter aus, bis niemand mehr darauf angewiesen ist.
 - Bettenzahl/Kinder werden nur bei der zeilenweisen OCR-Erkennung (≥5 Zimmer
   pro Aufnahme) mitgelesen, nicht im „spaltenweise gelesen"-Fallback-Pfad bei
   schlechten Aufnahmen — dort bleiben Erw./Kin. leer und müssen von Hand
@@ -126,6 +126,11 @@ dieser Runde — folgendes bleibt aus der alten Roadmap liegen:
 - ~~Kleineres~~ → Verfügbarkeitszahlen im Übergabebericht, Leerstand-Chips nach
   Vorder-/Hinterhaus gruppiert, Handbuch Kapitel 1 umgeschrieben, `alpha-scan.html`
   als Fallback gekennzeichnet.
+
+### Erledigt seit 25.09. (diese Übergabe)
+- ~~`alpha-scan.html` abschalten~~ → eigenständige OCR-Logik entfernt, Datei
+  leitet automatisch auf `housekeeping-v3.html` weiter, `bit.ly/turmhsk` bleibt
+  dadurch gültig. Kachel aus `manager.html` entfernt.
 
 ### Worauf beim Import zu achten ist
 - **Immer zuerst „Zimmerstatus zurücksetzen"**, sonst addiert sich der Vortag.
@@ -156,6 +161,7 @@ dieser Runde — folgendes bleibt aus der alten Roadmap liegen:
 | 07.09. | `1c9466c` | Merge PR #1 (Gebrauchsanweisung-PDF) |
 | 25.09. | `5467ab9` | Aufräumen (Skripte → `scripts/`, Backup → `archiv/`, `main` gelöscht) + Bettenzahl/Kinder im Foto-Scan + OOO-Rückläufer-Chips + Doppelcheck-Fix für Sharing + Verfügbarkeit im Übergabebericht + Vorder-/Hinterhaus-Gruppierung + Handbuch v3.9 |
 | 25.09. | `6c6118b` | Neue Seite `vorfuehrung.html` (Klick-Anleitung + PDF-Verlinkung + Testergebnis), in `manager.html` verlinkt, `housekeeping-anleitung.html` mit Hinweis-Banner, README aktualisiert |
+| 25.09. | `0388e22` | `alpha-scan.html` abgeschaltet (Redirect-Stub statt eigenständiger OCR-Logik), Kachel aus `manager.html` entfernt |
 
 ---
 

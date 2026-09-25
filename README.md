@@ -12,7 +12,11 @@ GitHub Pages. Entwicklung und Betrieb: André Schwarz, Rezeption.
 Der Foto-Scan der Alpha-Liste (früher eigene Seite `alpha-scan.html` / `bit.ly/turmhsk`)
 ist seit v3.9 ein Reiter im Housekeeping Manager selbst („Gästeliste" → „📷 Foto-Scan") —
 eine Seite für den ganzen Ablauf, kein CSV-Download/-Import mehr nötig.
-`alpha-scan.html` bleibt im Repo erhalten, ist aber nicht mehr der empfohlene Weg.
+`alpha-scan.html` ist seit 25.09.2026 abgeschaltet: die Datei bleibt unter derselben
+Adresse (`bit.ly/turmhsk`) erhalten, leitet aber automatisch auf den Housekeeping
+Manager weiter, damit alte Lesezeichen nicht ins Leere laufen. Die eigenständige
+OCR-Logik dort ist entfernt — zwei parallele Scan-Implementierungen hätten sonst
+immer weiter auseinanderdriften können.
 
 Einstiegspunkt für die Weiterarbeit: **`UEBERGABE_HSK777.md`**
 
@@ -25,6 +29,11 @@ Damit der Betrieb nicht an einer Person hängt:
 ---
 
 ## Versionsverlauf
+
+### v3.11 — 25.09.2026 · alpha-scan.html abgeschaltet
+- Eigenständige OCR-Logik entfernt; die Datei leitet jetzt automatisch auf
+  `housekeeping-v3.html` weiter (`bit.ly/turmhsk` bleibt dadurch gültig)
+- Kachel aus `manager.html` entfernt
 
 ### v3.10 — 25.09.2026 · Betten, Kinder, OOO-Rückläufer (`5467ab9`, PR #3)
 - Foto-Scan liest die Spalten `Erw.` und `Kin.` mit (Zimmertyp-Badge E/D/T,
@@ -137,9 +146,7 @@ Details und Verlauf: `UEBERGABE_HSK777.md`. Aktuell offen:
 
 1. Aus der älteren Planung offen: Arbeitszeit-Tracking, Mängel-Report,
    Technik-Report für den Hausmeister
-2. `alpha-scan.html` langfristig abschalten, sobald niemand mehr darauf
-   angewiesen ist (aktuell mit Fallback-Banner gekennzeichnet)
-3. `housekeeping/housekeeping-anleitung.html` (Stand Juli 2026) inhaltlich auf
+2. `housekeeping/housekeeping-anleitung.html` (Stand Juli 2026) inhaltlich auf
    v3.9 aktualisieren oder durch `vorfuehrung.html`/`handbuch.html` ersetzen
 
 ---
