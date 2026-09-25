@@ -56,6 +56,30 @@ Einführung steht aus**, bis Tanja wieder ansprechbar ist.
 71 Zimmer · 80 Erwachsene · 0 Kinder · 38 Abreisen · 33 Overnight.
 Summenzeile der Liste = Zeilenzahl → Scan-Grundlage stimmt.
 
+**Gegenprobe mit Suite8 „Verfügbarkeit" (Screenshot von Amir, 24.09. abends):**
+Alpha-Liste und PMS stimmen exakt überein — `Reservierungen`/`Def. Reservierungen`
+für Do 24.09. = **71** (= Anz.-Summe der Liste), `Erwachsene im Haus` = **80**
+(= Erw.-Summe), `Kinder im Haus` = **0** (= Kin.-Summe), `Abreisen Zimmer` für
+Fr 25.09. (HK-Tag) = **38** (= gezählte Abreise-Zeilen). Damit ist die neue
+Erw./Kin.-Erkennung aus 3.1/2.5 unabhängig gegen echte PMS-Zahlen bestätigt.
+
+**Suite8-Verfügbarkeit die ganze Woche (24.09.–30.09., zum Vorausplanen):**
+
+| Tag | Verfügbarkeit | Abreisen Zi. | Anreisen Zi. | Belegung | Kinder im Haus |
+|---|---|---|---|---|---|
+| Do 24.09. | 2 | 23 | 26 | 97,26 % | 0 |
+| Fr 25.09. (HK-Tag) | 5 | 38 | 35 | 93,15 % | 0 |
+| Sa 26.09. | 8 | 45 | 42 | 89,04 % | 0 |
+| So 27.09. | 25 | 56 | 39 | 65,75 % | 1 |
+| Mo 28.09. | 18 | 29 | 36 | 75,34 % | 2 |
+| Di 29.09. | 8 | 28 | 38 | 89,04 % | 1 |
+| Mi 30.09. | 6 | 20 | 22 | 91,78 % | 1 |
+
+Ruhigster Tag der Woche: **So 27.09. mit 65,75 % Belegung** (25 freie Zimmer) —
+für Personalplanung relevant. OOO/OOS laut PMS aktuell durchgehend 0.
+Für das Doppelcheck-Feld „Anreisen Zimmer laut PMS" gilt die Zeile des
+**HK-Tages**, nicht die des Listendatums (heute also 35, nicht 26).
+
 ---
 
 ## 2. Was man wissen muss
