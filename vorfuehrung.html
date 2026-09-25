@@ -40,6 +40,13 @@ nav{position:sticky;top:0;z-index:200;background:rgba(12,10,8,.95);backdrop-filt
 .toc a{color:var(--gold);text-decoration:none;}
 .toc a:hover{color:var(--gold-bright);}
 
+.exec-box{margin:36px 0;background:linear-gradient(175deg,rgba(201,162,39,.1),rgba(201,162,39,.02) 60%);border:1px solid var(--gold);border-radius:var(--radius);padding:34px 32px 30px;}
+.exec-eyebrow{font-family:'Spline Sans Mono',monospace;font-size:.68rem;letter-spacing:.3em;text-transform:uppercase;color:var(--gold);margin-bottom:12px;}
+.exec-box h2{font-family:'Fraunces',serif;font-size:clamp(1.4rem,3vw,1.9rem);font-weight:500;color:var(--paper);margin-bottom:18px;line-height:1.25;}
+.exec-box h2 span{font-family:'Spline Sans Mono',monospace;font-size:.5em;color:var(--muted);font-weight:400;letter-spacing:.02em;text-transform:uppercase;}
+.exec-box h3{font-family:'Fraunces',serif;font-size:1.25rem;font-weight:500;color:var(--gold-bright);margin:28px 0 12px;}
+.exec-box p{color:#cabfb0;line-height:1.8;margin-bottom:14px;font-size:.95rem;}
+
 .section{padding:40px 0;border-bottom:1px solid var(--line);}
 .section:last-child{border-bottom:none;}
 .sec-num{font-family:'Spline Sans Mono',monospace;font-size:.65rem;letter-spacing:.25em;text-transform:uppercase;color:var(--gold);margin-bottom:10px;}
@@ -122,9 +129,61 @@ nav{position:sticky;top:0;z-index:200;background:rgba(12,10,8,.95);backdrop-filt
     </div>
   </div>
 
+  <!-- AN DIE GESCHÄFTSFÜHRUNG -->
+  <div class="exec-box" id="fuehrung">
+    <div class="exec-eyebrow">An die Geschäftsführung</div>
+    <h2>Nicole <span>· Direktorin</span>, Tanja <span>· Inhaberin</span> und Ralf</h2>
+
+    <p>Diese Seiten sind nicht von oben in Auftrag gegeben worden — sie sind ausdrücklich aus
+      eigener Initiative, aus der täglichen Praxis an der Rezeption heraus entstanden. Doppelte
+      Zettelwirtschaft beim Housekeeping, kein Abgleich zwischen den Handys im Team und immer
+      wieder dieselben Fragen an der Rezeption waren im Alltag spürbar — daraus wurde zuerst
+      der Housekeeping Manager, dann der mehrsprachige Wegweiser, dann das Gästeportal mit
+      FAQ-Widget.</p>
+
+    <p>Dabei ging es nicht nur um die einzelne Funktion, sondern bewusst um das große Ganze:</p>
+
+    <div class="legend">
+      <div class="legend-item">
+        <div class="legend-dot" style="background:var(--gold)"></div>
+        <div class="legend-text"><strong>Housekeeping Manager</strong>Foto-Scan der Alpha-Liste, automatische Verteilung, Cloud-Sync zwischen den Handys, tägliches Archiv statt Zettel.</div>
+      </div>
+      <div class="legend-item">
+        <div class="legend-dot" style="background:#5bb3e8"></div>
+        <div class="legend-text"><strong>Wegweiser zum Zimmer</strong>15 Sprachen, direkt per QR-Code am Empfang oder auf der Zimmerkarte erreichbar.</div>
+      </div>
+      <div class="legend-item">
+        <div class="legend-dot" style="background:var(--clean)"></div>
+        <div class="legend-text"><strong>Gästeportal-FAQ</strong>Echte, vorab geprüfte Antworten auf die häufigsten Gästefragen — bewusst kein KI-Chatbot mit Halluzinationsrisiko, sondern geprüfte Fakten zum Haus.</div>
+      </div>
+      <div class="legend-item">
+        <div class="legend-dot" style="background:var(--gold-bright)"></div>
+        <div class="legend-text"><strong>Datenschutz von Anfang an</strong>Keine Zugangsdaten offen im Code, keine externen Tracker, jeder gefundene Fehler wird dokumentiert und behoben, nicht verschwiegen.</div>
+      </div>
+    </div>
+
+    <div class="shot">
+      <img src="img/screenshot-gaesteportal-faq.jpg" alt="Gästeportal: Widget „Fragen zu Ihrem Aufenthalt" mit Suchfeld und Antworten zu Check-in/Check-out, Late Check-in, Frühstückszeiten und Wegweiser" loading="lazy">
+      <div class="shot-caption">Screenshot vom Gerät, heute — Gästeportal-FAQ-Widget, direkt auf der Startseite erreichbar.</div>
+    </div>
+
+    <h3>Der Nutzen im Alltag — vor allem Zeitersparnis</h3>
+    <p>Housekeeping: Die Verteilung der Zimmer läuft in Sekunden statt über Zuruf und
+      Papierliste, der Übergabebericht entsteht automatisch statt von Hand. Rezeption: Fragen,
+      die täglich mehrfach am Telefon oder am Tresen beantwortet werden — Late-Check-in,
+      Frühstückszeiten, Parken, Zimmerfindung — sind jetzt jederzeit selbst abrufbar, ohne dass
+      die Rezeption jedes Mal unterbrochen wird. In Summe: weniger Rückfragen, weniger
+      Doppelarbeit, mehr Zeit für den Gast direkt vor Ort.</p>
+
+    <div class="tip"><strong>Aktueller Stand:</strong> Alle hier gezeigten Seiten laufen aktuell
+      auf einer Entwicklungsseite zum Testen und Abstimmen, noch nicht auf der offiziellen
+      Hotel-Domain — und erfüllen bereits jetzt alle Datenschutz-Richtlinien.</div>
+  </div>
+
   <div class="toc">
     <div class="toc-title">Inhalt</div>
     <ol>
+      <li><a href="#fuehrung">An die Geschäftsführung</a></li>
       <li><a href="#neu">Was seit der letzten Vorführung neu ist</a></li>
       <li><a href="#ablauf">Klick-Anleitung für heute</a></li>
       <li><a href="#getestet">Mit der echten Liste von heute getestet</a></li>
