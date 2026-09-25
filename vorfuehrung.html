@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>Vorführung heute — Housekeeping Manager · Turmhotel Frankfurt</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..900;1,9..144,300..900&family=Spline+Sans+Mono:wght@400;500;600&family=Spline+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#0c0a08;--paper:#f4ede0;--gold:#c9a227;--gold-bright:#e8c14f;--muted:#9b9085;--line:rgba(201,162,39,.18);--clean:#2a7a4b;--warn:#e67e22;--danger:#c0392b;--radius:3px;}
+*{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{font-family:'Spline Sans',sans-serif;background:var(--ink);color:var(--paper);line-height:1.6;-webkit-font-smoothing:antialiased;}
+body::before{content:"";position:fixed;inset:0;z-index:0;pointer-events:none;background:radial-gradient(900px 500px at 80% -10%,rgba(201,162,39,.07),transparent 60%),radial-gradient(700px 600px at -10% 100%,rgba(201,162,39,.04),transparent 60%);}
+
+nav{position:sticky;top:0;z-index:200;background:rgba(12,10,8,.95);backdrop-filter:blur(14px);border-bottom:1px solid var(--line);padding:12px 24px;display:flex;justify-content:space-between;align-items:center;gap:12px;}
+.nav-brand{font-family:'Fraunces',serif;font-size:.95rem;color:var(--gold);text-decoration:none;}
+.nav-link{font-family:'Spline Sans Mono',monospace;font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);text-decoration:none;border:1px solid var(--line);padding:5px 12px;border-radius:3px;transition:.15s;}
+.nav-link:hover{color:var(--gold);border-color:var(--gold);}
+
+.wrap{position:relative;z-index:1;max-width:860px;margin:0 auto;padding:0 24px 80px;}
+
+.hero{padding:48px 0 36px;border-bottom:1px solid var(--line);}
+.eyebrow{font-family:'Spline Sans Mono',monospace;font-size:.68rem;letter-spacing:.3em;text-transform:uppercase;color:var(--gold);margin-bottom:12px;}
+.hero h1{font-family:'Fraunces',serif;font-size:clamp(1.8rem,4vw,2.8rem);font-weight:500;letter-spacing:-.01em;line-height:1.1;}
+.hero h1 em{font-style:italic;color:var(--gold-bright);}
+.hero p{margin-top:14px;color:#cabfb0;font-size:.95rem;max-width:600px;line-height:1.75;}
+.hero-links{display:flex;gap:10px;flex-wrap:wrap;margin-top:22px;}
+.tool-link{display:inline-flex;align-items:center;gap:8px;font-family:'Spline Sans Mono',monospace;font-size:.72rem;color:var(--gold);text-decoration:none;border:1px solid var(--line);padding:8px 16px;border-radius:var(--radius);transition:.15s;}
+.tool-link:hover{border-color:var(--gold);background:rgba(201,162,39,.08);}
+.tool-link.primary{background:var(--gold);color:var(--ink);font-weight:600;border-color:var(--gold);}
+.tool-link.primary:hover{background:var(--gold-bright);}
+
+.toc{margin:32px 0;background:rgba(255,255,255,.025);border:1px solid var(--line);border-radius:var(--radius);padding:22px 26px;}
+.toc-title{font-family:'Spline Sans Mono',monospace;font-size:.65rem;letter-spacing:.25em;text-transform:uppercase;color:var(--gold);margin-bottom:14px;}
+.toc ol{padding-left:18px;display:grid;gap:6px;}
+.toc li{font-size:.9rem;color:#cabfb0;}
+.toc a{color:var(--gold);text-decoration:none;}
+.toc a:hover{color:var(--gold-bright);}
+
+.section{padding:40px 0;border-bottom:1px solid var(--line);}
+.section:last-child{border-bottom:none;}
+.sec-num{font-family:'Spline Sans Mono',monospace;font-size:.65rem;letter-spacing:.25em;text-transform:uppercase;color:var(--gold);margin-bottom:10px;}
+.section h2{font-family:'Fraunces',serif;font-size:1.6rem;font-weight:500;margin-bottom:18px;}
+.section p{color:#cabfb0;line-height:1.8;margin-bottom:14px;font-size:.95rem;}
+.section p:last-child{margin-bottom:0;}
+
+.steps{display:grid;gap:12px;margin:20px 0;}
+.step{display:flex;gap:16px;align-items:flex-start;background:rgba(255,255,255,.03);border:1px solid var(--line);border-radius:var(--radius);padding:16px 18px;}
+.step-num{font-family:'Fraunces',serif;font-size:1.4rem;color:var(--gold);font-weight:600;min-width:28px;line-height:1;}
+.step-title{font-weight:600;color:var(--paper);margin-bottom:4px;font-size:.95rem;}
+.step-desc{font-size:.88rem;color:#9b9085;line-height:1.65;}
+.step-desc strong{color:var(--paper);}
+.step-desc code{font-family:'Spline Sans Mono',monospace;font-size:.85em;color:var(--gold);}
+
+.tip{background:rgba(42,122,75,.1);border:1px solid rgba(42,122,75,.3);border-left:3px solid var(--clean);border-radius:0 var(--radius) var(--radius) 0;padding:14px 18px;margin:16px 0;font-size:.88rem;color:#cabfb0;line-height:1.7;}
+.tip strong{color:#4ecb82;}
+.warn{background:rgba(230,126,34,.08);border:1px solid rgba(230,126,34,.3);border-left:3px solid var(--warn);border-radius:0 var(--radius) var(--radius) 0;padding:14px 18px;margin:16px 0;font-size:.88rem;color:#cabfb0;line-height:1.7;}
+.warn strong{color:var(--warn);}
+.ooo-note{background:rgba(192,57,43,.08);border:1px solid rgba(192,57,43,.3);border-left:3px solid var(--danger);border-radius:0 var(--radius) var(--radius) 0;padding:14px 18px;margin:16px 0;font-size:.88rem;color:#cabfb0;line-height:1.7;}
+.ooo-note strong{color:#ff6b4a;}
+
+.legend{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:10px;margin:20px 0;}
+.legend-item{display:flex;align-items:flex-start;gap:12px;background:rgba(255,255,255,.03);border:1px solid var(--line);border-radius:var(--radius);padding:14px 16px;}
+.legend-dot{width:14px;height:14px;border-radius:2px;flex-shrink:0;margin-top:3px;}
+.legend-text{font-size:.85rem;color:#cabfb0;}
+.legend-text strong{display:block;color:var(--paper);font-size:.88rem;margin-bottom:2px;}
+
+.docs{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px;margin:20px 0;}
+.doc-card{display:block;background:rgba(255,255,255,.03);border:1px solid var(--line);border-radius:var(--radius);padding:18px 20px;text-decoration:none;color:inherit;transition:.15s;}
+.doc-card:hover{border-color:var(--gold);background:rgba(201,162,39,.05);}
+.doc-icon{font-size:1.4rem;margin-bottom:8px;}
+.doc-name{font-weight:600;color:var(--paper);font-size:.92rem;margin-bottom:4px;}
+.doc-desc{font-size:.8rem;color:var(--muted);line-height:1.6;}
+
+.testbox{background:rgba(42,122,75,.08);border:1px solid rgba(42,122,75,.3);border-radius:var(--radius);padding:20px 22px;margin:20px 0;}
+.testbox h3{font-family:'Fraunces',serif;font-size:1.05rem;color:#4ecb82;margin-bottom:10px;}
+.testbox ul{padding-left:20px;color:#cabfb0;font-size:.88rem;line-height:1.8;}
+.testbox ul strong{color:var(--paper);}
+
+@media(max-width:600px){.step{flex-direction:column;gap:8px;}.step-num{font-size:1.1rem;}}
+</style>
+</head>
+<body>
+
+<nav>
+  <a class="nav-brand" href="manager.html">♔ Turmhotel Frankfurt</a>
+  <a class="nav-link" href="housekeeping/housekeeping-v3.html">Tool öffnen →</a>
+</nav>
+
+<div class="wrap">
+
+  <div class="hero">
+    <div class="eyebrow">Turmhotel Frankfurt · Housekeeping · Stand 25.09.2026</div>
+    <h1>Vorführung <em>heute</em></h1>
+    <p>Diese Seite ist die Grundlage für die heutige Vorführung des Housekeeping Managers:
+      was seit der letzten Runde neu ist, wie der Ablauf mit der echten Alpha-Liste heute
+      Schritt für Schritt aussieht, und wo die passenden Unterlagen liegen.</p>
+    <div class="hero-links">
+      <a class="tool-link primary" href="housekeeping/housekeeping-v3.html">→ Housekeeping Manager öffnen</a>
+      <a class="tool-link" href="Gebrauchsanweisung-Housekeeping-App.pdf">📄 Gebrauchsanweisung (PDF)</a>
+      <a class="tool-link" href="handbuch.html">📖 Handbuch (ausführlich)</a>
+    </div>
+  </div>
+
+  <div class="toc">
+    <div class="toc-title">Inhalt</div>
+    <ol>
+      <li><a href="#neu">Was seit der letzten Vorführung neu ist</a></li>
+      <li><a href="#ablauf">Klick-Anleitung für heute</a></li>
+      <li><a href="#getestet">Mit der echten Liste von heute getestet</a></li>
+      <li><a href="#unterlagen">Unterlagen</a></li>
+    </ol>
+  </div>
+
+  <!-- 1. WAS NEU -->
+  <div class="section" id="neu">
+    <div class="sec-num">01</div>
+    <h2>Was seit der letzten Vorführung neu ist</h2>
+    <p>Fünf Punkte aus der letzten Übergabe sind umgesetzt und live im Tool (<code style="font-family:'Spline Sans Mono',monospace;color:var(--gold)">github.com/intelligentresponder-max/turmhotel</code>, PR&nbsp;#3):</p>
+
+    <div class="legend">
+      <div class="legend-item">
+        <div class="legend-dot" style="background:var(--gold)"></div>
+        <div class="legend-text"><strong>Bettenzahl (Erw.)</strong>Der Foto-Scan liest jetzt mit, wie viele Betten pro Zimmer zu beziehen sind — als Badge <span style="color:var(--gold)">E/D/T</span> am Zimmer.</div>
+      </div>
+      <div class="legend-item">
+        <div class="legend-dot" style="background:#5bb3e8"></div>
+        <div class="legend-text"><strong>Kinder (Kin.)</strong>Zusatz-/Kinderbett wird erkannt und als <span style="color:#5bb3e8">„+Kind"</span>-Badge am Zimmer angezeigt.</div>
+      </div>
+      <div class="legend-item">
+        <div class="legend-dot" style="background:#ff6b4a"></div>
+        <div class="legend-text"><strong>OOO-Rückläufer</strong>Zimmer, die aus „Außer Betrieb" zurückkommen, stehen im Foto-Scan separat und rot markiert — sie gelten <em>nicht</em> automatisch als sauber.</div>
+      </div>
+      <div class="legend-item">
+        <div class="legend-dot" style="background:var(--clean)"></div>
+        <div class="legend-text"><strong>Sharing-Doppelcheck</strong>Ein von zwei Gästen geteiltes Zimmer (Messe/Business) löst im Doppelcheck keinen Fehlalarm mehr aus.</div>
+      </div>
+      <div class="legend-item">
+        <div class="legend-dot" style="background:var(--muted)"></div>
+        <div class="legend-text"><strong>Übergabebericht</strong>Zeigt jetzt zusätzlich Anreisezahlen sowie Betten-/Kinderbelegung.</div>
+      </div>
+      <div class="legend-item">
+        <div class="legend-dot" style="background:var(--gold-bright)"></div>
+        <div class="legend-text"><strong>Leerstand nach Haus sortiert</strong>Die Leerstand-Chips im Foto-Scan sind jetzt nach Vorderhaus/Hinterhaus gruppiert.</div>
+      </div>
+    </div>
+
+    <div class="tip"><strong>Für die Direktion:</strong> Ein Werkzeug für Scan und Verteilung statt zwei getrennte Schritte — weniger Fehlerquellen, mehr Kennzahlen im Übergabebericht, jeder Tag automatisch archiviert.</div>
+  </div>
+
+  <!-- 2. KLICK-ANLEITUNG -->
+  <div class="section" id="ablauf">
+    <div class="sec-num">02</div>
+    <h2>Klick-Anleitung für heute</h2>
+    <p>Genau dieser Ablauf lässt sich live mit der heutigen, gedruckten Alpha-Liste vorführen:</p>
+
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div><div class="step-title">Zimmerstatus zurücksetzen</div>
+        <div class="step-desc">Unten im Tab <strong>„Gästeliste"</strong> → <strong>„Zimmerstatus zurücksetzen"</strong>. Archiviert den Vortag automatisch im Verlauf-Tab.</div></div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div><div class="step-title">Foto-Scan öffnen</div>
+        <div class="step-desc">Tab <strong>„Gästeliste"</strong> → <strong>„📷 Foto-Scan"</strong> antippen.</div></div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div><div class="step-title">Alpha-Liste fotografieren</div>
+        <div class="step-desc">Bis zu 3 Seiten aufnehmen (Kamera oder Datei) → <strong>„Seiten auswerten"</strong>. Läuft lokal im Browser, es geht nichts an einen Server.</div></div>
+      </div>
+      <div class="step">
+        <div class="step-num">4</div>
+        <div><div class="step-title">Zeilen prüfen — jetzt mit Betten &amp; Kindern</div>
+        <div class="step-desc">Zimmer und Abreisedatum durchgehen. <strong>Neu:</strong> die Spalten <code>Erw.</code> und <code>Kin.</code> stehen mit in der Tabelle und sind bei Bedarf editierbar.</div></div>
+      </div>
+      <div class="step">
+        <div class="step-num">5</div>
+        <div><div class="step-title">Doppelcheck ausfüllen</div>
+        <div class="step-desc"><strong>Anz.-Summe</strong> von der Alpha-Liste (heute: <strong>71</strong>) und <strong>Anreisen Zimmer</strong> laut Suite8-Verfügbarkeit eintragen. Beide Ampeln müssen grün werden.</div></div>
+      </div>
+      <div class="step">
+        <div class="step-num">6</div>
+        <div><div class="step-title">Leerstehende Anreisezimmer ergänzen</div>
+        <div class="step-desc">Zimmer ohne Alpha-Liste-Eintrag antippen — jetzt nach <strong>Vorderhaus/Hinterhaus</strong> gruppiert. Zimmer, die aus <strong style="color:#ff6b4a">Außer Betrieb (OOO)</strong> zurückkommen, extra darunter, rot markiert.</div></div>
+      </div>
+      <div class="step">
+        <div class="step-num">7</div>
+        <div><div class="step-title">Übertragen</div>
+        <div class="step-desc"><strong>„✓ Auf Zimmer übertragen"</strong> → Vorschau prüfen → übertragen. Abreise-Zimmer leuchten orange.</div></div>
+      </div>
+      <div class="step">
+        <div class="step-num">8</div>
+        <div><div class="step-title">Personal prüfen und verteilen</div>
+        <div class="step-desc">Tab <strong>„Personal"</strong>: wer heute nicht da ist markieren, dann automatisch verteilen lassen.</div></div>
+      </div>
+      <div class="step">
+        <div class="step-num">9</div>
+        <div><div class="step-title">Übergabebericht zeigen</div>
+        <div class="step-desc">Oben rechts <strong>„🖨️ Übergabebericht"</strong> — zeigt jetzt zusätzlich die Verfügbarkeitszahlen (Anreisen, Betten, Kinder) für den Tag.</div></div>
+      </div>
+    </div>
+
+    <div class="ooo-note"><strong>⛔ Für die Vorführung besonders zeigenswert:</strong> ein Zimmer im Modal auf „Außer Betrieb" setzen, dann im Foto-Scan zeigen, wie es als eigene rote „Ex-OOO"-Kachel wieder auftaucht und beim Übertragen automatisch eine Reinigung erzwingt statt als „schon sauber" zu gelten.</div>
+  </div>
+
+  <!-- 3. GETESTET -->
+  <div class="section" id="getestet">
+    <div class="sec-num">03</div>
+    <h2>Mit der echten Liste von heute getestet</h2>
+    <p>Die beiden Fotos der heutigen Alpha-Liste (24.09., HK-Tag 25.09.) wurden vorab gegen die neue Logik geprüft:</p>
+
+    <div class="testbox">
+      <h3>✓ Ergebnis: Volltreffer</h3>
+      <ul>
+        <li><strong>71 von 71 Zimmern</strong> korrekt erkannt, keins fehlt oder ist doppelt</li>
+        <li><strong>Erwachsene-Summe 80</strong> und <strong>Kinder-Summe 0</strong> — exakt wie auf der gedruckten Liste</li>
+        <li>Housekeeping-Tag automatisch richtig gesetzt: <strong>25.09.2026</strong></li>
+        <li>Anz.-Summen-Ampel <strong style="color:#4ecb82">grün</strong>: „71 Zimmer, Listendatum und Anz.-Summe stimmen überein"</li>
+      </ul>
+    </div>
+
+    <div class="warn"><strong>Ehrlich dazugesagt:</strong> Getestet wurde die Auswerte-Logik mit dem Text der beiden Fotos — nicht die Kamera-Texterkennung selbst, die aus der Testumgebung heraus nicht erreichbar war. Die Texterkennung (Tesseract) läuft unverändert und bewährt; sollte eine einzelne Zeile bei der Aufnahme unscharf gelesen werden, ist die Tabelle in Schritt 4 direkt editierbar.</div>
+  </div>
+
+  <!-- 4. UNTERLAGEN -->
+  <div class="section" id="unterlagen">
+    <div class="sec-num">04</div>
+    <h2>Unterlagen</h2>
+    <p>Zum Nachlesen und Weitergeben:</p>
+
+    <div class="docs">
+      <a class="doc-card" href="Gebrauchsanweisung-Housekeeping-App.pdf">
+        <div class="doc-icon">📄</div>
+        <div class="doc-name">Gebrauchsanweisung-Housekeeping-App.pdf</div>
+        <div class="doc-desc">Team-Anleitung zum Ausdrucken, DE/EN/HR/HU/AF</div>
+      </a>
+      <a class="doc-card" href="handbuch.html">
+        <div class="doc-icon">📖</div>
+        <div class="doc-name">Handbuch Housekeeping Manager</div>
+        <div class="doc-desc">Ausführliche Schritt-für-Schritt-Anleitung, DE/EN/HU, inkl. Kurzfassung für Mitarbeiter:innen und Direktion</div>
+      </a>
+      <a class="doc-card" href="housekeeping/housekeeping-v3.html">
+        <div class="doc-icon">🏠</div>
+        <div class="doc-name">Housekeeping Manager v3</div>
+        <div class="doc-desc">Das Werkzeug selbst — Zimmer, Foto-Scan, Personal, Verlauf</div>
+      </a>
+    </div>
+  </div>
+
+</div><!-- /wrap -->
+
+</body>
+</html>

@@ -26,6 +26,19 @@ Damit der Betrieb nicht an einer Person hängt:
 
 ## Versionsverlauf
 
+### v3.10 — 25.09.2026 · Betten, Kinder, OOO-Rückläufer (`5467ab9`, PR #3)
+- Foto-Scan liest die Spalten `Erw.` und `Kin.` mit (Zimmertyp-Badge E/D/T,
+  „+Kind"-Badge), editierbar in der Zeilen-Tabelle
+- Betriebsstatus-Toggle im Zimmer-Modal (Im Verkauf / Außer Betrieb) + eigene
+  „Ex-OOO-Rückläufer"-Chips im Foto-Scan, erzwingen Reinigung statt
+  „automatisch sauber"
+- Doppelcheck rechnet entfernte Sharing-Dubletten automatisch in die
+  Anz.-Summe ein, statt eine Ausnahmeliste zu pflegen
+- Übergabebericht zeigt Verfügbarkeitszahlen (Anreisen, Betten, Kinder);
+  Leerstand-Chips nach Vorder-/Hinterhaus gruppiert
+- Handbuch-Kapitel 1 auf den v3.9-Ablauf umgeschrieben, neue Seite
+  `vorfuehrung.html` für Live-Vorführungen
+
 ### v3.7 — 09.08.2026 · Ausrichtung, Lesemodus, Team
 Nachbesserungen aus dem ersten Nachtbetrieb.
 - **Automatische Ausrichtung:** Das Werkzeug ermittelt an einer verkleinerten
@@ -117,15 +130,17 @@ durchlief. Seitdem lehnt das Werkzeug schlechte Aufnahmen aktiv ab.
 
 ## Als Nächstes
 
-1. Dateiweg abschaffen: Ergebnis direkt übergeben statt CSV herunterladen und
-   wieder auswählen; auf Dauer beide Werkzeuge in einer Oberfläche
-2. Bettenzahl (Spalte `Erw.`) und Kinder (Spalte `Kin.`) mitführen — das
-   Housekeeping muss wissen, wie viele Betten zu beziehen sind
-3. OOO-Rückläufer sichtbar machen
-4. Ausnahmeliste für doppelte Zimmerzeilen, damit Zimmer-Sharing bei Messen
-   nicht als Fehler gemeldet wird
-5. Aus der älteren Planung offen: Arbeitszeit-Tracking, Mängel-Report,
+Die fünf Punkte der letzten Runde sind erledigt (`5467ab9`, PR #3 — Bettenzahl/
+Kinder im Foto-Scan, OOO-Rückläufer-Chips, Sharing-Doppelcheck-Fix,
+Verfügbarkeitszahlen im Übergabebericht, Vorder-/Hinterhaus-Gruppierung).
+Details und Verlauf: `UEBERGABE_HSK777.md`. Aktuell offen:
+
+1. Aus der älteren Planung offen: Arbeitszeit-Tracking, Mängel-Report,
    Technik-Report für den Hausmeister
+2. `alpha-scan.html` langfristig abschalten, sobald niemand mehr darauf
+   angewiesen ist (aktuell mit Fallback-Banner gekennzeichnet)
+3. `housekeeping/housekeeping-anleitung.html` (Stand Juli 2026) inhaltlich auf
+   v3.9 aktualisieren oder durch `vorfuehrung.html`/`handbuch.html` ersetzen
 
 ---
 
