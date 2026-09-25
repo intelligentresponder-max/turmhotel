@@ -45,18 +45,26 @@ Owner-Namen weiter (keine Neueinrichtung nötig), die komplette Commit-Historie
 bleibt erhalten, und es kostet nichts — GitHub Pages ist für öffentliche Repos
 immer kostenlos.
 
-**Vorher unbedingt aktualisieren — 6 Dateien verweisen fest auf den alten
+**Vorher unbedingt aktualisieren — 7 Dateien verweisen fest auf den alten
 Kontonamen** (`intelligentresponder-max`), das muss nach dem Transfer als
-Code-Änderung nachgezogen werden (sonst zeigen Canonical-Tags, ein Link in
-`vorfuehrung.html` und die Anleitung in `housekeeping-anleitung.html` weiter
-auf die alte Adresse):
+Code-Änderung nachgezogen werden (sonst zeigen Canonical-Tags, die Sitemap,
+ein Link in `vorfuehrung.html` und die Anleitung in
+`housekeeping-anleitung.html` weiter auf die alte Adresse):
 - `index.html` (canonical, og:url)
 - `wegweiser.html` (canonical, og:url)
+- `sitemap.xml` (`<loc>`-Eintrag)
 - `vorfuehrung.html` (Text „github.com/intelligentresponder-max/turmhotel")
 - `housekeeping/housekeeping-anleitung.html` (Link + sichtbarer Text auf
   `housekeeping-v3.html`)
 - `UEBERGABE_HSK777.md` (Repo-Adresse in Zeile 11)
 - diese Datei selbst (Platzhalter `[neuer-owner]` oben)
+
+Geprüft (25.09.2026): alle internen Links im Repo sind relativ, keine
+absoluten `/…`-Pfade — die Seiten laufen also unverändert sowohl unter der
+GitHub-Pages-Subpath-URL als auch später unter der eigenen Subdomain-Root,
+ohne dass an den Links selbst etwas geändert werden muss. Nur die 7 oben
+genannten Dateien mit fest eingetragener absoluter Adresse betreffen den
+Umzug.
 
 Am besten in einem eigenen Commit direkt nach dem Transfer — Claude Code kann
 das in einem Rutsch erledigen, sobald der neue Kontoname feststeht.
@@ -97,10 +105,25 @@ selbst bleibt gratis), nur die Domain gibt es schon.
    Konto-Umstellung gleich auf die Subdomain setzen, dann nur eine Änderung
    statt zwei.
 
-**Offene Frage, die nur ihr beantworten könnt:** Wer verwaltet die DNS-Einträge
-von `turmhotel-frankfurt.de` (eigener Provider-Login, Agentur, IT-Dienstleister)?
-Ohne Zugriff dorthin lässt sich Schritt 1 hier nicht selbst umsetzen — sobald
-klar ist, wer den DNS-Eintrag setzen kann, reicht ein Zweizeiler dorthin.
+Laut Rückmeldung (25.09.2026) verwaltet ein **externer Hoster/eine Agentur**
+die DNS-Einträge von `turmhotel-frankfurt.de` — nicht André direkt. Fertige
+Anfrage zum Weiterleiten:
+
+> Betreff: DNS-Eintrag für turmhotel-frankfurt.de — neue Subdomain
+>
+> Bitte legt für turmhotel-frankfurt.de folgenden Eintrag an:
+>
+> Typ: CNAME
+> Name/Host: tools
+> Ziel/Wert: [neuer-owner].github.io
+> TTL: Standard
+>
+> Ergebnis: tools.turmhotel-frankfurt.de soll auf unsere GitHub-Pages-Seite
+> zeigen (kein Webspace bei euch nötig, nur der DNS-Eintrag). Danke!
+
+`[neuer-owner]` durch den tatsächlichen GitHub-Kontonamen ersetzen, sobald er
+feststeht (Schritt 1) — bis dahin kann die Anfrage nicht ganz fertig
+raus, der Rest der Anfrage lässt sich aber schon jetzt vorbereiten/ankündigen.
 
 ## 2. Firebase-Projekt umziehen
 
@@ -195,7 +218,7 @@ Firebase-Projekte lassen sich nicht einfach übertragen — es braucht ein
       (Homescreen-Verknüpfung zeigt sonst weiter auf den alten Link).
 - [ ] Altes Firebase-Projekt und alte bit.ly-Links erst löschen/deaktivieren,
       wenn der neue Weg 1–2 Tage im echten Betrieb bestätigt ist.
-- [ ] Die 6 Dateien mit fest verdrahtetem alten Kontonamen aktualisieren
+- [ ] Die 7 Dateien mit fest verdrahtetem alten Kontonamen aktualisieren
       (Liste siehe Schritt 1 oben).
 
 ---
@@ -244,9 +267,11 @@ wo weiterläuft.
 **Entwickler-Werkzeug, nicht live:**
 - `scripts/` — 12 einmalige Python-Patch-Skripte aus der Entwicklungshistorie
   (`p5_…` bis `p12_…`, `fix_…`). Rein historisch, nichts davon wird zur
-  Laufzeit ausgeführt — Kandidat für eine spätere Aufräumrunde (nach
-  `archiv/` verschieben oder löschen, Git-Historie bleibt so oder so), aber
-  unkritisch für den Transfer selbst.
+  Laufzeit ausgeführt. **Geprüft (25.09.2026): bewusst getrennt von `archiv/`**
+  gehalten — laut Verlauf-Tabelle in `UEBERGABE_HSK777.md` war „Skripte →
+  `scripts/`, Backup → `archiv/`" eine gezielte Aufräum-Entscheidung vom
+  selben Tag (`5467ab9`), kein Versehen. Nicht zusammenlegen, unkritisch für
+  den Transfer.
 - `archiv/housekeeping-v3.backup.html` — bewusst hier statt in `housekeeping/`
   abgelegt (siehe Fehlerprotokoll F3 in `UEBERGABE_HSK777.md`).
 - `.claude/agents/Robo Bro.agent.md` — Agenten-Konfiguration, nicht Teil der
