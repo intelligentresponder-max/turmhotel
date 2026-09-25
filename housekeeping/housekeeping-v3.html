@@ -258,6 +258,8 @@ nav{
 .toggle-btn.active-dirty{background:var(--dirty);border-color:var(--gold);color:var(--gold);}
 .toggle-btn.active-free{background:var(--free-bg);border-color:var(--free-col);color:#5bb3e8;}
 .toggle-btn.active-occupied{background:var(--occupied-bg);border-color:var(--occupied);color:#e87070;}
+.toggle-btn.active-ok{background:var(--clean-bg);border-color:var(--clean);color:#4ecb82;}
+.toggle-btn.active-ooo{background:var(--occupied-bg);border-color:var(--occupied);color:#ff6b4a;}
 .staff-select,.note-input{
   width:100%;background:rgba(255,255,255,.05);
   border:1px solid var(--line);color:var(--paper);
@@ -430,6 +432,10 @@ nav{
 .scan-chip-grid{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px;}
 .scan-chip{font-family:'Spline Sans Mono',monospace;font-size:.72rem;padding:6px 10px;border-radius:4px;background:rgba(255,255,255,.04);color:var(--muted);border:1px solid var(--line);cursor:pointer;}
 .scan-chip.active{background:var(--checkout-bg);color:var(--checkout-col);border-color:rgba(230,126,34,.55);}
+.scan-chip.ex-ooo{border-color:rgba(192,57,43,.4);}
+.scan-chip.ex-ooo.active{background:var(--occupied-bg);color:#ff6b4a;border-color:rgba(192,57,43,.55);}
+.scan-chip-sub{font-family:'Spline Sans Mono',monospace;font-size:.63rem;letter-spacing:.15em;text-transform:uppercase;color:var(--muted);margin:12px 0 4px;}
+.scan-chip-sub:first-child{margin-top:0;}
 .scan-add-row-btn{margin-top:10px;background:none;border:1px dashed var(--line);color:var(--muted);border-radius:4px;padding:8px 14px;font-family:'Spline Sans Mono',monospace;font-size:.75rem;cursor:pointer;}
 .scan-add-row-btn:hover{border-color:var(--gold);color:var(--gold);}
 .scan-section{margin-top:22px;padding-top:18px;border-top:1px solid var(--line);}
@@ -621,7 +627,7 @@ nav{
         <h3>Erkannte Zimmer prüfen &amp; korrigieren</h3>
         <div class="scan-hint">Jede Zeile durchgehen — Zimmernummer und Abreisedatum müssen stimmen. Falsche Zeilen löschen, fehlende per „+ Zeile" ergänzen.</div>
         <table class="scan-table">
-          <thead><tr><th style="width:35%">Zimmer</th><th style="width:45%">Abreise</th><th style="width:20%"></th></tr></thead>
+          <thead><tr><th style="width:22%">Zimmer</th><th style="width:32%">Abreise</th><th style="width:14%">Erw.</th><th style="width:14%">Kin.</th><th style="width:18%"></th></tr></thead>
           <tbody id="scan-rows-body"></tbody>
         </table>
         <div class="scan-hint" id="scan-dupe-note" style="display:none;"></div>
@@ -656,6 +662,11 @@ nav{
         <div class="scan-hint">Zimmer, die nicht auf der Alpha-Liste stehen. Die antippen, in die heute jemand anreist.</div>
         <div class="scan-chip-grid" id="scan-free-chips"></div>
         <div class="scan-hint" id="scan-free-count"></div>
+
+        <div id="scan-ooo-section" style="display:none;margin-top:18px;padding-top:14px;border-top:1px solid var(--line);">
+          <div class="scan-hint" style="border-left-color:var(--occupied);color:#ff6b4a;">⛔ Diese Zimmer waren außer Betrieb (OOO) und kommen heute in den Verkauf zurück — <strong>nicht automatisch sauber</strong>, brauchen eine Reinigung. Antippen, wenn heute jemand einzieht.</div>
+          <div class="scan-chip-grid" id="scan-ooo-chips"></div>
+        </div>
       </div>
 
       <div id="scan-export-section" class="scan-section" style="display:none;">
@@ -791,6 +802,12 @@ nav{
       <button class="toggle-btn" id="btn-occupied" onclick="setOccupied(true)">● Belegt</button>
     </div>
 
+    <div class="field-label">Betriebsstatus</div>
+    <div class="toggle-row">
+      <button class="toggle-btn" id="btn-ok" onclick="setOOO(false)">✓ Im Verkauf</button>
+      <button class="toggle-btn" id="btn-ooo" onclick="setOOO(true)">⛔ Außer Betrieb (OOO)</button>
+    </div>
+
     <div class="field-label">Mitarbeiter</div>
     <select class="staff-select" id="modal-staff"></select>
 
@@ -893,7 +910,7 @@ if (!staff.length) {
 }
 
 function getRoomState(id) {
-  return state[id] || { clean: false, occupied: false, staff: '', note: '', guestType: '' };
+  return state[id] || { clean: false, occupied: false, staff: '', note: '', guestType: '', roomType: '', kinderbett: false, ooo: false };
 }
 
 // ══ TODAY ══
@@ -952,6 +969,8 @@ function renderRooms() {
       if (rs.guestType === 'checkout') typeBadge = '<span class="badge badge-checkout">Abreise</span>';
       else if (rs.guestType === 'overnight') typeBadge = '<span class="badge badge-overnight">Overnight</span>';
       const typBdg = rs.roomType ? `<span class="badge" style="background:rgba(201,162,39,.1);color:var(--gold)">${rs.roomType}</span>` : '';
+      const kinderBdg = rs.kinderbett ? `<span class="badge" style="background:rgba(91,179,232,.15);color:#5bb3e8;border:1px solid rgba(91,179,232,.4)">+Kind</span>` : '';
+      const oooBdg = rs.ooo ? `<span class="badge" style="background:rgba(192,57,43,.18);color:#ff6b4a;border:1px solid rgba(192,57,43,.45)">OOO</span>` : '';
       const roomType = ROOM_TYPES[r] || '';
       const typeColors = {
         'SDH': 'background:rgba(42,122,75,.18);color:#4ecb82;border:1px solid rgba(42,122,75,.4)',
@@ -968,7 +987,7 @@ function renderRooms() {
         <div class="room-status-row">
           <span class="badge ${rs.clean ? 'badge-clean' : 'badge-dirty'}">${rs.clean ? 'Sauber' : 'Offen'}</span>
           <span class="badge ${(rs.occupied || rs.guestType) ? 'badge-occupied' : 'badge-free'}">${(rs.occupied || rs.guestType) ? 'Belegt' : 'Frei'}</span>
-          ${sdhBdg}${typeBadge}${typBdg}
+          ${sdhBdg}${typeBadge}${typBdg}${kinderBdg}${oooBdg}
         </div>
         ${staffObj ? `<div class="room-staff"><span class="staff-chip" style="background:${staffObj.color}">${staffObj.abb}</span></div>` : ''}
         ${rs.note ? `<div class="room-note">${rs.note}</div>` : ''}
@@ -1030,9 +1049,11 @@ function openModal(roomId) {
   // Guest type info
   const gi = document.getElementById('modal-guest-info');
   const typeLabel = rs.roomType ? ` · Typ <strong style="color:var(--gold)">${rs.roomType}</strong>` : '';
-  if (rs.guestType === 'checkout') gi.innerHTML = `<span class="co-tag">↗ Abreise heute — Zimmer wird frei${typeLabel}</span>`;
-  else if (rs.guestType === 'overnight') gi.innerHTML = `<span class="ov-tag">🌙 Overnight — Gast bleibt${typeLabel}</span>`;
-  else gi.innerHTML = '';
+  const kinderLabel = rs.kinderbett ? ` · <strong style="color:#5bb3e8">+ Kinderbett</strong>` : '';
+  const oooLabel = rs.ooo ? ` · <strong style="color:#ff6b4a">⛔ OOO</strong>` : '';
+  if (rs.guestType === 'checkout') gi.innerHTML = `<span class="co-tag">↗ Abreise heute — Zimmer wird frei${typeLabel}${kinderLabel}</span>${oooLabel}`;
+  else if (rs.guestType === 'overnight') gi.innerHTML = `<span class="ov-tag">🌙 Overnight — Gast bleibt${typeLabel}${kinderLabel}</span>${oooLabel}`;
+  else gi.innerHTML = oooLabel ? oooLabel.replace(/^ · /, '') : '';
 
   const sel = document.getElementById('modal-staff');
   sel.innerHTML = '<option value="">— Niemand zugewiesen —</option>';
@@ -1054,10 +1075,13 @@ function refreshModalButtons() {
   document.getElementById('btn-dirty').className = 'toggle-btn' + (!tempState.clean ? ' active-dirty' : '');
   document.getElementById('btn-free').className = 'toggle-btn' + (!tempState.occupied ? ' active-free' : '');
   document.getElementById('btn-occupied').className = 'toggle-btn' + (tempState.occupied ? ' active-occupied' : '');
+  document.getElementById('btn-ok').className = 'toggle-btn' + (!tempState.ooo ? ' active-ok' : '');
+  document.getElementById('btn-ooo').className = 'toggle-btn' + (tempState.ooo ? ' active-ooo' : '');
 }
 
 function setClean(v) { tempState.clean = v; refreshModalButtons(); }
 function setOccupied(v) { tempState.occupied = v; refreshModalButtons(); }
+function setOOO(v) { tempState.ooo = v; refreshModalButtons(); }
 
 function saveRoom() {
   if (!currentRoom) return;
@@ -1069,6 +1093,8 @@ function saveRoom() {
     note: document.getElementById('modal-note').value.trim(),
     guestType: existing.guestType || '',
     roomType: existing.roomType || '',
+    kinderbett: existing.kinderbett || false,
+    ooo: !!tempState.ooo,
   };
   saveState(state);
   renderRooms();
@@ -1507,13 +1533,20 @@ function applyCsvImport() {
   if (!csvParsed.length) return;
   ALL_ROOMS.forEach(id => {
     const old = getRoomState(id);
-    state[id] = { ...old, guestType: '', occupied: false };
+    state[id] = { ...old, guestType: '', occupied: false, roomType: '', kinderbett: false };
   });
-  csvParsed.forEach(({ room, guestType }) => {
+  csvParsed.forEach(({ room, guestType, roomType, kinderbett, exOOO }) => {
     const rs = getRoomState(room);
-    state[room] = { ...rs, guestType, occupied: true };
+    state[room] = {
+      ...rs, guestType, occupied: true,
+      roomType: roomType || '',
+      kinderbett: !!kinderbett,
+      // Ex-OOO-Rückläufer: Zimmer kommt zurück in den Verkauf, OOO-Kennzeichnung entfällt.
+      ooo: exOOO ? false : rs.ooo,
+    };
   });
   state.__tag = todayStr();
+  if (scanLastVerfuegbarkeit) { state.__verfuegbarkeit = scanLastVerfuegbarkeit; scanLastVerfuegbarkeit = null; }
   saveState(state);
   renderRooms();
 
@@ -1570,6 +1603,7 @@ const scanArrivalsBadge = document.getElementById('scan-arrivals-badge');
 const scanDupeNote = document.getElementById('scan-dupe-note');
 const scanFreeChips = document.getElementById('scan-free-chips');
 const scanFreeCount = document.getElementById('scan-free-count');
+const scanOooChips = document.getElementById('scan-ooo-chips');
 const scanUebernehmenBtn = document.getElementById('scan-uebernehmen-btn');
 const scanResetBtn = document.getElementById('scan-reset-btn');
 const scanThumbs = document.getElementById('scan-thumbs');
@@ -1585,6 +1619,7 @@ let scanRows = [];
 let scanListenMonat = 0, scanListenJahr = 0;
 let scanDrehung = 0;
 let scanPruefText = '';
+let scanLastVerfuegbarkeit = null;
 
 function scanSetHskDate(d) {
   scanHskDate.value = d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
@@ -1665,13 +1700,18 @@ async function scanRunOCR() {
   }
 }
 
-function scanPruefStatus(kopf, summe, ungueltig) {
+function scanPruefStatus(kopf, summe, ungueltig, dubletten) {
   var mangel = [], hinweis = [];
   if (!kopf) mangel.push('Kopfzeile mit Listendatum nicht erkannt');
-  if (summe && summe !== scanRows.length) mangel.push('Anz.-Summe ' + summe + ', erkannt ' + scanRows.length);
+  // 2.3 Sharing: eine gemeinsam gebuchte Zimmerzeile taucht auf der Liste zweimal auf
+  // (Anz.-Summe zaehlt sie doppelt), das Tool dedupliziert sie aber zu einem Zimmer.
+  // Das ist erwuenscht und darf im Doppelcheck NICHT als Fehler gemeldet werden.
+  var erwartet = scanRows.length + (dubletten || 0);
+  if (summe && summe !== erwartet) mangel.push('Anz.-Summe ' + summe + ', erkannt ' + erwartet);
   if (!scanRows.length) mangel.push('keine Zimmer erkannt');
   if (scanPruefText) mangel.push(scanPruefText);
   if (ungueltig) hinweis.push(ungueltig + ' Fehlerkennung(en) verworfen');
+  if (dubletten) hinweis.push(dubletten + ' Zimmer mit Doppelzeile (Sharing) — einmal gezaehlt');
   if (!summe) hinweis.push('Anz.-Summe nicht gefunden — bitte von Hand eintragen');
   if (scanDrehung !== 0) hinweis.push('Aufnahme war quer, automatisch gedreht');
 
@@ -1694,21 +1734,51 @@ function scanPruefStatus(kopf, summe, ungueltig) {
 function scanRenderFreeRooms() {
   var belegt = scanRows.filter(function(r){ return !r.leer; }).map(function(r){ return r.zimmer.trim(); });
   var gew = scanRows.filter(function(r){ return r.leer; }).map(function(r){ return r.zimmer.trim(); });
-  var frei = SCAN_ZIMMER.filter(function(z){ return belegt.indexOf(z) === -1; });
+  var alleFrei = SCAN_ZIMMER.filter(function(z){ return belegt.indexOf(z) === -1; });
+  // OOO-Rückläufer (2.2): Zimmer, die auf Außer-Betrieb standen, sind NICHT automatisch sauber.
+  var frei = alleFrei.filter(function(z){ return !(state[z] && state[z].ooo); });
+  var freiOOO = alleFrei.filter(function(z){ return state[z] && state[z].ooo; });
+
+  // 7.5 Kleineres: Leerstand-Chips nach Vorder-/Hinterhaus gruppieren.
+  var vorderhaus = frei.filter(function(z){ return z.length <= 2; });
+  var hinterhaus = frei.filter(function(z){ return z.length === 3; });
   scanFreeChips.innerHTML = '';
-  frei.forEach(function(z){
+  function chipGroup(label, liste, exOOO) {
+    if (!liste.length) return;
+    var h = document.createElement('div');
+    h.className = 'scan-chip-sub';
+    h.textContent = label;
+    scanFreeChips.appendChild(h);
+    var grid = document.createElement('div');
+    grid.className = 'scan-chip-grid';
+    liste.forEach(function(z){
+      var b = document.createElement('button');
+      b.className = 'scan-chip' + (exOOO ? ' ex-ooo' : '') + (gew.indexOf(z) !== -1 ? ' active' : '');
+      b.textContent = z;
+      b.addEventListener('click', function(){ scanToggleFreeRoom(z, exOOO); });
+      grid.appendChild(b);
+    });
+    scanFreeChips.appendChild(grid);
+  }
+  chipGroup('Vorderhaus', vorderhaus, false);
+  chipGroup('Hinterhaus', hinterhaus, false);
+  scanFreeCount.textContent = frei.length + ' Zimmer frei · ' + gew.filter(function(z){ return frei.indexOf(z) !== -1; }).length + ' als Anreise markiert';
+
+  scanOooChips.innerHTML = '';
+  freiOOO.forEach(function(z){
     var b = document.createElement('button');
-    b.className = 'scan-chip' + (gew.indexOf(z) !== -1 ? ' active' : '');
+    b.className = 'scan-chip ex-ooo' + (gew.indexOf(z) !== -1 ? ' active' : '');
     b.textContent = z;
-    b.addEventListener('click', function(){ scanToggleFreeRoom(z); });
-    scanFreeChips.appendChild(b);
+    b.addEventListener('click', function(){ scanToggleFreeRoom(z, true); });
+    scanOooChips.appendChild(b);
   });
-  scanFreeCount.textContent = frei.length + ' Zimmer frei · ' + gew.length + ' als Anreise markiert';
+  document.getElementById('scan-ooo-section').style.display = freiOOO.length ? 'block' : 'none';
 }
 
-function scanToggleFreeRoom(z) {
+function scanToggleFreeRoom(z, exOOO) {
   var i = scanRows.findIndex(function(r){ return r.leer && r.zimmer.trim() === z; });
-  if (i >= 0) scanRows.splice(i,1); else scanRows.push({ zimmer: z, abreise: scanHeuteStr(), leer: true });
+  if (i >= 0) scanRows.splice(i,1);
+  else scanRows.push({ zimmer: z, abreise: scanHeuteStr(), leer: true, exOOO: !!exOOO, betten: null, kinder: 0 });
   scanRenderRows(); scanUpdateCheck();
 }
 
@@ -1829,10 +1899,22 @@ function scanZimmerAmZeilenanfang(zeile, belegt) {
   return { zimmer: frei[0], laenge: m[0].length };
 }
 
+function scanErwKinAnz(zeile) {
+  // Nach Anreise- und Abreisedatum stehen auf der Alpha-Liste die Spalten Erw./Kin./Anz.
+  // als drei einzelne Ziffern hintereinander, z.B. "... 23.09.2026 25.09.2026 1 0 1 LGS".
+  var datum = '\\d{2}[.,:\\s]{0,2}\\d{2}[.,:\\s]{0,2}(?:\\d{4}|\\d{3}|\\d{2})';
+  var re = new RegExp(datum + '\\s+' + datum + '\\D{0,6}(\\d)\\s+(\\d)\\s+(\\d)\\b');
+  var m = zeile.match(re);
+  if (!m) return null;
+  return { erw: +m[1], kin: +m[2], anz: +m[3] };
+}
+
 function scanParseText(text) {
   const jahr = scanHskDate.value ? scanHskDate.value.split('-')[0] : String(new Date().getFullYear());
   const rooms = [];
   const departures = [];
+  const bettenArr = [];
+  const kinderArr = [];
   let m;
 
   const belegt = {};
@@ -1840,12 +1922,17 @@ function scanParseText(text) {
     var mz = scanZimmerAmZeilenanfang(zeile, belegt);
     if (!mz) return;
     var d = scanDatumsTreffer(zeile.slice(mz.laenge), jahr);
-    if (d.length >= 2) { rooms.push(mz.zimmer); departures.push(d[1]); belegt[mz.zimmer] = 1; }
+    if (d.length >= 2) {
+      rooms.push(mz.zimmer); departures.push(d[1]); belegt[mz.zimmer] = 1;
+      var ek = scanErwKinAnz(zeile);
+      bettenArr.push(ek ? ek.erw : null);
+      kinderArr.push(ek ? ek.kin : 0);
+    }
   });
 
   if (rooms.length < 5) {
     const roomRe = /(?:^|\n)\s*(\d{3})\b/g;
-    while ((m = roomRe.exec(text)) !== null) rooms.push(m[1]);
+    while ((m = roomRe.exec(text)) !== null) { rooms.push(m[1]); bettenArr.push(null); kinderArr.push(0); }
     const alle = scanDatumsTreffer(text, jahr);
     for (let i = 1; i < alle.length; i += 2) departures.push(alle[i]);
     scanPruefText = 'spaltenweise gelesen — Zuordnung unsicher, bitte jede Zeile pruefen';
@@ -1861,7 +1948,7 @@ function scanParseText(text) {
     const z = scanNormalizeRoom(rooms[i]);
     if (gesehen.has(z)) { dubletten++; continue; }
     gesehen.add(z);
-    scanRows.push({ zimmer: z, abreise: departures[i], leer: false });
+    scanRows.push({ zimmer: z, abreise: departures[i], leer: false, betten: bettenArr[i] || null, kinder: kinderArr[i] || 0 });
   }
   const ungueltig = scanRows.filter(function(r){ return SCAN_ZIMMER.indexOf(r.zimmer) === -1; });
   scanRows = scanRows.filter(function(r){ return SCAN_ZIMMER.indexOf(r.zimmer) !== -1; });
@@ -1872,7 +1959,7 @@ function scanParseText(text) {
   const summe = scanAnzSumme(text);
   if (summe && !scanPmsTotalInput.value) scanPmsTotalInput.value = summe;
 
-  scanPruefStatus(kopf, summe, ungueltig.length);
+  scanPruefStatus(kopf, summe, ungueltig.length, dubletten);
 
   if (dubletten > 0) {
     scanDupeNote.textContent = dubletten + ' doppelte Zimmernummer(n) entfernt — im PMS kann dasselbe Zimmer zweimal gebucht sein, gereinigt wird es trotzdem nur einmal.';
@@ -1891,21 +1978,23 @@ function scanParseText(text) {
 function scanRenderRows() {
   scanRowsBody.innerHTML = '';
   if (scanRows.length === 0) {
-    scanRowsBody.innerHTML = '<tr><td colspan="3"><div class="scan-empty-note">Keine Zeilen erkannt — bitte manuell über „+ Zeile" ergänzen.</div></td></tr>';
+    scanRowsBody.innerHTML = '<tr><td colspan="5"><div class="scan-empty-note">Keine Zeilen erkannt — bitte manuell über „+ Zeile" ergänzen.</div></td></tr>';
   }
   scanRows.forEach((r, i) => {
     const tr = document.createElement('tr');
     tr.innerHTML = `
       <td><input type="text" value="${r.zimmer}" data-i="${i}" data-f="zimmer" placeholder="z.B. 14"></td>
       <td><input type="text" value="${r.abreise}" data-i="${i}" data-f="abreise" placeholder="TT.MM.JJJJ"></td>
-      <td>${r.leer ? '<span class="scan-leer-tag">LEER</span>' : ''}<button class="scan-row-del" data-i="${i}">✕</button></td>
+      <td><input type="number" min="1" max="3" value="${r.betten || ''}" data-i="${i}" data-f="betten" placeholder="—" style="text-align:center"></td>
+      <td><input type="number" min="0" max="4" value="${r.kinder || ''}" data-i="${i}" data-f="kinder" placeholder="0" style="text-align:center"></td>
+      <td>${r.exOOO ? '<span class="scan-leer-tag" style="color:#ff6b4a">EX-OOO</span>' : (r.leer ? '<span class="scan-leer-tag">LEER</span>' : '')}<button class="scan-row-del" data-i="${i}">✕</button></td>
     `;
     scanRowsBody.appendChild(tr);
   });
   scanRowsBody.querySelectorAll('input').forEach(inp => {
     inp.addEventListener('input', e => {
       const i = +e.target.dataset.i, f = e.target.dataset.f;
-      scanRows[i][f] = e.target.value;
+      scanRows[i][f] = (f === 'betten' || f === 'kinder') ? (parseInt(e.target.value, 10) || 0) : e.target.value;
       scanUpdateCheck();
     });
   });
@@ -1920,13 +2009,13 @@ function scanRenderRows() {
 }
 
 scanAddRowBtn.addEventListener('click', () => {
-  scanRows.push({ zimmer: '', abreise: '', leer: false });
+  scanRows.push({ zimmer: '', abreise: '', leer: false, betten: null, kinder: 0 });
   scanRenderRows();
   scanUpdateCheck();
 });
 
 scanAddEmptyRowBtn.addEventListener('click', () => {
-  scanRows.push({ zimmer: '', abreise: scanHeuteStr(), leer: true });
+  scanRows.push({ zimmer: '', abreise: scanHeuteStr(), leer: true, betten: null, kinder: 0 });
   scanRenderRows();
   scanUpdateCheck();
 });
@@ -1978,6 +2067,9 @@ function scanUpdateCheck() {
   }
 }
 
+// Bettenzahl (Erw.) -> Zimmertyp-Badge, gleiche Konvention wie beim JSON-Import (1/2/3 -> E/D/T).
+const BETTEN_TYP = { 1: 'E', 2: 'D', 3: 'T' };
+
 // Direktübernahme statt CSV-Download: erzeugt dieselbe {room, guestType}-Form wie
 // parseCsv() und speist sie in dieselbe Vorschau + denselben Übertragen-Knopf ein.
 scanUebernehmenBtn.addEventListener('click', () => {
@@ -1986,8 +2078,20 @@ scanUebernehmenBtn.addEventListener('click', () => {
   if (!valid.length) { alert('Keine gültigen Zeilen zum Übernehmen.'); return; }
   const results = valid.map(r => ({
     room: r.zimmer.trim(),
-    guestType: (!r.leer && r.abreise.trim() === heute) ? 'checkout' : 'overnight'
+    // 2.3 OOO-Rückläufer (exOOO) brauchen IMMER eine Reinigung, auch wenn sie als "leer" reinkommen.
+    guestType: (r.exOOO || (!r.leer && r.abreise.trim() === heute)) ? 'checkout' : 'overnight',
+    roomType: r.betten ? (BETTEN_TYP[r.betten] || '') : '',
+    kinderbett: !!(r.kinder && r.kinder > 0),
+    exOOO: !!r.exOOO,
   }));
+  // 7.5 Kleineres: Verfuegbarkeitszahlen fuer den Uebergabebericht sichern (Spitzentage frueh sehen).
+  scanLastVerfuegbarkeit = {
+    pmsTotal: parseInt(scanPmsTotalInput.value, 10) || null,
+    pmsAnreisen: parseInt(scanPmsArrivalsInput.value, 10) || null,
+    erwGesamt: valid.reduce((s, r) => s + (r.betten || 0), 0),
+    kinderGesamt: valid.reduce((s, r) => s + (r.kinder || 0), 0),
+    hskTag: scanHeuteStr(),
+  };
   showCsvPreview(results);
   document.getElementById('import-preview').scrollIntoView({ behavior: 'smooth', block: 'start' });
 });
@@ -2392,6 +2496,9 @@ function printHandoverReport(historicalState, historicalLabel) {
   var openCount = totalRooms - cleanedCount;
   var checkoutCount = rows.filter(function(r){ return r.guestType === 'checkout'; }).length;
   var overnightCount = rows.filter(function(r){ return r.guestType === 'overnight'; }).length;
+  var occupiedCount = rows.filter(function(r){ return r.occupied || r.guestType; }).length;
+  var freeCount = totalRooms - occupiedCount;
+  var verf = quelle.__verfuegbarkeit;
 
   var byStaff = {};
   rows.forEach(function(r){
@@ -2453,7 +2560,18 @@ function printHandoverReport(historicalState, historicalLabel) {
       '<span><strong>' + openCount + '</strong> ausstehend</span>' +
       '<span><strong>' + checkoutCount + '</strong> Abreise</span>' +
       '<span><strong>' + overnightCount + '</strong> Overnight</span>' +
+      '<span><strong>' + occupiedCount + '</strong> belegt</span>' +
+      '<span><strong>' + freeCount + '</strong> frei</span>' +
     '</div>' +
+    (verf ? (
+      '<h2>Verfuegbarkeit (Stand Scan ' + esc(verf.hskTag || '') + ')</h2>' +
+      '<div class="summary">' +
+        (verf.pmsAnreisen != null ? '<span><strong>' + verf.pmsAnreisen + '</strong> Anreisen lt. PMS</span>' : '') +
+        (verf.pmsTotal != null ? '<span><strong>' + verf.pmsTotal + '</strong> Zimmer lt. Anz.-Summe</span>' : '') +
+        '<span><strong>' + verf.erwGesamt + '</strong> Erwachsene</span>' +
+        '<span><strong>' + verf.kinderGesamt + '</strong> Kinder</span>' +
+      '</div>'
+    ) : '') +
     '<h2>Zuteilung nach Personal</h2>' +
     '<table><thead><tr><th>Name</th><th>Fertig / Zugewiesen</th><th>Zimmer</th></tr></thead><tbody>' + staffHtml + '</tbody></table>' +
     '<h2>Offene Maengel / Notizen</h2>' +

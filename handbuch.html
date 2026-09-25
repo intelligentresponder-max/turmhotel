@@ -105,6 +105,24 @@ nav{position:sticky;top:0;z-index:200;background:rgba(12,10,8,.95);backdrop-filt
     <a class="tool-link" href="housekeeping/housekeeping-v3.html">→ <span data-key="tool_link">Direkt zum Tool öffnen</span></a>
   </div>
 
+  <!-- KURZFASSUNG: MITARBEITER / DIREKTION -->
+  <div class="legend" style="margin:28px 0;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));">
+    <div class="legend-item" style="align-items:flex-start;padding:18px 20px;">
+      <div class="legend-dot" style="background:var(--gold);margin-top:3px;"></div>
+      <div class="legend-text">
+        <strong data-key="exec_staff_t">Kurz für dich am Zimmer</strong>
+        <span data-key="exec_staff_d">Der Foto-Scan läuft direkt im Tool — kein Umweg mehr über Claude. Betten- und Kinderzahl werden automatisch erkannt. Zimmer, die aus „Außer Betrieb" zurückkommen, sind extra rot markiert, damit sie nicht vergessen werden.</span>
+      </div>
+    </div>
+    <div class="legend-item" style="align-items:flex-start;padding:18px 20px;">
+      <div class="legend-dot" style="background:var(--clean);margin-top:3px;"></div>
+      <div class="legend-text">
+        <strong data-key="exec_dir_t">Kurz für die Direktion</strong>
+        <span data-key="exec_dir_d">Ein Werkzeug für Scan und Verteilung statt zwei getrennte Schritte — weniger Fehlerquellen. Der Übergabebericht zeigt jetzt auch Anreisezahlen, Betten- und Kinderbelegung. Jeder Tag wird automatisch archiviert und bleibt im Verlauf nachvollziehbar.</span>
+      </div>
+    </div>
+  </div>
+
   <!-- TOC -->
   <div class="toc">
     <div class="toc-title" data-key="toc_title">Inhalt</div>
@@ -122,37 +140,51 @@ nav{position:sticky;top:0;z-index:200;background:rgba(12,10,8,.95);backdrop-filt
   <!-- 1. GÄSTELISTE -->
   <div class="section" id="gaesteliste">
     <div class="sec-num">01</div>
-    <h2 data-key="s1_h2">Gästeliste einlesen — Foto-Workflow</h2>
-    <p data-key="s1_p1">Die Rezeption schickt jeden Abend die Gästeliste per WhatsApp oder E-Mail. Diese Liste enthält: <strong>Zimmernummer, Name, Anreise, Abreise, Erwachsene, Zimmerkategorie, Zimmerpreis.</strong></p>
+    <h2 data-key="s1_h2">Gästeliste einlesen — Foto-Scan im Manager (Stand v3.9)</h2>
+    <p data-key="s1_p1">Die Rezeption druckt am Ende der Spätschicht die <strong>Alpha-Liste</strong> („Gäste im Haus inkl. Anreisen"). Der Foto-Scan läuft seit v3.9 <strong>direkt im Housekeeping Manager</strong> — kein Umweg mehr über Claude oder eine separate Scan-Seite nötig.</p>
     <p data-key="s1_p2">So wird die Liste ins Tool übertragen:</p>
 
     <div class="steps">
       <div class="step">
         <div class="step-num">1</div>
         <div class="step-body">
-          <div class="step-title" data-key="s1_s1_t">Foto der Liste machen</div>
-          <div class="step-desc" data-key="s1_s1_d">Die gedruckte Gästeliste gut beleuchtet fotografieren. Ganz gerade halten — alle Zeilen müssen lesbar sein. Kein Blitz nötig, Tageslicht reicht.</div>
+          <div class="step-title" data-key="s1_s1_t">Zimmerstatus zurücksetzen</div>
+          <div class="step-desc" data-key="s1_s1_d">Im Tool zuerst <strong>„Zimmerstatus zurücksetzen"</strong> antippen. Das archiviert den Vortag automatisch im Verlauf-Tab, bevor er überschrieben wird.</div>
         </div>
       </div>
       <div class="step">
         <div class="step-num">2</div>
         <div class="step-body">
-          <div class="step-title" data-key="s1_s2_t">Foto an Claude schicken</div>
-          <div class="step-desc" data-key="s1_s2_d">Das Foto in <strong>claude.ai</strong> hochladen (Büroklammer-Symbol). Dann schreiben: <em>„Bitte als JSON extrahieren: Zimmernummer, Anreise, Abreise"</em>. Claude liest die Liste aus und gibt ein JSON zurück.</div>
+          <div class="step-title" data-key="s1_s2_t">Foto-Scan öffnen und fotografieren</div>
+          <div class="step-desc" data-key="s1_s2_d">Tab <strong>„Gästeliste"</strong> → <strong>„Foto-Scan"</strong> → bis zu 3 Seiten der Alpha-Liste fotografieren, dann <strong>„Seiten auswerten"</strong> antippen. Die Texterkennung läuft lokal im Browser, es werden keine Daten an einen Server geschickt.</div>
         </div>
       </div>
       <div class="step">
         <div class="step-num">3</div>
         <div class="step-body">
-          <div class="step-title" data-key="s1_s3_t">JSON kopieren</div>
-          <div class="step-desc" data-key="s1_s3_d">Das JSON von Claude <strong>komplett kopieren</strong> (langer Tipp auf Text → Alles auswählen → Kopieren).</div>
+          <div class="step-title" data-key="s1_s3_t">Zeilen prüfen — jetzt inklusive Betten & Kinder</div>
+          <div class="step-desc" data-key="s1_s3_d">Die erkannten Zimmer und Abreisedaten durchgehen und korrigieren. Neu: die Spalten <strong>„Erw."</strong> und <strong>„Kin."</strong> werden mit übernommen, damit klar ist, wie viele Betten zu beziehen sind und ob ein Kinderbett gebraucht wird.</div>
         </div>
       </div>
       <div class="step">
         <div class="step-num">4</div>
         <div class="step-body">
-          <div class="step-title" data-key="s1_s4_t">Im Tool einfügen</div>
-          <div class="step-desc" data-key="s1_s4_d">Im Housekeeping Manager Tab <strong>„Gästeliste"</strong> öffnen → <strong>„JSON"</strong> wählen → JSON einfügen → <strong>„Vorschau"</strong> prüfen → <strong>„Übernehmen"</strong> tippen. Fertig — alle Abreise-Zimmer leuchten <span style="color:var(--warn)">orange</span>.</div>
+          <div class="step-title" data-key="s1_s4_t">Doppelcheck</div>
+          <div class="step-desc" data-key="s1_s4_d">Die <strong>Anz.-Summe</strong> von der Alpha-Liste und die <strong>Anreisen Zimmer</strong> aus der Suite8-Verfügbarkeit eintragen. Beide Badges müssen grün sein. Teilt sich ein Zimmer zwei Gäste (Sharing), zählt das Tool automatisch richtig — das ist kein Fehler.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">5</div>
+        <div class="step-body">
+          <div class="step-title" data-key="s1_s5_t">Leerstehende Anreisezimmer ergänzen</div>
+          <div class="step-desc" data-key="s1_s5_d">Zimmer, die auf keiner Alpha-Liste stehen, unten antippen (nach Vorderhaus/Hinterhaus sortiert). <strong style="color:#ff6b4a">Zimmer, die aus „Außer Betrieb" (OOO) zurückkommen, stehen separat und rot markiert</strong> — die sind nicht automatisch sauber und brauchen eine Reinigung.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">6</div>
+        <div class="step-body">
+          <div class="step-title" data-key="s1_s6_t">Übertragen</div>
+          <div class="step-desc" data-key="s1_s6_d"><strong>„Auf Zimmer übertragen"</strong> → Vorschau prüfen → übertragen. Fertig — alle Abreise-Zimmer leuchten <span style="color:var(--warn)">orange</span>, direkt zugewiesen ist noch nichts.</div>
         </div>
       </div>
     </div>
@@ -388,24 +420,32 @@ const T = {
     hero_p:'Dieses Handbuch erklärt Schritt für Schritt, wie das digitale Tool funktioniert — vom Einlesen der Gästeliste bis zur Fertigmeldung eines Zimmers.',
     tool_link:'Direkt zum Tool öffnen',
     toc_title:'Inhalt',
-    toc_1:'Gästeliste einlesen (Foto-Workflow)',
+    toc_1:'Gästeliste einlesen (Foto-Scan im Manager)',
     toc_2:'Zimmer verwalten & Status setzen',
     toc_3:'Farben & Badges verstehen',
     toc_4:'Zimmer fertig melden (3-Klick)',
     toc_5:'Technik-Problem melden',
     toc_6:'Personal & Zuweisung',
     toc_7:'Notfallkontakte',
-    s1_h2:'Gästeliste einlesen — Foto-Workflow',
-    s1_p1:'Die Rezeption schickt jeden Abend die Gästeliste. Diese enthält: <strong>Zimmernummer, Name, Anreise, Abreise, Erwachsene, Zimmerkategorie, Zimmerpreis.</strong>',
+    exec_staff_t:'Kurz für dich am Zimmer',
+    exec_staff_d:'Der Foto-Scan läuft direkt im Tool — kein Umweg mehr über Claude. Betten- und Kinderzahl werden automatisch erkannt. Zimmer, die aus „Außer Betrieb" zurückkommen, sind extra rot markiert, damit sie nicht vergessen werden.',
+    exec_dir_t:'Kurz für die Direktion',
+    exec_dir_d:'Ein Werkzeug für Scan und Verteilung statt zwei getrennte Schritte — weniger Fehlerquellen. Der Übergabebericht zeigt jetzt auch Anreisezahlen, Betten- und Kinderbelegung. Jeder Tag wird automatisch archiviert und bleibt im Verlauf nachvollziehbar.',
+    s1_h2:'Gästeliste einlesen — Foto-Scan im Manager (Stand v3.9)',
+    s1_p1:'Die Rezeption druckt am Ende der Spätschicht die <strong>Alpha-Liste</strong> („Gäste im Haus inkl. Anreisen"). Der Foto-Scan läuft seit v3.9 <strong>direkt im Housekeeping Manager</strong> — kein Umweg mehr über Claude oder eine separate Scan-Seite nötig.',
     s1_p2:'So wird die Liste ins Tool übertragen:',
-    s1_s1_t:'Foto der Liste machen',
-    s1_s1_d:'Die gedruckte Gästeliste gut beleuchtet fotografieren. Alle Zeilen müssen lesbar sein.',
-    s1_s2_t:'Foto an Claude schicken',
-    s1_s2_d:'Das Foto in <strong>claude.ai</strong> hochladen. Dann schreiben: <em>„Bitte als JSON extrahieren: Zimmernummer, Anreise, Abreise"</em>.',
-    s1_s3_t:'JSON kopieren',
-    s1_s3_d:'Das JSON von Claude <strong>komplett kopieren</strong> (langer Tipp auf Text → Alles auswählen → Kopieren).',
-    s1_s4_t:'Im Tool einfügen',
-    s1_s4_d:'Tab <strong>„Gästeliste"</strong> → <strong>„JSON"</strong> → einfügen → <strong>„Vorschau"</strong> → <strong>„Übernehmen"</strong>. Abreise-Zimmer leuchten orange.',
+    s1_s1_t:'Zimmerstatus zurücksetzen',
+    s1_s1_d:'Im Tool zuerst <strong>„Zimmerstatus zurücksetzen"</strong> antippen. Das archiviert den Vortag automatisch im Verlauf-Tab, bevor er überschrieben wird.',
+    s1_s2_t:'Foto-Scan öffnen und fotografieren',
+    s1_s2_d:'Tab <strong>„Gästeliste"</strong> → <strong>„Foto-Scan"</strong> → bis zu 3 Seiten der Alpha-Liste fotografieren, dann <strong>„Seiten auswerten"</strong> antippen. Die Texterkennung läuft lokal im Browser.',
+    s1_s3_t:'Zeilen prüfen — jetzt inklusive Betten & Kinder',
+    s1_s3_d:'Erkannte Zimmer und Abreisedaten korrigieren. Neu: die Spalten <strong>„Erw."</strong> und <strong>„Kin."</strong> werden mit übernommen.',
+    s1_s4_t:'Doppelcheck',
+    s1_s4_d:'<strong>Anz.-Summe</strong> und <strong>Anreisen Zimmer</strong> (Suite8) eintragen — beide Badges müssen grün sein. Sharing-Zimmer zählt das Tool automatisch richtig.',
+    s1_s5_t:'Leerstehende Anreisezimmer ergänzen',
+    s1_s5_d:'Zimmer ohne Alpha-Liste-Eintrag antippen (Vorderhaus/Hinterhaus). <strong style="color:#ff6b4a">Ex-OOO-Zimmer stehen separat, rot markiert</strong> — nicht automatisch sauber.',
+    s1_s6_t:'Übertragen',
+    s1_s6_d:'<strong>„Auf Zimmer übertragen"</strong> → Vorschau prüfen → übertragen. Abreise-Zimmer leuchten orange.',
     s2_h2:'Zimmer verwalten & Status setzen',
     s2_p1:'Jedes Zimmer ist eine Karte. Antippen öffnet das Zimmer-Modal.',
     s2_s1_t:'Zimmerkarte antippen',
@@ -455,20 +495,26 @@ const T = {
     hero_p:'Ez a kézikönyv lépésről lépésre elmagyarázza a digitális eszköz működését — a vendéglista beolvasásától a szoba kész jelzéséig.',
     tool_link:'Megnyitás az eszközben',
     toc_title:'Tartalom',
-    toc_1:'Vendéglista beolvasása (fotó-munkafolyamat)',
+    toc_1:'Vendéglista beolvasása (fotó-szkennelés a Managerben)',
     toc_2:'Szobák kezelése és státusz beállítása',
     toc_3:'Színek és jelvények megértése',
     toc_4:'Szoba kész jelzése (3 kattintás)',
     toc_5:'Műszaki probléma bejelentése',
     toc_6:'Személyzet és hozzárendelés',
     toc_7:'Vészhelyzeti kapcsolatok',
-    s1_h2:'Vendéglista beolvasása — Fotó-munkafolyamat',
-    s1_p1:'A recepció minden este elküldi a vendéglistát. Ez tartalmazza: <strong>szobaszám, név, érkezés, távozás, felnőttek, szobakategória, szobáár.</strong>',
+    exec_staff_t:'Röviden neked, a szobánál',
+    exec_staff_d:'A fotó-szkennelés most már közvetlenül az eszközben fut — nincs többé kerülőút Claude-on keresztül. Az ágyak és gyerekek száma automatikusan felismerésre kerül. Az „Üzemen kívül" státuszból visszatérő szobák piros jelöléssel külön állnak, hogy ne maradjanak ki.',
+    exec_dir_t:'Röviden a Direkciónak',
+    exec_dir_d:'Egy eszköz a szkenneléshez és a kiosztáshoz két különálló lépés helyett — kevesebb hibalehetőség. Az átadási jelentés most már az érkezési számokat, az ágy- és gyerekfoglaltságot is mutatja. Minden nap automatikusan archiválódik és visszakereshető marad az előzményekben.',
+    s1_h2:'Vendéglista beolvasása — Fotó-szkennelés a Managerben (v3.9)',
+    s1_p1:'A recepció a késői műszak végén kinyomtatja az Alpha-listát („Gäste im Haus inkl. Anreisen"). A fotó-szkennelés v3.9 óta <strong>közvetlenül a Housekeeping Managerben</strong> fut — nincs többé szükség Claude-ra vagy külön szkennelő oldalra.',
     s1_p2:'Így töltsd be a listát az eszközbe:',
-    s1_s1_t:'Fénykép készítése',s1_s1_d:'Fényképezd le jól megvilágítva a nyomtatott vendéglistát. Minden sornak olvashatónak kell lennie.',
-    s1_s2_t:'Fotó küldése Claude-nak',s1_s2_d:'Töltsd fel a fotót a <strong>claude.ai</strong> oldalra. Majd írd: <em>„Kérlek JSON-ként add vissza: szobaszám, érkezés, távozás"</em>.',
-    s1_s3_t:'JSON másolása',s1_s3_d:'A Claude JSON-ját <strong>teljesen másold ki</strong> (hosszan tartsd → Összes kijelölése → Másolás).',
-    s1_s4_t:'Beillesztés az eszközbe',s1_s4_d:'„Vendéglista" fül → „JSON" → beillesztés → „Előnézet" → „Alkalmazás". A távozó szobák narancsszínűvé válnak.',
+    s1_s1_t:'Szobastátusz visszaállítása',s1_s1_d:'Az eszközben először érintsd meg a <strong>„Zimmerstatus zurücksetzen"</strong> gombot. Ez automatikusan archiválja az előző napot az Előzmények fülön.',
+    s1_s2_t:'Fotó-szkennelés megnyitása és fényképezés',s1_s2_d:'„Vendéglista" fül → „Foto-Scan" → az Alpha-lista max. 3 oldalának lefényképezése, majd „Seiten auswerten". A szövegfelismerés helyben, a böngészőben fut.',
+    s1_s3_t:'Sorok ellenőrzése — most már ágyszámmal és gyerekekkel',s1_s3_d:'Ellenőrizd a felismert szobákat és távozási dátumokat. Új: az „Erw." és „Kin." oszlopok is átvételre kerülnek.',
+    s1_s4_t:'Kettős ellenőrzés',s1_s4_d:'Add meg az „Anz."-összeget és az Anreisen Zimmer értéket (Suite8) — mindkét jelzésnek zöldnek kell lennie. A megosztott (Sharing) szobákat az eszköz automatikusan helyesen számolja.',
+    s1_s5_t:'Üresen álló érkező szobák hozzáadása',s1_s5_d:'Érintsd meg az Alpha-listán nem szereplő szobákat (Vorderhaus/Hinterhaus). <strong style="color:#ff6b4a">Az ex-OOO szobák külön, pirosan jelölve állnak</strong> — nem automatikusan tiszták.',
+    s1_s6_t:'Átvétel',s1_s6_d:'„Auf Zimmer übertragen" → előnézet ellenőrzése → átvétel. A távozó szobák narancssárgán világítanak.',
     s2_h2:'Szobák kezelése és státusz beállítása',
     s2_p1:'Minden szoba egy kártya. Érintsd meg a szoba-modal megnyitásához.',
     s2_s1_t:'Szobakártya megérintése',s2_s1_d:'A modal megnyílik a szobaszámmal és vendéginformációval.',
@@ -513,20 +559,26 @@ const T = {
     hero_p:'This manual explains step by step how the digital tool works — from importing the guest list to marking a room as clean.',
     tool_link:'Open the tool directly',
     toc_title:'Contents',
-    toc_1:'Import guest list (photo workflow)',
+    toc_1:'Import guest list (photo scan in the Manager)',
     toc_2:'Manage rooms & set status',
     toc_3:'Understanding colours & badges',
     toc_4:'Mark room as done (3-click)',
     toc_5:'Report a technical problem',
     toc_6:'Staff & assignment',
     toc_7:'Emergency contacts',
-    s1_h2:'Import guest list — Photo workflow',
-    s1_p1:'The reception sends the guest list every evening. It contains: <strong>room number, name, arrival, departure, adults, room category, room price.</strong>',
+    exec_staff_t:'Short version for you, at the room',
+    exec_staff_d:'The photo scan now runs directly in the tool — no more detour via Claude. Bed and children counts are picked up automatically. Rooms coming back from "Out of Order" are marked in red so they don\'t get forgotten.',
+    exec_dir_t:'Short version for management',
+    exec_dir_d:'One tool for scanning and distribution instead of two separate steps — fewer sources of error. The handover report now also shows arrival numbers, bed and children occupancy. Every day is archived automatically and stays traceable in the history.',
+    s1_h2:'Import guest list — Photo scan in the Manager (v3.9)',
+    s1_p1:'At the end of the late shift, reception prints the <strong>Alpha list</strong> ("guests in house incl. arrivals"). Since v3.9 the photo scan runs <strong>directly inside the Housekeeping Manager</strong> — no more detour via Claude or a separate scan page.',
     s1_p2:'How to load the list into the tool:',
-    s1_s1_t:'Take a photo',s1_s1_d:'Photograph the printed guest list in good light. All rows must be readable.',
-    s1_s2_t:'Send photo to Claude',s1_s2_d:'Upload the photo to <strong>claude.ai</strong>. Then write: <em>"Please extract as JSON: room number, arrival, departure"</em>.',
-    s1_s3_t:'Copy the JSON',s1_s3_d:'<strong>Copy the entire JSON</strong> from Claude (long press → Select all → Copy).',
-    s1_s4_t:'Paste into the tool',s1_s4_d:'"Guest list" tab → "JSON" → paste → "Preview" → "Apply". Checkout rooms turn orange.',
+    s1_s1_t:'Reset room status',s1_s1_d:'In the tool, tap <strong>"Reset room status"</strong> first. This automatically archives the previous day in the History tab.',
+    s1_s2_t:'Open photo scan and take photos',s1_s2_d:'"Guest list" tab → "Photo scan" → photograph up to 3 pages of the Alpha list, then tap "Evaluate pages". Text recognition runs locally in the browser.',
+    s1_s3_t:'Check rows — now including beds & children',s1_s3_d:'Review the detected rooms and departure dates. New: the "Adults" and "Children" columns are picked up too.',
+    s1_s4_t:'Double-check',s1_s4_d:'Enter the "count" total and the arrivals figure (Suite8) — both badges must turn green. Shared rooms are counted correctly by the tool automatically.',
+    s1_s5_t:'Add vacant arrival rooms',s1_s5_d:'Tap rooms not on the Alpha list (front/back building). <strong style="color:#ff6b4a">Ex-out-of-order rooms are shown separately, marked in red</strong> — not automatically clean.',
+    s1_s6_t:'Apply',s1_s6_d:'"Apply to rooms" → check the preview → apply. Checkout rooms turn orange.',
     s2_h2:'Manage rooms & set status',
     s2_p1:'Every room is a card. Tap to open the room modal.',
     s2_s1_t:'Tap the room card',s2_s1_d:'The modal opens with the room number and guest info.',
