@@ -1,6 +1,6 @@
 # TURMHOTEL HOUSEKEEPING — ÜBERGABE (Trigger: HSK777)
 
-Stand: **25.09.2026** · Letzter Commit: `0388e22` (25.09.2026, Branch `claude/alpha-scan-abschalten`)
+Stand: **25.09.2026** · Letzter Commit: `6f3c12f` (25.09.2026, Branch `claude/pms-verfuegbarkeit-referenz`)
 Diese Datei ist der Einstiegspunkt — egal ob am PC (Git Bash) oder am Handy (Termux).
 Bei „HSK777": diese Datei lesen, dann bei Abschnitt 3 weitermachen.
 
@@ -55,6 +55,30 @@ Einführung steht aus**, bis Tanja wieder ansprechbar ist.
 ### Referenzwerte letzte geprüfte Liste (24.09. → HK-Tag 25.09.)
 71 Zimmer · 80 Erwachsene · 0 Kinder · 38 Abreisen · 33 Overnight.
 Summenzeile der Liste = Zeilenzahl → Scan-Grundlage stimmt.
+
+**Gegenprobe mit Suite8 „Verfügbarkeit" (Screenshot von Amir, 24.09. abends):**
+Alpha-Liste und PMS stimmen exakt überein — `Reservierungen`/`Def. Reservierungen`
+für Do 24.09. = **71** (= Anz.-Summe der Liste), `Erwachsene im Haus` = **80**
+(= Erw.-Summe), `Kinder im Haus` = **0** (= Kin.-Summe), `Abreisen Zimmer` für
+Fr 25.09. (HK-Tag) = **38** (= gezählte Abreise-Zeilen). Damit ist die neue
+Erw./Kin.-Erkennung aus 3.1/2.5 unabhängig gegen echte PMS-Zahlen bestätigt.
+
+**Suite8-Verfügbarkeit die ganze Woche (24.09.–30.09., zum Vorausplanen):**
+
+| Tag | Verfügbarkeit | Abreisen Zi. | Anreisen Zi. | Belegung | Kinder im Haus |
+|---|---|---|---|---|---|
+| Do 24.09. | 2 | 23 | 26 | 97,26 % | 0 |
+| Fr 25.09. (HK-Tag) | 5 | 38 | 35 | 93,15 % | 0 |
+| Sa 26.09. | 8 | 45 | 42 | 89,04 % | 0 |
+| So 27.09. | 25 | 56 | 39 | 65,75 % | 1 |
+| Mo 28.09. | 18 | 29 | 36 | 75,34 % | 2 |
+| Di 29.09. | 8 | 28 | 38 | 89,04 % | 1 |
+| Mi 30.09. | 6 | 20 | 22 | 91,78 % | 1 |
+
+Ruhigster Tag der Woche: **So 27.09. mit 65,75 % Belegung** (25 freie Zimmer) —
+für Personalplanung relevant. OOO/OOS laut PMS aktuell durchgehend 0.
+Für das Doppelcheck-Feld „Anreisen Zimmer laut PMS" gilt die Zeile des
+**HK-Tages**, nicht die des Listendatums (heute also 35, nicht 26).
 
 ---
 
@@ -162,6 +186,7 @@ dieser Runde — folgendes bleibt aus der alten Roadmap liegen:
 | 25.09. | `5467ab9` | Aufräumen (Skripte → `scripts/`, Backup → `archiv/`, `main` gelöscht) + Bettenzahl/Kinder im Foto-Scan + OOO-Rückläufer-Chips + Doppelcheck-Fix für Sharing + Verfügbarkeit im Übergabebericht + Vorder-/Hinterhaus-Gruppierung + Handbuch v3.9 |
 | 25.09. | `6c6118b` | Neue Seite `vorfuehrung.html` (Klick-Anleitung + PDF-Verlinkung + Testergebnis), in `manager.html` verlinkt, `housekeeping-anleitung.html` mit Hinweis-Banner, README aktualisiert |
 | 25.09. | `0388e22` | `alpha-scan.html` abgeschaltet (Redirect-Stub statt eigenständiger OCR-Logik), Kachel aus `manager.html` entfernt |
+| 25.09. | `6f3c12f` | Echte Suite8-Verfügbarkeit (Amir) als Gegenprobe + Wochenübersicht in Referenzwerte dokumentiert |
 
 ---
 
