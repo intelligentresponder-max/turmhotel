@@ -1,6 +1,6 @@
 # TURMHOTEL HOUSEKEEPING — ÜBERGABE (Trigger: HSK777)
 
-Stand: **25.09.2026** · Letzter Commit: `6f3c12f` (25.09.2026, Branch `claude/pms-verfuegbarkeit-referenz`)
+Stand: **25.09.2026** · Letzter Commit: `a271cef` (25.09.2026, Branch `claude/erw-kin-ocr-robustheit`)
 Diese Datei ist der Einstiegspunkt — egal ob am PC (Git Bash) oder am Handy (Termux).
 Bei „HSK777": diese Datei lesen, dann bei Abschnitt 3 weitermachen.
 
@@ -132,6 +132,12 @@ dieser Runde — folgendes bleibt aus der alten Roadmap liegen:
   pro Aufnahme) mitgelesen, nicht im „spaltenweise gelesen"-Fallback-Pfad bei
   schlechten Aufnahmen — dort bleiben Erw./Kin. leer und müssen von Hand
   nachgetragen werden (Tabelle ist dafür editierbar).
+- **Mit echten Kamera-Fotos getestet (25.09., nach der Vorführung, F10):**
+  Zimmer- und Abreise-Erkennung 71/71 fehlerfrei, inkl. aller 38 Abreisen zum
+  HK-Tag. Erw./Kin. bei ca. 4 von 71 Zeilen (≈ 6 %) nicht lesbar, weil die
+  Kamera-Texterkennung eine einzelne Ziffer als anderes Zeichen liest (z. B.
+  „0" als „)"). Kein Bug, sondern OCR-Grenze — betroffene Zeilen sind in der
+  Tabelle klar als „—" sichtbar und in Sekunden von Hand ergänzbar.
 
 ### Erledigt seit 08.08. (aus der alten Liste)
 - ~~Housekeeping-Tag-Feld~~ → v3.8 / v3.9 (Datum aus Listenkopf, überschreibbar)
@@ -187,6 +193,8 @@ dieser Runde — folgendes bleibt aus der alten Roadmap liegen:
 | 25.09. | `6c6118b` | Neue Seite `vorfuehrung.html` (Klick-Anleitung + PDF-Verlinkung + Testergebnis), in `manager.html` verlinkt, `housekeeping-anleitung.html` mit Hinweis-Banner, README aktualisiert |
 | 25.09. | `0388e22` | `alpha-scan.html` abgeschaltet (Redirect-Stub statt eigenständiger OCR-Logik), Kachel aus `manager.html` entfernt |
 | 25.09. | `6f3c12f` | Echte Suite8-Verfügbarkeit (Amir) als Gegenprobe + Wochenübersicht in Referenzwerte dokumentiert |
+| 25.09. | `c27db12` | Suite8-Wochenübersicht zusätzlich sichtbar auf `vorfuehrung.html` ergänzt |
+| 25.09. | `a271cef` | Erw./Kin.-Regex robuster gegen OCR-Fehlerkennungen (F10), mit echten Fotos von der Vorführung getestet |
 
 ---
 
@@ -203,6 +211,7 @@ dieser Runde — folgendes bleibt aus der alten Roadmap liegen:
 | F7 | Blindes `git reset --hard` (08.08.) | Label-Commit fast verloren | erst `git log`/`git show`, dann `pull --rebase` |
 | F9 | Leere Datei `main` im Repo-Root (seit 12.07., vermutlich Tippfehler bei `git push … main` mit `>`) | Ballast, verwirrt | gelöscht 25.09.; vor `git add -A` immer `git status` lesen |
 | F8 | Scan vor Mitternacht mit Gerätedatum | Abreise/Overnight vertauscht | HK-Tag aus Listenkopf (v3.8) |
+| F10 | Erw./Kin.-Regex (25.09.) hatte `\b` am Zeilenende — bei OCR-Fehlerkennung klebt die Anz.-Ziffer oft ohne Leerzeichen an der nächsten Fehlerkennung (z.B. „1 0 14." statt „1 0 1 LGS") | Bei ca. 10 % der Zeilen (7 von 71 im Echttest) blieb Erw. leer, obwohl die Ziffer im Text stand | `\b` entfernt (25.09., zweiter Fix) → nur noch 4 von 71 Zeilen betroffen, siehe 3.1. Getestet mit `tesseract-ocr-deu` (Ubuntu-Paket) gegen die echten Fotos vom 25.09., nicht nur mit sauberem Text |
 
 ---
 
