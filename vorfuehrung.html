@@ -80,6 +80,17 @@ nav{position:sticky;top:0;z-index:200;background:rgba(12,10,8,.95);backdrop-filt
 .testbox ul{padding-left:20px;color:#cabfb0;font-size:.88rem;line-height:1.8;}
 .testbox ul strong{color:var(--paper);}
 
+.table-wrap{overflow-x:auto;margin:20px 0;border:1px solid var(--line);border-radius:var(--radius);}
+.pms-table{width:100%;border-collapse:collapse;font-family:'Spline Sans Mono',monospace;font-size:.78rem;white-space:nowrap;}
+.pms-table th{text-align:left;color:var(--gold);font-weight:500;padding:10px 14px;border-bottom:1px solid var(--line);font-size:.65rem;letter-spacing:.08em;text-transform:uppercase;background:rgba(255,255,255,.02);}
+.pms-table td{padding:9px 14px;border-bottom:1px solid rgba(255,255,255,.04);color:#cabfb0;}
+.pms-table tr:last-child td{border-bottom:none;}
+.pms-table td:first-child{color:var(--paper);font-weight:600;}
+.pms-table tr.today td{background:rgba(201,162,39,.07);}
+.pms-table tr.today td:first-child{color:var(--gold-bright);}
+.pms-table tr.quiet td:nth-child(4){color:#4ecb82;font-weight:600;}
+.pms-source{font-size:.78rem;color:var(--muted);margin-top:10px;}
+
 @media(max-width:600px){.step{flex-direction:column;gap:8px;}.step-num{font-size:1.1rem;}}
 </style>
 </head>
@@ -111,6 +122,7 @@ nav{position:sticky;top:0;z-index:200;background:rgba(12,10,8,.95);backdrop-filt
       <li><a href="#neu">Was seit der letzten Vorführung neu ist</a></li>
       <li><a href="#ablauf">Klick-Anleitung für heute</a></li>
       <li><a href="#getestet">Mit der echten Liste von heute getestet</a></li>
+      <li><a href="#verfuegbarkeit">Verfügbarkeit diese Woche (Suite8)</a></li>
       <li><a href="#unterlagen">Unterlagen</a></li>
     </ol>
   </div>
@@ -227,9 +239,40 @@ nav{position:sticky;top:0;z-index:200;background:rgba(12,10,8,.95);backdrop-filt
     <div class="warn"><strong>Ehrlich dazugesagt:</strong> Getestet wurde die Auswerte-Logik mit dem Text der beiden Fotos — nicht die Kamera-Texterkennung selbst, die aus der Testumgebung heraus nicht erreichbar war. Die Texterkennung (Tesseract) läuft unverändert und bewährt; sollte eine einzelne Zeile bei der Aufnahme unscharf gelesen werden, ist die Tabelle in Schritt 4 direkt editierbar.</div>
   </div>
 
-  <!-- 4. UNTERLAGEN -->
-  <div class="section" id="unterlagen">
+  <!-- 4. VERFÜGBARKEIT -->
+  <div class="section" id="verfuegbarkeit">
     <div class="sec-num">04</div>
+    <h2>Verfügbarkeit diese Woche (Suite8)</h2>
+    <p>Gegenprobe mit dem echten PMS-Export bestätigt die Zahlen von oben unabhängig:
+      <strong>Reservierungen 71</strong>, <strong>Erwachsene im Haus 80</strong>,
+      <strong>Kinder im Haus 0</strong> und <strong>Abreisen Zimmer 38</strong> zum
+      HK-Tag stimmen exakt mit der Alpha-Liste überein. Zusätzlich die ganze Woche
+      zum Vorausplanen:</p>
+
+    <div class="table-wrap">
+      <table class="pms-table">
+        <thead>
+          <tr><th>Tag</th><th>Verfügbarkeit</th><th>Abreisen Zi.</th><th>Anreisen Zi.</th><th>Belegung</th><th>Kinder im Haus</th></tr>
+        </thead>
+        <tbody>
+          <tr class="today"><td>Do 24.09.</td><td>2</td><td>23</td><td>26</td><td>97,26 %</td><td>0</td></tr>
+          <tr><td>Fr 25.09. (HK-Tag)</td><td>5</td><td>38</td><td>35</td><td>93,15 %</td><td>0</td></tr>
+          <tr><td>Sa 26.09.</td><td>8</td><td>45</td><td>42</td><td>89,04 %</td><td>0</td></tr>
+          <tr class="quiet"><td>So 27.09.</td><td>25</td><td>56</td><td>39</td><td>65,75 %</td><td>1</td></tr>
+          <tr><td>Mo 28.09.</td><td>18</td><td>29</td><td>36</td><td>75,34 %</td><td>2</td></tr>
+          <tr><td>Di 29.09.</td><td>8</td><td>28</td><td>38</td><td>89,04 %</td><td>1</td></tr>
+          <tr><td>Mi 30.09.</td><td>6</td><td>20</td><td>22</td><td>91,78 %</td><td>1</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="pms-source">Quelle: Suite8-Verfügbarkeitsexport (Screenshot von Amir, 24.09. abends). OOO/OOS laut PMS aktuell durchgehend 0.</p>
+
+    <div class="tip"><strong>Ruhigster Tag der Woche: So 27.09. mit 65,75 % Belegung</strong> (25 freie Zimmer) — relevant für die Personalplanung.</div>
+  </div>
+
+  <!-- 5. UNTERLAGEN -->
+  <div class="section" id="unterlagen">
+    <div class="sec-num">05</div>
     <h2>Unterlagen</h2>
     <p>Zum Nachlesen und Weitergeben:</p>
 
