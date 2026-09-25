@@ -1,6 +1,6 @@
 # TURMHOTEL HOUSEKEEPING — ÜBERGABE (Trigger: HSK777)
 
-Stand: **25.09.2026** · Letzter Commit: `5467ab9` (25.09.2026, Branch `claude/hsk777-aufraeumen-features`)
+Stand: **25.09.2026** · Letzter Commit: `6c6118b` (25.09.2026, Branch `claude/vorfuehrung-seite`)
 Diese Datei ist der Einstiegspunkt — egal ob am PC (Git Bash) oder am Handy (Termux).
 Bei „HSK777": diese Datei lesen, dann bei Abschnitt 3 weitermachen.
 
@@ -13,6 +13,8 @@ Bei „HSK777": diese Datei lesen, dann bei Abschnitt 3 weitermachen.
   `https://bit.ly/turm7` → `housekeeping/housekeeping-v3.html`
 - Scan-Tool (nur noch **Fallback**): `https://bit.ly/turmhsk` → `housekeeping/alpha-scan.html`
 - Team-Anleitung: `Gebrauchsanweisung-Housekeeping-App.pdf` (DE/EN/HR/HU/AF)
+- Vorführungs-/Demo-Seite: `vorfuehrung.html` — Klick-Anleitung, Neuerungen,
+  Verlinkung der Unterlagen; verlinkt in `manager.html`
 - Cloud-Sync: Firebase RTDB, `state.json` / `staff.json`, Archiv unter `/history/<Datum>.json`
 - Konto-Umzug und Updates: `KONTEN_UMZUG.md`, `ANLEITUNG_UPDATES.md`
 - Alte Patch-Skripte: `scripts/` · alte Backups: `archiv/`
@@ -153,6 +155,7 @@ dieser Runde — folgendes bleibt aus der alten Roadmap liegen:
 | 26.08. | `7120c6e`, `bfe730e`, `59b1cea` | Gästeportal: Revert WLAN-Leak, Late Check-in, Impressum |
 | 07.09. | `1c9466c` | Merge PR #1 (Gebrauchsanweisung-PDF) |
 | 25.09. | `5467ab9` | Aufräumen (Skripte → `scripts/`, Backup → `archiv/`, `main` gelöscht) + Bettenzahl/Kinder im Foto-Scan + OOO-Rückläufer-Chips + Doppelcheck-Fix für Sharing + Verfügbarkeit im Übergabebericht + Vorder-/Hinterhaus-Gruppierung + Handbuch v3.9 |
+| 25.09. | `6c6118b` | Neue Seite `vorfuehrung.html` (Klick-Anleitung + PDF-Verlinkung + Testergebnis), in `manager.html` verlinkt, `housekeeping-anleitung.html` mit Hinweis-Banner, README aktualisiert |
 
 ---
 
