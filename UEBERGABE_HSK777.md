@@ -11,7 +11,9 @@ Bei „HSK777": diese Datei lesen, dann bei Abschnitt 3 weitermachen.
 - Repo: `github.com/intelligentresponder-max/turmhotel`
 - Verteil-Tool (**Hauptwerkzeug**, enthält seit v3.9 auch den Foto-Scan):
   `https://bit.ly/turm7` → `housekeeping/housekeeping-v3.html`
-- Scan-Tool (nur noch **Fallback**): `https://bit.ly/turmhsk` → `housekeeping/alpha-scan.html`
+- Scan-Tool (**abgeschaltet seit 25.09.2026**): `https://bit.ly/turmhsk` →
+  `housekeeping/alpha-scan.html` leitet automatisch auf `housekeeping-v3.html`
+  weiter (Link bleibt so gültig, OCR-Logik dort ist entfernt)
 - Team-Anleitung: `Gebrauchsanweisung-Housekeeping-App.pdf` (DE/EN/HR/HU/AF)
 - Vorführungs-/Demo-Seite: `vorfuehrung.html` — Klick-Anleitung, Neuerungen,
   Verlinkung der Unterlagen; verlinkt in `manager.html`
@@ -102,8 +104,6 @@ siehe 2.2/2.3 und Verlauf-Tabelle). Aktuell keine neuen offenen Punkte aus
 dieser Runde — folgendes bleibt aus der alten Roadmap liegen:
 
 - Alte Roadmap: Arbeitszeit-Tracking, Mängel-Report, Technik-Report Hausmeister.
-- `alpha-scan.html` ist jetzt klar als Fallback gekennzeichnet (Banner) —
-  langfristiges Abschalten steht weiter aus, bis niemand mehr darauf angewiesen ist.
 - Bettenzahl/Kinder werden nur bei der zeilenweisen OCR-Erkennung (≥5 Zimmer
   pro Aufnahme) mitgelesen, nicht im „spaltenweise gelesen"-Fallback-Pfad bei
   schlechten Aufnahmen — dort bleiben Erw./Kin. leer und müssen von Hand
@@ -126,6 +126,11 @@ dieser Runde — folgendes bleibt aus der alten Roadmap liegen:
 - ~~Kleineres~~ → Verfügbarkeitszahlen im Übergabebericht, Leerstand-Chips nach
   Vorder-/Hinterhaus gruppiert, Handbuch Kapitel 1 umgeschrieben, `alpha-scan.html`
   als Fallback gekennzeichnet.
+
+### Erledigt seit 25.09. (diese Übergabe)
+- ~~`alpha-scan.html` abschalten~~ → eigenständige OCR-Logik entfernt, Datei
+  leitet automatisch auf `housekeeping-v3.html` weiter, `bit.ly/turmhsk` bleibt
+  dadurch gültig. Kachel aus `manager.html` entfernt.
 
 ### Worauf beim Import zu achten ist
 - **Immer zuerst „Zimmerstatus zurücksetzen"**, sonst addiert sich der Vortag.
