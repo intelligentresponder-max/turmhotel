@@ -1,6 +1,6 @@
 # TURMHOTEL HOUSEKEEPING — ÜBERGABE (Trigger: HSK777)
 
-Stand: **25.09.2026** · Letzter Commit: `0388e22` (25.09.2026, Branch `claude/alpha-scan-abschalten`)
+Stand: **25.09.2026** · Letzter Commit: `6f3c12f` (25.09.2026, Branch `claude/pms-verfuegbarkeit-referenz`)
 Diese Datei ist der Einstiegspunkt — egal ob am PC (Git Bash) oder am Handy (Termux).
 Bei „HSK777": diese Datei lesen, dann bei Abschnitt 3 weitermachen.
 
@@ -186,6 +186,7 @@ dieser Runde — folgendes bleibt aus der alten Roadmap liegen:
 | 25.09. | `5467ab9` | Aufräumen (Skripte → `scripts/`, Backup → `archiv/`, `main` gelöscht) + Bettenzahl/Kinder im Foto-Scan + OOO-Rückläufer-Chips + Doppelcheck-Fix für Sharing + Verfügbarkeit im Übergabebericht + Vorder-/Hinterhaus-Gruppierung + Handbuch v3.9 |
 | 25.09. | `6c6118b` | Neue Seite `vorfuehrung.html` (Klick-Anleitung + PDF-Verlinkung + Testergebnis), in `manager.html` verlinkt, `housekeeping-anleitung.html` mit Hinweis-Banner, README aktualisiert |
 | 25.09. | `0388e22` | `alpha-scan.html` abgeschaltet (Redirect-Stub statt eigenständiger OCR-Logik), Kachel aus `manager.html` entfernt |
+| 25.09. | `6f3c12f` | Echte Suite8-Verfügbarkeit (Amir) als Gegenprobe + Wochenübersicht in Referenzwerte dokumentiert |
 
 ---
 
