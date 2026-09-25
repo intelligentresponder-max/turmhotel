@@ -1,6 +1,6 @@
 # TURMHOTEL HOUSEKEEPING — ÜBERGABE (Trigger: HSK777)
 
-Stand: **25.09.2026** · Letzter Commit: `a271cef` (25.09.2026, Branch `claude/erw-kin-ocr-robustheit`)
+Stand: **25.09.2026** · Letzter Commit: `53b6735` (25.09.2026, Branch `claude/scan-speicher-fix`)
 Diese Datei ist der Einstiegspunkt — egal ob am PC (Git Bash) oder am Handy (Termux).
 Bei „HSK777": diese Datei lesen, dann bei Abschnitt 3 weitermachen.
 
@@ -195,6 +195,7 @@ dieser Runde — folgendes bleibt aus der alten Roadmap liegen:
 | 25.09. | `6f3c12f` | Echte Suite8-Verfügbarkeit (Amir) als Gegenprobe + Wochenübersicht in Referenzwerte dokumentiert |
 | 25.09. | `c27db12` | Suite8-Wochenübersicht zusätzlich sichtbar auf `vorfuehrung.html` ergänzt |
 | 25.09. | `a271cef` | Erw./Kin.-Regex robuster gegen OCR-Fehlerkennungen (F10), mit echten Fotos von der Vorführung getestet |
+| 25.09. | `53b6735` | Foto-Scan-Speicherverbrauch bei großen Fotos begrenzt — behebt Tab-Reload/Datenverlust nach dem Scan (F11) |
 
 ---
 
