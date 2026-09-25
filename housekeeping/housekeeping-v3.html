@@ -1839,7 +1839,19 @@ function scanBildAufbereiten(file) {
   return new Promise(function(res){
     var img = new Image();
     img.onload = function(){
-      res(scanAufCanvas(img, scanDrehung, img.width < 2000 ? 2 : 1));
+      // Verdoppeln verbessert die Trefferquote (v3.5), aber bei grossen Fotos
+      // (z.B. 1475x2048 einer vollen A4-Seite) sprengt das unveraendert die
+      // Handy-Speichergrenze: 2950x4096 Pixel als Graustufen-Canvas + separate
+      // ImageData-Kopie + Tesseract-eigener WASM-Speicher fuer dasselbe Bild
+      // koennen den Tab zum Absturz/Neuladen bringen — laufende Auswertung
+      // (noch nicht uebertragene Zeilen) geht dabei komplett verloren (F11).
+      // Lange Kante deshalb auf max. 3000px deckeln, Verdoppelung bleibt fuer
+      // normal grosse Fotos unveraendert erhalten.
+      var MAX_KANTE = 3000;
+      var faktor = img.width < 2000 ? 2 : 1;
+      var langeKante = Math.max(img.width, img.height) * faktor;
+      if (langeKante > MAX_KANTE) faktor *= MAX_KANTE / langeKante;
+      res(scanAufCanvas(img, scanDrehung, faktor));
     };
     img.onerror = function(){ res(file); };
     img.src = URL.createObjectURL(file);
