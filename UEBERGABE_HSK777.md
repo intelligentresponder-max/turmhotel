@@ -1,6 +1,6 @@
 # TURMHOTEL HOUSEKEEPING — ÜBERGABE (Trigger: HSK777)
 
-Stand: **25.09.2026** · Letzter Commit: `a271cef` (25.09.2026, Branch `claude/erw-kin-ocr-robustheit`)
+Stand: **25.09.2026** · Letzter Commit: `53b6735` (25.09.2026, Branch `claude/scan-speicher-fix`)
 Diese Datei ist der Einstiegspunkt — egal ob am PC (Git Bash) oder am Handy (Termux).
 Bei „HSK777": diese Datei lesen, dann bei Abschnitt 3 weitermachen.
 
@@ -195,6 +195,7 @@ dieser Runde — folgendes bleibt aus der alten Roadmap liegen:
 | 25.09. | `6f3c12f` | Echte Suite8-Verfügbarkeit (Amir) als Gegenprobe + Wochenübersicht in Referenzwerte dokumentiert |
 | 25.09. | `c27db12` | Suite8-Wochenübersicht zusätzlich sichtbar auf `vorfuehrung.html` ergänzt |
 | 25.09. | `a271cef` | Erw./Kin.-Regex robuster gegen OCR-Fehlerkennungen (F10), mit echten Fotos von der Vorführung getestet |
+| 25.09. | `53b6735` | Foto-Scan-Speicherverbrauch bei großen Fotos begrenzt — behebt Tab-Reload/Datenverlust nach dem Scan (F11) |
 
 ---
 
@@ -212,6 +213,7 @@ dieser Runde — folgendes bleibt aus der alten Roadmap liegen:
 | F9 | Leere Datei `main` im Repo-Root (seit 12.07., vermutlich Tippfehler bei `git push … main` mit `>`) | Ballast, verwirrt | gelöscht 25.09.; vor `git add -A` immer `git status` lesen |
 | F8 | Scan vor Mitternacht mit Gerätedatum | Abreise/Overnight vertauscht | HK-Tag aus Listenkopf (v3.8) |
 | F10 | Erw./Kin.-Regex (25.09.) hatte `\b` am Zeilenende — bei OCR-Fehlerkennung klebt die Anz.-Ziffer oft ohne Leerzeichen an der nächsten Fehlerkennung (z.B. „1 0 14." statt „1 0 1 LGS") | Bei ca. 10 % der Zeilen (7 von 71 im Echttest) blieb Erw. leer, obwohl die Ziffer im Text stand | `\b` entfernt (25.09., zweiter Fix) → nur noch 4 von 71 Zeilen betroffen, siehe 3.1. Getestet mit `tesseract-ocr-deu` (Ubuntu-Paket) gegen die echten Fotos vom 25.09., nicht nur mit sauberem Text |
+| F11 | `scanBildAufbereiten` verdoppelte jedes Foto mit Breite < 2000px ungedeckelt — ein normales Handyfoto einer vollen A4-Seite (z.B. 1475×2048) wurde zu einem 2950×4096-Graustufen-Canvas (~12 MP) samt eigener ImageData-Kopie und Tesseract-WASM-Speicher fürs selbe Bild | Handy lief nach korrekt eingelesenen Zimmer-/Abreisedaten in ein Speicherlimit, Tab lud neu, komplette Auswertung (noch nicht übertragen) war weg | Lange Kante nach Verdoppelung auf max. 3000px gedeckelt (25.09.). Mit den echten Fotos erneut getestet: Zimmer/Abreise weiter 71/71 bzw. 38/38 korrekt, Erw.-Erkennung minimal schwächer (6 statt 4 von 71 offen) — vertretbarer Tausch gegen die Speicherersparnis (~12 MP → ~6,5 MP beim großen Foto) |
 
 ---
 
