@@ -1902,8 +1902,11 @@ function scanZimmerAmZeilenanfang(zeile, belegt) {
 function scanErwKinAnz(zeile) {
   // Nach Anreise- und Abreisedatum stehen auf der Alpha-Liste die Spalten Erw./Kin./Anz.
   // als drei einzelne Ziffern hintereinander, z.B. "... 23.09.2026 25.09.2026 1 0 1 LGS".
+  // Kein \b am Ende: die Anz.-Ziffer klebt bei der Kamera-Texterkennung oft ohne
+  // Leerzeichen an einer Fehlerkennung aus der Kat.-Spalte (z.B. "1 0 14." statt
+  // "1 0 1 LGS") — ohne \b wird die erste (richtige) Ziffer trotzdem erkannt.
   var datum = '\\d{2}[.,:\\s]{0,2}\\d{2}[.,:\\s]{0,2}(?:\\d{4}|\\d{3}|\\d{2})';
-  var re = new RegExp(datum + '\\s+' + datum + '\\D{0,6}(\\d)\\s+(\\d)\\s+(\\d)\\b');
+  var re = new RegExp(datum + '\\s+' + datum + '\\D{0,6}(\\d)\\s+(\\d)\\s+(\\d)');
   var m = zeile.match(re);
   if (!m) return null;
   return { erw: +m[1], kin: +m[2], anz: +m[3] };

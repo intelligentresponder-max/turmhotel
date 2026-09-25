@@ -132,6 +132,12 @@ dieser Runde — folgendes bleibt aus der alten Roadmap liegen:
   pro Aufnahme) mitgelesen, nicht im „spaltenweise gelesen"-Fallback-Pfad bei
   schlechten Aufnahmen — dort bleiben Erw./Kin. leer und müssen von Hand
   nachgetragen werden (Tabelle ist dafür editierbar).
+- **Mit echten Kamera-Fotos getestet (25.09., nach der Vorführung, F10):**
+  Zimmer- und Abreise-Erkennung 71/71 fehlerfrei, inkl. aller 38 Abreisen zum
+  HK-Tag. Erw./Kin. bei ca. 4 von 71 Zeilen (≈ 6 %) nicht lesbar, weil die
+  Kamera-Texterkennung eine einzelne Ziffer als anderes Zeichen liest (z. B.
+  „0" als „)"). Kein Bug, sondern OCR-Grenze — betroffene Zeilen sind in der
+  Tabelle klar als „—" sichtbar und in Sekunden von Hand ergänzbar.
 
 ### Erledigt seit 08.08. (aus der alten Liste)
 - ~~Housekeeping-Tag-Feld~~ → v3.8 / v3.9 (Datum aus Listenkopf, überschreibbar)
@@ -203,6 +209,7 @@ dieser Runde — folgendes bleibt aus der alten Roadmap liegen:
 | F7 | Blindes `git reset --hard` (08.08.) | Label-Commit fast verloren | erst `git log`/`git show`, dann `pull --rebase` |
 | F9 | Leere Datei `main` im Repo-Root (seit 12.07., vermutlich Tippfehler bei `git push … main` mit `>`) | Ballast, verwirrt | gelöscht 25.09.; vor `git add -A` immer `git status` lesen |
 | F8 | Scan vor Mitternacht mit Gerätedatum | Abreise/Overnight vertauscht | HK-Tag aus Listenkopf (v3.8) |
+| F10 | Erw./Kin.-Regex (25.09.) hatte `\b` am Zeilenende — bei OCR-Fehlerkennung klebt die Anz.-Ziffer oft ohne Leerzeichen an der nächsten Fehlerkennung (z.B. „1 0 14." statt „1 0 1 LGS") | Bei ca. 10 % der Zeilen (7 von 71 im Echttest) blieb Erw. leer, obwohl die Ziffer im Text stand | `\b` entfernt (25.09., zweiter Fix) → nur noch 4 von 71 Zeilen betroffen, siehe 3.1. Getestet mit `tesseract-ocr-deu` (Ubuntu-Paket) gegen die echten Fotos vom 25.09., nicht nur mit sauberem Text |
 
 ---
 
