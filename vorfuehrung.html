@@ -75,6 +75,12 @@ nav{position:sticky;top:0;z-index:200;background:rgba(12,10,8,.95);backdrop-filt
 .legend-text{font-size:.85rem;color:#cabfb0;}
 .legend-text strong{display:block;color:var(--paper);font-size:.88rem;margin-bottom:2px;}
 
+.persona-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px;margin:24px 0;}
+.persona-card{background:rgba(255,255,255,.03);border:1px solid var(--line);border-radius:var(--radius);padding:18px 20px;}
+.persona-card h4{font-family:'Fraunces',serif;font-size:1.05rem;color:var(--gold-bright);margin-bottom:8px;}
+.persona-card p{font-size:.86rem;color:#cabfb0;line-height:1.7;margin:0;}
+.persona-card p+p{margin-top:8px;}
+
 .docs{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px;margin:20px 0;}
 .doc-card{display:block;background:rgba(255,255,255,.03);border:1px solid var(--line);border-radius:var(--radius);padding:18px 20px;text-decoration:none;color:inherit;transition:.15s;}
 .doc-card:hover{border-color:var(--gold);background:rgba(201,162,39,.05);}
@@ -119,9 +125,10 @@ nav{position:sticky;top:0;z-index:200;background:rgba(12,10,8,.95);backdrop-filt
   <div class="hero">
     <div class="eyebrow">Turmhotel Frankfurt · Housekeeping · Stand 25.09.2026</div>
     <h1>Vorführung <em>heute</em></h1>
-    <p>Diese Seite ist die Grundlage für die heutige Vorführung des Housekeeping Managers:
-      was seit der letzten Runde neu ist, wie der Ablauf mit der echten Alpha-Liste heute
-      Schritt für Schritt aussieht, und wo die passenden Unterlagen liegen.</p>
+    <p>Nicole, Tanja, Dario, Ralf — diese Seite ist die Grundlage für unsere heutige
+      Vorführung: was seit der letzten Runde neu ist, wie der Ablauf mit der echten
+      Alpha-Liste heute Schritt für Schritt aussieht, und wo die passenden Unterlagen
+      für euch liegen.</p>
     <div class="hero-links">
       <a class="tool-link primary" href="housekeeping/housekeeping-v3.html">→ Housekeeping Manager öffnen</a>
       <a class="tool-link" href="Gebrauchsanweisung-Housekeeping-App.pdf">📄 Gebrauchsanweisung (PDF)</a>
@@ -131,17 +138,18 @@ nav{position:sticky;top:0;z-index:200;background:rgba(12,10,8,.95);backdrop-filt
 
   <!-- AN DIE GESCHÄFTSFÜHRUNG -->
   <div class="exec-box" id="fuehrung">
-    <div class="exec-eyebrow">An die Geschäftsführung</div>
-    <h2>Nicole <span>· Direktorin</span>, Tanja <span>· Inhaberin</span> und Ralf</h2>
+    <div class="exec-eyebrow">An euch alle vier</div>
+    <h2>Nicole <span>· Direktorin</span>, Tanja <span>· Inhaberin</span>, Dario <span>· Front Office Manager</span> und Ralf <span>· Technischer Geschäftsführer</span></h2>
 
-    <p>Diese Seiten sind nicht von oben in Auftrag gegeben worden — sie sind ausdrücklich aus
-      eigener Initiative, aus der täglichen Praxis an der Rezeption heraus entstanden. Doppelte
-      Zettelwirtschaft beim Housekeeping, kein Abgleich zwischen den Handys im Team und immer
-      wieder dieselben Fragen an der Rezeption waren im Alltag spürbar — daraus wurde zuerst
-      der Housekeeping Manager, dann der mehrsprachige Wegweiser, dann das Gästeportal mit
+    <p>Nicole, Tanja, Dario, Ralf — diese Seiten sind nicht von oben in Auftrag gegeben worden.
+      Sie sind ausdrücklich aus eigener Initiative entstanden, aus der täglichen Praxis an der
+      Rezeption heraus: doppelte Zettelwirtschaft beim Housekeeping, kein Abgleich zwischen den
+      Handys im Team, immer wieder dieselben Fragen am Tresen. Daraus wurde zuerst der
+      Housekeeping Manager, dann der mehrsprachige Wegweiser, dann das Gästeportal mit
       FAQ-Widget.</p>
 
-    <p>Dabei ging es nicht nur um die einzelne Funktion, sondern bewusst um das große Ganze:</p>
+    <p>Dabei ging es mir nicht nur um die einzelne Funktion, sondern bewusst um das große
+      Ganze, das ich euch heute zeigen möchte:</p>
 
     <div class="legend">
       <div class="legend-item">
@@ -165,6 +173,46 @@ nav{position:sticky;top:0;z-index:200;background:rgba(12,10,8,.95);backdrop-filt
     <div class="shot">
       <img src="img/screenshot-gaesteportal-faq.jpg" alt="Gästeportal: Widget „Fragen zu Ihrem Aufenthalt" mit Suchfeld und Antworten zu Check-in/Check-out, Late Check-in, Frühstückszeiten und Wegweiser" loading="lazy">
       <div class="shot-caption">Screenshot vom Gerät, heute — Gästeportal-FAQ-Widget, direkt auf der Startseite erreichbar.</div>
+    </div>
+
+    <h3>Vier Perspektiven, eine Lösung</h3>
+    <p>Jede und jeder von euch schaut sich das gleich aus einem anderen Winkel an — hier
+      direkt für jeden von euch übersetzt:</p>
+
+    <div class="persona-grid">
+      <div class="persona-card">
+        <h4>Nicole — der Überblick</h4>
+        <p>Dir als Direktorin geht es ums große Bild: ein System statt drei Baustellen,
+          saubere Kennzahlen bei jeder Übergabe, kein Flickenteppich zwischen Rezeption und
+          Housekeeping.</p>
+        <p>Was am Ende zählt, entscheidet sich ohnehin daran, was bei Tanja im Alltag ankommt
+          — deshalb gleich im nächsten Feld in ihre Sprache übersetzt.</p>
+      </div>
+      <div class="persona-card">
+        <h4>Tanja — was es fürs Team bedeutet</h4>
+        <p>Weniger Wartezeit für die Housekeeping-Kräfte, weil die Zimmerliste nicht mehr
+          abends nachgereicht werden muss. Weniger Frust, weil niemand mehr auf einen Rückruf
+          wartet, der nicht kommt. Mehr Kapazität für die kleineren Zusatzaufgaben, die sonst
+          als Erstes hinten runterfallen.</p>
+        <p>Und falls dir oder Nicole beim Zusehen noch etwas fehlt: Das Tool ist erweiterbar —
+          jede zusätzliche Idee kann noch eingebaut werden.</p>
+      </div>
+      <div class="persona-card">
+        <h4>Dario — die Praxis</h4>
+        <p>Du kennst das HSK-Tool schon aus dem Alltag an der Rezeption. Genau die Version,
+          die heute läuft, ist die Lösung, die du wolltest: Scan und Verteilung in einem
+          Schritt, ohne Umweg über eine zweite Seite oder einen CSV-Export.</p>
+      </div>
+      <div class="persona-card">
+        <h4>Ralf — die Technik</h4>
+        <p>Kurz in deiner Sprache: Alle Werkzeuge laufen als statische Seiten über GitHub
+          Pages, ohne eigenen Server, den wir pflegen müssten. Die Synchronisation zwischen
+          den Handys übernimmt eine Firebase Realtime Database. Der Foto-Scan liest die
+          Alpha-Liste per Texterkennung direkt im Browser — es geht nichts an einen fremden
+          Server.</p>
+        <p>Jede Änderung läuft über einen dokumentierten Pull Request im GitHub-Repo (aktuell
+          PR #3), nicht über einen stillen Patch.</p>
+      </div>
     </div>
 
     <h3>Der Nutzen im Alltag — vor allem Zeitersparnis</h3>
@@ -226,7 +274,7 @@ nav{position:sticky;top:0;z-index:200;background:rgba(12,10,8,.95);backdrop-filt
       </div>
     </div>
 
-    <div class="tip"><strong>Für die Direktion:</strong> Ein Werkzeug für Scan und Verteilung statt zwei getrennte Schritte — weniger Fehlerquellen, mehr Kennzahlen im Übergabebericht, jeder Tag automatisch archiviert.</div>
+    <div class="tip"><strong>Für euch als Führungsrunde:</strong> Ein Werkzeug für Scan und Verteilung statt zwei getrennte Schritte — weniger Fehlerquellen, mehr Kennzahlen im Übergabebericht, jeder Tag automatisch archiviert.</div>
   </div>
 
   <!-- 2. KLICK-ANLEITUNG -->
@@ -345,7 +393,7 @@ nav{position:sticky;top:0;z-index:200;background:rgba(12,10,8,.95);backdrop-filt
   <div class="section" id="wegweiser">
     <div class="sec-num">05</div>
     <h2>Wegweiser zum Zimmer</h2>
-    <div class="addressed"><strong>Direkt an Dario, Tanja und Nicole:</strong> Das hier ist kein Housekeeping-Thema, aber da ihr heute alle im Raum seid, kurz mitgezeigt — Rückmeldung dazu ist ausdrücklich erwünscht, gerade von der Rezeption.</div>
+    <div class="addressed"><strong>Direkt an Dario, Tanja und Nicole:</strong> Das hier ist kein Housekeeping-Thema, aber da ihr heute alle im Raum seid, kurz mitgezeigt — Rückmeldung dazu ist ausdrücklich erwünscht, gerade von der Rezeption. <strong>Ralf:</strong> für dich eher zum Kenntnisnehmen als zum Mitentscheiden — technisch hängt der Wegweiser am selben Baukasten wie der Rest.</div>
     <p><code style="font-family:'Spline Sans Mono',monospace;color:var(--gold)">wegweiser.html</code> führt Gäste nach dem Check-in in 15 Sprachen vom Empfang zum Zimmer — gedacht zum Öffnen per <strong>QR-Code</strong> (z. B. auf der Zimmerkarte oder an der Rezeption), bereits verlinkt in <code style="font-family:'Spline Sans Mono',monospace;color:var(--gold)">manager.html</code> und im Gästeportal (<code style="font-family:'Spline Sans Mono',monospace;color:var(--gold)">index.html</code>).</p>
 
     <div class="shot">
@@ -383,6 +431,8 @@ nav{position:sticky;top:0;z-index:200;background:rgba(12,10,8,.95);backdrop-filt
         <div class="doc-desc">Das Werkzeug selbst — Zimmer, Foto-Scan, Personal, Verlauf</div>
       </a>
     </div>
+
+    <p style="margin-top:20px">Alles hier liegt bereit, falls einer von euch nach dem Termin noch einmal nachlesen will — Nicole, Tanja, Dario, Ralf.</p>
   </div>
 
 </div><!-- /wrap -->
