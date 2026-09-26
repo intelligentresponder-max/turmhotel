@@ -166,26 +166,89 @@ Firebase-Projekte lassen sich nicht einfach übertragen — es braucht ein
    dann **Realtime Database → Regeln** obiges JSON eintragen und
    veröffentlichen.
 
-   **Dazu nötige Code-Änderung** (vorbereitet, noch **nicht** in die Live-Datei
-   eingespielt — braucht den Firebase **Web API Key** aus der neuen Konsole,
-   Project Settings → General → „Web API Key", und eure Freigabe):
-   - Vor jedem der 7 Firebase-Zugriffe in `housekeeping/housekeeping-v3.html`
-     (`saveState`, `saveStaffData`, History-Speichern/-Laden, `syncFromCloud`)
-     einmalig anonym anmelden über die REST-Identity-Toolkit-API
-     (`identitytoolkit.googleapis.com/v1/accounts:signUp?key=WEB_API_KEY`),
-     das zurückgegebene `idToken` cachen und an jede `.json`-URL als
-     `?auth=TOKEN` (bzw. `&auth=TOKEN`) anhängen.
-   - `idToken` läuft nach 1 h ab — braucht einen stillen Refresh über das
-     mitgelieferte `refreshToken` (`securetoken.googleapis.com/v1/token`),
-     sonst reißt der Sync nach einer Stunde geräuschlos wieder ab (derselbe
-     Fehlertyp wie F12/F13).
-   - Kein SDK nötig, bleibt bei den bestehenden reinen `fetch()`-Aufrufen —
-     nur ein kleiner `dbUrl(pfad)`-Helfer, der den Token anhängt, plus die
-     Sign-in/Refresh-Funktion.
-   - Aufwand: klein (kein Architekturwechsel), aber echte Code-Änderung mit
-     Syntaxcheck-Pflicht und Test auf zwei Geräten — **nicht** im selben Zug
-     wie der reine Kontenumzug, sondern als eigener, separat committeter
-     Schritt, sobald der Web API Key vorliegt.
+   **Dazu nötige Code-Änderung — fertig geschrieben und geprüft, noch NICHT
+   in die Live-Datei eingespielt.** Fehlt nur noch der Firebase **Web API
+   Key** aus der neuen Konsole (Project Settings → General → „Web API Key"),
+   sobald das neue Projekt existiert. Kein SDK, bleibt bei reinen
+   `fetch()`-Aufrufen. Mit einem simulierten `fetch()` durchgetestet
+   (26.09.2026): ohne Key → unverändertes Verhalten von heute (keine
+   Anmeldung, Anfragen laufen wie bisher); mit Key → erster Aufruf meldet
+   sich einmalig an, spätere Aufrufe nutzen den gecachten Token, ein
+   abgelaufener Token wird über `refresh_token` erneuert statt neu
+   anzumelden, und ein bestehendes `?shallow=true` wird korrekt mit `&auth=`
+   statt einem zweiten `?` verbunden.
+
+   Direkt nach der Zeile mit `FIREBASE_URL` einfügen:
+   ```js
+   const FIREBASE_API_KEY = ''; // Web API Key aus der neuen Firebase-Konsole eintragen, sobald vorhanden
+   var fbAuth = { idToken: null, refreshToken: null, expiresAt: 0 };
+
+   async function fbEnsureAuth() {
+     if (!FIREBASE_API_KEY) return null; // kein Key hinterlegt -> Verhalten wie bisher, ohne Anmeldung
+     if (fbAuth.idToken && Date.now() < fbAuth.expiresAt) return fbAuth.idToken;
+     try {
+       if (fbAuth.refreshToken) {
+         const r = await fetch('https://securetoken.googleapis.com/v1/token?key=' + FIREBASE_API_KEY, {
+           method: 'POST',
+           headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+           body: 'grant_type=refresh_token&refresh_token=' + fbAuth.refreshToken
+         });
+         const d = await r.json();
+         if (d.id_token) {
+           fbAuth = { idToken: d.id_token, refreshToken: d.refresh_token, expiresAt: Date.now() + (+d.expires_in - 60) * 1000 };
+           return fbAuth.idToken;
+         }
+       }
+       const r2 = await fetch('https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=' + FIREBASE_API_KEY, {
+         method: 'POST',
+         headers: { 'Content-Type': 'application/json' },
+         body: JSON.stringify({ returnSecureToken: true })
+       });
+       const d2 = await r2.json();
+       if (d2.idToken) {
+         fbAuth = { idToken: d2.idToken, refreshToken: d2.refreshToken, expiresAt: Date.now() + (+d2.expiresIn - 60) * 1000 };
+         return fbAuth.idToken;
+       }
+     } catch (e) { console.error('Firebase-Anmeldung fehlgeschlagen', e); }
+     return null;
+   }
+
+   async function dbUrl(pfad) {
+     const token = await fbEnsureAuth();
+     if (!token) return FIREBASE_URL + pfad;
+     return FIREBASE_URL + pfad + (pfad.indexOf('?') >= 0 ? '&' : '?') + 'auth=' + token;
+   }
+   ```
+
+   Dann an den 7 bestehenden Aufrufstellen jeweils `FIREBASE_URL + '/…json'`
+   durch die passierende `dbUrl(...)`-Variante ersetzen. Drei der Funktionen
+   (`saveState`, `saveStaffData`, `archiveBeforeReset`) sind **nicht** `async`
+   (Fire-and-forget mit `.then`/`.catch`) — dort `dbUrl(...).then(url => …)`
+   voranstellen statt `await`. Die anderen vier (`ladeVerlaufListe`,
+   `verlaufBerichtAnzeigen`, die beiden Aufrufe in `syncFromCloud`) sind
+   bereits `async` — dort reicht `await dbUrl(...)` direkt in `fetch(...)`.
+   Beispiel `saveState` (Zeile 929 im aktuellen Stand):
+   ```js
+   // vorher:
+   fetch(FIREBASE_URL + '/state.json', {method: singleRoom ? 'PATCH' : 'PUT', headers:{'Content-Type':'application/json'}, body: JSON.stringify(body)})
+     .then(checkFirebaseResponse).then(function(){ setSyncStatus(true); })
+     .catch(function(e){ console.warn('Sync state fehlgeschlagen', e); setSyncStatus(false); });
+   // nachher:
+   dbUrl('/state.json').then(function(url){
+     return fetch(url, {method: singleRoom ? 'PATCH' : 'PUT', headers:{'Content-Type':'application/json'}, body: JSON.stringify(body)});
+   })
+     .then(checkFirebaseResponse).then(function(){ setSyncStatus(true); })
+     .catch(function(e){ console.warn('Sync state fehlgeschlagen', e); setSyncStatus(false); });
+   ```
+   Beispiel `syncFromCloud` (bereits `async`, Zeile 2888/2889):
+   ```js
+   const stateRes = await fetch(await dbUrl('/state.json'));
+   const staffRes = await fetch(await dbUrl('/staff.json'));
+   ```
+   Aufwand beim Einspielen: mechanisch, ca. 10 Minuten, danach Pflicht-
+   Syntaxcheck und Test auf zwei Geräten (Schritt 7) — **nicht** im selben
+   Zug wie der reine Kontenumzug, sondern als eigener, separat committeter
+   Schritt, sobald der Web API Key vorliegt.
 6. **Code anpassen** — dank der Aufräumarbeit gibt es nur noch **eine**
    Stelle für die URL selbst: in `housekeeping/housekeeping-v3.html` die Zeile
    ```js
