@@ -237,6 +237,7 @@ dieser Runde — folgendes bleibt aus der alten Roadmap liegen:
 | F15 | v3.12-Patch wurde zunächst gegen den Stand vor v3.10/v3.11 vorbereitet | Anker hätten bei blindem Einspielen nicht mehr gepasst | Regel: vor jedem Patch `git pull`, alle Anker vor dem Einspielen per `grep -c` auf genau 1 Treffer prüfen |
 | F16 | Ein Testfoto der Alpha-Liste enthielt zusätzlich die Safe-/Tür-PIN-Liste (zweites Blatt im Bild) | PINs wären im Klartext auf dem Handy/als Export gelandet | Hinweis direkt im Tool ergänzt („Nur die Gästeliste fotografieren — keine Schlüssel-/PIN-Listen im Bild"); betroffenes Foto löschen |
 | F17 | Screenshot-Check der Vorführung (26.09.): `npm i playwright@latest` in der Sandbox zieht eine neuere Playwright-Version als die vorinstallierten Browser (`/opt/pw-browsers/chromium-1194`) | `browserType.launch: Executable doesn't exist` — kein Screenshot, Zeitverlust | Kein `playwright install`; stattdessen `chromium.launch({executablePath:'/opt/pw-browsers/chromium-1194/chrome-linux/chrome'})`. Neue Seitenteile immer bei 390px und 1200px prüfen (`scrollWidth` = Viewport-Breite → kein seitliches Scrollen) |
+| F18 | `links.html` (25.09.) verlinkte eine private Zweitfassung der Vorführung außerhalb dieses Repos inkl. Hinweis auf deren Zweck | Private Inhalte wären für jeden im Haus sichtbar gewesen, der die Linkliste öffnet | Zeile entfernt (26.09.). Regel: in diesem Repo nur Links auf Seiten des Hotels bzw. dieses Repos; vor jedem Push `grep -rn "github.io/" *.html` und jede fremde Adresse bewusst prüfen. |
 
 ---
 
