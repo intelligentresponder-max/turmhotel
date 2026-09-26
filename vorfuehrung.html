@@ -110,6 +110,29 @@ nav{position:sticky;top:0;z-index:200;background:rgba(12,10,8,.95);backdrop-filt
 .pms-table tr.quiet td:nth-child(4){color:#4ecb82;font-weight:600;}
 .pms-source{font-size:.78rem;color:var(--muted);margin-top:10px;}
 
+.done-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:10px;margin:20px 0;}
+.done-item{display:flex;gap:12px;align-items:flex-start;background:rgba(42,122,75,.06);border:1px solid rgba(42,122,75,.25);border-radius:var(--radius);padding:14px 16px;text-decoration:none;color:inherit;transition:.15s;}
+a.done-item:hover{border-color:#4ecb82;background:rgba(42,122,75,.12);}
+.done-check{color:#4ecb82;font-weight:700;font-size:1rem;line-height:1.4;flex-shrink:0;}
+.done-item.open{background:rgba(230,126,34,.06);border-color:rgba(230,126,34,.3);}
+.done-item.open .done-check{color:var(--warn);}
+.done-text{font-size:.85rem;color:#cabfb0;line-height:1.6;}
+.done-text strong{display:block;color:var(--paper);font-size:.9rem;margin-bottom:2px;}
+.group-label{font-family:'Spline Sans Mono',monospace;font-size:.65rem;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin:26px 0 4px;}
+.future-card{background:linear-gradient(175deg,rgba(91,179,232,.08),rgba(91,179,232,.01) 70%);border:1px solid rgba(91,179,232,.35);border-radius:var(--radius);padding:24px 24px 20px;margin:22px 0;}
+.future-card h3{font-family:'Fraunces',serif;font-size:1.25rem;font-weight:500;color:#8fd0f5;margin-bottom:6px;}
+.future-tag{display:inline-block;font-family:'Spline Sans Mono',monospace;font-size:.62rem;letter-spacing:.12em;text-transform:uppercase;padding:3px 8px;border-radius:3px;margin-bottom:14px;}
+.future-tag.soon{background:rgba(42,122,75,.2);color:#4ecb82;}
+.future-tag.later{background:rgba(201,162,39,.15);color:var(--gold-bright);}
+.future-card p{color:#cabfb0;font-size:.92rem;line-height:1.8;margin-bottom:12px;}
+.future-card ul{padding-left:20px;color:#cabfb0;font-size:.88rem;line-height:1.8;margin-bottom:12px;}
+.future-card ul strong{color:var(--paper);}
+.pms-table.wrap-cells{white-space:normal;font-family:'Spline Sans',sans-serif;font-size:.82rem;}
+.pms-table.wrap-cells td{vertical-align:top;line-height:1.55;}
+.rate-good{color:#4ecb82 !important;}
+.rate-mid{color:var(--gold-bright) !important;}
+.rate-bad{color:#ff6b4a !important;}
+
 @media(max-width:600px){.step{flex-direction:column;gap:8px;}.step-num{font-size:1.1rem;}}
 </style>
 </head>
@@ -127,8 +150,8 @@ nav{position:sticky;top:0;z-index:200;background:rgba(12,10,8,.95);backdrop-filt
     <h1>Vorführung <em>heute</em></h1>
     <p>Nicole, Tanja, Dario, Ralf — diese Seite ist die Grundlage für unsere heutige
       Vorführung: was seit der letzten Runde neu ist, wie der Ablauf mit der echten
-      Alpha-Liste heute Schritt für Schritt aussieht, und wo die passenden Unterlagen
-      für euch liegen.</p>
+      Alpha-Liste heute Schritt für Schritt aussieht, was insgesamt schon erledigt ist,
+      wohin es als Nächstes gehen kann — und wo die passenden Unterlagen für euch liegen.</p>
     <div class="hero-links">
       <a class="tool-link primary" href="housekeeping/housekeeping-v3.html">→ Housekeeping Manager öffnen</a>
       <a class="tool-link" href="Gebrauchsanweisung-Housekeeping-App.pdf">📄 Gebrauchsanweisung (PDF)</a>
@@ -237,6 +260,8 @@ nav{position:sticky;top:0;z-index:200;background:rgba(12,10,8,.95);backdrop-filt
       <li><a href="#getestet">Mit der echten Liste von heute getestet</a></li>
       <li><a href="#verfuegbarkeit">Verfügbarkeit diese Woche (Suite8)</a></li>
       <li><a href="#wegweiser">Wegweiser zum Zimmer (an Dario, Tanja, Nicole)</a></li>
+      <li><a href="#erledigt">Was schon erledigt ist — Gesamtüberblick</a></li>
+      <li><a href="#zukunft">Blick nach vorn: Mehrsprachigkeit &amp; Buchungsplattformen</a></li>
       <li><a href="#unterlagen">Unterlagen</a></li>
     </ol>
   </div>
@@ -408,9 +433,185 @@ nav{position:sticky;top:0;z-index:200;background:rgba(12,10,8,.95);backdrop-filt
     </div>
   </div>
 
-  <!-- 7. UNTERLAGEN -->
-  <div class="section" id="unterlagen">
+  <!-- 7. ERLEDIGT -->
+  <div class="section" id="erledigt">
     <div class="sec-num">06</div>
+    <h2>Was schon erledigt ist — Gesamtüberblick</h2>
+    <p>Alles, was bis heute gebaut, getestet und live ist — dieselbe Liste wie auf der
+      <a href="links.html" style="color:var(--gold)">Linkübersicht</a>, hier zum Durchklicken.
+      Jeder Punkt öffnet die jeweilige Seite.</p>
+
+    <div class="group-label">Housekeeping</div>
+    <div class="done-grid">
+      <a class="done-item" href="housekeeping/housekeeping-v3.html">
+        <div class="done-check">✓</div>
+        <div class="done-text"><strong>Housekeeping Manager v3.12</strong>Gästeliste per Foto oder PDF, automatische Zimmerverteilung, „Meine Zimmer" pro Kraft, Übergabebericht, Tagesarchiv. Kurzlink <code style="color:var(--gold)">bit.ly/turm7</code>.</div>
+      </a>
+      <a class="done-item" href="housekeeping/housekeeping-v3.html">
+        <div class="done-check">✓</div>
+        <div class="done-text"><strong>Foto-Scan zusammengeführt</strong>Die alte Alpha-Scan-Seite ist seit 25.09. abgeschaltet; <code style="color:var(--gold)">bit.ly/turmhsk</code> leitet automatisch weiter — kein altes Lesezeichen läuft ins Leere.</div>
+      </a>
+      <a class="done-item" href="housekeeping/housekeeping-anleitung.html">
+        <div class="done-check">✓</div>
+        <div class="done-text"><strong>Kurzanleitung fürs Team</strong>Eigene Seite, direkt am Handy lesbar.</div>
+      </a>
+      <a class="done-item" href="Gebrauchsanweisung-Housekeeping-App.pdf">
+        <div class="done-check">✓</div>
+        <div class="done-text"><strong>Gebrauchsanweisung (PDF)</strong>Zum Ausdrucken, in fünf Sprachen: DE / EN / HR / HU / AF.</div>
+      </a>
+    </div>
+
+    <div class="group-label">Verwaltung &amp; Handbuch</div>
+    <div class="done-grid">
+      <a class="done-item" href="manager.html">
+        <div class="done-check">✓</div>
+        <div class="done-text"><strong>Manager Platform</strong>Ein Einstiegspunkt mit Kacheln zu allen Werkzeugen.</div>
+      </a>
+      <a class="done-item" href="facility.html">
+        <div class="done-check">✓</div>
+        <div class="done-text"><strong>Facility Manager</strong>Haustechnik &amp; Instandhaltung.</div>
+      </a>
+      <a class="done-item" href="handbuch.html">
+        <div class="done-check">✓</div>
+        <div class="done-text"><strong>Handbuch</strong>Ausführlich, DE / EN / HU, mit Kurzfassung für Team und Direktion.</div>
+      </a>
+      <a class="done-item" href="onboarding-checkliste.html">
+        <div class="done-check">✓</div>
+        <div class="done-text"><strong>Onboarding-Checkliste</strong>Für Firmen- und Gruppenbuchungen.</div>
+      </a>
+    </div>
+
+    <div class="group-label">Gäste</div>
+    <div class="done-grid">
+      <a class="done-item" href="index.html">
+        <div class="done-check">✓</div>
+        <div class="done-text"><strong>Gästeportal mit FAQ-Widget</strong>Geprüfte Antworten statt KI-Chatbot. Die einzige Seite, die für Suchmaschinen offen ist.</div>
+      </a>
+      <a class="done-item" href="wegweiser.html">
+        <div class="done-check">✓</div>
+        <div class="done-text"><strong>Wegweiser zum Zimmer</strong>15 Sprachen, per QR-Code. Live, inhaltlich noch Entwurf (siehe Abschnitt 05).</div>
+      </a>
+    </div>
+
+    <div class="group-label">Betriebssicherheit &amp; Datenschutz</div>
+    <div class="done-grid">
+      <div class="done-item">
+        <div class="done-check">✓</div>
+        <div class="done-text"><strong>Nicht öffentlich gelistet</strong>Alle internen Seiten sind <code style="color:var(--gold)">noindex</code>, keine Tracker, keine Zugangsdaten im Code.</div>
+      </div>
+      <div class="done-item">
+        <div class="done-check">✓</div>
+        <div class="done-text"><strong>Hängt nicht an einer Person</strong>Anleitung für kleine Änderungen ohne Entwickler, Plan für den Umzug auf hoteleigene Konten, vollständige Übergabe-Doku.</div>
+      </div>
+      <div class="done-item">
+        <div class="done-check">✓</div>
+        <div class="done-text"><strong>Fehlerprotokoll</strong>Jeder gefundene Fehler ist mit Ursache und Gegenmaßnahme dokumentiert — damit er nicht zweimal passiert.</div>
+      </div>
+      <a class="done-item" href="links.html">
+        <div class="done-check">✓</div>
+        <div class="done-text"><strong>Linkübersicht</strong>Alle Seiten auf einen Blick, inklusive abgeschalteter Altseiten.</div>
+      </a>
+    </div>
+
+    <div class="group-label">Ehrlich: noch offen</div>
+    <div class="done-grid">
+      <div class="done-item open">
+        <div class="done-check">○</div>
+        <div class="done-text"><strong>Sync zwischen den Handys</strong>Die Firebase-Testregeln sind abgelaufen. Die App zeigt das jetzt mit einem roten Banner an, statt still Daten zu verlieren. Die neuen Regeln kommen mit dem Umzug auf hoteleigene Konten.</div>
+      </div>
+      <div class="done-item open">
+        <div class="done-check">○</div>
+        <div class="done-text"><strong>Wegweiser final</strong>Wartet auf euer Feedback von der Rezeption.</div>
+      </div>
+      <div class="done-item open">
+        <div class="done-check">○</div>
+        <div class="done-text"><strong>Offizielle Hotel-Domain</strong>Aktuell läuft alles auf der Entwicklungsseite. Der Umzug ist vorbereitet, braucht aber eure Freigabe.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 8. ZUKUNFT -->
+  <div class="section" id="zukunft">
+    <div class="sec-num">07</div>
+    <h2>Blick nach vorn</h2>
+    <p>Das Fundament steht: ein Baukasten aus schlanken Seiten, der ohne eigenen Server
+      auskommt und sich Stück für Stück erweitern lässt. Zwei Richtungen liegen auf der Hand.</p>
+
+    <div class="future-card">
+      <h3>1 · Mehrsprachiger Ausbau</h3>
+      <span class="future-tag soon">Zeitnah möglich</span>
+      <p>Das ist kein Neuland. Der Wegweiser läuft schon in 15 Sprachen, die Gebrauchsanweisung
+        in fünf und das Handbuch in drei. Die Sprachumschaltung ist also schon gebaut und
+        erprobt. Wir müssen sie nur auf die übrigen Seiten übertragen.</p>
+      <ul>
+        <li><strong>Gästeportal &amp; FAQ</strong> in den Sprachen des Wegweisers — damit Gäste aus
+          aller Welt Late-Check-in, Frühstück oder Parken selbst nachlesen können, ohne an der Rezeption
+          zu fragen.</li>
+        <li><strong>Housekeeping-App in den Teamsprachen</strong> (Kroatisch, Ungarisch, Afrikaans —
+          wie schon im PDF), damit jede Kraft die Oberfläche in ihrer Sprache bedienen kann.</li>
+        <li><strong>Qualität vor Tempo:</strong> Jede Übersetzung wird von Muttersprachler:innen aus dem
+          Team oder von der Rezeption gegengelesen. Ungeprüfte Maschinenübersetzungen gehen nicht live.</li>
+      </ul>
+      <p>Aufwand: Tage, nicht Monate. Wir fangen mit Englisch fürs Gästeportal an, dann folgen die
+        Sprachen, die bei uns am häufigsten gebraucht werden.</p>
+    </div>
+
+    <div class="future-card">
+      <h3>2 · Zusammenspiel mit Buchungsplattformen</h3>
+      <span class="future-tag later">Nächster Ausbauschritt — nach Abstimmung</span>
+      <p>Die Verfügbarkeitstabelle oben zeigt es: Ruhige Tage wie <strong>So 27.09. mit 65,75 %
+        Belegung</strong> sind schon Tage vorher erkennbar. Die Idee dahinter: freie Zimmer gerade
+        zu diesen Randzeiten gezielt und preiswert anbieten, aber nur über seriöse, etablierte
+        Plattformen und nie am Haus vorbei.</p>
+      <div class="steps">
+        <div class="step">
+          <div class="step-num">1</div>
+          <div><div class="step-title">Erkennen</div>
+          <div class="step-desc">Das Tool erkennt aus der Suite8-Verfügbarkeit Tage mit niedriger Auslastung. Die Daten dafür nutzen wir heute schon.</div></div>
+        </div>
+        <div class="step">
+          <div class="step-num">2</div>
+          <div><div class="step-title">Vorschlagen — Mensch entscheidet</div>
+          <div class="step-desc">Das Tool schlägt nur vor, z. B. „Sonntag: 25 freie Zimmer, Randzeiten-Rate prüfen". <strong>Jeden Preis gebt ihr frei.</strong> Das Tool ändert nie selbst einen Preis.</div></div>
+        </div>
+        <div class="step">
+          <div class="step-num">3</div>
+          <div><div class="step-title">Veröffentlichen</div>
+          <div class="step-desc">Nach der Freigabe geht die Rate über den Channel Manager bzw. die Plattformen, mit denen das Haus <strong>bereits Verträge hat</strong>, hinaus. Es kommen keine neuen, unbekannten Portale dazu.</div></div>
+        </div>
+      </div>
+
+      <p style="margin-top:18px">Die Alternativen haben wir doppelt geprüft, jeweils auf Nutzen, Sicherheit und Aufwand:</p>
+      <div class="table-wrap">
+        <table class="pms-table wrap-cells">
+          <tr><th>Weg</th><th>Nutzen</th><th>Sicherheit / Seriosität</th><th>Einschätzung</th></tr>
+          <tr><td>Direktbuchung über die eigene Hotel-Website</td><td>Keine Provision, Gast bleibt direkt beim Haus</td><td>Volle Kontrolle</td><td class="rate-good">Erste Wahl</td></tr>
+          <tr><td>Etablierte Buchungsportale über den bestehenden Channel Manager</td><td>Große Reichweite, gerade für kurzfristige Buchungen</td><td>Vertraglich geregelt, bekannte Partner</td><td class="rate-good">Empfohlen</td></tr>
+          <tr><td>Last-Minute-Angebote bei großen, bekannten Anbietern</td><td>Genau für Randzeiten gedacht</td><td>Nur mit Vertrag; Provision und Markenwirkung vorher prüfen</td><td class="rate-mid">Prüfen</td></tr>
+          <tr><td>Unbekannte Rabatt- oder Weiterverkaufs-Portale</td><td>Kurzfristig Umsatz</td><td>Preisverfall, Imageschaden, unklare Zahlungswege</td><td class="rate-bad">Nicht empfohlen</td></tr>
+        </table>
+      </div>
+
+      <div class="warn"><strong>Ralf — der technische Knackpunkt:</strong> Die Zugangsdaten zu den
+        Buchungsplattformen dürfen <em>niemals</em> in einer öffentlichen Webseite stehen. Solange
+        alles als statische Seite läuft, bleibt es deshalb bei Stufe 1 und 2 (Erkennen und
+        Vorschlagen). Für Stufe 3 braucht es entweder die offizielle Schnittstelle des
+        Channel Managers oder einen kleinen, abgesicherten Server-Baustein. Das entscheiden wir
+        gemeinsam, nicht im Alleingang.</div>
+      <div class="tip"><strong>Rechtlich im Rücken:</strong> Preisparitätsklauseln der Buchungsportale
+        sind in Deutschland seit dem BGH-Beschluss von 2021 nicht mehr durchsetzbar. Das Haus
+        darf direkt also günstigere Preise anbieten als auf den Portalen. Deshalb steht die
+        Direktbuchung in der Tabelle ganz oben.</div>
+    </div>
+
+    <p>Beides passt zur bisherigen Linie: Das Tool schlägt vor, der Mensch entscheidet. Jeder
+      Schritt wird dokumentiert, und neue Bausteine kommen erst live, wenn sie mit echten Daten
+      getestet sind.</p>
+  </div>
+
+  <!-- 9. UNTERLAGEN -->
+  <div class="section" id="unterlagen">
+    <div class="sec-num">08</div>
     <h2>Unterlagen</h2>
     <p>Zum Nachlesen und Weitergeben:</p>
 
@@ -429,6 +630,11 @@ nav{position:sticky;top:0;z-index:200;background:rgba(12,10,8,.95);backdrop-filt
         <div class="doc-icon">🏠</div>
         <div class="doc-name">Housekeeping Manager v3</div>
         <div class="doc-desc">Das Werkzeug selbst — Zimmer, Foto-Scan, Personal, Verlauf</div>
+      </a>
+      <a class="doc-card" href="links.html">
+        <div class="doc-icon">🔗</div>
+        <div class="doc-name">Alle Links</div>
+        <div class="doc-desc">Komplette Übersicht aller Seiten, auch der abgeschalteten</div>
       </a>
     </div>
 

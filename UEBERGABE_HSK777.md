@@ -236,6 +236,7 @@ dieser Runde — folgendes bleibt aus der alten Roadmap liegen:
 | F14 | Erste Zuschnitt-Version des Foto-Scan-Uploads (v3.12) hätte Kopfzeile und Zimmerspalte abgeschnitten | Schwelle trennte bei formatfüllenden Fotos nur Randschatten vom Papier, nicht den echten Blattrand | `scanPapierRahmen` schneidet nur noch bei echtem dunklem Hintergrund zu (Mittelwert dunkler Bereich < 80, Abstand hell/dunkel > 90) |
 | F15 | v3.12-Patch wurde zunächst gegen den Stand vor v3.10/v3.11 vorbereitet | Anker hätten bei blindem Einspielen nicht mehr gepasst | Regel: vor jedem Patch `git pull`, alle Anker vor dem Einspielen per `grep -c` auf genau 1 Treffer prüfen |
 | F16 | Ein Testfoto der Alpha-Liste enthielt zusätzlich die Safe-/Tür-PIN-Liste (zweites Blatt im Bild) | PINs wären im Klartext auf dem Handy/als Export gelandet | Hinweis direkt im Tool ergänzt („Nur die Gästeliste fotografieren — keine Schlüssel-/PIN-Listen im Bild"); betroffenes Foto löschen |
+| F17 | Screenshot-Check der Vorführung (26.09.): `npm i playwright@latest` in der Sandbox zieht eine neuere Playwright-Version als die vorinstallierten Browser (`/opt/pw-browsers/chromium-1194`) | `browserType.launch: Executable doesn't exist` — kein Screenshot, Zeitverlust | Kein `playwright install`; stattdessen `chromium.launch({executablePath:'/opt/pw-browsers/chromium-1194/chrome-linux/chrome'})`. Neue Seitenteile immer bei 390px und 1200px prüfen (`scrollWidth` = Viewport-Breite → kein seitliches Scrollen) |
 
 ---
 
