@@ -317,6 +317,20 @@ nav{
 .btn-add{background:var(--gold);color:var(--ink);font-weight:600;width:100%;}
 .btn-add:hover{background:var(--gold-bright);}
 
+/* ── SPÄTE ANREISEN (anonymisierte Übergabe aus nachtdienst.html) ── */
+.late-arrivals-panel{max-width:640px;margin-bottom:28px;padding:16px 18px;background:var(--ink-2);border:1px solid var(--line);border-radius:var(--radius);}
+.late-arrivals-hint{font-size:.78rem;color:var(--muted);margin-bottom:10px;line-height:1.6;}
+.late-arrivals-hint code{color:var(--gold);font-family:'Spline Sans Mono',monospace;}
+.late-arrivals-chips{display:flex;flex-wrap:wrap;gap:8px;}
+.late-arrivals-chip{
+  font-family:'Spline Sans Mono',monospace;font-size:.8rem;color:var(--checkout-col);
+  background:var(--checkout-bg);border:1px solid rgba(230,126,34,.3);border-radius:var(--radius);
+  padding:5px 10px;display:inline-flex;align-items:baseline;gap:6px;
+}
+.late-arrivals-chip span{font-size:.66rem;color:var(--muted);}
+.late-arrivals-empty{font-size:.8rem;color:var(--muted);font-style:italic;}
+.late-arrivals-stamp{font-family:'Spline Sans Mono',monospace;font-size:.66rem;color:var(--muted);margin-top:8px;}
+
 /* ── IMPORT TAB ── */
 .import-panel{max-width:640px;}
 .import-zone{
@@ -587,6 +601,19 @@ nav{
 
 <!-- ══ TAB: GÄSTELISTE ══ -->
 <div id="tab-gaeste" style="display:none">
+
+  <!-- Anonymisierte Übergabe aus der Nachtdienst-Liste (nachtdienst.html):
+       nur Zimmer + Anreisedatum, nie Name, nie PIN. Siehe README/UEBERGABE. -->
+  <div class="late-arrivals-panel">
+    <div class="building-label" style="margin-top:4px;margin-bottom:6px">Späte Anreisen heute</div>
+    <div class="late-arrivals-hint">
+      Zimmer, deren Gast laut <code>nachtdienst.html</code> noch nicht eingecheckt ist — nur Zimmer &amp; Anreisedatum, keine Namen, keine PINs.
+      <button type="button" class="filter-btn" style="margin-left:8px" onclick="loadSpaeteAnreisen()">🔄 Aktualisieren</button>
+    </div>
+    <div id="late-arrivals-body"><div class="late-arrivals-empty">Lädt …</div></div>
+    <div class="late-arrivals-stamp" id="late-arrivals-stamp"></div>
+  </div>
+
   <div class="import-panel">
     <div class="building-label" style="margin-top:4px">Gästeliste importieren</div>
 
@@ -935,6 +962,45 @@ function saveStaffData(s) {
   fetch(FIREBASE_URL + '/staff.json', {method:'PUT', headers:{'Content-Type':'application/json'}, body: JSON.stringify(s)})
     .then(checkFirebaseResponse).then(function(){ setSyncStatus(true); })
     .catch(function(e){ console.warn('Sync staff fehlgeschlagen', e); setSyncStatus(false); });
+}
+
+// Anonymisierte Übergabe aus nachtdienst.html: liest nur { stand, zimmer:[{zimmer,anreise}] }
+// von genau diesem einen Pfad. Enthaelt bewusst nie Namen oder PINs -- die
+// Nachtdienst-Liste schreibt nur diese beiden Felder (siehe dort, F16).
+function renderSpaeteAnreisen(data){
+  var body = document.getElementById('late-arrivals-body');
+  var stampEl = document.getElementById('late-arrivals-stamp');
+  var zimmer = (data && Array.isArray(data.zimmer)) ? data.zimmer : [];
+  if (zimmer.length === 0){
+    body.innerHTML = '<div class="late-arrivals-empty">Keine offenen späten Anreisen übergeben — entweder sind alle schon da, oder es wurde noch nichts aus der Nachtdienst-Liste übergeben.</div>';
+    stampEl.textContent = '';
+    return;
+  }
+  var chips = zimmer.map(function(z){
+    var zi = String(z.zimmer == null ? '' : z.zimmer).replace(/[<>&]/g, '');
+    var an = String(z.anreise == null ? '' : z.anreise).replace(/[<>&]/g, '');
+    return '<div class="late-arrivals-chip">Zi. ' + zi + (an ? '<span>' + an + '</span>' : '') + '</div>';
+  }).join('');
+  body.innerHTML = '<div class="late-arrivals-chips">' + chips + '</div>';
+  if (data.stand){
+    var d = new Date(data.stand);
+    stampEl.textContent = 'Stand: ' + (isNaN(d) ? data.stand : d.toLocaleString('de-DE'));
+  } else {
+    stampEl.textContent = '';
+  }
+}
+function loadSpaeteAnreisen(){
+  var body = document.getElementById('late-arrivals-body');
+  if (body) body.innerHTML = '<div class="late-arrivals-empty">Lädt …</div>';
+  fetch(FIREBASE_URL + '/spaeteAnreisen.json')
+    .then(checkFirebaseResponse)
+    .then(function(res){ return res.json(); })
+    .then(function(data){ setSyncStatus(true); renderSpaeteAnreisen(data || {}); })
+    .catch(function(e){
+      console.warn('Späte Anreisen laden fehlgeschlagen', e);
+      setSyncStatus(false);
+      if (body) body.innerHTML = '<div class="late-arrivals-empty">Konnte nicht geladen werden (kein Sync gerade möglich).</div>';
+    });
 }
 
 let state = loadState();
@@ -1365,6 +1431,7 @@ function showTab(tab) {
   });
   if (tab === 'meine') renderMine();
   if (tab === 'uebersicht') renderOverview();
+  if (tab === 'gaeste') loadSpaeteAnreisen();
   if (tab === 'personal') renderPersonal();
   if (tab === 'verlauf') ladeVerlaufListe();
 }

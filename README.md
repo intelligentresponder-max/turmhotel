@@ -38,16 +38,32 @@ inkl. Schlüsselsafe-Tabelle) → Texterkennung im Browser (Tesseract.js, wie im
 Housekeeping Manager) → durchsuchbare Gästeliste plus automatisch mit der
 Safe-/PIN-Tabelle abgeglichene Übersicht „Nachteingang heute" für Gäste mit
 Status „Anreise erwartet".
-- **Bewusst ohne Speicherung:** Tür-PIN und Safe-PINs sind Zugangscodes zum
-  Gebäude bzw. zu Zimmerschlüsseln. Die Seite schreibt nichts in
-  `localStorage`, nichts in Firebase — alles existiert nur im Speicher des
-  offenen Tabs und ist nach Neuladen/Schließen weg. Hintergrund: F16 (siehe
+- **Bewusst ohne Speicherung:** Tür-PIN, Safe-PINs und Gästenamen schreibt
+  die Seite nirgends in `localStorage` oder Firebase — alles existiert nur
+  im Speicher des offenen Tabs und ist nach Neuladen/Schließen weg (siehe
+  aber die eine, bewusste Ausnahme unten). PINs werden zusätzlich erst nach
+  Antippen ("🔒 PINs anzeigen") im Klartext gezeigt. Hintergrund: F16 (siehe
   `UEBERGABE_HSK777.md`) hatte schon einmal gezeigt, dass genau diese
   PIN-Liste versehentlich mitgescannt und dauerhaft gespeichert werden kann,
   wenn man nicht bewusst dagegen entwirft.
 - Texterkennung liefert nicht immer fehlerfreie Ergebnisse — Namen, Zimmer
   und PINs im „Nachteingang heute"-Bereich sind direkt antippbar/korrigierbar,
   bevor sie an einen Gast weitergegeben werden.
+- Die Schlüsselsafe-Tabelle auf Seite 2 ist optional — wer sie nicht
+  fotografieren möchte, bekommt einfach nur die Gästeliste ohne den
+  „Nachteingang heute"-Abschnitt.
+- **Einzige Ausnahme von „nichts wird gespeichert":** Ein bewusster Klick auf
+  „📤 Anonymisiert übergeben" schreibt eine **anonymisierte** Liste — nur
+  Zimmernummer und Anreisedatum, **nie** Name, **nie** PIN — in dieselbe
+  Firebase-Datenbank, die der Housekeeping Manager ohnehin täglich nutzt
+  (`/spaeteAnreisen.json`). Der Housekeeping Manager zeigt das im Tab
+  „Gästeliste" unter „Späte Anreisen heute" an (`loadSpaeteAnreisen()` in
+  `housekeeping-v3.html`) — so kommt „wer kommt heute noch" auch in die
+  täglich genutzte Oberfläche, ohne ein zweites Mal fotografiert werden zu
+  müssen, und ohne dass PINs oder Namen das Nachtdienst-Tool verlassen.
+  Solange die Firebase-Regeln laut F13 abgelaufen sind, schlägt die Übergabe
+  mit einer sichtbaren Fehlermeldung fehl (kein stiller Datenverlust) — sie
+  funktioniert automatisch, sobald die Regeln erneuert sind.
 - Verlinkt in `manager.html` (Gruppe „Rezeption") und `links.html`.
 
 ### v3.12 — 25.09.2026 · Upload Foto oder PDF
