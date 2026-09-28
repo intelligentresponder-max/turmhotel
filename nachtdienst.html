@@ -129,7 +129,8 @@ input.search{
 </header>
 
 <div class="notice">
-  <strong>Läuft nur in diesem Browser-Tab.</strong> Die Fotos werden ausschließlich lokal auf diesem Gerät per Texterkennung gelesen — es geht nichts an einen Server. Tür-PIN und Safe-PINs werden <strong>nirgends gespeichert oder synchronisiert</strong> (kein Verlauf, kein Abgleich zwischen Handys). Beim Neuladen oder Schließen der Seite ist alles weg. Bitte Bildschirm danach sperren, wenn das Gerät nicht nur bei Ihnen liegt.
+  <strong>Läuft nur in diesem Browser-Tab.</strong> Die Fotos werden ausschließlich lokal auf diesem Gerät per Texterkennung gelesen — es geht nichts an einen Server. Tür-PIN und Safe-PINs werden <strong>nirgends gespeichert oder synchronisiert</strong> (kein Verlauf, kein Abgleich zwischen Handys). Beim Neuladen oder Schließen der Seite ist alles weg. PINs werden nach der Auswertung außerdem erst <strong>verdeckt</strong> angezeigt (siehe unten) — antippen zum Aufdecken. Bitte Bildschirm danach trotzdem sperren, wenn das Gerät nicht nur bei Ihnen liegt.<br><br>
+  <strong>Nur die Gästeliste ist Pflicht.</strong> Reicht Ihnen die reine Namens-/Zimmerliste, können Sie Seite 2 auch so fotografieren, dass die Schlüsselsafe-Tabelle nicht mit drauf ist (z. B. Blatt an der Stelle abdecken oder abschneiden) — dann fehlt nur der Abschnitt „Nachteingang heute" mit dem automatischen PIN-Abgleich, der Rest funktioniert unverändert.
 </div>
 
 <div class="upload-grid">
@@ -146,8 +147,8 @@ input.search{
     <div class="preview-tools"><span class="status-chip" id="status1"></span></div>
   </div>
   <div class="upload-card">
-    <h3>Seite 2 — Gästeliste Ende + Schlüsselsafe</h3>
-    <div class="hint">Rest der Liste plus die Safe-/Tür-PIN-Tabelle darunter (falls auf demselben Blatt).</div>
+    <h3>Seite 2 — Gästeliste Ende + Schlüsselsafe <em style="font-style:normal;color:var(--muted);font-size:.7rem">(Safe-Tabelle optional)</em></h3>
+    <div class="hint">Rest der Liste — die Safe-/Tür-PIN-Tabelle darunter nur mit drauf, wenn Sie den PIN-Abgleich nutzen möchten.</div>
     <input type="file" id="file2" accept="image/*" capture="environment" style="display:none">
     <div class="upload-actions">
       <button type="button" class="btn" onclick="document.getElementById('file2').click()">📷 Foto aufnehmen / wählen</button>
@@ -170,6 +171,8 @@ input.search{
     <h2>Nachteingang heute</h2>
     <div class="sub">Gäste mit Status „Anreise erwartet“, abgeglichen mit der Safe-/PIN-Tabelle. Bitte Namen und PIN vor Weitergabe an den Gast noch einmal mit dem Original vergleichen — Texterkennung kann Fehler machen.</div>
 
+    <button type="button" class="btn small" id="pinToggleBtn" onclick="togglePins()" style="margin-bottom:.9rem">🔒 PINs anzeigen</button>
+
     <div class="pin-hero">
       <div><div class="label">Tür-PIN (Nachteingang)</div><div class="value" id="doorPinValue">—</div></div>
       <div style="font-size:.78rem;color:var(--muted);max-width:22rem">Gilt für alle Gäste ohne aktivierte Schlüsselkarte, direkt am Lesegerät der Nachteingangstür.</div>
@@ -180,7 +183,7 @@ input.search{
 
   <div class="section">
     <h2>Safe-Belegung komplett</h2>
-    <div class="sub">Alle 12 Fächer, wie auf dem Blatt erkannt — zur Kontrolle.</div>
+    <div class="sub">Alle 12 Fächer, wie auf dem Blatt erkannt — zur Kontrolle. PINs folgen demselben Anzeigen/Verbergen-Schalter wie oben.</div>
     <div class="table-scroll">
       <table class="data safe-table" id="safeTable">
         <thead><tr><th>Safe-Nr.</th><th>PIN</th><th>Name</th><th>Zimmer</th></tr></thead>
@@ -220,6 +223,20 @@ var rotations = { 1: 0, 2: 0 };
 var guestRows = [];   // {zi, name, status, an, ab, kat, preis, code}
 var safeRows = [];    // {nr, pin, name, zimmer}
 var doorPin = '';
+var pinsRevealed = false; // PINs werden erst nach bewusstem Antippen im Klartext gezeigt
+
+function maskPin(p){
+  return p ? p.replace(/[0-9A-Za-z]/g, '•') : p;
+}
+function togglePins(){
+  pinsRevealed = !pinsRevealed;
+  var btn = document.getElementById('pinToggleBtn');
+  btn.textContent = pinsRevealed ? '🔓 PINs verbergen' : '🔒 PINs anzeigen';
+  renderArrivals();
+  renderSafeTable();
+  document.getElementById('doorPinValue').textContent =
+    doorPin ? (pinsRevealed ? doorPin : maskPin(doorPin)) : 'nicht erkannt — bitte Original prüfen';
+}
 
 function setStatus(n, text, cls){
   var el = document.getElementById('status'+n);
@@ -407,8 +424,11 @@ function parseDoorPin(text){
 // ---- Rendering ----
 function render(){
   document.getElementById('results').style.display = 'block';
-  document.getElementById('doorPinValue').textContent = doorPin || 'nicht erkannt — bitte Original prüfen';
-  if(!doorPin) document.getElementById('doorPinValue').classList.add('empty');
+  pinsRevealed = false;
+  document.getElementById('pinToggleBtn').textContent = '🔒 PINs anzeigen';
+  var doorEl = document.getElementById('doorPinValue');
+  doorEl.textContent = doorPin ? maskPin(doorPin) : 'nicht erkannt — bitte Original prüfen';
+  doorEl.classList.toggle('empty', !doorPin);
 
   renderArrivals();
   renderSafeTable();
@@ -448,7 +468,7 @@ function renderArrivals(){
       '</div>' +
       '<div class="pin-box">' +
         (safe
-          ? '<div class="safe">Safe ' + escapeHtml(safe.nr) + '</div><div class="pin editable" contenteditable="true">' + escapeHtml(safe.pin) + '</div>'
+          ? '<div class="safe">Safe ' + escapeHtml(safe.nr) + '</div><div class="pin' + (pinsRevealed ? ' editable" contenteditable="true"' : '"') + '>' + escapeHtml(pinsRevealed ? safe.pin : maskPin(safe.pin)) + '</div>'
           : '<div class="safe">kein Safe zugeordnet</div>') +
       '</div>' +
       (safe ? '' : '<div class="warn-note">Nicht automatisch in der Safe-Tabelle gefunden — bitte auf dem Originalfoto nachsehen.</div>');
@@ -468,7 +488,7 @@ function renderSafeTable(){
     if(!s.name) tr.className = 'free';
     tr.innerHTML =
       '<td>' + escapeHtml(s.nr) + '</td>' +
-      '<td class="pin">' + escapeHtml(s.pin) + '</td>' +
+      '<td class="pin">' + escapeHtml(pinsRevealed ? s.pin : maskPin(s.pin)) + '</td>' +
       '<td>' + escapeHtml(s.name || '—') + '</td>' +
       '<td>' + escapeHtml(s.zimmer || '') + '</td>';
     tbody.appendChild(tr);
