@@ -7,6 +7,7 @@ GitHub Pages. Entwicklung und Betrieb: André Schwarz, Rezeption.
 | Werkzeug | Zweck | Link |
 |---|---|---|
 | Housekeeping Manager v3 | Gästeliste per Foto einlesen, Zimmerverteilung, Fertigmeldung, Übergabebericht, Verlauf | `bit.ly/turm7` |
+| Nachtdienst-Liste | Fotos der Gästeliste + Schlüsselsafe-Tabelle einlesen, wer kommt noch/welches Safe/welcher PIN | im Repo (`nachtdienst.html`) |
 | Gästeportal / Handbücher | Gästeinformation, Personalanweisungen | im Repo |
 
 Der Foto-Scan der Alpha-Liste (früher eigene Seite `alpha-scan.html` / `bit.ly/turmhsk`)
@@ -29,6 +30,25 @@ Damit der Betrieb nicht an einer Person hängt:
 ---
 
 ## Versionsverlauf
+
+### Neues Werkzeug: Nachtdienst-Liste — 28.09.2026
+Eigenständige Seite `nachtdienst.html`, getrennt vom Housekeeping Manager.
+Zwei Fotos ablegen (Suite8-Export „Gäste im Haus alph.", Seite 1 und Seite 2
+inkl. Schlüsselsafe-Tabelle) → Texterkennung im Browser (Tesseract.js, wie im
+Housekeeping Manager) → durchsuchbare Gästeliste plus automatisch mit der
+Safe-/PIN-Tabelle abgeglichene Übersicht „Nachteingang heute" für Gäste mit
+Status „Anreise erwartet".
+- **Bewusst ohne Speicherung:** Tür-PIN und Safe-PINs sind Zugangscodes zum
+  Gebäude bzw. zu Zimmerschlüsseln. Die Seite schreibt nichts in
+  `localStorage`, nichts in Firebase — alles existiert nur im Speicher des
+  offenen Tabs und ist nach Neuladen/Schließen weg. Hintergrund: F16 (siehe
+  `UEBERGABE_HSK777.md`) hatte schon einmal gezeigt, dass genau diese
+  PIN-Liste versehentlich mitgescannt und dauerhaft gespeichert werden kann,
+  wenn man nicht bewusst dagegen entwirft.
+- Texterkennung liefert nicht immer fehlerfreie Ergebnisse — Namen, Zimmer
+  und PINs im „Nachteingang heute"-Bereich sind direkt antippbar/korrigierbar,
+  bevor sie an einen Gast weitergegeben werden.
+- Verlinkt in `manager.html` (Gruppe „Rezeption") und `links.html`.
 
 ### v3.12 — 25.09.2026 · Upload Foto oder PDF
 - Gästeliste als PDF (Suite8 → „Microsoft Print to PDF") wird ohne Texterkennung exakt gelesen
