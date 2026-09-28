@@ -77,6 +77,16 @@ header a.back:hover{color:var(--gold);border-color:var(--gold)}
 .pin-hero .value.empty{font-size:1rem;color:var(--muted);font-family:'Spline Sans',sans-serif;font-weight:400}
 
 .arrivals{display:grid;gap:.7rem}
+
+.handoff-box{
+  margin-top:1.4rem;padding:1rem 1.1rem;background:var(--ok-bg);border:1px solid rgba(42,122,75,.4);
+  border-left:3px solid var(--ok);border-radius:0 6px 6px 0;
+}
+.handoff-text{font-size:.82rem;color:var(--paper);margin-bottom:.7rem;line-height:1.5}
+.handoff-text strong{color:#4ecb82}
+.handoff-status{font-size:.78rem;color:var(--muted);margin-top:.5rem}
+.handoff-status.ok{color:var(--ok)}
+.handoff-status.err{color:var(--danger)}
 .arrival-card{
   background:var(--ink-2);border:1px solid var(--line);border-radius:6px;padding:.9rem 1.1rem;
   display:grid;grid-template-columns:1fr auto;gap:.6rem 1rem;align-items:center;
@@ -130,7 +140,8 @@ input.search{
 
 <div class="notice">
   <strong>Läuft nur in diesem Browser-Tab.</strong> Die Fotos werden ausschließlich lokal auf diesem Gerät per Texterkennung gelesen — es geht nichts an einen Server. Tür-PIN und Safe-PINs werden <strong>nirgends gespeichert oder synchronisiert</strong> (kein Verlauf, kein Abgleich zwischen Handys). Beim Neuladen oder Schließen der Seite ist alles weg. PINs werden nach der Auswertung außerdem erst <strong>verdeckt</strong> angezeigt (siehe unten) — antippen zum Aufdecken. Bitte Bildschirm danach trotzdem sperren, wenn das Gerät nicht nur bei Ihnen liegt.<br><br>
-  <strong>Nur die Gästeliste ist Pflicht.</strong> Reicht Ihnen die reine Namens-/Zimmerliste, können Sie Seite 2 auch so fotografieren, dass die Schlüsselsafe-Tabelle nicht mit drauf ist (z. B. Blatt an der Stelle abdecken oder abschneiden) — dann fehlt nur der Abschnitt „Nachteingang heute" mit dem automatischen PIN-Abgleich, der Rest funktioniert unverändert.
+  <strong>Nur die Gästeliste ist Pflicht.</strong> Reicht Ihnen die reine Namens-/Zimmerliste, können Sie Seite 2 auch so fotografieren, dass die Schlüsselsafe-Tabelle nicht mit drauf ist (z. B. Blatt an der Stelle abdecken oder abschneiden) — dann fehlt nur der Abschnitt „Nachteingang heute" mit dem automatischen PIN-Abgleich, der Rest funktioniert unverändert.<br><br>
+  <strong>Einzige Ausnahme von „nichts wird übertragen":</strong> Weiter unten können Sie eine <strong>anonymisierte</strong> Liste — nur Zimmernummer und Anreisedatum, nie Name, nie PIN — bewusst per Klick an den Housekeeping Manager übergeben, damit „wer kommt heute noch" auch dort sichtbar ist. Das passiert nur, wenn Sie aktiv auf „Anonymisiert übergeben" tippen.
 </div>
 
 <div class="upload-grid">
@@ -179,6 +190,14 @@ input.search{
     </div>
 
     <div class="arrivals" id="arrivalsWrap"></div>
+
+    <div class="handoff-box" id="handoffBox" style="display:none">
+      <div class="handoff-text">
+        <strong>An das Housekeeping-Tool übergeben.</strong> Nur Zimmernummer und Anreisedatum — <u>ohne Namen, ohne PIN</u> — für die Anzeige „Späte Anreisen heute" im täglichen Housekeeping Manager (Tab „Gästeliste"). Namen und PINs bleiben ausschließlich hier auf dieser Seite.
+      </div>
+      <button type="button" class="btn small" id="handoffBtn" onclick="handoffToHousekeeping()">📤 Anonymisiert übergeben (<span id="handoffCount">0</span> Zimmer)</button>
+      <div class="handoff-status" id="handoffStatus"></div>
+    </div>
   </div>
 
   <div class="section">
@@ -214,9 +233,15 @@ input.search{
 
 <script>
 // ===== Nachtdienst-Liste =====
-// Reine Texterkennung im Browser (Tesseract.js), kein Server, kein Firebase,
-// kein localStorage fuer diese Seite -- die Tuer-/Safe-PINs sind sensibel
-// und werden bewusst nur im Speicher dieses Tabs gehalten (siehe UEBERGABE F16).
+// Reine Texterkennung im Browser (Tesseract.js), kein Server. Namen und
+// PINs werden nirgends gespeichert oder uebertragen -- sie bleiben nur im
+// Speicher dieses Tabs (siehe UEBERGABE F16). Einzige Ausnahme, nur nach
+// bewusstem Klick: eine ANONYMISIERTE Liste (nur Zimmer + Anreisedatum,
+// kein Name, kein PIN) geht an dieselbe Firebase-Datenbank, die der
+// Housekeeping Manager fuer den taeglichen Gebrauch ohnehin schon nutzt --
+// damit die Information "wer kommt heute noch" auch dort ankommt, ohne
+// ein zweites Foto hochladen zu muessen.
+const FIREBASE_URL = 'https://turmhotel-hsk-default-rtdb.europe-west1.firebasedatabase.app';
 
 var images = { 1: null, 2: null };
 var rotations = { 1: 0, 2: 0 };
@@ -433,6 +458,45 @@ function render(){
   renderArrivals();
   renderSafeTable();
   renderGuestTable();
+  updateHandoffBox();
+}
+
+// ---- Übergabe an das Housekeeping-Tool (anonymisiert: nur Zimmer + Anreisedatum) ----
+function anonymizedArrivals(){
+  return guestRows
+    .filter(function(g){ return g.status === 'Anreise erwartet'; })
+    .map(function(g){ return { zimmer: g.zi, anreise: g.an }; });
+}
+
+function updateHandoffBox(){
+  var list = anonymizedArrivals();
+  var box = document.getElementById('handoffBox');
+  document.getElementById('handoffCount').textContent = list.length;
+  box.style.display = list.length ? 'block' : 'none';
+  document.getElementById('handoffStatus').textContent = '';
+  document.getElementById('handoffStatus').className = 'handoff-status';
+}
+
+function handoffToHousekeeping(){
+  var list = anonymizedArrivals();
+  var statusEl = document.getElementById('handoffStatus');
+  statusEl.className = 'handoff-status';
+  statusEl.textContent = 'Wird übergeben …';
+  var payload = { stand: new Date().toISOString(), zimmer: list };
+  fetch(FIREBASE_URL + '/spaeteAnreisen.json', {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload)
+  })
+    .then(function(res){ if(!res.ok) throw new Error('Firebase HTTP ' + res.status); })
+    .then(function(){
+      statusEl.className = 'handoff-status ok';
+      statusEl.textContent = '✓ Übergeben — erscheint im Housekeeping Manager unter „Gästeliste" → „Späte Anreisen heute".';
+    })
+    .catch(function(err){
+      statusEl.className = 'handoff-status err';
+      statusEl.textContent = 'Konnte nicht übergeben werden (kein Sync gerade möglich: ' + (err && err.message ? err.message : err) + '). Die Daten hier auf dieser Seite sind davon nicht betroffen.';
+    });
 }
 
 function matchSafeForGuest(g){
@@ -532,6 +596,7 @@ function resetAll(){
   images = { 1: null, 2: null };
   rotations = { 1: 0, 2: 0 };
   guestRows = []; safeRows = []; doorPin = '';
+  document.getElementById('handoffBox').style.display = 'none';
   [1,2].forEach(function(n){
     document.getElementById('file'+n).value = '';
     document.getElementById('img'+n).src = '';
