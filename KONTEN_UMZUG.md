@@ -166,19 +166,35 @@ Firebase-Projekte lassen sich nicht einfach übertragen — es braucht ein
    dann **Realtime Database → Regeln** obiges JSON eintragen und
    veröffentlichen.
 
-   **Dazu nötige Code-Änderung — fertig geschrieben und geprüft, noch NICHT
-   in die Live-Datei eingespielt.** Fehlt nur noch der Firebase **Web API
-   Key** aus der neuen Konsole (Project Settings → General → „Web API Key"),
-   sobald das neue Projekt existiert. Kein SDK, bleibt bei reinen
+   **Code-Änderung ist bereits eingespielt** (28.09.2026, `housekeeping-v3.html`
+   und `nachtdienst.html`) — fehlt nur noch der Firebase **Web API Key**
+   (Project Settings → General → „Web API Key"). Kein SDK, bleibt bei reinen
    `fetch()`-Aufrufen. Mit einem simulierten `fetch()` durchgetestet
-   (26.09.2026): ohne Key → unverändertes Verhalten von heute (keine
-   Anmeldung, Anfragen laufen wie bisher); mit Key → erster Aufruf meldet
-   sich einmalig an, spätere Aufrufe nutzen den gecachten Token, ein
-   abgelaufener Token wird über `refresh_token` erneuert statt neu
-   anzumelden, und ein bestehendes `?shallow=true` wird korrekt mit `&auth=`
-   statt einem zweiten `?` verbunden.
+   (26./28.09.2026, in beiden Dateien einzeln): ohne Key → unverändertes
+   Verhalten von heute (keine Anmeldung, Anfragen laufen wie bisher); mit
+   Key → erster Aufruf meldet sich einmalig an, spätere Aufrufe nutzen den
+   gecachten Token, ein abgelaufener Token wird über `refresh_token`
+   erneuert statt neu anzumelden, und ein bestehendes `?shallow=true` wird
+   korrekt mit `&auth=` statt einem zweiten `?` verbunden.
 
-   Direkt nach der Zeile mit `FIREBASE_URL` einfügen:
+   **Das funktioniert auch ohne den vollständigen Konten-Umzug**, schon auf
+   dem bestehenden Projekt `turmhotel-hsk`: Wer auch immer aktuell Zugriff
+   auf [console.firebase.google.com](https://console.firebase.google.com)
+   für dieses Projekt hat, kann dort direkt **Authentication → Sign-in
+   method → Anonymous → aktivieren**, die Regel oben eintragen und
+   veröffentlichen, dann den Web API Key kopieren und in beiden Dateien bei
+   `const FIREBASE_API_KEY = '';` eintragen (Zeile direkt nach
+   `FIREBASE_URL`) — fertig, der Sync zwischen den Handys läuft dann wieder,
+   ganz ohne neues Google-Konto oder neues Projekt. Der eigentliche
+   Konten-Umzug (neues Projekt unter einem Hotel-Konto) bleibt trotzdem
+   sinnvoll, ist aber ein separater, späterer Schritt.
+
+   Ich selbst kann diesen Teil nicht ausführen — die Firebase-Konsole
+   verlangt eine Anmeldung mit dem Google-Konto, das dieses Projekt besitzt,
+   und dafür habe ich keinen Zugang.
+
+   So sieht der bereits eingespielte Code direkt nach der Zeile mit
+   `FIREBASE_URL` in beiden Dateien aus (zur Kontrolle/Referenz):
    ```js
    const FIREBASE_API_KEY = ''; // Web API Key aus der neuen Firebase-Konsole eintragen, sobald vorhanden
    var fbAuth = { idToken: null, refreshToken: null, expiresAt: 0 };
@@ -220,14 +236,19 @@ Firebase-Projekte lassen sich nicht einfach übertragen — es braucht ein
    }
    ```
 
-   Dann an den 7 bestehenden Aufrufstellen jeweils `FIREBASE_URL + '/…json'`
-   durch die passierende `dbUrl(...)`-Variante ersetzen. Drei der Funktionen
-   (`saveState`, `saveStaffData`, `archiveBeforeReset`) sind **nicht** `async`
+   **Bereits erledigt** (28.09.2026): An allen 8 Aufrufstellen in
+   `housekeeping-v3.html` (die ursprünglichen 7 plus `loadSpaeteAnreisen`,
+   neu seit der Nachtdienst-Liste-Anbindung) sowie an der einen Aufrufstelle
+   in `nachtdienst.html` steht jetzt `dbUrl(...)` statt direkt
+   `FIREBASE_URL + '/…json'`. Drei der Funktionen (`saveState`,
+   `saveStaffData`, `archiveBeforeReset`) sind **nicht** `async`
    (Fire-and-forget mit `.then`/`.catch`) — dort `dbUrl(...).then(url => …)`
-   voranstellen statt `await`. Die anderen vier (`ladeVerlaufListe`,
-   `verlaufBerichtAnzeigen`, die beiden Aufrufe in `syncFromCloud`) sind
-   bereits `async` — dort reicht `await dbUrl(...)` direkt in `fetch(...)`.
-   Beispiel `saveState` (Zeile 929 im aktuellen Stand):
+   vorangestellt statt `await`. Die übrigen (`ladeVerlaufListe`,
+   `verlaufBerichtAnzeigen`, die beiden Aufrufe in `syncFromCloud`,
+   `loadSpaeteAnreisen`, der Handoff-Aufruf in `nachtdienst.html`) sind
+   `async` bzw. laufen als Promise-Kette — dort `await dbUrl(...)` bzw.
+   `dbUrl(...).then(url => fetch(url))` direkt in `fetch(...)`.
+   Beispiel `saveState` (so sieht es jetzt aus):
    ```js
    // vorher:
    fetch(FIREBASE_URL + '/state.json', {method: singleRoom ? 'PATCH' : 'PUT', headers:{'Content-Type':'application/json'}, body: JSON.stringify(body)})
@@ -245,10 +266,12 @@ Firebase-Projekte lassen sich nicht einfach übertragen — es braucht ein
    const stateRes = await fetch(await dbUrl('/state.json'));
    const staffRes = await fetch(await dbUrl('/staff.json'));
    ```
-   Aufwand beim Einspielen: mechanisch, ca. 10 Minuten, danach Pflicht-
-   Syntaxcheck und Test auf zwei Geräten (Schritt 7) — **nicht** im selben
-   Zug wie der reine Kontenumzug, sondern als eigener, separat committeter
-   Schritt, sobald der Web API Key vorliegt.
+   Geprüft: JS-Syntaxcheck beider Dateien fehlerfrei; der Auth-Ablauf
+   (Anmeldung, Token-Cache, Token-Erneuerung, `&auth=`-Anhängung an
+   bestehende Query-Strings) wurde mit einem simulierten `fetch()`
+   gegengetestet und verhält sich wie oben beschrieben. **Noch offen:** Test
+   auf zwei echten Geräten (Schritt 7) — das geht erst, sobald der Web API
+   Key eingetragen ist und die Regeln stehen.
 6. **Code anpassen** — dank der Aufräumarbeit gibt es nur noch **eine**
    Stelle für die URL selbst: in `housekeeping/housekeeping-v3.html` die Zeile
    ```js

@@ -31,6 +31,23 @@ Damit der Betrieb nicht an einer Person hängt:
 
 ## Versionsverlauf
 
+### Firebase-Sync: Anonymous-Auth-Anbindung eingespielt — 28.09.2026
+Code-Seite von F13 (`UEBERGABE_HSK777.md`) erledigt: `housekeeping-v3.html`
+und `nachtdienst.html` melden sich jetzt automatisch bei Firebase an, sobald
+ein Web API Key hinterlegt ist (`const FIREBASE_API_KEY = ''` direkt nach
+`FIREBASE_URL`, in beiden Dateien). Ohne Key läuft alles unverändert wie
+bisher — die Änderung selbst ändert also nichts am aktuellen Verhalten.
+**Damit der Sync zwischen den Handys wieder live funktioniert, fehlt nur
+noch ein Schritt in der Firebase-Konsole** (siehe `KONTEN_UMZUG.md`,
+Abschnitt 2, Punkt 5) — braucht den Login des Konto-Inhabers, das kann ich
+nicht selbst ausführen:
+1. [console.firebase.google.com](https://console.firebase.google.com) → Projekt `turmhotel-hsk`
+2. **Authentication → Sign-in method → Anonymous → aktivieren**
+3. **Realtime Database → Regeln** → `{"rules":{".read":"auth != null",".write":"auth != null"}}` eintragen, veröffentlichen
+4. **Project Settings → General → „Web API Key"** kopieren, in beide `FIREBASE_API_KEY = ''`-Zeilen eintragen, committen
+Danach synct es automatisch — kein neues Google-Konto, kein neues Projekt
+nötig, das ist unabhängig vom größeren Konten-Umzug.
+
 ### Neues Werkzeug: Nachtdienst-Liste — 28.09.2026
 Eigenständige Seite `nachtdienst.html`, getrennt vom Housekeeping Manager.
 Zwei Fotos ablegen (Suite8-Export „Gäste im Haus alph.", Seite 1 und Seite 2
