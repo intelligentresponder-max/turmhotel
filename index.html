@@ -247,6 +247,14 @@ footer{
 }
 .guest-panel-head h3{font-size:1.15rem;margin:0;color:var(--ink)}
 .guest-panel-head p{font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;color:var(--brass);margin-top:.15rem}
+.guest-panel-head-actions{display:flex;align-items:center;gap:.5rem}
+.lang-toggle{display:flex;gap:.3rem}
+.lang-toggle button{
+  font:inherit;font-size:.7rem;font-weight:600;letter-spacing:.05em;
+  background:none;border:1px solid var(--brass);color:var(--ink);opacity:.75;
+  border-radius:3px;padding:.2rem .5rem;cursor:pointer;
+}
+.lang-toggle button.active{background:var(--brass);color:var(--maroon);opacity:1}
 .guest-panel-close{
   background:none;border:0;color:var(--ink);opacity:.7;cursor:pointer;font-size:1.3rem;line-height:1;
   padding:.2rem .3rem;
@@ -512,10 +520,16 @@ input::placeholder,textarea::placeholder{color:var(--muted)}
       <p>Turm Hotel</p>
       <h3 id="guestPanelTitle" class="serif">Fragen zu Ihrem Aufenthalt</h3>
     </div>
-    <button class="guest-panel-close" id="guestClose" aria-label="Schließen">×</button>
+    <div class="guest-panel-head-actions">
+      <div class="lang-toggle" id="guestLangToggle" role="group" aria-label="Sprache · Language">
+        <button type="button" data-lang="de" class="active">DE</button>
+        <button type="button" data-lang="en">EN</button>
+      </div>
+      <button class="guest-panel-close" id="guestClose" aria-label="Schließen">×</button>
+    </div>
   </div>
   <div class="guest-panel-body" id="guestBody">
-    <p class="intro">Kurze Antworten auf die häufigsten Fragen. Für alles andere sind wir rund um die Uhr telefonisch da.</p>
+    <p class="intro" id="guestIntro">Kurze Antworten auf die häufigsten Fragen. Für alles andere sind wir rund um die Uhr telefonisch da.</p>
     <input type="text" id="guestSearch" placeholder="Stichwort eingeben, z. B. 'Parken' oder 'Frühstück'…" style="width:100%;padding:.6rem .8rem;margin-bottom:.8rem;border:1px solid var(--line, #ccc);border-radius:8px;font-size:.95rem;box-sizing:border-box;">
     <div id="guestQuestions"></div>
   </div>
@@ -523,38 +537,74 @@ input::placeholder,textarea::placeholder{color:var(--muted)}
 
 <script>
 (function(){
+  // Jede Frage/Antwort zweisprachig (de/en) — Grundlage für den EN-Umschalter im Panel-Kopf.
   var GUEST_FAQ = [
-    { q: "Check-in / Check-out?",
-      a: "Check-in ab 15:00 Uhr, Check-out bis 11:00 Uhr. Die Rezeption ist täglich von 6:45 bis 22:30 Uhr besetzt. Kommen Sie nach 22:30 Uhr an, teilen Sie uns das bitte vorab mit — dann stellen wir Ihnen rechtzeitig die Zugangsdaten für die Nachteingangstür zur Verfügung." },
-    { q: "Ich komme nach 22:30 Uhr an / Wie funktioniert der Late Check-in genau?",
-      a: "In drei Schritten: 1. Sie gelangen über die Nachteingangstür ins Haus — haben Sie bereits eine Schlüsselkarte, halten Sie diese einfach an das Lesegerät (der PIN ist darauf bereits hinterlegt); haben Sie noch keine Karte, geben Sie stattdessen Ihren persönlichen PIN direkt am Lesegerät ein. Diesen PIN erhalten Sie ausschließlich für den Late Check-in nach Rezeptionsschluss. Vor dem Haus gibt es drei Türen: Die linke Tür führt zum Frühstücksraum (nur zu den Frühstückszeiten geöffnet), die mittlere ist die Nachteingangstür, die rechte ist der Haupteingang. 2. Ihre Zimmerkarte holen Sie aus dem Schlüsselsafe im Bereich der Nachteingangstür, neben dem Aufzug — auch hier öffnet die Eingabe Ihres persönlichen PINs den Safe. Rechts neben dem Aufzug liegt die Tür zur Lobby und Rezeption. 3. Vom Schlüsselsafe aus geht es weiter: Für Zimmer 11–55 im Vorderhaus nehmen Sie einfach die Treppe direkt neben dem Schlüsselsafe nach oben — das ist bereits die richtige Treppe in die Obergeschosse. Alternativ steht Ihnen rechter Hand auch ein Aufzug zur Verfügung. Für Zimmer 102–510 im Hinterhaus gehen Sie durch die Glastür an der Rezeption vorbei, durch den Gang mit den roten Kinosesseln und biegen dort rechts ab — dort finden Sie den Aufzug in die Obergeschosse." },
-    { q: "Frühstückszeiten?",
-      a: "Mo–Fr 6:30–10:00 Uhr, Sa–So 7:00–11:00 Uhr. 18,– € pro Person, Kinder bis 8 Jahre zum halben Preis. Eierspeisen bereiten wir gerne nach Wunsch zu. Neben dem Buffet bieten wir auch vegetarische und laktosefreie Optionen an, auf Anfrage gerne auch glutenfrei. <a href=\"#fruehstueck-buchen\">Frühstück für morgen anmelden →</a>" },
-    { q: "Wie finde ich mein Zimmer?",
-      a: "Unser Wegweiser führt Sie in 15 Sprachen zum Zimmer. <a href=\"wegweiser.html\">Wegweiser öffnen →</a>" },
-    { q: "Rezeption kontaktieren",
-      a: "Wir sind rund um die Uhr erreichbar: <a href=\"tel:+4969154050\">+49 (0)69 15 40 50</a> oder <a href=\"mailto:rooms@turmhotel-frankfurt.de\">rooms@turmhotel-frankfurt.de</a>." },
-    { q: "Was ist in der Nähe sehenswert?",
-      a: "Der historische Eschenheimer Turm liegt nur wenige Schritte entfernt — ein Spaziergang lohnt sich besonders am Abend." },
-    { q: "Gibt es Parkplätze?",
-      a: "Einige kostenlose Parkplätze stehen direkt am Hotel zur Verfügung (nicht reservierbar) — Zufahrt über die Eschersheimer Landstraße 20. <a href=\"https://earth.google.com/earth/d/1-n5A6hHWrqOlDwZdA92QEH9K27ufq9zV?usp=sharing\" target=\"_blank\">Lage auf der Karte ansehen →</a> Bitte nur hinter dem Haus parken, nicht in der Feuerwehrzufahrt. Alternativ das CONTIPARK Parkhaus Turmcenter direkt nebenan, Querstraße 7-9, kostenpflichtig." },
-    { q: "Kann ich mein Haustier mitbringen?",
-      a: "Leider nein — wir können in unserem Haus keine Haustiere aufnehmen." },
-    { q: "Kann ich mein Gepäck aufbewahren lassen?",
-      a: "Ja, gerne — sprechen Sie uns einfach an der Rezeption darauf an: <a href=\"tel:+4969154050\">+49 (0)69 15 40 50</a>." },
-    { q: "Gibt es Konferenzräume?",
-      a: "Ja, zwei Konferenzräume für bis zu 35 Personen, mit WLAN und moderner Technik. Details und Anfrage über die Rezeption." },
-    { q: "Kann ich ein Fahrrad leihen?",
-      a: "Ja, ein Fahrradverleih ist auf Wunsch verfügbar — fragen Sie einfach an der Rezeption nach." },
-    { q: "Ich habe nachts ein Problem — was tue ich?",
-      a: "Rufen Sie einfach die Hotel-Telefonnummer an — Sie werden auf jeden Fall weitergeleitet: <a href=\"tel:+4969154050\">+49 (0)69 15 40 50</a>. Bei einem medizinischen oder sonstigen Notfall wählen Sie bitte direkt den Notruf <a href=\"tel:112\">112</a>." },
-    { q: "Ich möchte meine Buchung um einen Tag verlängern — was kann ich tun?",
-      a: "Endet Ihre Buchung morgen, buchen Sie am besten jetzt gleich die zusätzliche Nacht über unsere offizielle Buchungsseite — so sichern Sie sich Ihr Zimmer, bevor es jemand anderes bucht. <a href=\"https://www.secure-hotel-booking.com/smart/Turm-Hotel/21PC/de/\" target=\"_blank\">Zur Buchungsseite →</a>. Sie zahlen dort dieselben Preise wie an der Rezeption. Sehen Sie kein freies Zimmer mehr, sprechen Sie uns morgens vor Ihrem Check-out direkt an der Rezeption an — unser Team hat Ihre Buchung bereits zu Dienstbeginn vorliegen und hilft Ihnen gerne persönlich weiter." },
-    { q: "Wie schalte ich die Heizung im Zimmer ein?",
-      a: "Die Heizkörper befinden sich unter dem Fenster und sind mit einem Thermostat ausgestattet. Drehen Sie es einfach auf die gewünschte Stufe — je höher die Zahl, desto wärmer wird es." },
-    { q: "Etwas anderes",
-      a: "Rufen Sie uns gerne direkt an — wir sind rund um die Uhr für Sie da: <a href=\"tel:+4969154050\">+49 (0)69 15 40 50</a>. Für eine Zimmerbuchung geht's direkt hier entlang: <a href=\"https://www.secure-hotel-booking.com/smart/Turm-Hotel/21PC/de/\" target=\"_blank\">Zur Buchungsseite →</a>" }
+    { q: { de: "Check-in / Check-out?", en: "Check-in / check-out?" },
+      a: { de: "Check-in ab 15:00 Uhr, Check-out bis 11:00 Uhr. Die Rezeption ist täglich von 6:45 bis 22:30 Uhr besetzt. Kommen Sie nach 22:30 Uhr an, teilen Sie uns das bitte vorab mit — dann stellen wir Ihnen rechtzeitig die Zugangsdaten für die Nachteingangstür zur Verfügung.",
+        en: "Check-in from 3:00 pm, check-out by 11:00 am. The reception desk is staffed daily from 6:45 am to 10:30 pm. If you arrive after 10:30 pm, please let us know in advance — we'll send you the access details for the night entrance in good time." } },
+    { q: { de: "Ich komme nach 22:30 Uhr an / Wie funktioniert der Late Check-in genau?", en: "I'm arriving after 10:30 pm — how exactly does late check-in work?" },
+      a: { de: "In drei Schritten: 1. Sie gelangen über die Nachteingangstür ins Haus — haben Sie bereits eine Schlüsselkarte, halten Sie diese einfach an das Lesegerät (der PIN ist darauf bereits hinterlegt); haben Sie noch keine Karte, geben Sie stattdessen Ihren persönlichen PIN direkt am Lesegerät ein. Diesen PIN erhalten Sie ausschließlich für den Late Check-in nach Rezeptionsschluss. Vor dem Haus gibt es drei Türen: Die linke Tür führt zum Frühstücksraum (nur zu den Frühstückszeiten geöffnet), die mittlere ist die Nachteingangstür, die rechte ist der Haupteingang. 2. Ihre Zimmerkarte holen Sie aus dem Schlüsselsafe im Bereich der Nachteingangstür, neben dem Aufzug — auch hier öffnet die Eingabe Ihres persönlichen PINs den Safe. Rechts neben dem Aufzug liegt die Tür zur Lobby und Rezeption. 3. Vom Schlüsselsafe aus geht es weiter: Für Zimmer 11–55 im Vorderhaus nehmen Sie einfach die Treppe direkt neben dem Schlüsselsafe nach oben — das ist bereits die richtige Treppe in die Obergeschosse. Alternativ steht Ihnen rechter Hand auch ein Aufzug zur Verfügung. Für Zimmer 102–510 im Hinterhaus gehen Sie durch die Glastür an der Rezeption vorbei, durch den Gang mit den roten Kinosesseln und biegen dort rechts ab — dort finden Sie den Aufzug in die Obergeschosse.",
+        en: "Three steps: 1. You enter through the night entrance door — if you already have a key card, just hold it against the reader (the PIN is already stored on it); if you don't have a card yet, enter your personal PIN directly at the reader instead. This PIN is issued solely for late check-in after the reception has closed. There are three doors at the front of the building: the left door leads to the breakfast room (open only during breakfast hours), the middle one is the night entrance, the right one is the main entrance. 2. Collect your room key from the key safe next to the night entrance, beside the lift — entering your personal PIN opens this safe too. The door to the lobby and reception is just to the right of the lift. 3. From the key safe: for rooms 11–55 in the front building, simply take the staircase right next to the key safe — that's already the correct staircase to the upper floors (a lift is also available to the right). For rooms 102–510 in the rear building, go through the glass door past reception, through the corridor with the red cinema seats, and turn right — that's where you'll find the lift to the upper floors." } },
+    { q: { de: "Frühstückszeiten?", en: "Breakfast times?" },
+      a: { de: "Mo–Fr 6:30–10:00 Uhr, Sa–So 7:00–11:00 Uhr. 18,– € pro Person, Kinder bis 8 Jahre zum halben Preis. Eierspeisen bereiten wir gerne nach Wunsch zu. Neben dem Buffet bieten wir auch vegetarische und laktosefreie Optionen an, auf Anfrage gerne auch glutenfrei. <a href=\"#fruehstueck-buchen\">Frühstück für morgen anmelden →</a>",
+        en: "Mon–Fri 6:30–10:00 am, Sat–Sun 7:00–11:00 am. €18 per person, children up to 8 years pay half price. We're happy to prepare egg dishes to order. Alongside the buffet we also offer vegetarian and lactose-free options, and gluten-free on request. <a href=\"#fruehstueck-buchen\">Register breakfast for tomorrow →</a>" } },
+    { q: { de: "Wie finde ich mein Zimmer?", en: "How do I find my room?" },
+      a: { de: "Unser Wegweiser führt Sie in 15 Sprachen zum Zimmer. <a href=\"wegweiser.html\">Wegweiser öffnen →</a>",
+        en: "Our room guide leads you to your room in 15 languages. <a href=\"wegweiser.html\">Open the room guide →</a>" } },
+    { q: { de: "Rezeption kontaktieren", en: "Contact reception" },
+      a: { de: "Wir sind rund um die Uhr erreichbar: <a href=\"tel:+4969154050\">+49 (0)69 15 40 50</a> oder <a href=\"mailto:rooms@turmhotel-frankfurt.de\">rooms@turmhotel-frankfurt.de</a>.",
+        en: "We're reachable around the clock: <a href=\"tel:+4969154050\">+49 (0)69 15 40 50</a> or <a href=\"mailto:rooms@turmhotel-frankfurt.de\">rooms@turmhotel-frankfurt.de</a>." } },
+    { q: { de: "Was ist in der Nähe sehenswert?", en: "What's worth seeing nearby?" },
+      a: { de: "Der historische Eschenheimer Turm liegt nur wenige Schritte entfernt — ein Spaziergang lohnt sich besonders am Abend. Auch die Innenstadt ist gut zu Fuß erreichbar: Hauptwache (0,4 km), Zeil und Alte Oper (je 0,7 km), Goethehaus (1,0 km), Römerberg (1,2 km), Bankenviertel und Palmengarten (1,5 km), Museumsufer (1,7 km) sowie die Messe Frankfurt (2,0 km).",
+        en: "The historic Eschenheimer Turm tower is just a few steps away — a walk there is especially lovely in the evening. The city centre is also an easy walk: Hauptwache (0.4 km), Zeil shopping street and Alte Oper (0.7 km each), Goethe House (1.0 km), Römerberg (1.2 km), the financial district and Palmengarten (1.5 km), the Museumsufer riverside museums (1.7 km) and Messe Frankfurt (2.0 km)." } },
+    { q: { de: "Wie komme ich vom Hauptbahnhof zum Hotel?", en: "How do I get from the main train station to the hotel?" },
+      a: { de: "Der Hauptbahnhof ist rund 1,8 km entfernt. Am schnellsten geht es mit der U-Bahn (Linien U1, U2, U3, U8) bis Eschenheimer Tor, ca. 3–4 Minuten Fahrzeit, von dort sind es noch etwa 290 Meter zu Fuß bis zum Hotel. Ein Taxi kostet ungefähr 10–15 €.",
+        en: "Frankfurt Central Station (Hauptbahnhof) is about 1.8 km away. The fastest way is by U-Bahn (lines U1, U2, U3, U8) to Eschenheimer Tor, about 3–4 minutes, then roughly a 290-metre walk to the hotel. A taxi costs around €10–15." } },
+    { q: { de: "Wie komme ich vom Flughafen zum Hotel?", en: "How do I get from the airport to the hotel?" },
+      a: { de: "Der Flughafen Frankfurt (FRA) liegt etwa 18 km entfernt. Mit öffentlichen Verkehrsmitteln: S-Bahn bis Hauptwache (ca. 17 Minuten), dann eine Station mit der U-Bahn bis Eschenheimer Tor. Mit dem Taxi rechnen Sie mit etwa 30–50 €.",
+        en: "Frankfurt Airport (FRA) is about 18 km away. By public transport: take the S-Bahn to Hauptwache (about 17 minutes), then one stop on the U-Bahn to Eschenheimer Tor. A taxi costs roughly €30–50." } },
+    { q: { de: "Gibt es Parkplätze?", en: "Is parking available?" },
+      a: { de: "Einige kostenlose Parkplätze stehen direkt am Hotel zur Verfügung (nicht reservierbar) — Zufahrt über die Eschersheimer Landstraße 20. <a href=\"https://earth.google.com/earth/d/1-n5A6hHWrqOlDwZdA92QEH9K27ufq9zV?usp=sharing\" target=\"_blank\">Lage auf der Karte ansehen →</a> Bitte nur hinter dem Haus parken, nicht in der Feuerwehrzufahrt. Alternativ das CONTIPARK Parkhaus Turmcenter direkt nebenan, Querstraße 7-9, kostenpflichtig.",
+        en: "A few free parking spaces are available directly at the hotel (no reservation possible) — access via Eschersheimer Landstraße 20. <a href=\"https://earth.google.com/earth/d/1-n5A6hHWrqOlDwZdA92QEH9K27ufq9zV?usp=sharing\" target=\"_blank\">View the location on the map →</a> Please only park behind the building, not in the fire lane. Alternatively, the CONTIPARK Turmcenter car park is right next door at Querstraße 7-9 (paid parking)." } },
+    { q: { de: "Welche Zimmerkategorien gibt es?", en: "What room categories are there?" },
+      a: { de: "Drei Kategorien: <strong>Little Gym</strong> (1–2 Gäste, ca. 20 m², Queen-Size-Bett, mit Sprossenwand und Klimmzugstange), <strong>Vintage</strong> (1–2 Gäste, ca. 20 m², King-Size-Bett, klassisches Design) und <strong>Softstone Superior</strong> (1–3 Gäste, 23–37 m², King-Size-Bett plus optionalem Zusatzbett, verstellbare Klimaanlage und Safe mit Steckdose). Alle Zimmer sind Nichtraucherzimmer mit WLAN, Kühlschrank und schallisolierten Türen und Fenstern.",
+        en: "Three categories: <strong>Little Gym</strong> (1–2 guests, approx. 20 m², queen-size bed, with wall bars and a pull-up bar), <strong>Vintage</strong> (1–2 guests, approx. 20 m², king-size bed, classic design) and <strong>Softstone Superior</strong> (1–3 guests, 23–37 m², king-size bed plus an optional extra bed, adjustable air conditioning and an in-room safe with power outlet). All rooms are non-smoking, with Wi-Fi, a mini-fridge and soundproofed doors and windows." } },
+    { q: { de: "Kann ich mir zusätzliche Ausstattung aufs Zimmer bringen lassen?", en: "Can I have extra equipment brought to my room?" },
+      a: { de: "Ja, auf Anfrage an der Rezeption: Wasserkocher mit Zubehör, Bügeleisen und Bügelbrett, Badhocker, Hygieneartikel, Kleinkindtritt und Babybett. Betten in Überlänge (210 cm) und allergikerfreundliche Bettwäsche sind ebenfalls auf Wunsch verfügbar.",
+        en: "Yes, just ask at reception: a kettle with accessories, iron and ironing board, bath step stool, toiletries, a step stool for small children and a baby cot. Extra-long beds (210 cm) and allergy-friendly bedding are also available on request." } },
+    { q: { de: "Kann ich mein Haustier mitbringen?", en: "Can I bring my pet?" },
+      a: { de: "Leider nein — wir können in unserem Haus keine Haustiere aufnehmen.",
+        en: "Unfortunately not — we're unable to accommodate pets in our house." } },
+    { q: { de: "Kann ich mein Gepäck aufbewahren lassen?", en: "Can I store my luggage?" },
+      a: { de: "Ja, gerne — sprechen Sie uns einfach an der Rezeption darauf an: <a href=\"tel:+4969154050\">+49 (0)69 15 40 50</a>.",
+        en: "Yes, gladly — just ask us at reception: <a href=\"tel:+4969154050\">+49 (0)69 15 40 50</a>." } },
+    { q: { de: "Gibt es Konferenzräume?", en: "Are there conference rooms?" },
+      a: { de: "Ja, zwei klimatisierte Tagungsräume: <strong>Mailand</strong> für bis zu 8 Personen und <strong>Barcelona</strong> für bis zu 24 Personen — kombiniert bis zu 35 Personen. Mit WLAN, moderner Medientechnik, Tageslicht und optionalem Catering. Details und Anfrage über die Rezeption.",
+        en: "Yes, two air-conditioned meeting rooms: <strong>Mailand</strong> for up to 8 people and <strong>Barcelona</strong> for up to 24 people — combined for up to 35 people. With Wi-Fi, modern media technology, daylight and optional catering. Please ask reception for details and booking." } },
+    { q: { de: "Kann ich ein Fahrrad leihen?", en: "Can I rent a bicycle?" },
+      a: { de: "Ja, ein Fahrradverleih ist auf Wunsch verfügbar — fragen Sie einfach an der Rezeption nach.",
+        en: "Yes, bicycle rental is available on request — just ask at reception." } },
+    { q: { de: "Ich habe nachts ein Problem — was tue ich?", en: "I have a problem at night — what should I do?" },
+      a: { de: "Rufen Sie einfach die Hotel-Telefonnummer an — Sie werden auf jeden Fall weitergeleitet: <a href=\"tel:+4969154050\">+49 (0)69 15 40 50</a>. Bei einem medizinischen oder sonstigen Notfall wählen Sie bitte direkt den Notruf <a href=\"tel:112\">112</a>.",
+        en: "Just call the hotel's phone number — you will always be put through: <a href=\"tel:+4969154050\">+49 (0)69 15 40 50</a>. In a medical or other emergency, please dial the emergency number <a href=\"tel:112\">112</a> directly." } },
+    { q: { de: "Ich möchte meine Buchung um einen Tag verlängern — was kann ich tun?", en: "I'd like to extend my stay by one night — what can I do?" },
+      a: { de: "Endet Ihre Buchung morgen, buchen Sie am besten jetzt gleich die zusätzliche Nacht über unsere offizielle Buchungsseite — so sichern Sie sich Ihr Zimmer, bevor es jemand anderes bucht. <a href=\"https://www.secure-hotel-booking.com/smart/Turm-Hotel/21PC/de/\" target=\"_blank\">Zur Buchungsseite →</a>. Sie zahlen dort dieselben Preise wie an der Rezeption. Sehen Sie kein freies Zimmer mehr, sprechen Sie uns morgens vor Ihrem Check-out direkt an der Rezeption an — unser Team hat Ihre Buchung bereits zu Dienstbeginn vorliegen und hilft Ihnen gerne persönlich weiter.",
+        en: "If your booking ends tomorrow, it's best to book the extra night right now via our official booking page — that way you secure your room before someone else does. <a href=\"https://www.secure-hotel-booking.com/smart/Turm-Hotel/21PC/de/\" target=\"_blank\">Go to the booking page →</a>. You'll pay the same prices there as at reception. If no room shows as available, speak to us at reception in the morning before your check-out — our team already has your booking on file at the start of the shift and will be happy to help you personally." } },
+    { q: { de: "Wie schalte ich die Heizung im Zimmer ein?", en: "How do I turn on the heating in my room?" },
+      a: { de: "Die Heizkörper befinden sich unter dem Fenster und sind mit einem Thermostat ausgestattet. Drehen Sie es einfach auf die gewünschte Stufe — je höher die Zahl, desto wärmer wird es.",
+        en: "The radiators are located under the window and are fitted with a thermostat. Simply turn it to the desired setting — the higher the number, the warmer it gets." } },
+    { q: { de: "Etwas anderes", en: "Something else" },
+      a: { de: "Rufen Sie uns gerne direkt an — wir sind rund um die Uhr für Sie da: <a href=\"tel:+4969154050\">+49 (0)69 15 40 50</a>. Für eine Zimmerbuchung geht's direkt hier entlang: <a href=\"https://www.secure-hotel-booking.com/smart/Turm-Hotel/21PC/de/\" target=\"_blank\">Zur Buchungsseite →</a>",
+        en: "Feel free to call us directly — we're here for you around the clock: <a href=\"tel:+4969154050\">+49 (0)69 15 40 50</a>. To book a room, follow this link: <a href=\"https://www.secure-hotel-booking.com/smart/Turm-Hotel/21PC/de/\" target=\"_blank\">Go to the booking page →</a>" } }
   ];
+
+  var UI_TEXT = {
+    de: { title: "Fragen zu Ihrem Aufenthalt", intro: "Kurze Antworten auf die häufigsten Fragen. Für alles andere sind wir rund um die Uhr telefonisch da.",
+      placeholder: "Stichwort eingeben, z. B. 'Parken' oder 'Frühstück'…", none: "Dazu haben wir nichts Passendes gefunden — rufen Sie uns gerne direkt an.", back: "← Zurück zu den Fragen" },
+    en: { title: "Questions about your stay", intro: "Short answers to the most common questions. For anything else, we're available by phone around the clock.",
+      placeholder: "Enter a keyword, e.g. 'parking' or 'breakfast'…", none: "We couldn't find a matching answer — please feel free to call us directly.", back: "← Back to questions" }
+  };
+  var LANG = 'de';
 
   var fab = document.getElementById('guestFab');
   var panel = document.getElementById('guestPanel');
@@ -562,20 +612,41 @@ input::placeholder,textarea::placeholder{color:var(--muted)}
   var body = document.getElementById('guestBody');
   var qWrap = document.getElementById('guestQuestions');
   var searchInput = document.getElementById('guestSearch');
+  var titleEl = document.getElementById('guestPanelTitle');
+  var introEl = document.getElementById('guestIntro');
+  var langButtons = document.querySelectorAll('#guestLangToggle button');
+
+  function applyLanguage(){
+    var t = UI_TEXT[LANG];
+    titleEl.textContent = t.title;
+    introEl.textContent = t.intro;
+    searchInput.placeholder = t.placeholder;
+    langButtons.forEach(function(btn){
+      btn.classList.toggle('active', btn.getAttribute('data-lang') === LANG);
+    });
+  }
+
+  langButtons.forEach(function(btn){
+    btn.addEventListener('click', function(){
+      LANG = btn.getAttribute('data-lang');
+      applyLanguage();
+      renderQuestions();
+    });
+  });
 
   function renderQuestions(){
     var term = (searchInput.value || '').trim().toLowerCase();
     var list = term
       ? GUEST_FAQ.filter(function(item){
-          return item.q.toLowerCase().indexOf(term) !== -1 ||
-                 item.a.toLowerCase().indexOf(term) !== -1;
+          return item.q[LANG].toLowerCase().indexOf(term) !== -1 ||
+                 item.a[LANG].toLowerCase().indexOf(term) !== -1;
         })
       : GUEST_FAQ;
     qWrap.innerHTML = '';
     if (list.length === 0){
       var none = document.createElement('p');
       none.className = 'intro';
-      none.textContent = 'Dazu haben wir nichts Passendes gefunden — rufen Sie uns gerne direkt an.';
+      none.textContent = UI_TEXT[LANG].none;
       qWrap.appendChild(none);
       return;
     }
@@ -584,7 +655,7 @@ input::placeholder,textarea::placeholder{color:var(--muted)}
       var btn = document.createElement('button');
       btn.className = 'guest-q';
       btn.type = 'button';
-      btn.textContent = item.q;
+      btn.textContent = item.q[LANG];
       btn.addEventListener('click', function(){ showAnswer(i); });
       qWrap.appendChild(btn);
     });
@@ -597,11 +668,11 @@ input::placeholder,textarea::placeholder{color:var(--muted)}
     var back = document.createElement('button');
     back.className = 'guest-back';
     back.type = 'button';
-    back.textContent = '← Zurück zu den Fragen';
+    back.textContent = UI_TEXT[LANG].back;
     back.addEventListener('click', renderQuestions);
     var a = document.createElement('div');
     a.className = 'guest-a';
-    a.innerHTML = item.a;
+    a.innerHTML = item.a[LANG];
     qWrap.appendChild(back);
     qWrap.appendChild(a);
     qWrap.appendChild(back.cloneNode(true));
@@ -611,6 +682,7 @@ input::placeholder,textarea::placeholder{color:var(--muted)}
   function openPanel(){
     panel.classList.add('open');
     fab.setAttribute('aria-expanded', 'true');
+    applyLanguage();
     renderQuestions();
   }
   function closePanel(){
@@ -633,7 +705,11 @@ var LEGAL_CONTENT = {
     title: 'Impressum',
     html: '<h4>Angaben gemäß § 5 TMG</h4>' +
       '<p>Turm Hotel GmbH<br>Eschersheimer Landstraße 20<br>60322 Frankfurt am Main<br>Deutschland</p>' +
+      '<p>Geschäftsführung: Tanja Will<br>' +
+      'Handelsregister: HRB 42905 (Amtsgericht Frankfurt am Main)<br>' +
+      'USt-IdNr.: DE 812 482 422</p>' +
       '<p>Telefon: <a href="tel:+4969154050">+49 (0) 69 / 15 40 5-0</a><br>' +
+      'Fax: +49 (0) 69 / 55 35 78<br>' +
       'E-Mail: <a href="mailto:rooms@turmhotel-frankfurt.de">rooms@turmhotel-frankfurt.de</a></p>' +
       '<p class="legal-note">Vollständiges Impressum: <a href="https://www.turmhotel-frankfurt.de/">turmhotel-frankfurt.de →</a></p>'
   },
