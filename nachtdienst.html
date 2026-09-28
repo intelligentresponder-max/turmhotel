@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>Nachtdienst-Liste — Turmhotel Frankfurt</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..900;1,9..144,300..900&family=Spline+Sans+Mono:wght@400;500;600&family=Spline+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/tesseract.js/5.0.5/tesseract.min.js"></script>
+<style>
+:root{
+  --ink:#0c0a08;--ink-2:#161310;--paper:#f4ede0;--gold:#c9a227;--gold-bright:#e8c14f;
+  --muted:#9b9085;--line:rgba(201,162,39,.18);
+  --danger:#c0392b;--danger-bg:rgba(192,57,43,.14);
+  --warn:#e67e22;--warn-bg:rgba(230,126,34,.14);
+  --ok:#2a7a4b;--ok-bg:rgba(42,122,75,.15);
+  --radius:3px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Spline Sans',sans-serif;background:var(--ink);color:var(--paper);min-height:100vh;-webkit-font-smoothing:antialiased;line-height:1.55}
+h1,h2,h3,.serif{font-family:'Fraunces',serif}
+a{color:var(--gold-bright)}
+.wrap{max-width:920px;margin:0 auto;padding:0 1.2rem 4rem}
+
+header{padding:1.6rem 0 1.2rem;border-bottom:1px solid var(--line);margin-bottom:1.4rem}
+header .crown{color:var(--gold);font-size:1.1rem}
+header h1{font-size:clamp(1.5rem,4vw,2rem);font-weight:600;margin:.3rem 0 .2rem}
+header p{color:var(--muted);font-size:.85rem}
+header a.back{font-family:'Spline Sans Mono',monospace;font-size:.7rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);text-decoration:none;border:1px solid var(--line);padding:.3rem .7rem;border-radius:var(--radius);display:inline-block;margin-bottom:1rem}
+header a.back:hover{color:var(--gold);border-color:var(--gold)}
+
+.notice{background:var(--danger-bg);border:1px solid rgba(192,57,43,.4);border-left:3px solid var(--danger);border-radius:0 var(--radius) var(--radius) 0;padding:.9rem 1.1rem;margin-bottom:1.6rem;font-size:.86rem}
+.notice strong{color:#ff8a70}
+
+.upload-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1rem;margin-bottom:1.4rem}
+.upload-card{background:var(--ink-2);border:1px solid var(--line);border-radius:6px;padding:1.1rem}
+.upload-card h3{font-size:1rem;margin-bottom:.5rem;color:var(--gold-bright)}
+.upload-card .hint{font-size:.78rem;color:var(--muted);margin-bottom:.7rem}
+.upload-actions{display:flex;gap:.5rem;flex-wrap:wrap}
+.btn{
+  font:inherit;font-size:.82rem;background:var(--ink);color:var(--paper);border:1px solid var(--gold);
+  border-radius:var(--radius);padding:.5rem .9rem;cursor:pointer;display:inline-flex;align-items:center;gap:.4rem;
+}
+.btn:hover{background:#221c14}
+.btn:disabled{opacity:.4;cursor:not-allowed}
+.btn.primary{background:var(--gold);color:var(--ink);font-weight:600}
+.btn.primary:hover{background:var(--gold-bright)}
+.btn.small{font-size:.72rem;padding:.3rem .6rem}
+.btn.danger{border-color:var(--danger);color:#ff9a86}
+
+.preview-wrap{margin-top:.8rem;position:relative;display:none}
+.preview-wrap.has-image{display:block}
+.preview-wrap img{width:100%;border-radius:4px;border:1px solid var(--line);display:block}
+.preview-tools{display:flex;justify-content:space-between;align-items:center;margin-top:.5rem}
+.status-chip{font-family:'Spline Sans Mono',monospace;font-size:.68rem;letter-spacing:.05em;text-transform:uppercase;color:var(--muted)}
+.status-chip.ok{color:var(--ok)}
+.status-chip.busy{color:var(--warn)}
+
+.progress-bar{height:5px;background:var(--line);border-radius:3px;overflow:hidden;margin-top:.5rem;display:none}
+.progress-bar.on{display:block}
+.progress-bar span{display:block;height:100%;background:var(--gold);width:0%;transition:width .2s}
+
+.section{margin-top:2.2rem}
+.section h2{font-size:1.25rem;margin-bottom:.3rem}
+.section .sub{color:var(--muted);font-size:.85rem;margin-bottom:1rem}
+
+.pin-hero{
+  background:linear-gradient(175deg,rgba(192,57,43,.14),rgba(192,57,43,.03) 65%);
+  border:1px solid var(--danger);border-radius:6px;padding:1.2rem 1.3rem;margin-bottom:1.2rem;
+  display:flex;flex-wrap:wrap;align-items:center;gap:1.2rem;justify-content:space-between;
+}
+.pin-hero .label{font-family:'Spline Sans Mono',monospace;font-size:.7rem;letter-spacing:.1em;text-transform:uppercase;color:#ff9a86}
+.pin-hero .value{font-family:'Fraunces',serif;font-size:2.2rem;font-weight:700;letter-spacing:.08em;color:#fff}
+.pin-hero .value.empty{font-size:1rem;color:var(--muted);font-family:'Spline Sans',sans-serif;font-weight:400}
+
+.arrivals{display:grid;gap:.7rem}
+.arrival-card{
+  background:var(--ink-2);border:1px solid var(--line);border-radius:6px;padding:.9rem 1.1rem;
+  display:grid;grid-template-columns:1fr auto;gap:.6rem 1rem;align-items:center;
+}
+.arrival-card .name{font-weight:600;font-size:1rem}
+.arrival-card .room{color:var(--muted);font-size:.82rem}
+.arrival-card .pin-box{
+  font-family:'Spline Sans Mono',monospace;text-align:right;
+}
+.arrival-card .pin-box .safe{font-size:.68rem;color:var(--muted);text-transform:uppercase;letter-spacing:.05em}
+.arrival-card .pin-box .pin{font-size:1.3rem;font-weight:600;color:var(--gold-bright)}
+.arrival-card.unmatched{border-color:var(--warn);background:var(--warn-bg)}
+.arrival-card .warn-note{grid-column:1/-1;font-size:.76rem;color:var(--warn)}
+
+.editable{background:none;border:1px solid transparent;border-radius:3px;color:inherit;font:inherit;padding:.1rem .3rem;width:100%}
+.editable:hover,.editable:focus{border-color:var(--line);background:rgba(255,255,255,.04)}
+
+table.data{width:100%;border-collapse:collapse;font-size:.84rem}
+table.data th{
+  text-align:left;color:var(--gold);font-weight:500;padding:.5rem .6rem;border-bottom:1px solid var(--line);
+  font-size:.66rem;letter-spacing:.06em;text-transform:uppercase;position:sticky;top:0;background:var(--ink);
+}
+table.data td{padding:.4rem .6rem;border-bottom:1px solid rgba(255,255,255,.05);vertical-align:top}
+table.data tr.status-expected td{color:var(--warn)}
+table.data tr.status-inhouse td{color:var(--muted)}
+.table-scroll{max-height:26rem;overflow:auto;border:1px solid var(--line);border-radius:6px}
+input.search{
+  width:100%;padding:.55rem .8rem;margin-bottom:.7rem;background:var(--ink-2);border:1px solid var(--line);
+  border-radius:6px;color:var(--paper);font:inherit;font-size:.88rem;
+}
+
+.safe-table td.pin{font-family:'Spline Sans Mono',monospace;color:var(--gold-bright)}
+.safe-table tr.free td{color:var(--muted)}
+
+.finish-bar{margin-top:2.5rem;padding-top:1.4rem;border-top:1px solid var(--line);text-align:center}
+.finish-bar p{color:var(--muted);font-size:.8rem;margin-bottom:.7rem}
+
+.empty-hint{color:var(--muted);font-size:.85rem;padding:1.5rem;text-align:center;border:1px dashed var(--line);border-radius:6px}
+@media(max-width:600px){.arrival-card{grid-template-columns:1fr}.arrival-card .pin-box{text-align:left}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <a class="back" href="manager.html">← Manager Platform</a>
+  <div class="crown">♔ Turmhotel Frankfurt</div>
+  <h1>Nachtdienst-Liste</h1>
+  <p>Fotos der Gästeliste (Suite8, „Gäste im Haus alph.“) ablegen — Wer kommt heute noch, welches Safe, welcher PIN.</p>
+</header>
+
+<div class="notice">
+  <strong>Läuft nur in diesem Browser-Tab.</strong> Die Fotos werden ausschließlich lokal auf diesem Gerät per Texterkennung gelesen — es geht nichts an einen Server. Tür-PIN und Safe-PINs werden <strong>nirgends gespeichert oder synchronisiert</strong> (kein Verlauf, kein Abgleich zwischen Handys). Beim Neuladen oder Schließen der Seite ist alles weg. Bitte Bildschirm danach sperren, wenn das Gerät nicht nur bei Ihnen liegt.
+</div>
+
+<div class="upload-grid">
+  <div class="upload-card">
+    <h3>Seite 1 — Gästeliste</h3>
+    <div class="hint">Die vollständige alphabetische Liste, erste Seite (z. B. „Seite 1 von 2“).</div>
+    <input type="file" id="file1" accept="image/*" capture="environment" style="display:none">
+    <div class="upload-actions">
+      <button type="button" class="btn" onclick="document.getElementById('file1').click()">📷 Foto aufnehmen / wählen</button>
+      <button type="button" class="btn small" id="rotate1" style="display:none" onclick="rotateImage(1)">↻ Drehen</button>
+    </div>
+    <div class="preview-wrap" id="preview1"><img id="img1" alt="Vorschau Seite 1"></div>
+    <div class="progress-bar" id="progress1"><span></span></div>
+    <div class="preview-tools"><span class="status-chip" id="status1"></span></div>
+  </div>
+  <div class="upload-card">
+    <h3>Seite 2 — Gästeliste Ende + Schlüsselsafe</h3>
+    <div class="hint">Rest der Liste plus die Safe-/Tür-PIN-Tabelle darunter (falls auf demselben Blatt).</div>
+    <input type="file" id="file2" accept="image/*" capture="environment" style="display:none">
+    <div class="upload-actions">
+      <button type="button" class="btn" onclick="document.getElementById('file2').click()">📷 Foto aufnehmen / wählen</button>
+      <button type="button" class="btn small" id="rotate2" style="display:none" onclick="rotateImage(2)">↻ Drehen</button>
+    </div>
+    <div class="preview-wrap" id="preview2"><img id="img2" alt="Vorschau Seite 2"></div>
+    <div class="progress-bar" id="progress2"><span></span></div>
+    <div class="preview-tools"><span class="status-chip" id="status2"></span></div>
+  </div>
+</div>
+
+<div class="upload-actions" style="margin-bottom:.5rem">
+  <button type="button" class="btn primary" id="runBtn" onclick="runOcr()" disabled>Fotos auswerten</button>
+  <button type="button" class="btn danger" onclick="resetAll()">Alles löschen</button>
+</div>
+
+<div id="results" style="display:none">
+
+  <div class="section">
+    <h2>Nachteingang heute</h2>
+    <div class="sub">Gäste mit Status „Anreise erwartet“, abgeglichen mit der Safe-/PIN-Tabelle. Bitte Namen und PIN vor Weitergabe an den Gast noch einmal mit dem Original vergleichen — Texterkennung kann Fehler machen.</div>
+
+    <div class="pin-hero">
+      <div><div class="label">Tür-PIN (Nachteingang)</div><div class="value" id="doorPinValue">—</div></div>
+      <div style="font-size:.78rem;color:var(--muted);max-width:22rem">Gilt für alle Gäste ohne aktivierte Schlüsselkarte, direkt am Lesegerät der Nachteingangstür.</div>
+    </div>
+
+    <div class="arrivals" id="arrivalsWrap"></div>
+  </div>
+
+  <div class="section">
+    <h2>Safe-Belegung komplett</h2>
+    <div class="sub">Alle 12 Fächer, wie auf dem Blatt erkannt — zur Kontrolle.</div>
+    <div class="table-scroll">
+      <table class="data safe-table" id="safeTable">
+        <thead><tr><th>Safe-Nr.</th><th>PIN</th><th>Name</th><th>Zimmer</th></tr></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>Alle Gäste im Haus</h2>
+    <div class="sub">Vollständige Liste aus beiden Fotos, durchsuchbar. Felder sind bei Bedarf antippbar/korrigierbar.</div>
+    <input type="text" class="search" id="guestSearch" placeholder="Suchen nach Name oder Zimmer …" oninput="renderGuestTable()">
+    <div class="table-scroll">
+      <table class="data" id="guestTable">
+        <thead><tr><th>Zi.</th><th>Name</th><th>Status</th><th>Anreise</th><th>Abreise</th><th>Kat.</th><th>Preis</th></tr></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="finish-bar">
+    <p>Fertig für heute? Löscht alle erkannten Daten und Fotos aus diesem Tab.</p>
+    <button type="button" class="btn danger" onclick="resetAll()">🗑 Daten jetzt löschen</button>
+  </div>
+</div>
+
+</div>
+
+<script>
+// ===== Nachtdienst-Liste =====
+// Reine Texterkennung im Browser (Tesseract.js), kein Server, kein Firebase,
+// kein localStorage fuer diese Seite -- die Tuer-/Safe-PINs sind sensibel
+// und werden bewusst nur im Speicher dieses Tabs gehalten (siehe UEBERGABE F16).
+
+var images = { 1: null, 2: null };
+var rotations = { 1: 0, 2: 0 };
+var guestRows = [];   // {zi, name, status, an, ab, kat, preis, code}
+var safeRows = [];    // {nr, pin, name, zimmer}
+var doorPin = '';
+
+function setStatus(n, text, cls){
+  var el = document.getElementById('status'+n);
+  el.textContent = text;
+  el.className = 'status-chip' + (cls ? ' '+cls : '');
+}
+
+[1,2].forEach(function(n){
+  document.getElementById('file'+n).addEventListener('change', function(e){
+    var f = e.target.files[0];
+    if(!f) return;
+    var reader = new FileReader();
+    reader.onload = function(ev){
+      images[n] = ev.target.result;
+      rotations[n] = 0;
+      var img = document.getElementById('img'+n);
+      img.src = images[n];
+      img.style.transform = 'rotate(0deg)';
+      document.getElementById('preview'+n).classList.add('has-image');
+      document.getElementById('rotate'+n).style.display = 'inline-flex';
+      setStatus(n, 'Foto bereit', 'ok');
+      updateRunButton();
+    };
+    reader.readAsDataURL(f);
+  });
+});
+
+function rotateImage(n){
+  rotations[n] = (rotations[n] + 90) % 360;
+  document.getElementById('img'+n).style.transform = 'rotate(' + rotations[n] + 'deg)';
+}
+
+function updateRunButton(){
+  document.getElementById('runBtn').disabled = !(images[1] || images[2]);
+}
+
+function loadImageEl(dataUrl){
+  return new Promise(function(resolve){
+    var img = new Image();
+    img.onload = function(){ resolve(img); };
+    img.src = dataUrl;
+  });
+}
+
+function rotatedCanvas(img, deg){
+  var c = document.createElement('canvas');
+  var rad = deg * Math.PI / 180;
+  var swap = (deg % 180) !== 0;
+  c.width = swap ? img.height : img.width;
+  c.height = swap ? img.width : img.height;
+  var ctx = c.getContext('2d');
+  ctx.translate(c.width/2, c.height/2);
+  ctx.rotate(rad);
+  ctx.drawImage(img, -img.width/2, -img.height/2);
+  return c;
+}
+
+async function ocrOne(n){
+  if(!images[n]) return '';
+  setStatus(n, 'Wird gelesen …', 'busy');
+  var bar = document.getElementById('progress'+n);
+  bar.classList.add('on');
+  var fill = bar.querySelector('span');
+  var img = await loadImageEl(images[n]);
+  var canvas = rotatedCanvas(img, rotations[n]);
+  var result = await Tesseract.recognize(canvas, 'deu', {
+    tessedit_pageseg_mode: '6',
+    logger: function(m){
+      if(m.status === 'recognizing text'){
+        fill.style.width = Math.round(m.progress*100) + '%';
+      }
+    }
+  });
+  bar.classList.remove('on');
+  fill.style.width = '0%';
+  setStatus(n, 'Erkannt', 'ok');
+  return result.data.text || '';
+}
+
+async function runOcr(){
+  document.getElementById('runBtn').disabled = true;
+  document.getElementById('runBtn').textContent = 'Wird ausgewertet …';
+  try{
+    var text1 = await ocrOne(1);
+    var text2 = await ocrOne(2);
+    var fullText = text1 + '\n' + text2;
+    guestRows = parseGuestList(fullText);
+    var safeSection = extractSafeSection(text2) || extractSafeSection(text1) || '';
+    safeRows = parseSafeTable(safeSection);
+    doorPin = parseDoorPin(text2) || parseDoorPin(text1) || '';
+    render();
+  } catch(err){
+    alert('Fehler bei der Texterkennung: ' + (err && err.message ? err.message : err) + '\nBitte Fotos pruefen (Schaerfe/Ausrichtung) und erneut versuchen.');
+  } finally {
+    document.getElementById('runBtn').disabled = false;
+    document.getElementById('runBtn').textContent = 'Fotos auswerten';
+  }
+}
+
+// ---- Parser: Gaesteliste ----
+var STATUS_WORDS = ['Eingecheckt','im Haus','Anreise erwartet'];
+
+function normDigits(s){ return (s||'').replace(/[Oo]/g,'0').replace(/[Il|]/g,'1'); }
+
+function parseGuestList(text){
+  var lines = text.split('\n').map(function(l){ return l.trim(); }).filter(Boolean);
+  var rows = [];
+  lines.forEach(function(line){
+    // Zimmer-/Zeilennummer am Anfang: 2-3 Ziffern
+    var m = line.match(/^(\d{2,3})\s+(.*)$/);
+    if(!m) return;
+    var zi = m[1];
+    var rest = m[2];
+    // Status-Wort suchen (längstes zuerst, damit "im Haus" vor "Haus" matcht)
+    var statusIdx = -1, statusWord = '', statusLen = 0;
+    STATUS_WORDS.forEach(function(w){
+      var idx = rest.indexOf(w);
+      if(idx !== -1 && (statusIdx === -1 || idx < statusIdx)){
+        statusIdx = idx; statusWord = w; statusLen = w.length;
+      }
+    });
+    if(statusIdx === -1) return;
+    var name = rest.slice(0, statusIdx).trim().replace(/[.,;:]+$/, '');
+    var tail = rest.slice(statusIdx + statusLen).trim();
+    // Rest: zwei Daten, 3 Ziffern (Erw/Kin/Anz), Kat, Preis, Preiscode
+    var tm = tail.match(/(\d{1,2}[.\s]\d{1,2}[.\s]\d{2,4})\s+(\d{1,2}[.\s]\d{1,2}[.\s]\d{2,4})\s+(\d)\s+(\d)\s+(\d)\s+([A-Z0-9]{2,7})\s+([\d.,]{3,7})\s+([A-Z]{2,4}\s?[A-Z0-9]{0,3})/);
+    if(!tm) return;
+    rows.push({
+      zi: zi.replace(/^0+(?=\d)/, ''),
+      ziRaw: zi,
+      name: name,
+      status: statusWord,
+      an: tm[1].replace(/\s/g,'.'),
+      ab: tm[2].replace(/\s/g,'.'),
+      erw: tm[3], kin: tm[4], anz: tm[5],
+      kat: tm[6],
+      preis: tm[7],
+      code: tm[8].trim()
+    });
+  });
+  return rows;
+}
+
+// ---- Parser: Schluesselsafe / Tuer-PIN ----
+function extractSafeSection(text){
+  var idx = text.search(/Zimmerschl(ü|u)ssel|Schl(ü|u)sselsafe|Safe\s*Nr/i);
+  if(idx === -1) return null;
+  return text.slice(idx);
+}
+
+function parseSafeTable(text){
+  if(!text) return [];
+  var lines = text.split('\n').map(function(l){ return l.trim(); }).filter(Boolean);
+  var rows = [];
+  lines.forEach(function(line){
+    var m = line.match(/^(\d{1,2})\s+(\d{3}\s*\+?\s*[A-Za-z])\b\s*(.*)$/);
+    if(!m) return;
+    var nr = m[1];
+    var pin = m[2].replace(/\s+/g,'').replace(/\+?([A-Za-z])$/, '+$1').toUpperCase();
+    var restStr = (m[3]||'').trim();
+    var name = '', zimmer = '';
+    if(restStr){
+      var rm = restStr.match(/^(.*?)(?:\s+(\d{1,3}))?$/);
+      name = (rm && rm[1] ? rm[1] : restStr).trim();
+      zimmer = (rm && rm[2]) ? rm[2] : '';
+    }
+    rows.push({ nr: nr, pin: pin, name: name, zimmer: zimmer });
+  });
+  return rows;
+}
+
+function parseDoorPin(text){
+  var m = text.match(/T[üuÜU]+r[\s\S]{0,25}?PIN[\s\S]{0,25}?(\d{4})/i);
+  if(m) return m[1];
+  // Fallback: eine allein stehende 4-stellige Zahl nach dem Wort "PIN"
+  var idx = text.search(/PIN/i);
+  if(idx !== -1){
+    var after = text.slice(idx, idx+60);
+    var m2 = after.match(/(\d{4})/);
+    if(m2) return m2[1];
+  }
+  return '';
+}
+
+// ---- Rendering ----
+function render(){
+  document.getElementById('results').style.display = 'block';
+  document.getElementById('doorPinValue').textContent = doorPin || 'nicht erkannt — bitte Original prüfen';
+  if(!doorPin) document.getElementById('doorPinValue').classList.add('empty');
+
+  renderArrivals();
+  renderSafeTable();
+  renderGuestTable();
+}
+
+function matchSafeForGuest(g){
+  // 1) über Zimmernummer
+  var byRoom = safeRows.find(function(s){
+    return s.zimmer && (s.zimmer === g.zi || s.zimmer === g.ziRaw);
+  });
+  if(byRoom) return byRoom;
+  // 2) über Nachnamen (erstes Wort vor dem Komma)
+  var lastName = (g.name.split(',')[0] || '').trim().toLowerCase();
+  if(!lastName) return null;
+  return safeRows.find(function(s){
+    return s.name && s.name.toLowerCase().indexOf(lastName) !== -1 && !/reserve|leere karten/i.test(s.name);
+  }) || null;
+}
+
+function renderArrivals(){
+  var wrap = document.getElementById('arrivalsWrap');
+  wrap.innerHTML = '';
+  var expected = guestRows.filter(function(g){ return g.status === 'Anreise erwartet'; });
+  if(expected.length === 0){
+    wrap.innerHTML = '<div class="empty-hint">Keine Gäste mit Status „Anreise erwartet“ erkannt — entweder sind heute alle schon da, oder die Fotos noch einmal prüfen.</div>';
+    return;
+  }
+  expected.forEach(function(g){
+    var safe = matchSafeForGuest(g);
+    var card = document.createElement('div');
+    card.className = 'arrival-card' + (safe ? '' : ' unmatched');
+    card.innerHTML =
+      '<div>' +
+        '<div class="name"><span class="editable" contenteditable="true">' + escapeHtml(g.name) + '</span></div>' +
+        '<div class="room">Zimmer <span class="editable" contenteditable="true" style="display:inline;width:auto">' + escapeHtml(g.zi) + '</span> · Anreise ' + escapeHtml(g.an) + '</div>' +
+      '</div>' +
+      '<div class="pin-box">' +
+        (safe
+          ? '<div class="safe">Safe ' + escapeHtml(safe.nr) + '</div><div class="pin editable" contenteditable="true">' + escapeHtml(safe.pin) + '</div>'
+          : '<div class="safe">kein Safe zugeordnet</div>') +
+      '</div>' +
+      (safe ? '' : '<div class="warn-note">Nicht automatisch in der Safe-Tabelle gefunden — bitte auf dem Originalfoto nachsehen.</div>');
+    wrap.appendChild(card);
+  });
+}
+
+function renderSafeTable(){
+  var tbody = document.querySelector('#safeTable tbody');
+  tbody.innerHTML = '';
+  if(safeRows.length === 0){
+    tbody.innerHTML = '<tr><td colspan="4" class="empty-hint" style="border:none">Keine Safe-Tabelle erkannt — war sie auf Seite 2 mit dabei?</td></tr>';
+    return;
+  }
+  safeRows.forEach(function(s){
+    var tr = document.createElement('tr');
+    if(!s.name) tr.className = 'free';
+    tr.innerHTML =
+      '<td>' + escapeHtml(s.nr) + '</td>' +
+      '<td class="pin">' + escapeHtml(s.pin) + '</td>' +
+      '<td>' + escapeHtml(s.name || '—') + '</td>' +
+      '<td>' + escapeHtml(s.zimmer || '') + '</td>';
+    tbody.appendChild(tr);
+  });
+}
+
+function renderGuestTable(){
+  var term = (document.getElementById('guestSearch').value || '').toLowerCase();
+  var tbody = document.querySelector('#guestTable tbody');
+  tbody.innerHTML = '';
+  var list = guestRows.filter(function(g){
+    return !term || g.name.toLowerCase().indexOf(term) !== -1 || g.zi.indexOf(term) !== -1;
+  });
+  if(list.length === 0){
+    tbody.innerHTML = '<tr><td colspan="7" class="empty-hint" style="border:none">' + (guestRows.length ? 'Keine Treffer.' : 'Keine Gästezeilen erkannt — Fotos schärfer/gerader erneut aufnehmen.') + '</td></tr>';
+    return;
+  }
+  list.forEach(function(g){
+    var tr = document.createElement('tr');
+    if(g.status === 'Anreise erwartet') tr.className = 'status-expected';
+    else if(g.status === 'im Haus') tr.className = 'status-inhouse';
+    tr.innerHTML =
+      '<td>' + escapeHtml(g.zi) + '</td>' +
+      '<td>' + escapeHtml(g.name) + '</td>' +
+      '<td>' + escapeHtml(g.status) + '</td>' +
+      '<td>' + escapeHtml(g.an) + '</td>' +
+      '<td>' + escapeHtml(g.ab) + '</td>' +
+      '<td>' + escapeHtml(g.kat) + '</td>' +
+      '<td>' + escapeHtml(g.preis) + '</td>';
+    tbody.appendChild(tr);
+  });
+}
+
+function escapeHtml(s){
+  return String(s == null ? '' : s).replace(/[&<>"']/g, function(c){
+    return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];
+  });
+}
+
+function resetAll(){
+  images = { 1: null, 2: null };
+  rotations = { 1: 0, 2: 0 };
+  guestRows = []; safeRows = []; doorPin = '';
+  [1,2].forEach(function(n){
+    document.getElementById('file'+n).value = '';
+    document.getElementById('img'+n).src = '';
+    document.getElementById('preview'+n).classList.remove('has-image');
+    document.getElementById('rotate'+n).style.display = 'none';
+    setStatus(n, '');
+  });
+  document.getElementById('results').style.display = 'none';
+  updateRunButton();
+}
+</script>
+</body>
+</html>
