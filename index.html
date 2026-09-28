@@ -42,18 +42,24 @@
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Alex+Brush&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
 
 <style>
+/* Farb- und Schriftsprache angelehnt an turmhotel-frankfurt.de:
+   schwarzer Header, dunkles Grün im Blickfang, Gold-Akzente,
+   weinrote Buttons mit Goldrand, fette Headline-Schrift + Schreibschrift-Zusatz. */
 :root{
-  --ink:#2a2622;        /* warm near-black text */
-  --cream:#f6f2ea;      /* warm paper background */
-  --cream-2:#efe8db;    /* slightly deeper panel */
-  --brass:#a8854a;      /* warm brass accent */
-  --brass-deep:#8a6a37;
-  --line:#ddd2bf;       /* hairline */
-  --muted:#6f665b;
-  --white:#fffdf8;
+  --ink:#f2ece1;         /* helle Schrift auf dunklem Grund */
+  --cream:#0a0d0a;       /* fast schwarzer Seitenhintergrund */
+  --cream-2:#111b15;     /* dunkles Grün-Panel (RAUM-Leiste, Zitate) */
+  --white:#142720;       /* Karten-/Flächen-Grund, dunkles Waldgrün */
+  --brass:#d4af37;       /* Gold-Akzent */
+  --brass-deep:#b8901f;  /* etwas gedeckteres Gold, Standard-Linkfarbe */
+  --line:rgba(212,175,55,.22); /* Gold-Haarlinie */
+  --muted:#9db0a1;       /* gedecktes Salbeigrau für Eyebrow/Nebentext */
+  --maroon:#3a1414;      /* Button-/Leisten-Grund, wie die CTA-Buttons der echten Seite */
+  --green-call:#2f6b4c;  /* Grün wie der Anruf-Button der echten Seite */
+  --white-hard:#fdfaf3;
 }
 *{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
@@ -65,20 +71,27 @@ body{
   line-height:1.65;
   -webkit-font-smoothing:antialiased;
 }
-h1,h2,h3,.serif{font-family:'Cormorant Garamond',serif;font-weight:500;letter-spacing:.01em}
+body::before{
+  content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;
+  background:
+    radial-gradient(1100px 650px at 12% -8%, rgba(212,175,55,.06), transparent 60%),
+    radial-gradient(900px 700px at 105% 8%, rgba(47,107,76,.16), transparent 60%);
+}
+h1,h2{font-family:'Anton',sans-serif;font-weight:400;text-transform:uppercase;letter-spacing:.01em}
+h3,.serif{font-family:'Jost',sans-serif;font-weight:600;letter-spacing:.015em}
 a{color:var(--brass-deep);text-decoration:none}
-a:hover{text-decoration:underline}
+a:hover{color:var(--brass);text-decoration:underline}
 
 .eyebrow{
   font-family:'Jost',sans-serif;font-weight:500;
   text-transform:uppercase;letter-spacing:.32em;
-  font-size:.7rem;color:var(--brass);
+  font-size:.7rem;color:var(--muted);
 }
 
 /* ---- Header ---- */
 header{
   position:sticky;top:0;z-index:50;
-  background:rgba(246,242,234,.92);
+  background:rgba(4,6,4,.92);
   backdrop-filter:blur(8px);
   border-bottom:1px solid var(--line);
 }
@@ -87,28 +100,50 @@ header{
   display:flex;align-items:center;justify-content:space-between;gap:1rem;
 }
 .brand{display:flex;align-items:center;gap:.7rem;line-height:1}
-.brand .crown{font-size:1.3rem;color:var(--brass)}
-.brand b{font-family:'Cormorant Garamond',serif;font-weight:600;font-size:1.25rem;letter-spacing:.04em}
-.brand small{display:block;font-size:.6rem;letter-spacing:.28em;text-transform:uppercase;color:var(--muted)}
+.brand .crown{font-size:1.4rem;color:var(--ink)}
+.brand b{font-family:'Anton',sans-serif;font-weight:400;font-size:1.2rem;letter-spacing:.03em;text-transform:uppercase;color:var(--ink)}
+.brand small{display:block;font-size:.6rem;letter-spacing:.28em;text-transform:uppercase;color:var(--brass);margin-top:.15rem}
 .nav-links{display:flex;gap:1.4rem;font-size:.82rem;letter-spacing:.06em;text-transform:uppercase}
 .nav-links a{color:var(--ink)}
-.nav-links a:hover{color:var(--brass-deep);text-decoration:none}
+.nav-links a:hover{color:var(--brass);text-decoration:none}
 @media(max-width:680px){.nav-links{display:none}}
 
 /* ---- Hero ---- */
 .hero{
-  max-width:1080px;margin:0 auto;padding:5rem 1.5rem 3.5rem;
-  text-align:center;
+  padding:3.2rem 1.5rem 3.6rem;
+  background:
+    linear-gradient(180deg, rgba(5,9,7,.35), rgba(5,9,7,.8)),
+    radial-gradient(1100px 620px at 50% 0%, #1c3a2d 0%, #0e2018 55%, #070b09 100%);
+}
+.hero-card{
+  max-width:640px;margin:0 auto;text-align:center;
+  background:rgba(15,32,26,.6);
+  border:1px solid var(--brass);border-radius:4px;
+  padding:2.6rem 1.8rem 2.4rem;
 }
 .hero .eyebrow{display:block;margin-bottom:1.2rem}
 .hero h1{
-  font-size:clamp(2.6rem,7vw,4.6rem);line-height:1.04;font-weight:500;
+  font-size:clamp(2.2rem,7vw,3.6rem);line-height:1.06;color:var(--white-hard);
 }
-.hero h1 .accent{color:var(--brass);font-style:italic}
+.hero h1 .accent{
+  display:block;margin-top:.5rem;
+  font-family:'Alex Brush',cursive;font-weight:400;text-transform:none;
+  font-size:clamp(1.6rem,4.5vw,2.3rem);color:var(--brass);letter-spacing:.01em;
+}
 .hero p.lead{
-  max-width:34rem;margin:1.4rem auto 0;color:var(--muted);font-size:1.05rem;
+  max-width:32rem;margin:1.3rem auto 0;color:#cfd9d1;font-size:1rem;
 }
-.rule{width:54px;height:1px;background:var(--brass);margin:2.2rem auto}
+.rule{width:54px;height:1px;background:var(--brass);margin:1.8rem auto}
+
+.btn-cta{
+  display:inline-flex;align-items:center;gap:.55rem;
+  padding:.75rem 1.4rem;background:var(--maroon);color:var(--ink);
+  border:1px solid var(--brass);border-radius:2px;
+  font-family:'Jost',sans-serif;font-size:.82rem;font-weight:500;
+  text-transform:uppercase;letter-spacing:.1em;cursor:pointer;
+  transition:background .15s ease,border-color .15s ease;
+}
+.btn-cta:hover{background:#4c1a1a;border-color:var(--brass);text-decoration:none}
 
 /* ---- RAUM signature strip ---- */
 .raum{
@@ -118,9 +153,10 @@ header{
 .raum-inner{
   max-width:1080px;margin:0 auto;padding:1.1rem 1.5rem;
   display:flex;flex-wrap:wrap;justify-content:center;gap:.4rem 1.6rem;
-  font-family:'Cormorant Garamond',serif;font-size:1.15rem;color:var(--muted);
+  font-family:'Jost',sans-serif;font-weight:400;text-transform:uppercase;letter-spacing:.1em;
+  font-size:.82rem;color:var(--muted);
 }
-.raum-inner span b{color:var(--brass-deep);font-weight:600}
+.raum-inner span b{color:var(--brass);font-weight:600;letter-spacing:.01em}
 
 /* ---- Sections ---- */
 section.block{max-width:1080px;margin:0 auto;padding:3.4rem 1.5rem}
@@ -132,8 +168,8 @@ section.block{max-width:1080px;margin:0 auto;padding:3.4rem 1.5rem}
   padding:1.6rem 1.5rem;border-radius:2px;
 }
 .card .ico{font-size:1.4rem;color:var(--brass);margin-bottom:.5rem}
-.card h3{font-size:1.4rem;margin-bottom:.5rem}
-.card .big{font-family:'Cormorant Garamond',serif;font-size:1.5rem;color:var(--ink)}
+.card h3{font-size:1.15rem;margin-bottom:.5rem;text-transform:uppercase;letter-spacing:.04em;color:var(--brass)}
+.card .big{font-family:'Jost',sans-serif;font-weight:500;font-size:1.25rem;color:var(--ink)}
 .card p{color:var(--muted);font-size:.95rem}
 .card .times{margin-top:.4rem}
 .card .times div{display:flex;justify-content:space-between;border-bottom:1px dotted var(--line);padding:.25rem 0;font-size:.92rem}
@@ -147,12 +183,12 @@ section.block{max-width:1080px;margin:0 auto;padding:3.4rem 1.5rem}
 }
 .step::before{
   counter-increment:step;content:counter(step);
-  font-family:'Cormorant Garamond',serif;font-size:1.6rem;color:var(--brass);
+  font-family:'Anton',sans-serif;font-size:1.3rem;color:var(--brass);
   border:1px solid var(--brass);border-radius:50%;
   width:2.4rem;height:2.4rem;min-width:2.4rem;
   display:flex;align-items:center;justify-content:center;
 }
-.step h3{font-size:1.25rem;margin-bottom:.2rem}
+.step h3{font-size:1.1rem;margin-bottom:.2rem;text-transform:uppercase;letter-spacing:.03em;color:var(--brass)}
 .step p{color:var(--muted);font-size:.95rem}
 
 .note{
@@ -176,7 +212,7 @@ footer{
   font-size:.85rem;color:var(--muted);
 }
 .foot-inner .crown{color:var(--brass);font-size:1.1rem}
-.foot-links a{color:var(--muted);margin-left:1rem}
+.foot-links a{color:var(--brass-deep);margin-left:1rem}
 .staff-link{font-size:.75rem;letter-spacing:.1em;text-transform:uppercase;opacity:.7}
 @media(max-width:680px){.foot-inner{flex-direction:column}.foot-links a{margin:0 1rem 0 0}}
 
@@ -184,12 +220,12 @@ footer{
 .guest-fab{
   position:fixed;right:1.4rem;bottom:1.4rem;z-index:80;
   width:3.4rem;height:3.4rem;border-radius:50%;
-  background:var(--ink);color:var(--cream);border:1px solid var(--brass);
+  background:var(--green-call);color:var(--ink);border:1px solid var(--brass);
   display:flex;align-items:center;justify-content:center;
-  cursor:pointer;box-shadow:0 8px 24px -8px rgba(42,38,34,.45);
+  cursor:pointer;box-shadow:0 8px 24px -8px rgba(0,0,0,.6);
   transition:transform .15s ease,background .15s ease;
 }
-.guest-fab:hover{background:var(--brass-deep);transform:scale(1.05)}
+.guest-fab:hover{background:#3a7f59;transform:scale(1.05)}
 .guest-fab svg{width:1.5rem;height:1.5rem}
 .guest-fab .dot{
   position:absolute;top:-2px;right:-2px;width:.6rem;height:.6rem;border-radius:50%;
@@ -200,18 +236,19 @@ footer{
   position:fixed;right:1.4rem;bottom:5.4rem;z-index:80;
   width:min(21rem,calc(100vw - 2.8rem));max-height:min(30rem,calc(100vh - 8rem));
   background:var(--white);border:1px solid var(--line);border-radius:6px;
-  box-shadow:0 24px 60px -20px rgba(42,38,34,.5);
+  box-shadow:0 24px 60px -20px rgba(0,0,0,.7);
   display:none;flex-direction:column;overflow:hidden;
 }
 .guest-panel.open{display:flex}
 .guest-panel-head{
-  background:var(--ink);color:var(--cream);padding:1rem 1.2rem;
+  background:var(--maroon);color:var(--ink);padding:1rem 1.2rem;
+  border-bottom:1px solid var(--brass);
   display:flex;align-items:center;justify-content:space-between;gap:.6rem;
 }
-.guest-panel-head h3{font-size:1.15rem;margin:0;color:var(--cream)}
+.guest-panel-head h3{font-size:1.15rem;margin:0;color:var(--ink)}
 .guest-panel-head p{font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;color:var(--brass);margin-top:.15rem}
 .guest-panel-close{
-  background:none;border:0;color:var(--cream);opacity:.7;cursor:pointer;font-size:1.3rem;line-height:1;
+  background:none;border:0;color:var(--ink);opacity:.7;cursor:pointer;font-size:1.3rem;line-height:1;
   padding:.2rem .3rem;
 }
 .guest-panel-close:hover{opacity:1}
@@ -239,23 +276,24 @@ footer{
 /* ---- Impressum / Datenschutz Modal ---- */
 .legal-overlay{
   display:none;position:fixed;inset:0;z-index:90;
-  background:rgba(42,38,34,.55);
+  background:rgba(0,0,0,.7);
   align-items:center;justify-content:center;padding:1.5rem;
 }
 .legal-overlay.open{display:flex}
 .legal-modal{
   width:min(38rem,100%);max-height:min(34rem,calc(100vh - 3rem));
   background:var(--white);border:1px solid var(--line);border-radius:6px;
-  box-shadow:0 24px 60px -20px rgba(42,38,34,.5);
+  box-shadow:0 24px 60px -20px rgba(0,0,0,.7);
   display:flex;flex-direction:column;overflow:hidden;
 }
 .legal-modal-head{
-  background:var(--ink);color:var(--cream);padding:1rem 1.3rem;
+  background:var(--maroon);color:var(--ink);padding:1rem 1.3rem;
+  border-bottom:1px solid var(--brass);
   display:flex;align-items:center;justify-content:space-between;gap:.6rem;
 }
-.legal-modal-head h3{color:var(--cream);font-size:1.3rem;margin:0}
+.legal-modal-head h3{color:var(--ink);font-size:1.3rem;margin:0}
 .legal-close{
-  background:none;border:0;color:var(--cream);opacity:.7;cursor:pointer;font-size:1.3rem;line-height:1;
+  background:none;border:0;color:var(--ink);opacity:.7;cursor:pointer;font-size:1.3rem;line-height:1;
   padding:.2rem .3rem;
 }
 .legal-close:hover{opacity:1}
@@ -266,6 +304,13 @@ footer{
 .legal-modal-body ul{margin:0 0 .6rem 1.2rem;color:var(--ink)}
 .legal-modal-body li{margin-bottom:.4rem}
 .legal-modal-body .legal-note{color:var(--muted);font-size:.85rem;margin-top:.8rem}
+
+/* ---- Formularfelder auf dunklem Grund ---- */
+input,select,textarea{
+  background:var(--white);color:var(--ink);border-color:var(--line);
+  font-family:inherit;
+}
+input::placeholder,textarea::placeholder{color:var(--muted)}
 </style>
 </head>
 <body>
@@ -286,13 +331,15 @@ footer{
 </header>
 
 <div class="hero">
-  <span class="eyebrow">Willkommen im</span>
-  <h1>Turm Hotel<br><span class="accent">… Creative Moments</span></h1>
-  <p class="lead">Schön, dass Sie da sind. Auf dieser Seite finden Sie alle wichtigen Informationen für Ihren Aufenthalt in unserem privat geführten Boutique Hotel im Zentrum Frankfurts.</p>
-  <button type="button" onclick="document.getElementById('guestFab').click()" style="margin-top:1rem;padding:.55rem 1.1rem;background:var(--ink);color:var(--cream);border:1px solid var(--brass);border-radius:8px;font-size:.9rem;cursor:pointer;display:inline-flex;align-items:center;gap:.5rem;">
-    💬 Häufige Fragen? Chat öffnen
-  </button>
-  <div class="rule"></div>
+  <div class="hero-card">
+    <span class="eyebrow">Willkommen im</span>
+    <h1>Turm Hotel<span class="accent">… Creative Moments</span></h1>
+    <p class="lead">Schön, dass Sie da sind. Auf dieser Seite finden Sie alle wichtigen Informationen für Ihren Aufenthalt in unserem privat geführten Boutique Hotel im Zentrum Frankfurts.</p>
+    <div class="rule"></div>
+    <button type="button" class="btn-cta" onclick="document.getElementById('guestFab').click()">
+      💬 Häufige Fragen? Chat öffnen
+    </button>
+  </div>
 </div>
 
 <div class="raum">
@@ -409,7 +456,7 @@ footer{
         <input type="checkbox" id="fsZimmerservice" style="width:auto">
         Zimmerservice gewünscht (+5,00 € pro Person)
       </label>
-      <button type="submit" style="padding:.7rem 1.2rem;background:var(--ink);color:var(--cream);border:1px solid var(--brass);border-radius:8px;cursor:pointer;font-size:.9rem">Anfrage per E-Mail senden</button>
+      <button type="submit" class="btn-cta">Anfrage per E-Mail senden</button>
     </form>
   </div>
 </section>
