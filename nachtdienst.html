@@ -243,6 +243,47 @@ input.search{
 // ein zweites Foto hochladen zu muessen.
 const FIREBASE_URL = 'https://turmhotel-hsk-default-rtdb.europe-west1.firebasedatabase.app';
 
+// Dieselbe Anonymous-Auth-Anbindung wie im Housekeeping Manager (siehe dort
+// und KONTEN_UMZUG.md) -- ohne eingetragenen Key unveraendertes Verhalten.
+const FIREBASE_API_KEY = ''; // Web API Key aus der Firebase-Konsole eintragen, sobald die Regeln stehen
+var fbAuth = { idToken: null, refreshToken: null, expiresAt: 0 };
+
+async function fbEnsureAuth() {
+  if (!FIREBASE_API_KEY) return null;
+  if (fbAuth.idToken && Date.now() < fbAuth.expiresAt) return fbAuth.idToken;
+  try {
+    if (fbAuth.refreshToken) {
+      const r = await fetch('https://securetoken.googleapis.com/v1/token?key=' + FIREBASE_API_KEY, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: 'grant_type=refresh_token&refresh_token=' + fbAuth.refreshToken
+      });
+      const d = await r.json();
+      if (d.id_token) {
+        fbAuth = { idToken: d.id_token, refreshToken: d.refresh_token, expiresAt: Date.now() + (+d.expires_in - 60) * 1000 };
+        return fbAuth.idToken;
+      }
+    }
+    const r2 = await fetch('https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=' + FIREBASE_API_KEY, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ returnSecureToken: true })
+    });
+    const d2 = await r2.json();
+    if (d2.idToken) {
+      fbAuth = { idToken: d2.idToken, refreshToken: d2.refreshToken, expiresAt: Date.now() + (+d2.expiresIn - 60) * 1000 };
+      return fbAuth.idToken;
+    }
+  } catch (e) { console.error('Firebase-Anmeldung fehlgeschlagen', e); }
+  return null;
+}
+
+async function dbUrl(pfad) {
+  const token = await fbEnsureAuth();
+  if (!token) return FIREBASE_URL + pfad;
+  return FIREBASE_URL + pfad + (pfad.indexOf('?') >= 0 ? '&' : '?') + 'auth=' + token;
+}
+
 var images = { 1: null, 2: null };
 var rotations = { 1: 0, 2: 0 };
 var guestRows = [];   // {zi, name, status, an, ab, kat, preis, code}
@@ -483,10 +524,12 @@ function handoffToHousekeeping(){
   statusEl.className = 'handoff-status';
   statusEl.textContent = 'Wird übergeben …';
   var payload = { stand: new Date().toISOString(), zimmer: list };
-  fetch(FIREBASE_URL + '/spaeteAnreisen.json', {
-    method: 'PUT',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(payload)
+  dbUrl('/spaeteAnreisen.json').then(function(url){
+    return fetch(url, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
   })
     .then(function(res){ if(!res.ok) throw new Error('Firebase HTTP ' + res.status); })
     .then(function(){

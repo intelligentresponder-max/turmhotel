@@ -895,6 +895,49 @@ nav{
 // Beim Konten-Umzug reicht es, diese eine Zeile zu ändern (siehe KONTEN_UMZUG.md).
 const FIREBASE_URL = 'https://turmhotel-hsk-default-rtdb.europe-west1.firebasedatabase.app';
 
+// Anonymous-Auth-Anbindung fuer die neuen Regeln aus KONTEN_UMZUG.md
+// (".read"/".write": "auth != null"). Ohne eingetragenen Key verhaelt sich
+// alles exakt wie bisher -- kein SDK, reine fetch()-Aufrufe, mit einem
+// simulierten fetch() durchgetestet (26.09.2026, siehe KONTEN_UMZUG.md).
+const FIREBASE_API_KEY = ''; // Web API Key aus der Firebase-Konsole eintragen, sobald die Regeln stehen
+var fbAuth = { idToken: null, refreshToken: null, expiresAt: 0 };
+
+async function fbEnsureAuth() {
+  if (!FIREBASE_API_KEY) return null; // kein Key hinterlegt -> Verhalten wie bisher, ohne Anmeldung
+  if (fbAuth.idToken && Date.now() < fbAuth.expiresAt) return fbAuth.idToken;
+  try {
+    if (fbAuth.refreshToken) {
+      const r = await fetch('https://securetoken.googleapis.com/v1/token?key=' + FIREBASE_API_KEY, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: 'grant_type=refresh_token&refresh_token=' + fbAuth.refreshToken
+      });
+      const d = await r.json();
+      if (d.id_token) {
+        fbAuth = { idToken: d.id_token, refreshToken: d.refresh_token, expiresAt: Date.now() + (+d.expires_in - 60) * 1000 };
+        return fbAuth.idToken;
+      }
+    }
+    const r2 = await fetch('https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=' + FIREBASE_API_KEY, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ returnSecureToken: true })
+    });
+    const d2 = await r2.json();
+    if (d2.idToken) {
+      fbAuth = { idToken: d2.idToken, refreshToken: d2.refreshToken, expiresAt: Date.now() + (+d2.expiresIn - 60) * 1000 };
+      return fbAuth.idToken;
+    }
+  } catch (e) { console.error('Firebase-Anmeldung fehlgeschlagen', e); }
+  return null;
+}
+
+async function dbUrl(pfad) {
+  const token = await fbEnsureAuth();
+  if (!token) return FIREBASE_URL + pfad;
+  return FIREBASE_URL + pfad + (pfad.indexOf('?') >= 0 ? '&' : '?') + 'auth=' + token;
+}
+
 // ══ ROOM MAP ══
 const ROOMS = {
   'n1-a': ['11','12'],
@@ -953,13 +996,17 @@ function saveState(s, changedRoom) {
   // Verteilen) sollen weiterhin den kompletten Stand ersetzen -> PUT.
   const singleRoom = changedRoom && s[changedRoom] !== undefined;
   const body = singleRoom ? { [changedRoom]: s[changedRoom] } : s;
-  fetch(FIREBASE_URL + '/state.json', {method: singleRoom ? 'PATCH' : 'PUT', headers:{'Content-Type':'application/json'}, body: JSON.stringify(body)})
+  dbUrl('/state.json').then(function(url){
+    return fetch(url, {method: singleRoom ? 'PATCH' : 'PUT', headers:{'Content-Type':'application/json'}, body: JSON.stringify(body)});
+  })
     .then(checkFirebaseResponse).then(function(){ setSyncStatus(true); })
     .catch(function(e){ console.warn('Sync state fehlgeschlagen', e); setSyncStatus(false); });
 }
 function saveStaffData(s) {
   localStorage.setItem('hk_staff3', JSON.stringify(s));
-  fetch(FIREBASE_URL + '/staff.json', {method:'PUT', headers:{'Content-Type':'application/json'}, body: JSON.stringify(s)})
+  dbUrl('/staff.json').then(function(url){
+    return fetch(url, {method:'PUT', headers:{'Content-Type':'application/json'}, body: JSON.stringify(s)});
+  })
     .then(checkFirebaseResponse).then(function(){ setSyncStatus(true); })
     .catch(function(e){ console.warn('Sync staff fehlgeschlagen', e); setSyncStatus(false); });
 }
@@ -992,7 +1039,7 @@ function renderSpaeteAnreisen(data){
 function loadSpaeteAnreisen(){
   var body = document.getElementById('late-arrivals-body');
   if (body) body.innerHTML = '<div class="late-arrivals-empty">Lädt …</div>';
-  fetch(FIREBASE_URL + '/spaeteAnreisen.json')
+  dbUrl('/spaeteAnreisen.json').then(function(url){ return fetch(url); })
     .then(checkFirebaseResponse)
     .then(function(res){ return res.json(); })
     .then(function(data){ setSyncStatus(true); renderSpaeteAnreisen(data || {}); })
@@ -1606,15 +1653,15 @@ function archiveBeforeReset() {
   if (!hatDaten) return;
   var key = ddmmyyyyZuIso(state.__tag) || ddmmyyyyZuIso(todayStr());
   if (!key) return;
-  fetch(FIREBASE_URL + '/history/' + key + '.json', {
-    method: 'PUT', headers: {'Content-Type':'application/json'}, body: JSON.stringify(state)
+  dbUrl('/history/' + key + '.json').then(function(url){
+    return fetch(url, { method: 'PUT', headers: {'Content-Type':'application/json'}, body: JSON.stringify(state) });
   }).catch(function(e){ console.warn('Verlauf-Archivierung fehlgeschlagen', e); });
 }
 async function ladeVerlaufListe() {
   var sel = document.getElementById('verlauf-datum');
   sel.innerHTML = '<option value="">Lade Verlauf …</option>';
   try {
-    var res = await fetch(FIREBASE_URL + '/history.json?shallow=true');
+    var res = await fetch(await dbUrl('/history.json?shallow=true'));
     var data = await res.json();
     var keys = data ? Object.keys(data).sort().reverse() : [];
     if (!keys.length) { sel.innerHTML = '<option value="">Noch kein Verlauf vorhanden</option>'; return; }
@@ -1627,7 +1674,7 @@ async function verlaufBerichtAnzeigen() {
   var key = document.getElementById('verlauf-datum').value;
   if (!key) return;
   try {
-    var res = await fetch(FIREBASE_URL + '/history/' + key + '.json');
+    var res = await fetch(await dbUrl('/history/' + key + '.json'));
     var snap = await res.json();
     if (!snap) { alert('Keine Daten fuer diesen Tag gefunden.'); return; }
     printHandoverReport(snap, isoZuAnzeige(key));
@@ -2952,8 +2999,8 @@ function printHandoverReport(historicalState, historicalLabel) {
 // == CLOUD-SYNC (Firebase) ==
 async function syncFromCloud() {
   try {
-    const stateRes = await fetch(FIREBASE_URL + '/state.json');
-    const staffRes = await fetch(FIREBASE_URL + '/staff.json');
+    const stateRes = await fetch(await dbUrl('/state.json'));
+    const staffRes = await fetch(await dbUrl('/staff.json'));
     checkFirebaseResponse(stateRes);
     checkFirebaseResponse(staffRes);
     const cloudState = await stateRes.json();
