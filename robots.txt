@@ -8,6 +8,9 @@ Disallow: /manager.html
 Disallow: /facility.html
 Disallow: /handbuch.html
 Disallow: /onboarding-checkliste.html
+Disallow: /wegweiser.html
+Disallow: /links.html
+Disallow: /vorfuehrung.html
 Disallow: /archiv/
 
 Sitemap: https://intelligentresponder-max.github.io/turmhotel/sitemap.xml
