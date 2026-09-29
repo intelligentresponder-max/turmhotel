@@ -48,6 +48,26 @@ main{max-width:56rem;margin:0 auto;padding:2rem 1.5rem 4rem}
 }
 footer{text-align:center;padding:2rem;color:var(--muted);font-size:.8rem}
 
+/* ---- Für Nicole: die 3 wichtigsten Links ---- */
+.nicole-box{
+  background:var(--ink);border-radius:12px;padding:1.6rem 1.6rem 1.4rem;margin-bottom:2.4rem;
+  box-shadow:0 4px 14px rgba(0,0,0,.18);
+}
+.nicole-box h2{
+  color:var(--white);font-size:1.05rem;margin-bottom:.3rem;border:none;padding:0;
+  text-transform:none;letter-spacing:normal;
+}
+.nicole-box .sub{color:var(--brass);font-size:.8rem;margin-bottom:1.1rem}
+.nicole-links{display:grid;grid-template-columns:repeat(auto-fit,minmax(13rem,1fr));gap:.8rem}
+.nicole-link{
+  display:block;background:var(--cream);border:1px solid transparent;border-radius:10px;
+  padding:1rem 1.1rem;text-decoration:none;color:var(--ink);transition:transform .15s,border-color .15s;
+}
+.nicole-link:hover{transform:translateY(-2px);border-color:var(--brass)}
+.nicole-link .n{font-size:.68rem;text-transform:uppercase;letter-spacing:.1em;color:var(--brass-deep);margin-bottom:.3rem}
+.nicole-link .name{font-weight:700;font-size:1rem;margin-bottom:.25rem}
+.nicole-link .desc{font-size:.8rem;color:var(--muted)}
+
 /* ---- Schwarzes-Brett-Vorschau ---- */
 .brett-preview{
   background:
@@ -101,6 +121,28 @@ footer{text-align:center;padding:2rem;color:var(--muted);font-size:.8rem}
 </header>
 
 <main>
+
+  <div class="nicole-box">
+    <h2>Für Nicole — drei Türen zum Reinschauen</h2>
+    <div class="sub">Kein Vorwissen nötig, einfach antippen</div>
+    <div class="nicole-links">
+      <a class="nicole-link" href="https://intelligentresponder-max.github.io/turmhotel/" target="_blank" rel="noopener">
+        <div class="n">Für Gäste</div>
+        <div class="name">Gäste-Information</div>
+        <div class="desc">Die öffentliche Startseite — das Ergebnis nach außen</div>
+      </a>
+      <a class="nicole-link" href="https://intelligentresponder-max.github.io/turmhotel/housekeeping/housekeeping-v3.html" target="_blank" rel="noopener">
+        <div class="n">Im Einsatz</div>
+        <div class="name">Housekeeping Manager</div>
+        <div class="desc">Das Haupttool, heute Morgen live im Test</div>
+      </a>
+      <a class="nicole-link" href="https://intelligentresponder-max.github.io/turmhotel/schwarzes-brett.html" target="_blank" rel="noopener">
+        <div class="n">Für's Team</div>
+        <div class="name">Schwarzes Brett</div>
+        <div class="desc">Dein Geburtstagsgruß vom ganzen Team</div>
+      </a>
+    </div>
+  </div>
 
   <div class="brett-preview">
     <div class="brett-head">
