@@ -48,7 +48,7 @@ header{position:sticky;top:0;z-index:50;background:rgba(246,242,234,.94);backdro
   display:flex;flex-direction:column;align-items:center;justify-content:flex-end;
   padding-bottom:5px;flex-shrink:0;position:relative;
 }
-.logo .crown{color:#fff;font-size:.85rem;line-height:1;margin-bottom:2px}
+.logo .crown{width:16px;height:24px;margin-bottom:2px}
 .logo b{color:#fff;font-family:'Cormorant Garamond',serif;font-size:.62rem;letter-spacing:.14em;line-height:1;text-align:center}
 .brand .txt b{display:block;font-family:'Cormorant Garamond',serif;font-weight:600;font-size:1.2rem;color:var(--ink);letter-spacing:.03em;line-height:1.1}
 .brand .txt small{font-size:.58rem;letter-spacing:.26em;text-transform:uppercase;color:var(--muted)}
@@ -57,7 +57,7 @@ header{position:sticky;top:0;z-index:50;background:rgba(246,242,234,.94);backdro
 
 /* Hero */
 .hero{max-width:920px;margin:0 auto;padding:3rem 1.5rem 1rem;text-align:center}
-.hero .crown-big{color:var(--green);font-size:1.6rem}
+.hero .crown-big{width:44px;height:66px;margin:0 auto}
 .hero h1{font-size:clamp(2.1rem,5.5vw,3.2rem);margin:.4rem 0 .2rem}
 .hero p.lead{color:var(--muted);max-width:32rem;margin:.4rem auto 0}
 .creative{font-family:'Cormorant Garamond',serif;font-style:italic;color:var(--green);font-size:1.1rem;margin-top:.3rem}
@@ -102,7 +102,7 @@ header{position:sticky;top:0;z-index:50;background:rgba(246,242,234,.94);backdro
 
 footer{border-top:1px solid var(--line);background:var(--cream-2);margin-top:1rem}
 .foot-inner{max-width:920px;margin:0 auto;padding:2rem 1.5rem;display:flex;flex-wrap:wrap;justify-content:space-between;gap:1rem;font-size:.85rem;color:var(--muted)}
-.foot-inner .crown{color:var(--green)}
+.foot-inner .tower-icon{width:14px;height:21px;vertical-align:-4px}
 .foot-links a{color:var(--muted);margin-left:1rem}
 @media(max-width:600px){.foot-inner{flex-direction:column}.foot-links a{margin:0 1rem 0 0}.building{padding:1.4rem}}
 [dir="rtl"] .steps li{flex-direction:row-reverse;text-align:right}
@@ -114,7 +114,7 @@ footer{border-top:1px solid var(--line);background:var(--cream-2);margin-top:1re
 <header>
   <div class="nav">
     <div class="brand">
-      <span class="logo"><span class="crown">♔</span><b>TURM<br>HOTEL</b></span>
+      <span class="logo"><svg class="crown" viewBox="0 0 100 150" fill="none" aria-hidden="true">   <path d="M15 38 L27 12 L39 32 L50 8 L61 32 L73 12 L85 38" stroke="#f4f0e8" stroke-width="7" stroke-linejoin="round" stroke-linecap="round"/>   <path d="M24 45 Q50 40 76 45" stroke="#c9a227" stroke-width="9" stroke-linecap="round"/>   <path d="M36 55 L26 136" stroke="#f4f0e8" stroke-width="7" stroke-linecap="round"/>   <path d="M64 55 L77 136" stroke="#f4f0e8" stroke-width="7" stroke-linecap="round"/>   <path d="M18 140 L82 140" stroke="#c9a227" stroke-width="8" stroke-linecap="round"/> </svg><b>TURM<br>HOTEL</b></span>
       <span class="txt"><b>Turm Hotel</b><small>Frankfurt am Main</small></span>
     </div>
     <a class="back" href="index.html">← Übersicht</a>
@@ -122,7 +122,13 @@ footer{border-top:1px solid var(--line);background:var(--cream-2);margin-top:1re
 </header>
 
 <div class="hero">
-  <div class="crown-big">♔</div>
+  <svg class="crown-big" viewBox="0 0 100 150" fill="none" aria-hidden="true">
+    <path d="M15 38 L27 12 L39 32 L50 8 L61 32 L73 12 L85 38" stroke="#2e6b4f" stroke-width="7" stroke-linejoin="round" stroke-linecap="round"/>
+    <path d="M24 45 Q50 40 76 45" stroke="#c9a227" stroke-width="9" stroke-linecap="round"/>
+    <path d="M36 55 L26 136" stroke="#2e6b4f" stroke-width="7" stroke-linecap="round"/>
+    <path d="M64 55 L77 136" stroke="#2e6b4f" stroke-width="7" stroke-linecap="round"/>
+    <path d="M18 140 L82 140" stroke="#c9a227" stroke-width="8" stroke-linecap="round"/>
+  </svg>
   <span class="eyebrow" id="eyebrow">Nach dem Check-in, nach Erhalt der Zimmerkarte</span>
   <p style="font-size:.85rem;color:var(--muted);margin-bottom:.3rem" id="location-note">Sie befinden sich im Erdgeschoss an der Rezeption.</p>
   <h1 id="page-title">Wegweiser zum Zimmer</h1>
@@ -158,7 +164,8 @@ footer{border-top:1px solid var(--line);background:var(--cream-2);margin-top:1re
 <footer>
   <div class="foot-inner">
     <div>
-      <span class="crown">♔</span> <b class="serif" style="font-size:1.1rem">Turm Hotel Frankfurt</b><br>
+      <svg class="tower-icon" viewBox="0 0 100 150" fill="none" aria-hidden="true"> <path d="M15 38 L27 12 L39 32 L50 8 L61 32 L73 12 L85 38" stroke="#2e6b4f" stroke-width="7" stroke-linejoin="round" stroke-linecap="round"/> <path d="M24 45 Q50 40 76 45" stroke="#c9a227" stroke-width="9" stroke-linecap="round"/> <path d="M36 55 L26 136" stroke="#2e6b4f" stroke-width="7" stroke-linecap="round"/> <path d="M64 55 L77 136" stroke="#2e6b4f" stroke-width="7" stroke-linecap="round"/> <path d="M18 140 L82 140" stroke="#c9a227" stroke-width="8" stroke-linecap="round"/>
+  </svg> <b class="serif" style="font-size:1.1rem">Turm Hotel Frankfurt</b><br>
       Eschersheimer Landstraße 20 · 60322 Frankfurt am Main<br>
       © 2026 Turm Hotel GmbH · Raum für Möglichkeiten
     </div>

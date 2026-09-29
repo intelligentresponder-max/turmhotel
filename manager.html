@@ -25,7 +25,7 @@ header{
   background:var(--ink);color:var(--white);padding:1.8rem 1.5rem;text-align:center;
   border-bottom:3px solid var(--brass);
 }
-header .crown{font-size:1.6rem;color:var(--brass);display:block;margin-bottom:.3rem}
+header .tower-icon{width:28px;height:42px;margin:0 auto .5rem;display:block}
 header h1{font-size:1.4rem;letter-spacing:.02em}
 header p{color:var(--brass);font-size:.75rem;text-transform:uppercase;letter-spacing:.15em;margin-top:.4rem}
 main{max-width:56rem;margin:0 auto;padding:2rem 1.5rem 4rem}
@@ -89,7 +89,13 @@ footer{text-align:center;padding:2rem;color:var(--muted);font-size:.8rem}
 <body>
 
 <header>
-  <span class="crown">♔</span>
+  <svg class="tower-icon" viewBox="0 0 100 150" fill="none" aria-hidden="true">
+    <path d="M15 38 L27 12 L39 32 L50 8 L61 32 L73 12 L85 38" stroke="#f4f0e8" stroke-width="7" stroke-linejoin="round" stroke-linecap="round"/>
+    <path d="M24 45 Q50 40 76 45" stroke="#c9a227" stroke-width="9" stroke-linecap="round"/>
+    <path d="M36 55 L26 136" stroke="#f4f0e8" stroke-width="7" stroke-linecap="round"/>
+    <path d="M64 55 L77 136" stroke="#f4f0e8" stroke-width="7" stroke-linecap="round"/>
+    <path d="M18 140 L82 140" stroke="#c9a227" stroke-width="8" stroke-linecap="round"/>
+  </svg>
   <h1>Manager Platform</h1>
   <p>Turm Hotel Frankfurt · Interner Zugang</p>
 </header>

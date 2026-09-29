@@ -117,7 +117,7 @@ header{
   display:flex;align-items:center;justify-content:space-between;gap:1rem;
 }
 .brand{display:flex;align-items:center;gap:.7rem;line-height:1}
-.brand .crown{font-size:1.4rem;color:var(--ink)}
+.brand .tower-icon{width:22px;height:33px;flex-shrink:0}
 .brand b{font-family:'Anton',sans-serif;font-weight:400;font-size:1.2rem;letter-spacing:.03em;text-transform:uppercase;color:var(--ink)}
 .brand small{display:block;font-size:.6rem;letter-spacing:.28em;text-transform:uppercase;color:var(--brass);margin-top:.15rem}
 .nav-links{display:flex;gap:1.4rem;font-size:.82rem;letter-spacing:.06em;text-transform:uppercase}
@@ -150,6 +150,7 @@ header{
   border:1px solid var(--brass);border-radius:4px;
   padding:2.6rem 1.8rem 2.4rem;
 }
+.hero-tower-icon{width:64px;height:96px;margin:0 auto 1.4rem;display:block}
 .hero .eyebrow{display:block;margin-bottom:1.2rem}
 .hero h1{
   font-size:clamp(2.2rem,7vw,3.6rem);line-height:1.06;color:var(--white-hard);
@@ -245,7 +246,7 @@ footer{
   display:flex;flex-wrap:wrap;justify-content:space-between;gap:1.4rem;
   font-size:.85rem;color:var(--muted);
 }
-.foot-inner .crown{color:var(--brass);font-size:1.1rem}
+.foot-inner .tower-icon{width:14px;height:21px;vertical-align:-4px}
 .foot-links a{color:var(--brass-deep);margin-left:1rem}
 .staff-link{font-size:.75rem;letter-spacing:.1em;text-transform:uppercase;opacity:.7}
 @media(max-width:680px){.foot-inner{flex-direction:column}.foot-links a{margin:0 1rem 0 0}}
@@ -353,7 +354,13 @@ input::placeholder,textarea::placeholder{color:var(--muted)}
 <header>
   <div class="nav">
     <div class="brand">
-      <span class="crown">♔</span>
+      <svg class="tower-icon" viewBox="0 0 100 150" fill="none" aria-hidden="true">
+        <path d="M15 38 L27 12 L39 32 L50 8 L61 32 L73 12 L85 38" stroke="#f4f0e8" stroke-width="7" stroke-linejoin="round" stroke-linecap="round"/>
+        <path d="M24 45 Q50 40 76 45" stroke="#c9a227" stroke-width="9" stroke-linecap="round"/>
+        <path d="M36 55 L26 136" stroke="#f4f0e8" stroke-width="7" stroke-linecap="round"/>
+        <path d="M64 55 L77 136" stroke="#f4f0e8" stroke-width="7" stroke-linecap="round"/>
+        <path d="M18 140 L82 140" stroke="#c9a227" stroke-width="8" stroke-linecap="round"/>
+      </svg>
       <div><b>Turm Hotel</b><small>Frankfurt am Main</small></div>
     </div>
     <div class="nav-right">
@@ -371,6 +378,13 @@ input::placeholder,textarea::placeholder{color:var(--muted)}
 
 <div class="hero">
   <div class="hero-card">
+    <svg class="hero-tower-icon" viewBox="0 0 100 150" fill="none" aria-hidden="true">
+      <path d="M15 38 L27 12 L39 32 L50 8 L61 32 L73 12 L85 38" stroke="#f4f0e8" stroke-width="7" stroke-linejoin="round" stroke-linecap="round"/>
+      <path d="M24 45 Q50 40 76 45" stroke="#c9a227" stroke-width="9" stroke-linecap="round"/>
+      <path d="M36 55 L26 136" stroke="#f4f0e8" stroke-width="7" stroke-linecap="round"/>
+      <path d="M64 55 L77 136" stroke="#f4f0e8" stroke-width="7" stroke-linecap="round"/>
+      <path d="M18 140 L82 140" stroke="#c9a227" stroke-width="8" stroke-linecap="round"/>
+    </svg>
     <span class="eyebrow" data-i18n="hero.eyebrow">Willkommen im</span>
     <h1>Turm Hotel<span class="accent">… Creative Moments</span></h1>
     <p class="lead" data-i18n="hero.lead">Schön, dass Sie da sind. Auf dieser Seite finden Sie alle wichtigen Informationen für Ihren Aufenthalt in unserem privat geführten Boutique Hotel im Zentrum Frankfurts.</p>
@@ -542,7 +556,14 @@ input::placeholder,textarea::placeholder{color:var(--muted)}
 <footer>
   <div class="foot-inner">
     <div>
-      <span class="crown">♔</span> <b class="serif" style="font-size:1.1rem">Turm Hotel Frankfurt</b><br>
+      <svg class="tower-icon" viewBox="0 0 100 150" fill="none" aria-hidden="true">
+        <path d="M15 38 L27 12 L39 32 L50 8 L61 32 L73 12 L85 38" stroke="#f4f0e8" stroke-width="7" stroke-linejoin="round" stroke-linecap="round"/>
+        <path d="M24 45 Q50 40 76 45" stroke="#c9a227" stroke-width="9" stroke-linecap="round"/>
+        <path d="M36 55 L26 136" stroke="#f4f0e8" stroke-width="7" stroke-linecap="round"/>
+        <path d="M64 55 L77 136" stroke="#f4f0e8" stroke-width="7" stroke-linecap="round"/>
+        <path d="M18 140 L82 140" stroke="#c9a227" stroke-width="8" stroke-linecap="round"/>
+      </svg>
+      <b class="serif" style="font-size:1.1rem">Turm Hotel Frankfurt</b><br>
       Eschersheimer Landstraße 20 · 60322 Frankfurt am Main<br>
       <span data-i18n="footer.copyright">© 2026 Turm Hotel GmbH · Raum für Möglichkeiten</span>
     </div>
