@@ -601,6 +601,29 @@ input::placeholder,textarea::placeholder{color:var(--muted)}
   var GUEST_FAQ = [];
   var UI_TEXT = {};
   var SITE_I18N = {};
+  // FAQPage-Strukturdaten aus GUEST_FAQ (Deutsch) erzeugen, sobald die Inhalte da sind --
+  // hilft Suchmaschinen/KI-Systemen, die JS ausführen, die FAQ ohne eigene Pflege zu erfassen.
+  function injectFaqStructuredData(){
+    if (!GUEST_FAQ.length) return;
+    var strip = function(html){ var d = document.createElement('div'); d.innerHTML = html; return d.textContent.trim(); };
+    var data = {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": GUEST_FAQ.map(function(item){
+        return {
+          "@type": "Question",
+          "name": item.q.de,
+          "acceptedAnswer": { "@type": "Answer", "text": strip(item.a.de) }
+        };
+      })
+    };
+    var s = document.createElement('script');
+    s.type = 'application/ld+json';
+    s.id = 'faq-structured-data';
+    s.textContent = JSON.stringify(data);
+    document.head.appendChild(s);
+  }
+
   var CONTENT_READY = fetch('content/gaeste-info.json')
     .then(function(r){ if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
     .then(function(data){
@@ -609,6 +632,7 @@ input::placeholder,textarea::placeholder{color:var(--muted)}
       SITE_I18N = data.labels || {};
       applyStaticI18n();
       syncAllLangButtons();
+      injectFaqStructuredData();
     })
     .catch(function(e){ console.error('Gäste-Infotexte konnten nicht geladen werden, Seite zeigt die eingebauten Standardtexte', e); });
 
