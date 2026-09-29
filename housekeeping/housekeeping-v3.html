@@ -1162,9 +1162,10 @@ function renderRooms() {
 
 // ══ STATS + PROGRESS ══
 function updateStats() {
-  let clean=0, dirty=0, free=0, occ=0, checkout=0, overnight=0;
+  let clean=0, dirty=0, free=0, occ=0, checkout=0, overnight=0, total=0;
   ALL_ROOMS.forEach(r => {
-    if (r === '101') return; // Massageraum — kein Gästezimmer
+    if (r === '101' || /^Tagungsraum/.test(r)) return; // Massageraum & Tagungsräume — keine Gästezimmer
+    total++;
     const rs = getRoomState(r);
     if (rs.clean) clean++; else dirty++;
     if (rs.occupied || rs.guestType) occ++; else free++;
@@ -1178,7 +1179,6 @@ function updateStats() {
   document.getElementById('stat-checkout').textContent = checkout;
   document.getElementById('stat-overnight').textContent = overnight;
 
-  const total = ALL_ROOMS.length;
   const pct = total ? Math.round(clean / total * 100) : 0;
   document.getElementById('progress-pct').textContent = pct + '%';
   document.getElementById('progress-fill').style.width = pct + '%';
