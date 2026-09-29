@@ -894,6 +894,13 @@
       "fr": "Salle de réunion « Mailand »",
       "es": "Sala de reuniones «Mailand»",
       "zh": "会议室「Mailand」"
+    },
+    "footer.spontan": {
+      "de": "Heute noch frei",
+      "en": "Free tonight",
+      "fr": "Libre ce soir",
+      "es": "Libre esta noche",
+      "zh": "今晚仍有空房"
     }
   }
 }

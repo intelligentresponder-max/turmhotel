@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>Spontanangebote bearbeiten · Turm Hotel</title>
+<style>
+:root{
+  --ink:#1a1a1a;--bg:#f7f5f0;--panel:#ffffff;--line:#e0dcd2;
+  --brass:#b8901f;--brass-deep:#8f6f18;--ok:#2e7d4f;--err:#b33636;
+}
+*{box-sizing:border-box}
+body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;background:var(--bg);color:var(--ink);line-height:1.5}
+header{background:var(--panel);border-bottom:1px solid var(--line);padding:16px;position:sticky;top:0;z-index:10}
+header h1{margin:0 0 4px;font-size:1.15rem}
+header p{margin:0;font-size:.85rem;color:#6b6558}
+main{max-width:640px;margin:0 auto;padding:16px 16px 100px}
+.box{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:16px;margin-bottom:16px}
+.box h2{margin:0 0 10px;font-size:1rem}
+label{display:block;font-size:.78rem;color:#6b6558;margin:8px 0 3px}
+input[type=text],input[type=number],input[type=password],input[type=time],textarea{
+  width:100%;padding:10px 12px;border:1px solid var(--line);border-radius:8px;font-size:1rem;
+  font-family:inherit;background:#fff;color:var(--ink)
+}
+.btn{display:inline-block;padding:12px 20px;border-radius:8px;border:none;font-size:1rem;font-weight:600;cursor:pointer;background:var(--brass);color:#fff}
+.btn:active{background:var(--brass-deep)}
+.btn.secondary{background:transparent;color:var(--brass-deep);border:1px solid var(--brass-deep)}
+.btn.small{padding:8px 14px;font-size:.85rem}
+.btn.danger{background:transparent;color:var(--err);border:1px solid var(--err)}
+.btn:disabled{opacity:.5;cursor:default}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.msg{padding:10px 12px;border-radius:8px;font-size:.9rem;margin:10px 0}
+.msg.ok{background:#e6f4ea;color:var(--ok)}
+.msg.err{background:#fbe9e9;color:var(--err)}
+.msg.info{background:#eef2fb;color:#31527f}
+.warn-box{background:#fff8e6;border:1px solid #e8cf8a;border-radius:8px;padding:12px 14px;font-size:.85rem;margin-bottom:16px}
+.offer-card{border:1px solid var(--line);border-radius:8px;padding:14px;margin-bottom:12px;background:#fbfaf7}
+.offer-card .grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.offer-card .del{margin-top:10px}
+.sticky-save{position:sticky;bottom:0;background:linear-gradient(to top, var(--bg) 60%, transparent);padding:16px 0 8px;margin-top:8px}
+.hint{font-size:.78rem;color:#8a8373;margin-top:4px}
+.empty-note{color:#8a8373;font-size:.9rem;padding:14px 0;text-align:center}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Spontanangebote bearbeiten</h1>
+  <p>Kurzfristig frei gewordene Zimmer eintragen — erscheint sofort auf spontanangebote.html.</p>
+</header>
+
+<main>
+  <div id="loginBox" class="box">
+    <h2>Anmelden</h2>
+    <div class="warn-box">
+      Derselbe Zugangs-Token wie beim Gäste-Info-Editor funktioniert hier auch (Contents: Read and write
+      auf dieses Repo). Details/Einrichtung: siehe <code>content/editor.html</code>.
+    </div>
+    <label for="ghOwner">GitHub-Konto (Besitzer des Repos)</label>
+    <input type="text" id="ghOwner" placeholder="z.B. intelligentresponder-max">
+    <label for="ghRepo">Repository</label>
+    <input type="text" id="ghRepo" value="turmhotel">
+    <label for="ghBranch">Branch</label>
+    <input type="text" id="ghBranch" value="main">
+    <label for="ghToken">Zugangs-Token</label>
+    <input type="password" id="ghToken" placeholder="github_pat_…">
+    <div class="row" style="margin-top:14px">
+      <button class="btn" id="loadBtn">Laden</button>
+    </div>
+    <div id="loginMsg"></div>
+  </div>
+
+  <div id="editorBox" style="display:none">
+    <div class="box">
+      <h2>Zimmer, die heute noch frei sind</h2>
+      <div id="offerList"></div>
+      <div id="emptyNote" class="empty-note" style="display:none">Noch keine Zimmer eingetragen.</div>
+      <button class="btn secondary" id="addBtn" style="margin-top:8px">+ Zimmer hinzufügen</button>
+    </div>
+
+    <div class="box sticky-save">
+      <p class="hint" id="updatedInfo"></p>
+      <div class="row" style="margin-top:8px">
+        <button class="btn" id="saveBtn">Speichern &amp; veröffentlichen</button>
+        <button class="btn secondary small" id="logoutBtn">Abmelden</button>
+      </div>
+      <div id="saveMsg"></div>
+    </div>
+  </div>
+</main>
+
+<script>
+var state = { updated: '', offers: [], sha: null };
+
+function el(tag, attrs, children){
+  var e = document.createElement(tag);
+  attrs = attrs || {};
+  Object.keys(attrs).forEach(function(k){
+    if (k === 'text') e.textContent = attrs[k]; else e.setAttribute(k, attrs[k]);
+  });
+  (children || []).forEach(function(c){ if (c) e.appendChild(c); });
+  return e;
+}
+function msgBox(container, text, kind){
+  container.innerHTML = '';
+  if (!text) return;
+  container.appendChild(el('div', { class: 'msg ' + kind, text: text }));
+}
+
+function ghHeaders(){
+  return {
+    'Authorization': 'Bearer ' + sessionStorage.getItem('gh_token'),
+    'Accept': 'application/vnd.github+json',
+    'X-GitHub-Api-Version': '2022-11-28'
+  };
+}
+function ghApiUrl(path){
+  var owner = sessionStorage.getItem('gh_owner');
+  var repo = sessionStorage.getItem('gh_repo');
+  return 'https://api.github.com/repos/' + owner + '/' + repo + '/contents/' + path;
+}
+function utf8ToBase64(str){
+  var bytes = new TextEncoder().encode(str);
+  var binary = '';
+  var chunk = 0x8000;
+  for (var i = 0; i < bytes.length; i += chunk) binary += String.fromCharCode.apply(null, bytes.subarray(i, i + chunk));
+  return btoa(binary);
+}
+function base64ToUtf8(b64){
+  var binary = atob(b64.replace(/\n/g, ''));
+  var bytes = new Uint8Array(binary.length);
+  for (var i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
+  return new TextDecoder().decode(bytes);
+}
+
+document.getElementById('loadBtn').addEventListener('click', function(){
+  var owner = document.getElementById('ghOwner').value.trim();
+  var repo = document.getElementById('ghRepo').value.trim();
+  var branch = document.getElementById('ghBranch').value.trim() || 'main';
+  var token = document.getElementById('ghToken').value.trim();
+  var loginMsg = document.getElementById('loginMsg');
+  if (!owner || !repo || !token){ msgBox(loginMsg, 'Bitte Konto, Repository und Token ausfüllen.', 'err'); return; }
+  sessionStorage.setItem('gh_owner', owner);
+  sessionStorage.setItem('gh_repo', repo);
+  sessionStorage.setItem('gh_branch', branch);
+  sessionStorage.setItem('gh_token', token);
+  msgBox(loginMsg, 'Lade …', 'info');
+
+  fetch(ghApiUrl('content/spontanangebote.json') + '?ref=' + encodeURIComponent(branch), { headers: ghHeaders() })
+    .then(function(r){
+      if (!r.ok) return r.json().then(function(b){ throw new Error('HTTP ' + r.status + ': ' + (b.message || '')); });
+      return r.json();
+    })
+    .then(function(fileData){
+      state.sha = fileData.sha;
+      var data = JSON.parse(base64ToUtf8(fileData.content));
+      state.updated = data.updated || '';
+      state.offers = data.offers || [];
+      msgBox(loginMsg, '', 'info');
+      document.getElementById('loginBox').style.display = 'none';
+      document.getElementById('editorBox').style.display = 'block';
+      renderOffers();
+    })
+    .catch(function(e){ msgBox(loginMsg, 'Laden fehlgeschlagen: ' + e.message, 'err'); });
+});
+
+document.getElementById('logoutBtn').addEventListener('click', function(){
+  sessionStorage.removeItem('gh_token');
+  location.reload();
+});
+
+function renderOffers(){
+  var wrap = document.getElementById('offerList');
+  var empty = document.getElementById('emptyNote');
+  wrap.innerHTML = '';
+  empty.style.display = state.offers.length ? 'none' : 'block';
+  document.getElementById('updatedInfo').textContent = state.updated
+    ? 'Zuletzt veröffentlicht: ' + new Date(state.updated).toLocaleString('de-DE')
+    : 'Noch nie veröffentlicht.';
+
+  state.offers.forEach(function(o, i){
+    var card = el('div', { class: 'offer-card' });
+    var grid = el('div', { class: 'grid2' });
+
+    function field(labelText, key, type, placeholder){
+      var w = el('div');
+      w.appendChild(el('label', { text: labelText }));
+      var input = el('input', { type: type || 'text' });
+      if (placeholder) input.setAttribute('placeholder', placeholder);
+      input.value = o[key] != null ? o[key] : '';
+      input.addEventListener('input', function(){
+        o[key] = (type === 'number') ? (parseFloat(input.value) || 0) : input.value;
+      });
+      w.appendChild(input);
+      return w;
+    }
+
+    grid.appendChild(field('Zimmernummer', 'zimmer', 'text', 'z.B. 14'));
+    grid.appendChild(field('Kategorie', 'kategorie', 'text', 'z.B. Vintage'));
+    grid.appendChild(field('Preis (EUR)', 'preis', 'number'));
+    grid.appendChild(field('Frei ab (Uhrzeit)', 'verfuegbar_ab', 'time'));
+    card.appendChild(grid);
+    card.appendChild(field('Hinweis (optional)', 'hinweis', 'text', 'z.B. 1 Nacht, Doppelzimmer'));
+
+    var del = el('button', { class: 'btn danger small del', text: '✕ Entfernen' });
+    del.addEventListener('click', function(){ state.offers.splice(i, 1); renderOffers(); });
+    card.appendChild(del);
+
+    wrap.appendChild(card);
+  });
+}
+
+document.getElementById('addBtn').addEventListener('click', function(){
+  state.offers.push({ zimmer: '', kategorie: '', preis: 0, verfuegbar_ab: '', hinweis: '' });
+  renderOffers();
+});
+
+document.getElementById('saveBtn').addEventListener('click', function(){
+  var saveMsg = document.getElementById('saveMsg');
+  var branch = sessionStorage.getItem('gh_branch') || 'main';
+  // leere Zimmernummern rausfiltern, damit keine kaputten Karten live gehen
+  var offers = state.offers.filter(function(o){ return (o.zimmer || '').trim(); });
+  var payload = { updated: new Date().toISOString(), offers: offers };
+
+  msgBox(saveMsg, 'Speichere …', 'info');
+  document.getElementById('saveBtn').disabled = true;
+
+  fetch(ghApiUrl('content/spontanangebote.json'), {
+    method: 'PUT',
+    headers: Object.assign({ 'Content-Type': 'application/json' }, ghHeaders()),
+    body: JSON.stringify({
+      message: 'Spontanangebote aktualisiert (' + offers.length + ' Zimmer)',
+      content: utf8ToBase64(JSON.stringify(payload, null, 2) + '\n'),
+      sha: state.sha,
+      branch: branch
+    })
+  })
+    .then(function(r){
+      if (!r.ok) return r.json().then(function(b){ throw new Error('HTTP ' + r.status + ': ' + (b.message || '')); });
+      return r.json();
+    })
+    .then(function(result){
+      state.sha = result.content.sha;
+      state.updated = payload.updated;
+      state.offers = offers;
+      renderOffers();
+      msgBox(saveMsg, '✓ Veröffentlicht — live in 1–2 Minuten.', 'ok');
+      document.getElementById('saveBtn').disabled = false;
+    })
+    .catch(function(e){
+      var extra = e.message.indexOf('does not match') !== -1
+        ? ' Jemand anderes hat zwischenzeitlich gespeichert — bitte Seite neu laden.'
+        : '';
+      msgBox(saveMsg, 'Speichern fehlgeschlagen: ' + e.message + extra, 'err');
+      document.getElementById('saveBtn').disabled = false;
+    });
+});
+
+(function(){
+  var o = sessionStorage.getItem('gh_owner');
+  if (o) document.getElementById('ghOwner').value = o;
+  if (sessionStorage.getItem('gh_repo')) document.getElementById('ghRepo').value = sessionStorage.getItem('gh_repo');
+  if (sessionStorage.getItem('gh_branch')) document.getElementById('ghBranch').value = sessionStorage.getItem('gh_branch');
+})();
+</script>
+</body>
+</html>

@@ -26,6 +26,7 @@
 ## Wichtige Seiten in diesem Repo
 
 - Gäste-FAQ (interaktiv, in dieser Seite eingebettet): 22 Fragen und Antworten zu Check-in, Frühstück, Anreise, Zimmerkategorien u. a., in 5 Sprachen (DE/EN/FR/ES/中文). Rohdaten: content/gaeste-info.json
+- spontanangebote.html — kurzfristig frei gewordene Zimmer, direkt beim Hotel anfragbar (kein Buchungsportal). Rohdaten: content/spontanangebote.json. Ändert sich mehrmals täglich; kann auch leer sein.
 - wegweiser.html — Wegweiser zum Zimmer in 15 Sprachen (nur per Link/QR-Code, nicht indexiert)
 
 ## Hinweis für Sprach-/KI-Systeme

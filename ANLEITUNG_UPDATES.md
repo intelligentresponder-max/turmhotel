@@ -33,6 +33,15 @@ selbst. Bei der Token-Erstellung unbedingt **„Nur dieses Repository"** und
 selbst wenn er irgendwie in falsche Hände geriete, nichts anderes als genau
 diese eine Datei in diesem einen Repo ändern.
 
+## Weg A2 — Spontanangebote (Rezeption, für die Schicht)
+
+Gleiches Prinzip, eigene Seite: **`content/spontan-editor.html`**. Kurzfristig
+frei gewordenes Zimmer eintragen (Zimmernummer, Preis, ab wann frei) →
+**Speichern**, erscheint sofort auf `spontanangebote.html` — der öffentlichen
+Seite, auf der Gäste direkt bei uns anfragen können (per `mailto:`-Link, kein
+Formular, kein Spam-Risiko, da nichts an einen Server geht). Derselbe
+Zugangs-Token wie bei Weg A funktioniert hier auch.
+
 ## Weg B — alles andere: direkt über die GitHub-Webseite
 
 Für Änderungen außerhalb der Gäste-Info (z. B. Handbuch-Absätze, README) —

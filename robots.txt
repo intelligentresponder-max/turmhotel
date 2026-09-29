@@ -1,6 +1,7 @@
 User-agent: *
 Allow: /
 Disallow: /content/editor.html
+Disallow: /content/spontan-editor.html
 Disallow: /housekeeping/
 Disallow: /nachtdienst.html
 Disallow: /manager.html

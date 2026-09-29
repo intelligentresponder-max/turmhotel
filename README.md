@@ -10,6 +10,7 @@ GitHub Pages. Entwicklung und Betrieb: André Schwarz, Rezeption.
 | Nachtdienst-Liste | Fotos der Gästeliste + Schlüsselsafe-Tabelle einlesen, wer kommt noch/welches Safe/welcher PIN | im Repo (`nachtdienst.html`) |
 | Gästeportal / Handbücher | Gästeinformation, Personalanweisungen | im Repo |
 | Gäste-Info-Editor | FAQ, Öffnungszeiten, Kontakttexte (5 Sprachen) vom Handy bearbeiten, ohne GitHub-Kenntnisse | im Repo (`content/editor.html`) |
+| Spontanangebote | Kurzfristig freie Zimmer eintragen (Rezeption) bzw. anzeigen (Gäste) | im Repo (`content/spontan-editor.html` / `spontanangebote.html`) |
 
 Der Foto-Scan der Alpha-Liste (früher eigene Seite `alpha-scan.html` / `bit.ly/turmhsk`)
 ist seit v3.9 ein Reiter im Housekeeping Manager selbst („Gästeliste" → „📷 Foto-Scan") —
@@ -31,6 +32,33 @@ Damit der Betrieb nicht an einer Person hängt:
 ---
 
 ## Versionsverlauf
+
+### Spontanangebote, Spa-Klarstellung, SEO/KI-Lesbarkeit — 29.09.2026
+- **Neue Seite `spontanangebote.html`** ("Heute noch frei"): zeigt kurzfristig
+  frei gewordene Zimmer, direkt beim Hotel anfragbar per `mailto:`-Link (kein
+  Server, kein Spam-Risiko). Gepflegt über `content/spontan-editor.html`
+  (gleicher GitHub-Token wie der Gäste-Info-Editor). Bewusstes
+  Anfrage-Modell statt Direktbuchung: kein Zahlungsrisiko, keine
+  Doppelbuchungsgefahr mit Suite8 — passt zur bestehenden
+  "Tool schlägt vor, Mensch entscheidet"-Linie aus `vorfuehrung.html`.
+  In Sitemap/robots.txt/llms.txt eingetragen.
+- **FAQ-Klarstellung Spa:** mehrere externe Buchungsportale bewerben einen
+  "Wellnessbereich", den es im Haus nicht gibt. Neue FAQ verneint das ehrlich
+  und nennt zwei echte Alternativen in der Nähe (ELEMENTS Eschenheimer Turm,
+  THE SPA im Steigenberger Frankfurter Hof). Dazu eine zweite, sachliche FAQ:
+  verbindlich sind nur die eigenen Angaben, externe Portale übernehmen Daten
+  teils automatisiert und nicht immer korrekt.
+- **SEO/KI-Lesbarkeit:** `llms.txt` neu (Basisdaten als Klartext für
+  Sprachmodelle/Crawler ohne JS-Ausführung), FAQPage-Strukturdaten werden
+  jetzt automatisch aus den 22 FAQ-Einträgen erzeugt.
+
+### Echte Fotos + Original-Inhalte von turmhotel-frankfurt.de — 29.09.2026
+Auf Basis dreier vom Betreiber hochgeladener HTML-Kopien der echten Seite
+(offizielle Seite + 2 Aggregator-Seiten) plus 4 echter Hotelfotos: `img/hotel/`
+mit Außenansicht, Lounge, Zimmern, Frühstück, Tagungsraum; neue Sektion
+"Lounge & Zimmer" auf `index.html`; Zimmerkategorien/Distanzen-FAQ mit den
+offiziellen, präzisen Zahlen aktualisiert; `robots.txt`, `og:image`,
+`hreflang`, `sitemap.xml` (SEO-Lücken aus der vorherigen Analyse) geschlossen.
 
 ### Gäste-Info als eigene Datei + mobiler Editor — 29.09.2026
 `index.html` enthielt bislang alle FAQ-Antworten, Öffnungszeiten und

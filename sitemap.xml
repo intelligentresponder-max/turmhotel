@@ -6,9 +6,15 @@
     <changefreq>monthly</changefreq>
     <priority>1.0</priority>
   </url>
+  <url>
+    <loc>https://intelligentresponder-max.github.io/turmhotel/spontanangebote.html</loc>
+    <lastmod>2026-09-29</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.7</priority>
+  </url>
   <!-- Bewusst NICHT gelistet, nur per QR-Code/direktem Link erreichbar: -->
   <!-- wegweiser.html, speakingchat.html (Gäste, noindex) -->
   <!-- facility.html, handbuch.html, housekeeping/housekeeping-v3.html, -->
   <!-- housekeeping/alpha-scan.html, onboarding-checkliste.html, nachtdienst.html (Personal, noindex) -->
-  <!-- content/editor.html (Personal, noindex) -->
+  <!-- content/editor.html, content/spontan-editor.html (Personal, noindex) -->
 </urlset>
