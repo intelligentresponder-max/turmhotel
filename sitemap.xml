@@ -2,13 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://intelligentresponder-max.github.io/turmhotel/</loc>
-    <lastmod>2026-06-17</lastmod>
+    <lastmod>2026-09-29</lastmod>
     <changefreq>monthly</changefreq>
     <priority>1.0</priority>
   </url>
   <!-- Bewusst NICHT gelistet, nur per QR-Code/direktem Link erreichbar: -->
   <!-- wegweiser.html, speakingchat.html (Gäste, noindex) -->
   <!-- facility.html, handbuch.html, housekeeping/housekeeping-v3.html, -->
-  <!-- housekeeping/alpha-scan.html, onboarding-checkliste.html (Personal, noindex) -->
-  <!-- personal.html: im Footer verlinkt, Datei existiert noch nicht im Repo (24.08.2026) -->
+  <!-- housekeeping/alpha-scan.html, onboarding-checkliste.html, nachtdienst.html (Personal, noindex) -->
+  <!-- content/editor.html (Personal, noindex) -->
 </urlset>

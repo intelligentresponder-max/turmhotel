@@ -15,7 +15,23 @@
 <meta property="og:title" content="Gäste-Information · Turm Hotel Frankfurt">
 <meta property="og:description" content="Alle wichtigen Informationen für Ihren Aufenthalt im Turm Hotel Frankfurt – Rezeption, Frühstück, Kontakt und Nachteingang.">
 <meta property="og:url" content="https://intelligentresponder-max.github.io/turmhotel/">
+<meta property="og:image" content="https://intelligentresponder-max.github.io/turmhotel/img/hotel/og-image.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Lounge im Turm Hotel Frankfurt mit roten Sesseln und Kunst an der Wand">
 <meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://intelligentresponder-max.github.io/turmhotel/img/hotel/og-image.jpg">
+
+<!-- hreflang: die Seite bedient 5 Sprachen ueber einen JS-Umschalter auf derselben URL.
+     Fuer echte Mehrsprachigkeits-Signale an Google braeuchte es eigene URLs je Sprache
+     (siehe vorfuehrung.html, "Blick nach vorn") -- diese selbstreferenzierenden Tags
+     sind der bestmoegliche Zwischenschritt ohne URL-Struktur zu aendern. -->
+<link rel="alternate" hreflang="de" href="https://intelligentresponder-max.github.io/turmhotel/">
+<link rel="alternate" hreflang="en" href="https://intelligentresponder-max.github.io/turmhotel/">
+<link rel="alternate" hreflang="fr" href="https://intelligentresponder-max.github.io/turmhotel/">
+<link rel="alternate" hreflang="es" href="https://intelligentresponder-max.github.io/turmhotel/">
+<link rel="alternate" hreflang="zh" href="https://intelligentresponder-max.github.io/turmhotel/">
+<link rel="alternate" hreflang="x-default" href="https://intelligentresponder-max.github.io/turmhotel/">
 
 <!-- Structured data: Hotel -->
 <script type="application/ld+json">
@@ -25,6 +41,7 @@
   "name": "Turm Hotel Frankfurt",
   "description": "Privat geführtes Boutique Hotel im Zentrum Frankfurts.",
   "url": "https://www.turmhotel-frankfurt.de/",
+  "image": "https://intelligentresponder-max.github.io/turmhotel/img/hotel/og-image.jpg",
   "telephone": "+49 69 1540 50",
   "email": "rooms@turmhotel-frankfurt.de",
   "checkinTime": "15:00",
@@ -123,8 +140,9 @@ header{
 .hero{
   padding:3.2rem 1.5rem 3.6rem;
   background:
-    linear-gradient(180deg, rgba(5,9,7,.35), rgba(5,9,7,.8)),
-    radial-gradient(1100px 620px at 50% 0%, #1c3a2d 0%, #0e2018 55%, #070b09 100%);
+    linear-gradient(180deg, rgba(10,18,14,.72), rgba(7,11,9,.85)),
+    radial-gradient(1100px 620px at 50% 0%, rgba(28,58,45,.75) 0%, rgba(14,32,24,.82) 55%, rgba(7,11,9,.9) 100%),
+    url('img/hotel/aussenansicht.jpg') center 25%/cover no-repeat;
 }
 .hero-card{
   max-width:640px;margin:0 auto;text-align:center;
@@ -185,6 +203,11 @@ section.block{max-width:1080px;margin:0 auto;padding:3.4rem 1.5rem}
 .card .times{margin-top:.4rem}
 .card .times div{display:flex;justify-content:space-between;border-bottom:1px dotted var(--line);padding:.25rem 0;font-size:.92rem}
 .card .times div span:last-child{color:var(--ink)}
+
+.gallery{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:1.1rem;margin-top:1.6rem}
+.gallery figure{margin:0;border:1px solid var(--line);border-radius:2px;overflow:hidden;background:var(--white)}
+.gallery img{display:block;width:100%;height:170px;object-fit:cover}
+.gallery figcaption{padding:.65rem .9rem;font-size:.82rem;color:var(--muted);text-transform:uppercase;letter-spacing:.05em}
 
 /* ---- Night entrance steps ---- */
 .steps{counter-reset:step;display:grid;gap:1rem;margin-top:1.4rem}
@@ -337,6 +360,7 @@ input::placeholder,textarea::placeholder{color:var(--muted)}
       <nav class="nav-links">
         <a href="#ankunft" data-i18n="nav.ankunft">Ankunft</a>
         <a href="#zeiten" data-i18n="nav.zeiten">Zeiten</a>
+        <a href="#lounge" data-i18n="nav.lounge">Lounge</a>
         <a href="#nacht" data-i18n="nav.nacht">Nachteingang</a>
         <a href="#kontakt" data-i18n="nav.kontakt">Kontakt</a>
       </nav>
@@ -413,6 +437,34 @@ input::placeholder,textarea::placeholder{color:var(--muted)}
       </div>
       <p style="margin-top:.6rem" data-i18n="card.breakfast.note">Kinder bis 8 Jahre zum halben Preis. Eierspeisen bereiten wir gerne nach Wunsch zu.</p>
     </div>
+  </div>
+</section>
+
+<section class="block" id="lounge" style="padding-top:0">
+  <span class="eyebrow" data-i18n="lounge.eyebrow">Im Haus</span>
+  <h2 data-i18n="lounge.h2">Lounge &amp; Zimmer</h2>
+  <p style="color:var(--muted);max-width:38rem" data-i18n="lounge.lead">Unsere gemütlich gestylte Lounge steht Ihnen während Ihres Aufenthalts für berufliche Meetings, Ausarbeitungen am Laptop, Gespräche mit Freunden oder Geschäftspartnern oder einfach zum Chillen jederzeit zur Verfügung.</p>
+  <div class="gallery">
+    <figure>
+      <img src="img/hotel/lounge.jpg" alt="Lounge im Turm Hotel mit roten Sesseln und Kunst an der Wand" loading="lazy">
+      <figcaption data-i18n="gallery.lounge">Lounge</figcaption>
+    </figure>
+    <figure>
+      <img src="img/hotel/zimmer-1.jpg" alt="Zimmer im Turm Hotel mit blauem Wandbild über den Betten" loading="lazy">
+      <figcaption data-i18n="gallery.zimmer">Zimmer</figcaption>
+    </figure>
+    <figure>
+      <img src="img/hotel/zimmer-2.jpg" alt="Zimmer im Turm Hotel mit Doppelbett und blauem Kopfteil" loading="lazy">
+      <figcaption data-i18n="gallery.zimmer2">Zimmer</figcaption>
+    </figure>
+    <figure>
+      <img src="img/hotel/fruehstueck.jpg" alt="Frühstücksbereich im Turm Hotel" loading="lazy">
+      <figcaption data-i18n="gallery.fruehstueck">Frühstücksbuffet</figcaption>
+    </figure>
+    <figure>
+      <img src="img/hotel/tagungsraum.jpg" alt="Tagungsraum im Turm Hotel mit Präsentationstechnik" loading="lazy">
+      <figcaption data-i18n="gallery.tagungsraum">Tagungsraum „Mailand"</figcaption>
+    </figure>
   </div>
 </section>
 

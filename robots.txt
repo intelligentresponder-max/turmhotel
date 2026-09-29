@@ -1,0 +1,12 @@
+User-agent: *
+Allow: /
+Disallow: /content/editor.html
+Disallow: /housekeeping/
+Disallow: /nachtdienst.html
+Disallow: /manager.html
+Disallow: /facility.html
+Disallow: /handbuch.html
+Disallow: /onboarding-checkliste.html
+Disallow: /archiv/
+
+Sitemap: https://intelligentresponder-max.github.io/turmhotel/sitemap.xml

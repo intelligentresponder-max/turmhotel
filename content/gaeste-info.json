@@ -50,6 +50,22 @@
     },
     {
       "q": {
+        "de": "Gibt es einen Snack- oder Getränkeautomaten?",
+        "en": "Is there a snack or drinks vending machine?",
+        "fr": "Y a-t-il un distributeur de snacks ou de boissons ?",
+        "es": "¿Hay una máquina expendedora de snacks o bebidas?",
+        "zh": "是否有零食或饮料自动售货机？"
+      },
+      "a": {
+        "de": "Ja, ein Getränke- und Snackautomat steht Ihnen im Haus rund um die Uhr zur Verfügung.",
+        "en": "Yes, a drinks and snack vending machine is available in the hotel around the clock.",
+        "fr": "Oui, un distributeur de boissons et de snacks est à votre disposition dans l'hôtel 24 heures sur 24.",
+        "es": "Sí, dispone de una máquina expendedora de bebidas y snacks en el hotel las 24 horas.",
+        "zh": "有的，酒店内设有饮料及零食自动售货机，全天候可用。"
+      }
+    },
+    {
+      "q": {
         "de": "Wie finde ich mein Zimmer?",
         "en": "How do I find my room?",
         "fr": "Comment trouver ma chambre ?",
@@ -89,11 +105,11 @@
         "zh": "附近有哪些值得参观的地方？"
       },
       "a": {
-        "de": "Der historische Eschenheimer Turm liegt nur wenige Schritte entfernt — ein Spaziergang lohnt sich besonders am Abend. Auch die Innenstadt ist gut zu Fuß erreichbar: Hauptwache (0,4 km), Zeil und Alte Oper (je 0,7 km), Goethehaus (1,0 km), Römerberg (1,2 km), Bankenviertel und Palmengarten (1,5 km), Museumsufer (1,7 km) sowie die Messe Frankfurt (2,0 km).",
-        "en": "The historic Eschenheimer Turm tower is just a few steps away — a walk there is especially lovely in the evening. The city centre is also an easy walk: Hauptwache (0.4 km), Zeil shopping street and Alte Oper (0.7 km each), Goethe House (1.0 km), Römerberg (1.2 km), the financial district and Palmengarten (1.5 km), the Museumsufer riverside museums (1.7 km) and Messe Frankfurt (2.0 km).",
-        "fr": "La célèbre tour historique Eschenheimer Turm se trouve à quelques pas seulement — une promenade y est particulièrement agréable le soir. Le centre-ville est également facilement accessible à pied : Hauptwache (0,4 km), la Zeil et l'Alte Oper (0,7 km chacune), la maison de Goethe (1,0 km), Römerberg (1,2 km), le quartier financier et le Palmengarten (1,5 km), les musées du Museumsufer (1,7 km) ainsi que la foire de Francfort (2,0 km).",
-        "es": "La histórica torre Eschenheimer Turm está a solo unos pasos — un paseo hasta allí es especialmente agradable por la noche. El centro de la ciudad también es fácilmente accesible a pie: Hauptwache (0,4 km), la Zeil y la Alte Oper (0,7 km cada una), la Casa de Goethe (1,0 km), Römerberg (1,2 km), el distrito financiero y el Palmengarten (1,5 km), los museos del Museumsufer (1,7 km) y el recinto ferial Messe Frankfurt (2,0 km).",
-        "zh": "历史悠久的埃申海姆塔（Eschenheimer Turm）近在咫尺——傍晚前往散步尤为惬意。市中心亦可轻松步行到达：中央广场Hauptwache（0.4公里）、采尔购物街与老歌剧院Alte Oper（各0.7公里）、歌德故居（1.0公里）、罗马广场Römerberg（1.2公里）、金融区与棕榈园Palmengarten（1.5公里）、博物馆河岸Museumsufer（1.7公里）以及法兰克福展览中心（2.0公里）。"
+        "de": "Der historische Eschenheimer Turm liegt nur wenige Schritte entfernt — ein Spaziergang lohnt sich besonders am Abend. Auch die Innenstadt ist gut zu Fuß erreichbar: Kino (0,3 km), Hauptwache (0,4 km), Zeil und Alte Oper (je 0,7 km), Goethestraße und Fressgass (je 0,8 km), Goethehaus (1,1 km), Main Tower und Kleinmarkthalle (je 1,0 km), Römerberg/Paulskirche (1,2 km), Bankenviertel und Palmengarten (1,5 km), Museumsufer (1,7 km), Zoo (1,8 km) sowie Alt-Sachsenhausen, Städel Museum und die Messe Frankfurt (je 2,0 km).",
+        "en": "The historic Eschenheimer Turm tower is just a few steps away — a walk there is especially lovely in the evening. The city centre is also an easy walk: cinema (0.3 km), Hauptwache (0.4 km), Zeil shopping street and Alte Oper (0.7 km each), Goethestraße and Fressgass (0.8 km each), Goethe House (1.1 km), Main Tower and Kleinmarkthalle market hall (1.0 km each), Römerberg/Paulskirche (1.2 km), the financial district and Palmengarten (1.5 km), the Museumsufer riverside museums (1.7 km), the zoo (1.8 km), and Alt-Sachsenhausen, the Städel Museum and Messe Frankfurt (2.0 km each).",
+        "fr": "La célèbre tour historique Eschenheimer Turm se trouve à quelques pas seulement — une promenade y est particulièrement agréable le soir. Le centre-ville est également facilement accessible à pied : cinéma (0,3 km), Hauptwache (0,4 km), la Zeil et l'Alte Oper (0,7 km chacune), Goethestraße et Fressgass (0,8 km chacune), la maison de Goethe (1,1 km), la Main Tower et le marché couvert Kleinmarkthalle (1,0 km chacun), Römerberg/Paulskirche (1,2 km), le quartier financier et le Palmengarten (1,5 km), les musées du Museumsufer (1,7 km), le zoo (1,8 km) ainsi qu'Alt-Sachsenhausen, le musée Städel et la foire de Francfort (2,0 km chacun).",
+        "es": "La histórica torre Eschenheimer Turm está a solo unos pasos — un paseo hasta allí es especialmente agradable por la noche. El centro de la ciudad también es fácilmente accesible a pie: cine (0,3 km), Hauptwache (0,4 km), la Zeil y la Alte Oper (0,7 km cada una), Goethestraße y Fressgass (0,8 km cada una), la Casa de Goethe (1,1 km), la Main Tower y el mercado Kleinmarkthalle (1,0 km cada uno), Römerberg/Paulskirche (1,2 km), el distrito financiero y el Palmengarten (1,5 km), los museos del Museumsufer (1,7 km), el zoo (1,8 km) y Alt-Sachsenhausen, el Museo Städel y el recinto ferial Messe Frankfurt (2,0 km cada uno).",
+        "zh": "历史悠久的埃申海姆塔（Eschenheimer Turm）近在咫尺——傍晚前往散步尤为惬意。市中心亦可轻松步行到达：电影院（0.3公里）、中央广场Hauptwache（0.4公里）、采尔购物街与老歌剧院Alte Oper（各0.7公里）、Goethestraße与Fressgass商业街（各0.8公里）、歌德故居（1.1公里）、Main Tower大厦与Kleinmarkthalle市场（各1.0公里）、罗马广场Römerberg与圣保罗教堂（1.2公里）、金融区与棕榈园Palmengarten（1.5公里）、博物馆河岸Museumsufer（1.7公里）、动物园（1.8公里），以及Alt-Sachsenhausen老城区、Städel博物馆与法兰克福展览中心（各2.0公里）。"
       }
     },
     {
@@ -105,11 +121,11 @@
         "zh": "如何从中央火车站前往酒店？"
       },
       "a": {
-        "de": "Der Hauptbahnhof ist rund 1,8 km entfernt. Am schnellsten geht es mit der U-Bahn (Linien U1, U2, U3, U8) bis Eschenheimer Tor, ca. 3–4 Minuten Fahrzeit, von dort sind es noch etwa 290 Meter zu Fuß bis zum Hotel. Ein Taxi kostet ungefähr 10–15 €.",
-        "en": "Frankfurt Central Station (Hauptbahnhof) is about 1.8 km away. The fastest way is by U-Bahn (lines U1, U2, U3, U8) to Eschenheimer Tor, about 3–4 minutes, then roughly a 290-metre walk to the hotel. A taxi costs around €10–15.",
-        "fr": "La gare centrale (Hauptbahnhof) est à environ 1,8 km. Le plus rapide est de prendre le métro (U-Bahn, lignes U1, U2, U3, U8) jusqu'à Eschenheimer Tor, environ 3–4 minutes de trajet, puis environ 290 mètres à pied jusqu'à l'hôtel. Un taxi coûte environ 10–15 €.",
-        "es": "La estación central (Hauptbahnhof) está a unos 1,8 km. La forma más rápida es en metro (U-Bahn, líneas U1, U2, U3, U8) hasta Eschenheimer Tor, unos 3–4 minutos, y luego unos 290 metros a pie hasta el hotel. Un taxi cuesta aproximadamente 10–15 €.",
-        "zh": "中央火车站（Hauptbahnhof）距离酒店约1.8公里。最快的方式是乘坐地铁（U-Bahn，U1、U2、U3、U8线）至Eschenheimer Tor站，车程约3–4分钟，之后步行约290米即可到达酒店。乘坐出租车费用约为10–15欧元。"
+        "de": "Der Hauptbahnhof ist rund 1,8 km entfernt (Fernbusbahnhof ZOB ebenfalls 1,8 km). Am schnellsten geht es mit der U-Bahn (Linien U1, U2, U3, U8) ab Willy-Brandt-Platz (1 Minute vom Hauptbahnhof) bis Eschenheimer Tor, ca. 3 Minuten Fahrzeit, von dort sind es noch etwa 290 Meter zu Fuß bis zum Hotel. Ein Taxi kostet ungefähr 10–15 €.",
+        "en": "Frankfurt Central Station (Hauptbahnhof) is about 1.8 km away (the ZOB long-distance bus station is also 1.8 km). The fastest way is by U-Bahn (lines U1, U2, U3, U8) from Willy-Brandt-Platz (1 minute from the station) to Eschenheimer Tor, about 3 minutes, then roughly a 290-metre walk to the hotel. A taxi costs around €10–15.",
+        "fr": "La gare centrale (Hauptbahnhof) est à environ 1,8 km (la gare routière longue distance ZOB est également à 1,8 km). Le plus rapide est de prendre le métro (U-Bahn, lignes U1, U2, U3, U8) depuis Willy-Brandt-Platz (à 1 minute de la gare) jusqu'à Eschenheimer Tor, environ 3 minutes de trajet, puis environ 290 mètres à pied jusqu'à l'hôtel. Un taxi coûte environ 10–15 €.",
+        "es": "La estación central (Hauptbahnhof) está a unos 1,8 km (la estación de autobuses de larga distancia ZOB también está a 1,8 km). La forma más rápida es en metro (U-Bahn, líneas U1, U2, U3, U8) desde Willy-Brandt-Platz (a 1 minuto de la estación) hasta Eschenheimer Tor, unos 3 minutos, y luego unos 290 metros a pie hasta el hotel. Un taxi cuesta aproximadamente 10–15 €.",
+        "zh": "中央火车站（Hauptbahnhof）距离酒店约1.8公里（长途汽车站ZOB同样为1.8公里）。最快的方式是从Willy-Brandt-Platz站（距火车站1分钟）乘坐地铁（U-Bahn，U1、U2、U3、U8线）至Eschenheimer Tor站，车程约3分钟，之后步行约290米即可到达酒店。乘坐出租车费用约为10–15欧元。"
       }
     },
     {
@@ -121,11 +137,11 @@
         "zh": "如何从机场前往酒店？"
       },
       "a": {
-        "de": "Der Flughafen Frankfurt (FRA) liegt etwa 18 km entfernt. Mit öffentlichen Verkehrsmitteln: S-Bahn bis Hauptwache (ca. 17 Minuten), dann eine Station mit der U-Bahn bis Eschenheimer Tor. Mit dem Taxi rechnen Sie mit etwa 30–50 €.",
-        "en": "Frankfurt Airport (FRA) is about 18 km away. By public transport: take the S-Bahn to Hauptwache (about 17 minutes), then one stop on the U-Bahn to Eschenheimer Tor. A taxi costs roughly €30–50.",
-        "fr": "L'aéroport de Francfort (FRA) est à environ 18 km. En transports en commun : S-Bahn jusqu'à Hauptwache (environ 17 minutes), puis une station de métro jusqu'à Eschenheimer Tor. En taxi, comptez environ 30–50 €.",
-        "es": "El aeropuerto de Fráncfort (FRA) está a unos 18 km. En transporte público: S-Bahn hasta Hauptwache (unos 17 minutos), luego una parada de metro hasta Eschenheimer Tor. En taxi, cuente con unos 30–50 €.",
-        "zh": "法兰克福机场（FRA）距离酒店约18公里。乘坐公共交通：搭乘S-Bahn城铁至Hauptwache站（约17分钟），再乘一站地铁至Eschenheimer Tor站即可。乘坐出租车费用约为30–50欧元。"
+        "de": "Der Flughafen Frankfurt (FRA) liegt etwa 13,5–18 km entfernt (je nach Terminal). Mit öffentlichen Verkehrsmitteln: S-Bahn bis Hauptwache (ca. 17 Minuten), dann eine Station mit der U-Bahn bis Eschenheimer Tor — von dort etwa 290 Meter zu Fuß bis zum Hotel. Nachts fahren zusätzlich die Buslinien M36, N7 und N8. Mit dem Taxi rechnen Sie mit etwa 30–50 €.",
+        "en": "Frankfurt Airport (FRA) is about 13.5–18 km away (depending on the terminal). By public transport: take the S-Bahn to Hauptwache (about 17 minutes), then one stop on the U-Bahn to Eschenheimer Tor — from there roughly a 290-metre walk to the hotel. At night, bus lines M36, N7 and N8 also run this route. A taxi costs roughly €30–50.",
+        "fr": "L'aéroport de Francfort (FRA) est à environ 13,5–18 km (selon le terminal). En transports en commun : S-Bahn jusqu'à Hauptwache (environ 17 minutes), puis une station de métro jusqu'à Eschenheimer Tor — puis environ 290 mètres à pied jusqu'à l'hôtel. La nuit, les lignes de bus M36, N7 et N8 desservent également ce trajet. En taxi, comptez environ 30–50 €.",
+        "es": "El aeropuerto de Fráncfort (FRA) está a unos 13,5–18 km (según la terminal). En transporte público: S-Bahn hasta Hauptwache (unos 17 minutos), luego una parada de metro hasta Eschenheimer Tor — desde allí unos 290 metros a pie hasta el hotel. Por la noche también circulan las líneas de autobús M36, N7 y N8. En taxi, cuente con unos 30–50 €.",
+        "zh": "法兰克福机场（FRA）距离酒店约13.5–18公里（视航站楼而定）。乘坐公共交通：搭乘S-Bahn城铁至Hauptwache站（约17分钟），再乘一站地铁至Eschenheimer Tor站——之后步行约290米即可到达酒店。夜间还有M36、N7、N8路夜班巴士可选。乘坐出租车费用约为30–50欧元。"
       }
     },
     {
@@ -153,11 +169,11 @@
         "zh": "酒店有哪些房型？"
       },
       "a": {
-        "de": "Drei Kategorien: <strong>Little Gym</strong> (1–2 Gäste, ca. 20 m², Queen-Size-Bett, mit Sprossenwand und Klimmzugstange), <strong>Vintage</strong> (1–2 Gäste, ca. 20 m², King-Size-Bett, klassisches Design) und <strong>Softstone Superior</strong> (1–3 Gäste, 23–37 m², King-Size-Bett plus optionalem Zusatzbett, verstellbare Klimaanlage und Safe mit Steckdose). Alle Zimmer sind Nichtraucherzimmer mit WLAN, Kühlschrank und schallisolierten Türen und Fenstern.",
-        "en": "Three categories: <strong>Little Gym</strong> (1–2 guests, approx. 20 m², queen-size bed, with wall bars and a pull-up bar), <strong>Vintage</strong> (1–2 guests, approx. 20 m², king-size bed, classic design) and <strong>Softstone Superior</strong> (1–3 guests, 23–37 m², king-size bed plus an optional extra bed, adjustable air conditioning and an in-room safe with power outlet). All rooms are non-smoking, with Wi-Fi, a mini-fridge and soundproofed doors and windows.",
-        "fr": "Trois catégories : <strong>Little Gym</strong> (1–2 personnes, env. 20 m², lit queen-size, avec espalier et barre de traction), <strong>Vintage</strong> (1–2 personnes, env. 20 m², lit king-size, design classique) et <strong>Softstone Superior</strong> (1–3 personnes, 23–37 m², lit king-size avec lit d'appoint en option, climatisation réglable et coffre-fort avec prise électrique). Toutes les chambres sont non-fumeurs, avec Wi-Fi, mini-réfrigérateur et portes et fenêtres insonorisées.",
-        "es": "Tres categorías: <strong>Little Gym</strong> (1–2 huéspedes, aprox. 20 m², cama queen-size, con espaldera y barra de dominadas), <strong>Vintage</strong> (1–2 huéspedes, aprox. 20 m², cama king-size, diseño clásico) y <strong>Softstone Superior</strong> (1–3 huéspedes, 23–37 m², cama king-size más una cama adicional opcional, aire acondicionado regulable y caja fuerte con enchufe). Todas las habitaciones son para no fumadores, con Wi-Fi, minibar refrigerado y puertas y ventanas insonorizadas.",
-        "zh": "共三种房型：<strong>Little Gym</strong>（1–2位客人，约20平方米，大号双人床，配有肋木架和引体向上杆）、<strong>Vintage</strong>（1–2位客人，约20平方米，特大号双人床，经典设计）以及<strong>Softstone Superior</strong>（1–3位客人，23–37平方米，特大号双人床外加可选加床、可调节空调及带电源插座的保险箱）。所有客房均为无烟房，配备无线网络、迷你冰箱及隔音门窗。"
+        "de": "Drei Kategorien: <strong>Little Gym</strong> (1–2 Gäste, ca. 20 m², Queensize-Bett 140×200 cm, mit Sprossenwand, Klimmzugstange und Yogamatte, Regendusche), <strong>Vintage</strong> (1–2 Gäste, ca. 20 m², Kingsize-Bett 160×200 cm, klassisches Design, Bad mit Dusche oder Badewanne) und <strong>Softstone Superior</strong> (1–3 Gäste, 23–29 m² im Doppelzimmer bzw. 28–37 m² im 3-Bett-Zimmer, Kingsize-Bett 160×200 cm plus optionalem Zusatzbett 90×200 cm, regulierbare Klimaanlage und Safe mit Steckdose). Alle Zimmer sind Nichtraucherzimmer mit WLAN, Kühlschrank und schallisolierten Türen und Fenstern.",
+        "en": "Three categories: <strong>Little Gym</strong> (1–2 guests, approx. 20 m², queen-size bed 140×200 cm, with wall bars, a pull-up bar and a yoga mat, rain shower), <strong>Vintage</strong> (1–2 guests, approx. 20 m², king-size bed 160×200 cm, classic design, bathroom with shower or bathtub) and <strong>Softstone Superior</strong> (1–3 guests, 23–29 m² as a double room or 28–37 m² as a 3-bed room, king-size bed 160×200 cm plus an optional extra bed 90×200 cm, adjustable air conditioning and an in-room safe with power outlet). All rooms are non-smoking, with Wi-Fi, a mini-fridge and soundproofed doors and windows.",
+        "fr": "Trois catégories : <strong>Little Gym</strong> (1–2 personnes, env. 20 m², lit queen-size 140×200 cm, avec espalier, barre de traction et tapis de yoga, douche à effet pluie), <strong>Vintage</strong> (1–2 personnes, env. 20 m², lit king-size 160×200 cm, design classique, salle de bain avec douche ou baignoire) et <strong>Softstone Superior</strong> (1–3 personnes, 23–29 m² en chambre double ou 28–37 m² en chambre à 3 lits, lit king-size 160×200 cm avec lit d'appoint en option 90×200 cm, climatisation réglable et coffre-fort avec prise électrique). Toutes les chambres sont non-fumeurs, avec Wi-Fi, mini-réfrigérateur et portes et fenêtres insonorisées.",
+        "es": "Tres categorías: <strong>Little Gym</strong> (1–2 huéspedes, aprox. 20 m², cama queen-size 140×200 cm, con espaldera, barra de dominadas y esterilla de yoga, ducha efecto lluvia), <strong>Vintage</strong> (1–2 huéspedes, aprox. 20 m², cama king-size 160×200 cm, diseño clásico, baño con ducha o bañera) y <strong>Softstone Superior</strong> (1–3 huéspedes, 23–29 m² en habitación doble o 28–37 m² en habitación de 3 camas, cama king-size 160×200 cm más una cama adicional opcional 90×200 cm, aire acondicionado regulable y caja fuerte con enchufe). Todas las habitaciones son para no fumadores, con Wi-Fi, minibar refrigerado y puertas y ventanas insonorizadas.",
+        "zh": "共三种房型：<strong>Little Gym</strong>（1–2位客人，约20平方米，大号双人床140×200厘米，配有肋木架、引体向上杆和瑜伽垫，雨淋花洒）、<strong>Vintage</strong>（1–2位客人，约20平方米，特大号双人床160×200厘米，经典设计，浴室配淋浴或浴缸）以及<strong>Softstone Superior</strong>（1–3位客人，双人房23–29平方米或三床房28–37平方米，特大号双人床160×200厘米外加可选加床90×200厘米，可调节空调及带电源插座的保险箱）。所有客房均为无烟房，配备无线网络、迷你冰箱及隔音门窗。"
       }
     },
     {
@@ -783,6 +799,69 @@
       "fr": "Confidentialité",
       "es": "Privacidad",
       "zh": "隐私政策"
+    },
+    "nav.lounge": {
+      "de": "Lounge",
+      "en": "Lounge",
+      "fr": "Lounge",
+      "es": "Lounge",
+      "zh": "休闲区"
+    },
+    "lounge.eyebrow": {
+      "de": "Im Haus",
+      "en": "In the hotel",
+      "fr": "Dans l'hôtel",
+      "es": "En el hotel",
+      "zh": "酒店内"
+    },
+    "lounge.h2": {
+      "de": "Lounge & Zimmer",
+      "en": "Lounge & Rooms",
+      "fr": "Salon & Chambres",
+      "es": "Salón y Habitaciones",
+      "zh": "休闲区与客房"
+    },
+    "lounge.lead": {
+      "de": "Unsere gemütlich gestylte Lounge steht Ihnen während Ihres Aufenthalts für berufliche Meetings, Ausarbeitungen am Laptop, Gespräche mit Freunden oder Geschäftspartnern oder einfach zum Chillen jederzeit zur Verfügung.",
+      "en": "Our cosily styled lounge is available to you throughout your stay — for business meetings, working on your laptop, catching up with friends or business partners, or simply relaxing.",
+      "fr": "Notre salon, à l'ambiance chaleureuse, est à votre disposition tout au long de votre séjour — pour des réunions professionnelles, du travail sur ordinateur portable, des échanges avec des amis ou partenaires, ou simplement pour vous détendre.",
+      "es": "Nuestro acogedor salón está a su disposición durante toda su estancia — para reuniones de trabajo, para trabajar con el portátil, para charlar con amigos o socios, o simplemente para relajarse.",
+      "zh": "我们风格舒适的休闲区在您入住期间随时开放——无论是商务会议、笔记本电脑办公、与朋友或商业伙伴交谈，还是单纯放松身心，都非常适合。"
+    },
+    "gallery.lounge": {
+      "de": "Lounge",
+      "en": "Lounge",
+      "fr": "Salon",
+      "es": "Salón",
+      "zh": "休闲区"
+    },
+    "gallery.zimmer": {
+      "de": "Zimmer",
+      "en": "Room",
+      "fr": "Chambre",
+      "es": "Habitación",
+      "zh": "客房"
+    },
+    "gallery.zimmer2": {
+      "de": "Zimmer",
+      "en": "Room",
+      "fr": "Chambre",
+      "es": "Habitación",
+      "zh": "客房"
+    },
+    "gallery.fruehstueck": {
+      "de": "Frühstücksbuffet",
+      "en": "Breakfast buffet",
+      "fr": "Buffet du petit-déjeuner",
+      "es": "Bufé de desayuno",
+      "zh": "自助早餐"
+    },
+    "gallery.tagungsraum": {
+      "de": "Tagungsraum „Mailand\"",
+      "en": "Meeting room \"Mailand\"",
+      "fr": "Salle de réunion « Mailand »",
+      "es": "Sala de reuniones «Mailand»",
+      "zh": "会议室「Mailand」"
     }
   }
 }
