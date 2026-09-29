@@ -66,6 +66,22 @@
     },
     {
       "q": {
+        "de": "Gibt es einen Spa- oder Wellnessbereich?",
+        "en": "Is there a spa or wellness area?",
+        "fr": "Y a-t-il un espace spa ou bien-être ?",
+        "es": "¿Hay una zona de spa o bienestar?",
+        "zh": "酒店是否设有水疗或健康中心？"
+      },
+      "a": {
+        "de": "Leider nein — das Turm Hotel selbst hat keinen eigenen Spa-/Wellnessbereich. In der unmittelbaren Nachbarschaft bietet <strong>ELEMENTS Eschenheimer Turm</strong> (Bleichstraße 57) Sauna und Massagen, nur wenige Gehminuten entfernt. Etwas mehr Auswahl (Hamam, Dampfbad, Behandlungen) bietet <strong>THE SPA im Steigenberger Frankfurter Hof</strong> (Am Kaiserplatz) als Tagesgast, bequem mit dem Taxi oder zu Fuß erreichbar. Für beide empfiehlt sich eine Voranmeldung.",
+        "en": "Unfortunately not — the Turm Hotel itself has no spa or wellness area of its own. Right in the neighbourhood, <strong>ELEMENTS Eschenheimer Turm</strong> (Bleichstraße 57) offers a sauna and massages, just a few minutes' walk away. For a bit more choice (hammam, steam bath, treatments), <strong>THE SPA at Steigenberger Frankfurter Hof</strong> (Am Kaiserplatz) welcomes day guests, an easy taxi ride or walk away. We recommend booking ahead for either.",
+        "fr": "Malheureusement non — le Turm Hotel ne dispose pas de son propre espace spa ou bien-être. Tout près, <strong>ELEMENTS Eschenheimer Turm</strong> (Bleichstraße 57) propose sauna et massages, à quelques minutes à pied seulement. Pour davantage de choix (hammam, bain de vapeur, soins), <strong>THE SPA au Steigenberger Frankfurter Hof</strong> (Am Kaiserplatz) accueille les visiteurs à la journée, facilement accessible en taxi ou à pied. Une réservation préalable est recommandée dans les deux cas.",
+        "es": "Lamentablemente no — el Turm Hotel no dispone de su propia zona de spa o bienestar. Muy cerca, <strong>ELEMENTS Eschenheimer Turm</strong> (Bleichstraße 57) ofrece sauna y masajes, a solo unos minutos a pie. Para más opciones (hamam, baño de vapor, tratamientos), <strong>THE SPA en el Steigenberger Frankfurter Hof</strong> (Am Kaiserplatz) recibe a huéspedes de día, fácilmente accesible en taxi o a pie. Se recomienda reservar con antelación en ambos casos.",
+        "zh": "很抱歉，Turm Hotel本身没有水疗或健康中心。附近的<strong>ELEMENTS Eschenheimer Turm</strong>（Bleichstraße 57）设有桑拿和按摩服务，步行仅需几分钟。若想要更多选择（土耳其浴、蒸汽浴、各类理疗），<strong>Steigenberger Frankfurter Hof酒店的THE SPA</strong>（Am Kaiserplatz）也接待非住店客人，乘出租车或步行均可轻松抵达。建议两处均提前预约。"
+      }
+    },
+    {
+      "q": {
         "de": "Wie finde ich mein Zimmer?",
         "en": "How do I find my room?",
         "fr": "Comment trouver ma chambre ?",
@@ -302,6 +318,22 @@
         "fr": "Les radiateurs se trouvent sous la fenêtre et sont équipés d'un thermostat. Tournez-le simplement sur le niveau souhaité — plus le chiffre est élevé, plus il fera chaud.",
         "es": "Los radiadores se encuentran debajo de la ventana y están equipados con un termostato. Simplemente gírelo al nivel deseado — cuanto más alto el número, más calor hará.",
         "zh": "暖气片位于窗户下方，配有温控旋钮。只需将旋钮转到所需档位即可——数字越大，温度越高。"
+      }
+    },
+    {
+      "q": {
+        "de": "Auf einer anderen Webseite stehen andere Angaben zum Hotel — was gilt?",
+        "en": "Another website shows different information about the hotel — which is correct?",
+        "fr": "Un autre site web indique des informations différentes sur l'hôtel — laquelle est valable ?",
+        "es": "Otra página web muestra información distinta sobre el hotel — ¿cuál es válida?",
+        "zh": "其他网站上关于酒店的信息有所不同——以哪个为准？"
+      },
+      "a": {
+        "de": "Verbindlich sind ausschließlich die Angaben auf dieser Seite und direkt bei uns an der Rezeption. Externe Buchungsportale übernehmen Ausstattungsmerkmale teils automatisiert und nicht immer aktuell oder korrekt — bei Abweichungen (z. B. zu Ausstattung oder Preisen) fragen Sie im Zweifel gerne direkt bei uns nach: <a href=\"tel:+4969154050\">+49 (0)69 15 40 50</a>.",
+        "en": "Only the information on this page and directly from our reception desk is binding. External booking portals sometimes pull amenity details automatically, and these aren't always current or correct — if in doubt about anything (e.g. amenities or pricing), just ask us directly: <a href=\"tel:+4969154050\">+49 (0)69 15 40 50</a>.",
+        "fr": "Seules les informations figurant sur cette page et communiquées directement par notre réception font foi. Les portails de réservation externes reprennent parfois automatiquement les caractéristiques de l'établissement, pas toujours à jour ni exactes — en cas de doute (équipements, tarifs, etc.), n'hésitez pas à nous contacter directement : <a href=\"tel:+4969154050\">+49 (0)69 15 40 50</a>.",
+        "es": "Solo la información de esta página y la facilitada directamente en nuestra recepción es vinculante. Los portales de reserva externos a veces recogen las características del hotel de forma automática, y no siempre están actualizadas o son correctas — si tiene dudas (p. ej. sobre equipamiento o precios), consúltenos directamente: <a href=\"tel:+4969154050\">+49 (0)69 15 40 50</a>.",
+        "zh": "只有本页面及前台直接提供的信息具有效力。第三方预订平台有时会自动抓取设施信息，未必是最新或准确的——如对设施、价格等有任何疑问，请直接联系我们确认：<a href=\"tel:+4969154050\">+49 (0)69 15 40 50</a>。"
       }
     },
     {
