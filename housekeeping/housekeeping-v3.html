@@ -640,7 +640,7 @@ nav{
     <!-- Foto-Scan Mode -->
     <div id="import-mode-scan" style="display:none;">
       <div class="import-info-box" style="margin-bottom:14px;">
-        <div class="import-zone-hint">Alpha-Liste als <b>PDF</b> (am besten: Suite8 → Drucken → „Microsoft Print to PDF") oder als <b>Foto</b>. PDF wird ohne Texterkennung exakt gelesen. Alles läuft lokal im Browser, es werden keine Daten an einen Server gesendet. <b>Nur die Gästeliste fotografieren — keine Schlüssel-/PIN-Listen im Bild.</b></div>
+        <div class="import-zone-hint">Alpha-Liste als <b>PDF</b> (am besten: Suite8 → Drucken → „Microsoft Print to PDF") oder als <b>Foto</b>. PDF wird ohne Texterkennung exakt gelesen. Alles läuft lokal im Browser, es werden keine Daten an einen Server gesendet. Die Safe-Liste darf mit aufs Foto — „Reserve"-Zimmer werden automatisch als sauber/frei erkannt. <b>Den Tür-PIN-Kasten dabei immer abdecken oder außerhalb des Fotos lassen.</b></div>
       </div>
 
       <div class="import-zone" id="scan-dropzone">
@@ -669,6 +669,7 @@ nav{
           <tbody id="scan-rows-body"></tbody>
         </table>
         <div class="scan-hint" id="scan-dupe-note" style="display:none;"></div>
+        <div class="scan-hint" id="scan-reserve-note" style="display:none;color:var(--gold-bright)"></div>
         <button class="scan-add-row-btn" id="scan-add-row">+ Zeile</button>
         <button class="scan-add-row-btn" id="scan-add-empty-row">+ Leerstehendes Anreisezimmer</button>
       </div>
@@ -1755,6 +1756,7 @@ const scanCheckBadge = document.getElementById('scan-check-badge');
 const scanPmsArrivalsInput = document.getElementById('scan-pms-arrivals');
 const scanArrivalsBadge = document.getElementById('scan-arrivals-badge');
 const scanDupeNote = document.getElementById('scan-dupe-note');
+const scanReserveNote = document.getElementById('scan-reserve-note');
 const scanFreeChips = document.getElementById('scan-free-chips');
 const scanFreeCount = document.getElementById('scan-free-count');
 const scanOooChips = document.getElementById('scan-ooo-chips');
@@ -2317,6 +2319,20 @@ function scanErwKinAnz(zeile) {
   return { erw: +m[1], kin: +m[2], anz: +m[3] };
 }
 
+function scanReserveZimmer(text) {
+  // Zimmerschlüssel-Safe-Liste: Zeilen der Form "7  Reserve  301" — das Zimmer
+  // ist im Safe als Reserve hinterlegt, also sauber & nicht verkauft/belegt.
+  // Kann zusammen mit der Alpha-Liste auf demselben oder einem weiteren Foto stehen.
+  var re = /reserve\D{0,10}(\d{1,4})/gi;
+  var out = [];
+  var m;
+  while ((m = re.exec(text)) !== null) {
+    var z = scanNormalizeRoom(m[1]);
+    if (SCAN_ZIMMER.indexOf(z) !== -1 && out.indexOf(z) === -1) out.push(z);
+  }
+  return out;
+}
+
 function scanParseText(text) {
   const jahr = scanHskDate.value ? scanHskDate.value.split('-')[0] : String(new Date().getFullYear());
   const rooms = [];
@@ -2361,6 +2377,18 @@ function scanParseText(text) {
   const ungueltig = scanRows.filter(function(r){ return SCAN_ZIMMER.indexOf(r.zimmer) === -1; });
   scanRows = scanRows.filter(function(r){ return SCAN_ZIMMER.indexOf(r.zimmer) !== -1; });
 
+  const reserveGefunden = scanReserveZimmer(text);
+  const reserveNeu = reserveGefunden.filter(function(z){ return !scanRows.some(function(r){ return r.zimmer === z; }); });
+  reserveNeu.forEach(function(z){
+    scanRows.push({ zimmer: z, abreise: scanHeuteStr(), leer: true, reserve: true, betten: null, kinder: 0 });
+  });
+  if (reserveNeu.length > 0) {
+    scanReserveNote.textContent = reserveNeu.length + ' Reserve-Zimmer laut Safe-Liste erkannt (' + reserveNeu.join(', ') + ') — als sauber/frei eingetragen, nicht verkauft.';
+    scanReserveNote.style.display = 'block';
+  } else {
+    scanReserveNote.style.display = 'none';
+  }
+
   const kopf = text.match(/am\s+(\d{2})[.,:\s](\d{2})[.,:\s](\d{4})/);
   if (kopf) { var kd = new Date(+kopf[3], +kopf[2]-1, +kopf[1]); kd.setDate(kd.getDate()+1); scanSetHskDate(kd); }
 
@@ -2395,7 +2423,7 @@ function scanRenderRows() {
       <td><input type="text" value="${r.abreise}" data-i="${i}" data-f="abreise" placeholder="TT.MM.JJJJ"></td>
       <td><input type="number" min="1" max="3" value="${r.betten || ''}" data-i="${i}" data-f="betten" placeholder="—" style="text-align:center"></td>
       <td><input type="number" min="0" max="4" value="${r.kinder || ''}" data-i="${i}" data-f="kinder" placeholder="0" style="text-align:center"></td>
-      <td>${r.exOOO ? '<span class="scan-leer-tag" style="color:#ff6b4a">EX-OOO</span>' : (r.leer ? '<span class="scan-leer-tag">LEER</span>' : '')}<button class="scan-row-del" data-i="${i}">✕</button></td>
+      <td>${r.exOOO ? '<span class="scan-leer-tag" style="color:#ff6b4a">EX-OOO</span>' : (r.reserve ? '<span class="scan-leer-tag" style="color:var(--gold-bright)">RESERVE</span>' : (r.leer ? '<span class="scan-leer-tag">LEER</span>' : ''))}<button class="scan-row-del" data-i="${i}">✕</button></td>
     `;
     scanRowsBody.appendChild(tr);
   });
@@ -2515,6 +2543,7 @@ scanResetBtn.addEventListener('click', () => {
   scanPmsTotalInput.value = '';
   scanPmsArrivalsInput.value = '';
   scanDupeNote.style.display = 'none';
+  scanReserveNote.style.display = 'none';
   scanFileInput.value = '';
 });
 

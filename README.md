@@ -34,6 +34,20 @@ Damit der Betrieb nicht an einer Person hängt:
 
 ## Versionsverlauf
 
+### Zimmerstatistik-Fix + Reserve-Erkennung im Foto-Scan — 29.09.2026
+- **Fix**: `updateStats()` zählte Tagungsraum Mailand und Tagungsraum Barcelona
+  fälschlich in die Kopfzeilen-Statistik mit (75 statt der echten 73 Gästezimmer).
+  Ausschluss jetzt konsistent mit `SCAN_ZIMMER` und dem `skip`-Array in
+  `autoAssignStaff()` (`f9710eb`)
+- **Neu**: Foto-Scan erkennt „Reserve"-Zeilen auf der Zimmerschlüssel-Safe-Liste
+  automatisch mit (`scanReserveZimmer()`) — wird die Safe-Liste zusammen mit der
+  Alpha-Liste fotografiert, trägt das Tool diese Zimmer selbständig als sauber/frei
+  ein (Markierung „RESERVE" in der Ergebnistabelle), statt sie von Hand nachzutragen
+- Hinweistext im Foto-Scan angepasst: Safe-Liste darf jetzt bewusst mit aufs Foto,
+  der Tür-PIN-Kasten muss dabei aber weiterhin abgedeckt oder außerhalb des Fotos
+  bleiben — die Erw./Kin.-Spalten-Auswertung und der Summenzeilen-Doppelcheck
+  (Zeile „Erw. Kin. Anz." am Listenende) existierten dafür bereits seit v3.10
+
 ### Schwarzes Brett + repo-weiter QA-Durchgang — 29.09.2026
 - **Neue Seite `schwarzes-brett.html`**: Pinnwand für Team-Neuigkeiten
   (Geburtstage, Ankündigungen, Sonstiges) — optisch als Kork-Pinnwand mit
