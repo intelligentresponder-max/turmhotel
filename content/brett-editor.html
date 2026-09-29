@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>Schwarzes Brett bearbeiten · Turm Hotel</title>
+<style>
+:root{
+  --ink:#1a1a1a;--bg:#f7f5f0;--panel:#ffffff;--line:#e0dcd2;
+  --brass:#b8901f;--brass-deep:#8f6f18;--ok:#2e7d4f;--err:#b33636;
+}
+*{box-sizing:border-box}
+body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;background:var(--bg);color:var(--ink);line-height:1.5}
+header{background:var(--panel);border-bottom:1px solid var(--line);padding:16px;position:sticky;top:0;z-index:10}
+header h1{margin:0 0 4px;font-size:1.15rem}
+header p{margin:0;font-size:.85rem;color:#6b6558}
+main{max-width:640px;margin:0 auto;padding:16px 16px 100px}
+.box{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:16px;margin-bottom:16px}
+.box h2{margin:0 0 10px;font-size:1rem}
+label{display:block;font-size:.78rem;color:#6b6558;margin:8px 0 3px}
+input[type=text],input[type=password],input[type=date],select,textarea{
+  width:100%;padding:10px 12px;border:1px solid var(--line);border-radius:8px;font-size:1rem;
+  font-family:inherit;background:#fff;color:var(--ink)
+}
+textarea{min-height:70px;resize:vertical}
+.btn{display:inline-block;padding:12px 20px;border-radius:8px;border:none;font-size:1rem;font-weight:600;cursor:pointer;background:var(--brass);color:#fff}
+.btn:active{background:var(--brass-deep)}
+.btn.secondary{background:transparent;color:var(--brass-deep);border:1px solid var(--brass-deep)}
+.btn.small{padding:8px 14px;font-size:.85rem}
+.btn.danger{background:transparent;color:var(--err);border:1px solid var(--err)}
+.btn:disabled{opacity:.5;cursor:default}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.msg{padding:10px 12px;border-radius:8px;font-size:.9rem;margin:10px 0}
+.msg.ok{background:#e6f4ea;color:var(--ok)}
+.msg.err{background:#fbe9e9;color:var(--err)}
+.msg.info{background:#eef2fb;color:#31527f}
+.warn-box{background:#fff8e6;border:1px solid #e8cf8a;border-radius:8px;padding:12px 14px;font-size:.85rem;margin-bottom:16px}
+.post-card{border:1px solid var(--line);border-radius:8px;padding:14px;margin-bottom:12px;background:#fbfaf7}
+.post-card .del{margin-top:10px}
+.sticky-save{position:sticky;bottom:0;background:linear-gradient(to top, var(--bg) 60%, transparent);padding:16px 0 8px;margin-top:8px}
+.hint{font-size:.78rem;color:#8a8373;margin-top:4px}
+.empty-note{color:#8a8373;font-size:.9rem;padding:14px 0;text-align:center}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Schwarzes Brett bearbeiten</h1>
+  <p>Geburtstage, Ankündigungen, Aktuelles — erscheint sofort auf schwarzes-brett.html.</p>
+</header>
+
+<main>
+  <div id="loginBox" class="box">
+    <h2>Anmelden</h2>
+    <div class="warn-box">
+      Derselbe Zugangs-Token wie bei den anderen Editoren funktioniert hier auch
+      (Contents: Read and write auf dieses Repo). Details: <code>content/editor.html</code>.
+    </div>
+    <label for="ghOwner">GitHub-Konto (Besitzer des Repos)</label>
+    <input type="text" id="ghOwner" placeholder="z.B. intelligentresponder-max">
+    <label for="ghRepo">Repository</label>
+    <input type="text" id="ghRepo" value="turmhotel">
+    <label for="ghBranch">Branch</label>
+    <input type="text" id="ghBranch" value="main">
+    <label for="ghToken">Zugangs-Token</label>
+    <input type="password" id="ghToken" placeholder="github_pat_…">
+    <div class="row" style="margin-top:14px">
+      <button class="btn" id="loadBtn">Laden</button>
+    </div>
+    <div id="loginMsg"></div>
+  </div>
+
+  <div id="editorBox" style="display:none">
+    <div class="box">
+      <h2>Beiträge</h2>
+      <div id="postList"></div>
+      <div id="emptyNote" class="empty-note" style="display:none">Noch keine Beiträge.</div>
+      <button class="btn secondary" id="addBtn" style="margin-top:8px">+ Beitrag hinzufügen</button>
+    </div>
+
+    <div class="box sticky-save">
+      <div class="row">
+        <button class="btn" id="saveBtn">Speichern &amp; veröffentlichen</button>
+        <button class="btn secondary small" id="logoutBtn">Abmelden</button>
+      </div>
+      <div id="saveMsg"></div>
+    </div>
+  </div>
+</main>
+
+<script>
+var state = { posts: [], sha: null, nextId: 1 };
+
+function el(tag, attrs, children){
+  var e = document.createElement(tag);
+  attrs = attrs || {};
+  Object.keys(attrs).forEach(function(k){
+    if (k === 'text') e.textContent = attrs[k]; else e.setAttribute(k, attrs[k]);
+  });
+  (children || []).forEach(function(c){ if (c) e.appendChild(c); });
+  return e;
+}
+function msgBox(container, text, kind){
+  container.innerHTML = '';
+  if (!text) return;
+  container.appendChild(el('div', { class: 'msg ' + kind, text: text }));
+}
+
+function ghHeaders(){
+  return {
+    'Authorization': 'Bearer ' + sessionStorage.getItem('gh_token'),
+    'Accept': 'application/vnd.github+json',
+    'X-GitHub-Api-Version': '2022-11-28'
+  };
+}
+function ghApiUrl(path){
+  var owner = sessionStorage.getItem('gh_owner');
+  var repo = sessionStorage.getItem('gh_repo');
+  return 'https://api.github.com/repos/' + owner + '/' + repo + '/contents/' + path;
+}
+function utf8ToBase64(str){
+  var bytes = new TextEncoder().encode(str);
+  var binary = '';
+  var chunk = 0x8000;
+  for (var i = 0; i < bytes.length; i += chunk) binary += String.fromCharCode.apply(null, bytes.subarray(i, i + chunk));
+  return btoa(binary);
+}
+function base64ToUtf8(b64){
+  var binary = atob(b64.replace(/\n/g, ''));
+  var bytes = new Uint8Array(binary.length);
+  for (var i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
+  return new TextDecoder().decode(bytes);
+}
+
+document.getElementById('loadBtn').addEventListener('click', function(){
+  var owner = document.getElementById('ghOwner').value.trim();
+  var repo = document.getElementById('ghRepo').value.trim();
+  var branch = document.getElementById('ghBranch').value.trim() || 'main';
+  var token = document.getElementById('ghToken').value.trim();
+  var loginMsg = document.getElementById('loginMsg');
+  if (!owner || !repo || !token){ msgBox(loginMsg, 'Bitte Konto, Repository und Token ausfüllen.', 'err'); return; }
+  sessionStorage.setItem('gh_owner', owner);
+  sessionStorage.setItem('gh_repo', repo);
+  sessionStorage.setItem('gh_branch', branch);
+  sessionStorage.setItem('gh_token', token);
+  msgBox(loginMsg, 'Lade …', 'info');
+
+  fetch(ghApiUrl('content/schwarzes-brett.json') + '?ref=' + encodeURIComponent(branch), { headers: ghHeaders() })
+    .then(function(r){
+      if (!r.ok) return r.json().then(function(b){ throw new Error('HTTP ' + r.status + ': ' + (b.message || '')); });
+      return r.json();
+    })
+    .then(function(fileData){
+      state.sha = fileData.sha;
+      var data = JSON.parse(base64ToUtf8(fileData.content));
+      state.posts = data.posts || [];
+      var maxId = 0;
+      state.posts.forEach(function(p){ var n = parseInt(p.id, 10); if (!isNaN(n) && n > maxId) maxId = n; });
+      state.nextId = maxId + 1;
+      msgBox(loginMsg, '', 'info');
+      document.getElementById('loginBox').style.display = 'none';
+      document.getElementById('editorBox').style.display = 'block';
+      renderPosts();
+    })
+    .catch(function(e){ msgBox(loginMsg, 'Laden fehlgeschlagen: ' + e.message, 'err'); });
+});
+
+document.getElementById('logoutBtn').addEventListener('click', function(){
+  sessionStorage.removeItem('gh_token');
+  location.reload();
+});
+
+function todayIso(){
+  var d = new Date();
+  return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
+}
+
+function renderPosts(){
+  var wrap = document.getElementById('postList');
+  var empty = document.getElementById('emptyNote');
+  wrap.innerHTML = '';
+  empty.style.display = state.posts.length ? 'none' : 'block';
+
+  state.posts.forEach(function(p, i){
+    var card = el('div', { class: 'post-card' });
+
+    var typLabel = el('label', { text: 'Art' });
+    var typSelect = el('select');
+    [['geburtstag','🎂 Geburtstag'],['ankuendigung','📢 Ankündigung'],['sonstiges','📌 Sonstiges']].forEach(function(opt){
+      var o = el('option', { value: opt[0], text: opt[1] });
+      if (p.typ === opt[0]) o.selected = true;
+      typSelect.appendChild(o);
+    });
+    typSelect.addEventListener('change', function(){ p.typ = typSelect.value; });
+    card.appendChild(typLabel); card.appendChild(typSelect);
+
+    var titelLabel = el('label', { text: 'Titel' });
+    var titelInput = el('input', { type: 'text', placeholder: 'z.B. Nicole hat heute Geburtstag! 🎂' });
+    titelInput.value = p.titel || '';
+    titelInput.addEventListener('input', function(){ p.titel = titelInput.value; });
+    card.appendChild(titelLabel); card.appendChild(titelInput);
+
+    var textLabel = el('label', { text: 'Text' });
+    var textInput = el('textarea', { placeholder: 'z.B. Das ganze Team wünscht alles Gute!' });
+    textInput.value = p.text || '';
+    textInput.addEventListener('input', function(){ p.text = textInput.value; });
+    card.appendChild(textLabel); card.appendChild(textInput);
+
+    var datumLabel = el('label', { text: 'Datum' });
+    var datumInput = el('input', { type: 'date' });
+    datumInput.value = p.datum || todayIso();
+    datumInput.addEventListener('input', function(){ p.datum = datumInput.value; });
+    card.appendChild(datumLabel); card.appendChild(datumInput);
+
+    var autorLabel = el('label', { text: 'Von (optional)' });
+    var autorInput = el('input', { type: 'text', placeholder: 'z.B. Rezeption' });
+    autorInput.value = p.autor || '';
+    autorInput.addEventListener('input', function(){ p.autor = autorInput.value; });
+    card.appendChild(autorLabel); card.appendChild(autorInput);
+
+    var del = el('button', { class: 'btn danger small del', text: '✕ Entfernen' });
+    del.addEventListener('click', function(){ state.posts.splice(i, 1); renderPosts(); });
+    card.appendChild(del);
+
+    wrap.appendChild(card);
+  });
+}
+
+document.getElementById('addBtn').addEventListener('click', function(){
+  state.posts.push({ id: String(state.nextId++), typ: 'ankuendigung', titel: '', text: '', datum: todayIso(), autor: '' });
+  renderPosts();
+});
+
+document.getElementById('saveBtn').addEventListener('click', function(){
+  var saveMsg = document.getElementById('saveMsg');
+  var branch = sessionStorage.getItem('gh_branch') || 'main';
+  var posts = state.posts.filter(function(p){ return (p.titel || '').trim(); });
+  var payload = { updated: new Date().toISOString(), posts: posts };
+
+  msgBox(saveMsg, 'Speichere …', 'info');
+  document.getElementById('saveBtn').disabled = true;
+
+  fetch(ghApiUrl('content/schwarzes-brett.json'), {
+    method: 'PUT',
+    headers: Object.assign({ 'Content-Type': 'application/json' }, ghHeaders()),
+    body: JSON.stringify({
+      message: 'Schwarzes Brett aktualisiert (' + posts.length + ' Beiträge)',
+      content: utf8ToBase64(JSON.stringify(payload, null, 2) + '\n'),
+      sha: state.sha,
+      branch: branch
+    })
+  })
+    .then(function(r){
+      if (!r.ok) return r.json().then(function(b){ throw new Error('HTTP ' + r.status + ': ' + (b.message || '')); });
+      return r.json();
+    })
+    .then(function(result){
+      state.sha = result.content.sha;
+      state.posts = posts;
+      renderPosts();
+      msgBox(saveMsg, '✓ Veröffentlicht — live in 1–2 Minuten.', 'ok');
+      document.getElementById('saveBtn').disabled = false;
+    })
+    .catch(function(e){
+      var extra = e.message.indexOf('does not match') !== -1
+        ? ' Jemand anderes hat zwischenzeitlich gespeichert — bitte Seite neu laden.'
+        : '';
+      msgBox(saveMsg, 'Speichern fehlgeschlagen: ' + e.message + extra, 'err');
+      document.getElementById('saveBtn').disabled = false;
+    });
+});
+
+(function(){
+  var o = sessionStorage.getItem('gh_owner');
+  if (o) document.getElementById('ghOwner').value = o;
+  if (sessionStorage.getItem('gh_repo')) document.getElementById('ghRepo').value = sessionStorage.getItem('gh_repo');
+  if (sessionStorage.getItem('gh_branch')) document.getElementById('ghBranch').value = sessionStorage.getItem('gh_branch');
+})();
+</script>
+</body>
+</html>

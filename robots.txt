@@ -2,6 +2,8 @@ User-agent: *
 Allow: /
 Disallow: /content/editor.html
 Disallow: /content/spontan-editor.html
+Disallow: /content/brett-editor.html
+Disallow: /schwarzes-brett.html
 Disallow: /housekeeping/
 Disallow: /nachtdienst.html
 Disallow: /manager.html

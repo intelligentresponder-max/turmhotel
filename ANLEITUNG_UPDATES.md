@@ -42,6 +42,14 @@ Seite, auf der Gäste direkt bei uns anfragen können (per `mailto:`-Link, kein
 Formular, kein Spam-Risiko, da nichts an einen Server geht). Derselbe
 Zugangs-Token wie bei Weg A funktioniert hier auch.
 
+## Weg A3 — Schwarzes Brett (Team-Neuigkeiten)
+
+Gleiches Prinzip, eigene Seite: **`content/brett-editor.html`**. Geburtstag,
+Ankündigung oder Sonstiges eintragen (Titel, Text, Datum, optional „von") →
+**Speichern**, erscheint sofort als Pinnwand auf `schwarzes-brett.html` und
+als Vorschau (neueste 3 Beiträge) oben auf der Manager Platform. Derselbe
+Zugangs-Token wie bei Weg A funktioniert hier auch.
+
 ## Weg B — alles andere: direkt über die GitHub-Webseite
 
 Für Änderungen außerhalb der Gäste-Info (z. B. Handbuch-Absätze, README) —

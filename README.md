@@ -11,6 +11,7 @@ GitHub Pages. Entwicklung und Betrieb: André Schwarz, Rezeption.
 | Gästeportal / Handbücher | Gästeinformation, Personalanweisungen | im Repo |
 | Gäste-Info-Editor | FAQ, Öffnungszeiten, Kontakttexte (5 Sprachen) vom Handy bearbeiten, ohne GitHub-Kenntnisse | im Repo (`content/editor.html`) |
 | Spontanangebote | Kurzfristig freie Zimmer eintragen (Rezeption) bzw. anzeigen (Gäste) | im Repo (`content/spontan-editor.html` / `spontanangebote.html`) |
+| Schwarzes Brett | Geburtstage, Ankündigungen, Aktuelles fürs Team pflegen bzw. anzeigen | im Repo (`content/brett-editor.html` / `schwarzes-brett.html`) |
 
 Der Foto-Scan der Alpha-Liste (früher eigene Seite `alpha-scan.html` / `bit.ly/turmhsk`)
 ist seit v3.9 ein Reiter im Housekeeping Manager selbst („Gästeliste" → „📷 Foto-Scan") —
@@ -32,6 +33,19 @@ Damit der Betrieb nicht an einer Person hängt:
 ---
 
 ## Versionsverlauf
+
+### Schwarzes Brett + repo-weiter QA-Durchgang — 29.09.2026
+- **Neue Seite `schwarzes-brett.html`**: Pinnwand für Team-Neuigkeiten
+  (Geburtstage, Ankündigungen, Sonstiges) — optisch als Kork-Pinnwand mit
+  angepinnten Notizzetteln. Gepflegt über `content/brett-editor.html`
+  (gleicher GitHub-Token wie die anderen Editoren). Zusätzlich eine
+  kompakte Vorschau (neueste 3 Beiträge) oben auf der Manager Platform.
+  Nicht öffentlich (noindex + robots.txt) — reines Team-Tool.
+- **QA-Durchgang übers ganze Repo:** alle 15 HTML-Dateien Syntax-geprüft,
+  alle JSON/XML validiert, alle internen Links gegengeprüft, jede Seite per
+  Playwright auf Konsolenfehler getestet. Zwei echte Lücken gefunden und
+  behoben: `housekeeping-anleitung.html` hatte kein robots-Meta;
+  `robots.txt` disallowte drei noindex-Seiten nicht. Sonst: sauber.
 
 ### Spontanangebote, Spa-Klarstellung, SEO/KI-Lesbarkeit — 29.09.2026
 - **Neue Seite `spontanangebote.html`** ("Heute noch frei"): zeigt kurzfristig

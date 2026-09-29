@@ -47,6 +47,43 @@ main{max-width:56rem;margin:0 auto;padding:2rem 1.5rem 4rem}
   color:var(--brass-deep);margin-top:.5rem;
 }
 footer{text-align:center;padding:2rem;color:var(--muted);font-size:.8rem}
+
+/* ---- Schwarzes-Brett-Vorschau ---- */
+.brett-preview{
+  background:
+    radial-gradient(circle at 25% 35%, rgba(0,0,0,.05) 0, transparent 3%),
+    radial-gradient(circle at 75% 65%, rgba(0,0,0,.05) 0, transparent 3%),
+    linear-gradient(#c9a876, #c9a876);
+  border:8px solid #7a5c3a;border-radius:8px;
+  padding:1.2rem 1.2rem 1rem;margin-bottom:2.4rem;
+  box-shadow:inset 0 0 20px rgba(0,0,0,.22), 0 3px 10px rgba(0,0,0,.15);
+}
+.brett-preview .brett-head{
+  display:flex;justify-content:space-between;align-items:center;margin-bottom:.9rem;
+}
+.brett-preview .brett-head h2{
+  color:#fffdf8;font-size:.85rem;text-transform:uppercase;letter-spacing:.1em;
+  text-shadow:0 1px 2px rgba(0,0,0,.3);border:none;padding:0;margin:0;
+}
+.brett-preview .brett-head a{
+  color:#fffdf8;font-size:.75rem;text-decoration:none;background:rgba(0,0,0,.2);
+  padding:.3rem .7rem;border-radius:20px;
+}
+.brett-preview .brett-head a:hover{background:rgba(0,0,0,.32)}
+.brett-notes{display:flex;gap:1rem;flex-wrap:wrap}
+.brett-note{
+  background:var(--white);padding:.8rem .9rem 1rem;min-width:9rem;max-width:13rem;
+  box-shadow:0 3px 8px rgba(0,0,0,.22);font-size:.82rem;position:relative;
+}
+.brett-note:nth-child(odd){transform:rotate(-1.5deg)}
+.brett-note:nth-child(even){transform:rotate(1.2deg)}
+.brett-note .bn-pin{
+  position:absolute;top:-8px;left:50%;transform:translateX(-50%);
+  width:12px;height:12px;border-radius:50%;background:#e8c14f;box-shadow:0 1px 2px rgba(0,0,0,.4);
+}
+.brett-note .bn-titel{font-weight:700;margin-bottom:.25rem;line-height:1.25}
+.brett-note .bn-text{color:#4a453e;font-size:.78rem}
+.brett-empty{color:#fffdf8;font-size:.82rem;opacity:.85;padding:.4rem 0}
 </style>
 </head>
 <body>
@@ -58,6 +95,14 @@ footer{text-align:center;padding:2rem;color:var(--muted);font-size:.8rem}
 </header>
 
 <main>
+
+  <div class="brett-preview">
+    <div class="brett-head">
+      <h2>📌 Schwarzes Brett</h2>
+      <a href="schwarzes-brett.html">Alle Beiträge →</a>
+    </div>
+    <div class="brett-notes" id="brettNotes"><span class="brett-empty">Lade …</span></div>
+  </div>
 
   <div class="group">
     <h2>Housekeeping</h2>
@@ -109,6 +154,10 @@ footer{text-align:center;padding:2rem;color:var(--muted);font-size:.8rem}
         <div class="name">Onboarding-Checkliste</div>
         <div class="desc">Firmen- &amp; Gruppenbuchungen</div>
       </a>
+      <a class="tool" href="content/brett-editor.html">
+        <div class="name">Schwarzes Brett pflegen</div>
+        <div class="desc">Geburtstage, Ankündigungen, Aktuelles eintragen</div>
+      </a>
     </div>
   </div>
 
@@ -136,6 +185,32 @@ footer{text-align:center;padding:2rem;color:var(--muted);font-size:.8rem}
   Turm Hotel Frankfurt · Diese Seite ist bewusst nicht öffentlich gelistet (noindex) — nur per direktem Link erreichbar.<br>
   <a href="links.html">Komplette Linkliste aller Seiten →</a>
 </footer>
+
+<script>
+(function(){
+  var ICONS = { geburtstag: '🎂', ankuendigung: '📢', sonstiges: '📌' };
+  function esc(s){ var d = document.createElement('div'); d.textContent = String(s == null ? '' : s); return d.innerHTML; }
+  fetch('content/schwarzes-brett.json')
+    .then(function(r){ if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
+    .then(function(data){
+      var posts = (data.posts || []).slice().sort(function(a, b){ return (b.datum || '').localeCompare(a.datum || ''); }).slice(0, 3);
+      var wrap = document.getElementById('brettNotes');
+      if (!posts.length) { wrap.innerHTML = '<span class="brett-empty">Aktuell nichts angepinnt.</span>'; return; }
+      wrap.innerHTML = '';
+      posts.forEach(function(p){
+        var typ = ['geburtstag','ankuendigung','sonstiges'].indexOf(p.typ) !== -1 ? p.typ : 'sonstiges';
+        var el = document.createElement('div');
+        el.className = 'brett-note';
+        el.innerHTML = '<div class="bn-pin"></div><div class="bn-titel">' + (ICONS[typ] || '📌') + ' ' + esc(p.titel) + '</div><div class="bn-text">' + esc(p.text) + '</div>';
+        wrap.appendChild(el);
+      });
+    })
+    .catch(function(e){
+      console.error('Schwarzes-Brett-Vorschau fehlgeschlagen', e);
+      document.getElementById('brettNotes').innerHTML = '<span class="brett-empty">Konnte nicht geladen werden.</span>';
+    });
+})();
+</script>
 
 </body>
 </html>
