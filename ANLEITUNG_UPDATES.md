@@ -1,7 +1,42 @@
 # Kleine Änderungen selbst veröffentlichen (ohne Entwickler)
 
-Für Rezeption/Hausdame — kein Git, kein Terminal nötig. Alles läuft über die
-GitHub-Webseite im Browser.
+Für Rezeption/Hausdame — kein Git, kein Terminal nötig.
+
+## Weg A — Gäste-Info auf index.html: der Editor (empfohlen für Tanja)
+
+FAQ-Antworten, Öffnungszeiten, Frühstückspreise, Kontakttexte, Chat-Fenster-Texte
+(in allen 5 Sprachen) stehen **nicht mehr im Programmcode**, sondern in einer
+eigenen Datei (`content/gaeste-info.json`). Dafür gibt es eine eigene Seite mit
+Formularfeldern statt Rohtext — direkt vom Handy nutzbar:
+
+**`content/editor.html`** öffnen (z. B. `[github-pages-url]/content/editor.html`) →
+
+1. Einmalig einen **GitHub-Zugangs-Token** einrichten (Anleitung steht direkt auf
+   der Editor-Seite) — nur einmal nötig, danach reicht der gespeicherte Token
+   für die laufende Sitzung.
+2. Konto, Repository (`turmhotel`) und Branch (`main`) eintragen, **Laden** tippen.
+3. Gewünschten Punkt antippen (z. B. eine FAQ-Frage), Text ändern. Deutsch ist
+   immer sichtbar, andere Sprachen nur auf Wunsch über „🌐 Alle Sprachen zeigen".
+4. Unten kurz beschreiben, was geändert wurde, **Speichern & veröffentlichen**
+   tippen. Die Seite zeigt die Änderung nach 1–2 Minuten.
+
+**Warum eigens dafür eine Seite?** Diese Inhalte liegen technisch als JSON-Datei
+vor (fürs Programm nötig, damit 5 Sprachen sauber zusammenspielen) — direkt in
+GitHub bearbeitet müsste man auf Anführungszeichen und Kommas achten, ein
+Tippfehler hätte die ganze Seite lahmgelegt. Der Editor übernimmt das im
+Hintergrund; man tippt nur noch in normale Textfelder.
+
+**Sicherheit:** Der Zugangs-Token wird nur im Browser-Tab gespeichert
+(sessionStorage) — verschwindet beim Schließen, geht an niemanden außer GitHub
+selbst. Bei der Token-Erstellung unbedingt **„Nur dieses Repository"** und
+**„Contents: Read and write"** wählen, sonst nichts — dann kann der Token,
+selbst wenn er irgendwie in falsche Hände geriete, nichts anderes als genau
+diese eine Datei in diesem einen Repo ändern.
+
+## Weg B — alles andere: direkt über die GitHub-Webseite
+
+Für Änderungen außerhalb der Gäste-Info (z. B. Handbuch-Absätze, README) —
+läuft weiterhin klassisch über den GitHub-Web-Editor im Browser.
 
 **Wichtig — was hier NICHT geht:** Nur Text und Zahlen außerhalb der
 Programmierung ändern (Kontaktdaten, Überschriften, Handbuch-Absätze,

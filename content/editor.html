@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>Gäste-Info bearbeiten · Turm Hotel</title>
+<style>
+:root{
+  --ink:#1a1a1a;
+  --bg:#f7f5f0;
+  --panel:#ffffff;
+  --line:#e0dcd2;
+  --brass:#b8901f;
+  --brass-deep:#8f6f18;
+  --ok:#2e7d4f;
+  --err:#b33636;
+}
+*{box-sizing:border-box}
+body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;background:var(--bg);color:var(--ink);line-height:1.5}
+header{background:var(--panel);border-bottom:1px solid var(--line);padding:16px 16px 14px;position:sticky;top:0;z-index:10}
+header h1{margin:0 0 4px;font-size:1.15rem}
+header p{margin:0;font-size:.85rem;color:#6b6558}
+main{max-width:720px;margin:0 auto;padding:16px 16px 80px}
+.box{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:16px;margin-bottom:16px}
+.box h2{margin:0 0 10px;font-size:1rem}
+label{display:block;font-size:.8rem;color:#6b6558;margin:10px 0 4px}
+input[type=text],input[type=password],textarea,select{
+  width:100%;padding:10px 12px;border:1px solid var(--line);border-radius:8px;font-size:1rem;
+  font-family:inherit;background:#fff;color:var(--ink)
+}
+textarea{min-height:70px;resize:vertical}
+.btn{
+  display:inline-block;padding:12px 20px;border-radius:8px;border:none;font-size:1rem;font-weight:600;
+  cursor:pointer;background:var(--brass);color:#fff;
+}
+.btn:active{background:var(--brass-deep)}
+.btn.secondary{background:transparent;color:var(--brass-deep);border:1px solid var(--brass-deep)}
+.btn.small{padding:8px 14px;font-size:.85rem}
+.btn:disabled{opacity:.5;cursor:default}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.msg{padding:10px 12px;border-radius:8px;font-size:.9rem;margin:10px 0}
+.msg.ok{background:#e6f4ea;color:var(--ok)}
+.msg.err{background:#fbe9e9;color:var(--err)}
+.msg.info{background:#eef2fb;color:#31527f}
+.warn-box{background:#fff8e6;border:1px solid #e8cf8a;border-radius:8px;padding:12px 14px;font-size:.85rem;margin-bottom:16px}
+.item{border:1px solid var(--line);border-radius:8px;margin-bottom:10px;overflow:hidden}
+.item-head{display:flex;justify-content:space-between;align-items:center;padding:12px 14px;cursor:pointer;background:#fbfaf7}
+.item-head strong{font-size:.95rem;font-weight:600}
+.item-head .chev{transition:transform .15s;color:#9a9384}
+.item.open .item-head .chev{transform:rotate(90deg)}
+.item-body{display:none;padding:14px;border-top:1px solid var(--line)}
+.item.open .item-body{display:block}
+.lang-toggle{font-size:.8rem;color:var(--brass-deep);cursor:pointer;margin:12px 0 6px;display:inline-block}
+.other-langs{display:none;border-top:1px dashed var(--line);margin-top:10px;padding-top:10px}
+.other-langs.open{display:block}
+.other-langs label{font-size:.75rem}
+.group-title{font-size:.75rem;text-transform:uppercase;letter-spacing:.04em;color:#9a9384;margin:18px 0 8px;font-weight:600}
+.group-title:first-child{margin-top:0}
+.sticky-save{position:sticky;bottom:0;background:linear-gradient(to top, var(--bg) 60%, transparent);padding:16px 0 8px;margin-top:8px}
+.hint{font-size:.78rem;color:#8a8373;margin-top:4px}
+.pill{display:inline-block;font-size:.72rem;padding:2px 8px;border-radius:999px;background:#eee;color:#666;margin-left:6px}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Gäste-Info bearbeiten</h1>
+  <p>Fragen &amp; Antworten, Öffnungszeiten, Kontakttexte — direkt vom Handy, ohne GitHub-Kenntnisse.</p>
+</header>
+
+<main>
+
+  <div id="loginBox" class="box">
+    <h2>Anmelden</h2>
+    <div class="warn-box">
+      <strong>Einmalig einrichten:</strong> Auf
+      <a href="https://github.com/settings/personal-access-tokens/new" target="_blank">github.com/settings/personal-access-tokens/new</a>
+      einen <strong>Fine-grained Token</strong> erstellen — Repository access: <strong>nur dieses eine Repo</strong>
+      (<code>turmhotel</code>), Permissions: <strong>Contents → Read and write</strong> (sonst nichts).
+      Der Token wird nur in diesem Browser-Tab gespeichert (verschwindet beim Schließen) und geht an
+      niemanden außer GitHub selbst.
+    </div>
+    <label for="ghOwner">GitHub-Konto (Besitzer des Repos)</label>
+    <input type="text" id="ghOwner" placeholder="z.B. intelligentresponder-max">
+    <label for="ghRepo">Repository</label>
+    <input type="text" id="ghRepo" value="turmhotel">
+    <label for="ghBranch">Branch</label>
+    <input type="text" id="ghBranch" value="main">
+    <label for="ghToken">Zugangs-Token</label>
+    <input type="password" id="ghToken" placeholder="github_pat_…">
+    <div class="row" style="margin-top:14px">
+      <button class="btn" id="loadBtn">Laden</button>
+    </div>
+    <div id="loginMsg"></div>
+  </div>
+
+  <div id="editorBox" style="display:none">
+    <div id="topMsg"></div>
+
+    <div class="box">
+      <h2>Häufige Fragen (FAQ)</h2>
+      <p class="hint">Antippen zum Öffnen. Deutsch ist immer sichtbar — andere Sprachen nur, wenn Sie
+        „Alle Sprachen zeigen" antippen. HTML-Tags wie <code>&lt;a href=…&gt;</code> bitte nicht löschen,
+        nur den Text dazwischen ändern.</p>
+      <div id="faqList"></div>
+    </div>
+
+    <div class="box">
+      <h2>Öffnungszeiten, Kontakt &amp; Texte auf der Startseite</h2>
+      <p class="hint">Gruppiert wie auf der Seite selbst. Deutsch ist immer sichtbar, andere Sprachen optional.</p>
+      <div id="labelsList"></div>
+    </div>
+
+    <div class="box">
+      <h2>Chat-Fenster (Texte rund um die FAQ)</h2>
+      <div id="chatUiList"></div>
+    </div>
+
+    <div class="box sticky-save">
+      <label for="commitMsg">Kurzbeschreibung der Änderung</label>
+      <input type="text" id="commitMsg" placeholder="z.B. Frühstückspreis aktualisiert">
+      <div class="row" style="margin-top:12px">
+        <button class="btn" id="saveBtn">Speichern &amp; veröffentlichen</button>
+        <button class="btn secondary small" id="logoutBtn">Abmelden</button>
+      </div>
+      <div id="saveMsg"></div>
+    </div>
+  </div>
+
+</main>
+
+<script>
+var LANGS = [
+  { code: 'de', label: 'Deutsch' },
+  { code: 'en', label: 'English' },
+  { code: 'fr', label: 'Français' },
+  { code: 'es', label: 'Español' },
+  { code: 'zh', label: '中文' }
+];
+
+// Menschlich lesbare Gruppen für die 63 "labels" (SITE_I18N) -- Reihenfolge wie auf der Seite.
+var LABEL_GROUPS = [
+  { title: 'Navigation & Einstieg', prefixes: ['nav.', 'hero.', 'ankunft.'] },
+  { title: 'Rezeption & Zeiten', prefixes: ['card.phone.', 'card.mail.', 'card.map.', 'card.reception.'] },
+  { title: 'Frühstück', prefixes: ['card.breakfast.'] },
+  { title: 'Nachteingang', prefixes: ['nacht.'] },
+  { title: 'Frühstück & Zimmerservice anmelden (Formular)', prefixes: ['fs.'] },
+  { title: 'Kontakt-Bereich', prefixes: ['kontakt.'] },
+  { title: 'Fußzeile', prefixes: ['footer.'] }
+];
+
+var state = { faq: [], labels: {}, chatUi: {}, sha: null };
+
+function el(tag, attrs, children){
+  var e = document.createElement(tag);
+  attrs = attrs || {};
+  Object.keys(attrs).forEach(function(k){
+    if (k === 'text') e.textContent = attrs[k];
+    else e.setAttribute(k, attrs[k]);
+  });
+  (children || []).forEach(function(c){ if (c) e.appendChild(c); });
+  return e;
+}
+
+function msgBox(container, text, kind){
+  container.innerHTML = '';
+  if (!text) return;
+  container.appendChild(el('div', { class: 'msg ' + kind, text: text }));
+}
+
+// ---- GitHub API Helfer ----
+function ghHeaders(){
+  return {
+    'Authorization': 'Bearer ' + sessionStorage.getItem('gh_token'),
+    'Accept': 'application/vnd.github+json',
+    'X-GitHub-Api-Version': '2022-11-28'
+  };
+}
+function ghApiUrl(path){
+  var owner = sessionStorage.getItem('gh_owner');
+  var repo = sessionStorage.getItem('gh_repo');
+  return 'https://api.github.com/repos/' + owner + '/' + repo + '/contents/' + path;
+}
+function utf8ToBase64(str){
+  var bytes = new TextEncoder().encode(str);
+  var binary = '';
+  var chunk = 0x8000;
+  for (var i = 0; i < bytes.length; i += chunk){
+    binary += String.fromCharCode.apply(null, bytes.subarray(i, i + chunk));
+  }
+  return btoa(binary);
+}
+function base64ToUtf8(b64){
+  var binary = atob(b64.replace(/\n/g, ''));
+  var bytes = new Uint8Array(binary.length);
+  for (var i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
+  return new TextDecoder().decode(bytes);
+}
+
+// ---- Laden ----
+document.getElementById('loadBtn').addEventListener('click', function(){
+  var owner = document.getElementById('ghOwner').value.trim();
+  var repo = document.getElementById('ghRepo').value.trim();
+  var branch = document.getElementById('ghBranch').value.trim() || 'main';
+  var token = document.getElementById('ghToken').value.trim();
+  var loginMsg = document.getElementById('loginMsg');
+  if (!owner || !repo || !token){
+    msgBox(loginMsg, 'Bitte Konto, Repository und Token ausfüllen.', 'err');
+    return;
+  }
+  sessionStorage.setItem('gh_owner', owner);
+  sessionStorage.setItem('gh_repo', repo);
+  sessionStorage.setItem('gh_branch', branch);
+  sessionStorage.setItem('gh_token', token);
+  msgBox(loginMsg, 'Lade …', 'info');
+
+  fetch(ghApiUrl('content/gaeste-info.json') + '?ref=' + encodeURIComponent(branch), { headers: ghHeaders() })
+    .then(function(r){
+      if (!r.ok) return r.json().then(function(b){ throw new Error('HTTP ' + r.status + ': ' + (b.message || '')); });
+      return r.json();
+    })
+    .then(function(fileData){
+      state.sha = fileData.sha;
+      var data = JSON.parse(base64ToUtf8(fileData.content));
+      state.faq = data.faq || [];
+      state.labels = data.labels || {};
+      state.chatUi = data.chatUi || {};
+      msgBox(loginMsg, '', 'info');
+      document.getElementById('loginBox').style.display = 'none';
+      document.getElementById('editorBox').style.display = 'block';
+      renderFaq();
+      renderLabels();
+      renderChatUi();
+    })
+    .catch(function(e){
+      msgBox(loginMsg, 'Laden fehlgeschlagen: ' + e.message + ' — Konto/Repo/Branch und Token prüfen.', 'err');
+    });
+});
+
+document.getElementById('logoutBtn').addEventListener('click', function(){
+  sessionStorage.removeItem('gh_token');
+  location.reload();
+});
+
+// ---- Feld-Bausteine ----
+function langField(labelPrefix, obj, code, isTextarea){
+  var wrap = el('div');
+  wrap.appendChild(el('label', { text: labelPrefix + ' (' + (LANGS.filter(function(l){return l.code===code;})[0]||{}).label + ')' }));
+  var input = isTextarea ? el('textarea') : el('input', { type: 'text' });
+  input.value = obj[code] || '';
+  input.addEventListener('input', function(){ obj[code] = input.value; });
+  wrap.appendChild(input);
+  return wrap;
+}
+
+function otherLangsBlock(obj, isTextarea){
+  var toggle = el('span', { class: 'lang-toggle', text: '🌐 Alle Sprachen zeigen' });
+  var body = el('div', { class: 'other-langs' });
+  LANGS.filter(function(l){ return l.code !== 'de'; }).forEach(function(l){
+    body.appendChild(langField('Text', obj, l.code, isTextarea));
+  });
+  toggle.addEventListener('click', function(){
+    body.classList.toggle('open');
+    toggle.textContent = body.classList.contains('open') ? '🌐 Andere Sprachen verbergen' : '🌐 Alle Sprachen zeigen';
+  });
+  var frag = document.createDocumentFragment();
+  frag.appendChild(toggle);
+  frag.appendChild(body);
+  return frag;
+}
+
+function makeCollapsible(headText, bodyBuilder){
+  var item = el('div', { class: 'item' });
+  var head = el('div', { class: 'item-head' }, [
+    el('strong', { text: headText }),
+    el('span', { class: 'chev', text: '›' })
+  ]);
+  var body = el('div', { class: 'item-body' });
+  head.addEventListener('click', function(){
+    var wasOpen = item.classList.contains('open');
+    if (!wasOpen && !body.dataset.built){
+      bodyBuilder(body);
+      body.dataset.built = '1';
+    }
+    item.classList.toggle('open');
+  });
+  item.appendChild(head);
+  item.appendChild(body);
+  return item;
+}
+
+// ---- FAQ ----
+function renderFaq(){
+  var wrap = document.getElementById('faqList');
+  wrap.innerHTML = '';
+  state.faq.forEach(function(item){
+    var node = makeCollapsible(item.q.de || '(ohne Titel)', function(body){
+      body.appendChild(langField('Frage', item.q, 'de'));
+      body.appendChild(langField('Antwort', item.a, 'de', true));
+      body.appendChild(otherLangsBlockFaq(item));
+    });
+    wrap.appendChild(node);
+  });
+}
+function otherLangsBlockFaq(item){
+  var toggle = el('span', { class: 'lang-toggle', text: '🌐 Alle Sprachen zeigen' });
+  var body = el('div', { class: 'other-langs' });
+  LANGS.filter(function(l){ return l.code !== 'de'; }).forEach(function(l){
+    body.appendChild(langField('Frage', item.q, l.code));
+    body.appendChild(langField('Antwort', item.a, l.code, true));
+  });
+  toggle.addEventListener('click', function(){
+    body.classList.toggle('open');
+    toggle.textContent = body.classList.contains('open') ? '🌐 Andere Sprachen verbergen' : '🌐 Alle Sprachen zeigen';
+  });
+  var frag = document.createDocumentFragment();
+  frag.appendChild(toggle);
+  frag.appendChild(body);
+  return frag;
+}
+
+// ---- Labels (SITE_I18N), gruppiert ----
+function humanKeyName(key){
+  var last = key.split('.').pop();
+  var known = {
+    h3: 'Überschrift', h2: 'Überschrift', p: 'Text', lead: 'Einleitung', eyebrow: 'Kleine Überschrift',
+    note: 'Hinweis', link: 'Link-Text', daily: 'Label „täglich"', dailyHours: 'Uhrzeit', checkin: 'Check-in-Zeit',
+    checkout: 'Check-out-Zeit', weekday: 'Label Werktag', weekdayHours: 'Uhrzeit Werktag', weekend: 'Label Wochenende',
+    weekendHours: 'Uhrzeit Wochenende', priceLabel: 'Preis-Label', room: 'Feld „Zimmer"', guests: 'Feld „Personen"',
+    diet: 'Feld „Ernährung"', time: 'Feld „Uhrzeit"', roomservice: 'Zimmerservice-Option', submit: 'Absenden-Knopf',
+    cta: 'Knopf-Text', copyright: 'Copyright-Zeile', mainsite: 'Link Hauptseite', impressum: 'Link Impressum',
+    privacy: 'Link Datenschutz', wegweiserLink: 'Link zum Wegweiser'
+  };
+  return known[last] || key;
+}
+function renderLabels(){
+  var wrap = document.getElementById('labelsList');
+  wrap.innerHTML = '';
+  var used = {};
+  LABEL_GROUPS.forEach(function(group){
+    var keys = Object.keys(state.labels).filter(function(k){
+      return group.prefixes.some(function(p){ return k.indexOf(p) === 0; });
+    });
+    if (!keys.length) return;
+    wrap.appendChild(el('div', { class: 'group-title', text: group.title }));
+    keys.forEach(function(key){
+      used[key] = true;
+      var obj = state.labels[key];
+      var isLong = (obj.de || '').length > 60;
+      var node = makeCollapsible(humanKeyName(key) + ' — „' + (obj.de || '').slice(0, 40) + (obj.de && obj.de.length > 40 ? '…' : '') + '"', function(body){
+        body.appendChild(langField('Text', obj, 'de', isLong));
+        body.appendChild(otherLangsBlock(obj, isLong));
+      });
+      wrap.appendChild(node);
+    });
+  });
+  // Rest (falls neue Keys dazukommen, die keiner Gruppe zugeordnet sind)
+  var rest = Object.keys(state.labels).filter(function(k){ return !used[k]; });
+  if (rest.length){
+    wrap.appendChild(el('div', { class: 'group-title', text: 'Weitere' }));
+    rest.forEach(function(key){
+      var obj = state.labels[key];
+      var node = makeCollapsible(key + ' — „' + (obj.de || '').slice(0, 40) + '"', function(body){
+        body.appendChild(langField('Text', obj, 'de', true));
+        body.appendChild(otherLangsBlock(obj, true));
+      });
+      wrap.appendChild(node);
+    });
+  }
+}
+
+// ---- Chat-UI-Texte ----
+var CHAT_UI_FIELDS = [
+  { key: 'title', label: 'Titel des Chat-Fensters' },
+  { key: 'intro', label: 'Einleitungstext' },
+  { key: 'placeholder', label: 'Platzhalter im Suchfeld' },
+  { key: 'none', label: 'Text bei „nichts gefunden"' },
+  { key: 'back', label: 'Zurück-Link' }
+];
+function chatUiField(f, code){
+  var langLabel = (LANGS.filter(function(l){ return l.code === code; })[0] || {}).label || code;
+  var wrap = el('div');
+  wrap.appendChild(el('label', { text: f.label + ' (' + langLabel + ')' }));
+  var input = el('input', { type: 'text' });
+  if (!state.chatUi[code]) state.chatUi[code] = {};
+  input.value = state.chatUi[code][f.key] || '';
+  input.addEventListener('input', function(){ state.chatUi[code][f.key] = input.value; });
+  wrap.appendChild(input);
+  return wrap;
+}
+function renderChatUi(){
+  var wrap = document.getElementById('chatUiList');
+  wrap.innerHTML = '';
+  CHAT_UI_FIELDS.forEach(function(f){
+    var deText = (state.chatUi.de || {})[f.key] || '';
+    var node = makeCollapsible(f.label + ' — „' + deText.slice(0, 40) + (deText.length > 40 ? '…' : '') + '"', function(body){
+      body.appendChild(chatUiField(f, 'de'));
+      var toggle = el('span', { class: 'lang-toggle', text: '🌐 Alle Sprachen zeigen' });
+      var olBody = el('div', { class: 'other-langs' });
+      LANGS.filter(function(l){ return l.code !== 'de'; }).forEach(function(l){
+        olBody.appendChild(chatUiField(f, l.code));
+      });
+      toggle.addEventListener('click', function(){
+        olBody.classList.toggle('open');
+        toggle.textContent = olBody.classList.contains('open') ? '🌐 Andere Sprachen verbergen' : '🌐 Alle Sprachen zeigen';
+      });
+      body.appendChild(toggle);
+      body.appendChild(olBody);
+    });
+    wrap.appendChild(node);
+  });
+}
+
+// ---- Speichern ----
+document.getElementById('saveBtn').addEventListener('click', function(){
+  var saveMsg = document.getElementById('saveMsg');
+  var msg = document.getElementById('commitMsg').value.trim() || 'Gäste-Info über Editor aktualisiert';
+  var payload = { faq: state.faq, chatUi: state.chatUi, labels: state.labels };
+  var branch = sessionStorage.getItem('gh_branch') || 'main';
+
+  msgBox(saveMsg, 'Speichere …', 'info');
+  document.getElementById('saveBtn').disabled = true;
+
+  fetch(ghApiUrl('content/gaeste-info.json'), {
+    method: 'PUT',
+    headers: Object.assign({ 'Content-Type': 'application/json' }, ghHeaders()),
+    body: JSON.stringify({
+      message: msg,
+      content: utf8ToBase64(JSON.stringify(payload, null, 2) + '\n'),
+      sha: state.sha,
+      branch: branch
+    })
+  })
+    .then(function(r){
+      if (!r.ok) return r.json().then(function(b){ throw new Error('HTTP ' + r.status + ': ' + (b.message || '')); });
+      return r.json();
+    })
+    .then(function(result){
+      state.sha = result.content.sha;
+      msgBox(saveMsg, '✓ Gespeichert — die Seite zeigt die Änderung in 1–2 Minuten.', 'ok');
+      document.getElementById('saveBtn').disabled = false;
+    })
+    .catch(function(e){
+      var extra = e.message.indexOf('does not match') !== -1
+        ? ' Jemand anderes hat zwischenzeitlich gespeichert — bitte Seite neu laden und Änderung erneut eintragen.'
+        : '';
+      msgBox(saveMsg, 'Speichern fehlgeschlagen: ' + e.message + extra, 'err');
+      document.getElementById('saveBtn').disabled = false;
+    });
+});
+
+// Vorbelegung, falls schon mal angemeldet in dieser Sitzung
+(function(){
+  var o = sessionStorage.getItem('gh_owner');
+  if (o) document.getElementById('ghOwner').value = o;
+  if (sessionStorage.getItem('gh_repo')) document.getElementById('ghRepo').value = sessionStorage.getItem('gh_repo');
+  if (sessionStorage.getItem('gh_branch')) document.getElementById('ghBranch').value = sessionStorage.getItem('gh_branch');
+})();
+</script>
+</body>
+</html>

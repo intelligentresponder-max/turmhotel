@@ -9,6 +9,7 @@ GitHub Pages. Entwicklung und Betrieb: André Schwarz, Rezeption.
 | Housekeeping Manager v3 | Gästeliste per Foto einlesen, Zimmerverteilung, Fertigmeldung, Übergabebericht, Verlauf | `bit.ly/turm7` |
 | Nachtdienst-Liste | Fotos der Gästeliste + Schlüsselsafe-Tabelle einlesen, wer kommt noch/welches Safe/welcher PIN | im Repo (`nachtdienst.html`) |
 | Gästeportal / Handbücher | Gästeinformation, Personalanweisungen | im Repo |
+| Gäste-Info-Editor | FAQ, Öffnungszeiten, Kontakttexte (5 Sprachen) vom Handy bearbeiten, ohne GitHub-Kenntnisse | im Repo (`content/editor.html`) |
 
 Der Foto-Scan der Alpha-Liste (früher eigene Seite `alpha-scan.html` / `bit.ly/turmhsk`)
 ist seit v3.9 ein Reiter im Housekeeping Manager selbst („Gästeliste" → „📷 Foto-Scan") —
@@ -30,6 +31,28 @@ Damit der Betrieb nicht an einer Person hängt:
 ---
 
 ## Versionsverlauf
+
+### Gäste-Info als eigene Datei + mobiler Editor — 29.09.2026
+`index.html` enthielt bislang alle FAQ-Antworten, Öffnungszeiten und
+Kontakttexte (5 Sprachen) fest im Programmcode (`GUEST_FAQ`, `SITE_I18N`,
+`UI_TEXT`) — genau der Teil, den Tanja am ehesten ändern will, lag damit
+laut `ANLEITUNG_UPDATES.md` im gesperrten `<script>`-Bereich.
+- Diese drei Blöcke sind jetzt in **`content/gaeste-info.json`** ausgelagert.
+  `index.html` lädt sie beim Öffnen per `fetch()` nach — inhaltlich exakt
+  derselbe Text wie vorher (automatisiert aus dem bisherigen Code erzeugt,
+  keine manuelle Abschrift), nur die Speicherform hat sich geändert.
+- Neue Seite **`content/editor.html`**: Formular statt Rohtext, mobil
+  bedienbar, meldet sich mit einem selbst erstellten, auf dieses eine Repo
+  beschränkten GitHub-Token an und committet Änderungen direkt über die
+  GitHub-API. Details und Sicherheitshinweise: `ANLEITUNG_UPDATES.md`, Weg A.
+- Getestet (Playwright, Konsole fehlerfrei): `index.html` rendert nach dem
+  Refactor identisch (alle 19 FAQ-Einträge, Sprachumschalter DE/EN/FR/ES/中文,
+  Links in den Antworten); der Editor lädt/speichert korrekt (Konflikt- und
+  Fehlerfälle wie abgelaufener Token oder gleichzeitige Änderung geprüft),
+  auf einem Handy-Viewport (390×844) durchgeklickt.
+- Rechtlich/gestalterisch **nicht** angefasst: Impressum/Datenschutz
+  (`LEGAL_CONTENT`) bleiben bewusst im Code, keine Freitext-Bearbeitung ohne
+  Rechtsprüfung.
 
 ### Firebase-Sync: Anonymous-Auth-Anbindung eingespielt — 28.09.2026
 Code-Seite von F13 (`UEBERGABE_HSK777.md`) erledigt: `housekeeping-v3.html`

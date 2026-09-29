@@ -1,0 +1,788 @@
+{
+  "faq": [
+    {
+      "q": {
+        "de": "Check-in / Check-out?",
+        "en": "Check-in / check-out?",
+        "fr": "Arrivée / départ ?",
+        "es": "¿Check-in / check-out?",
+        "zh": "入住/退房时间？"
+      },
+      "a": {
+        "de": "Check-in ab 15:00 Uhr, Check-out bis 11:00 Uhr. Die Rezeption ist täglich von 6:45 bis 22:30 Uhr besetzt. Kommen Sie nach 22:30 Uhr an, teilen Sie uns das bitte vorab mit — dann stellen wir Ihnen rechtzeitig die Zugangsdaten für die Nachteingangstür zur Verfügung.",
+        "en": "Check-in from 3:00 pm, check-out by 11:00 am. The reception desk is staffed daily from 6:45 am to 10:30 pm. If you arrive after 10:30 pm, please let us know in advance — we'll send you the access details for the night entrance in good time.",
+        "fr": "Arrivée à partir de 15h00, départ jusqu'à 11h00. La réception est ouverte tous les jours de 6h45 à 22h30. Si vous arrivez après 22h30, merci de nous en informer à l'avance — nous vous communiquerons à temps les informations d'accès à l'entrée de nuit.",
+        "es": "Check-in a partir de las 15:00 h, check-out hasta las 11:00 h. La recepción está atendida todos los días de 6:45 a 22:30 h. Si llega después de las 22:30 h, avísenos con antelación — le enviaremos a tiempo los datos de acceso a la entrada nocturna.",
+        "zh": "入住时间为15:00起，退房时间为11:00前。前台每日服务时间为6:45至22:30。如您将在22:30后抵达，请提前告知我们——我们会及时为您提供夜间入口的门禁信息。"
+      }
+    },
+    {
+      "q": {
+        "de": "Ich komme nach 22:30 Uhr an / Wie funktioniert der Late Check-in genau?",
+        "en": "I'm arriving after 10:30 pm — how exactly does late check-in work?",
+        "fr": "J'arrive après 22h30 — comment fonctionne exactement l'arrivée tardive (late check-in) ?",
+        "es": "Llego después de las 22:30 h — ¿cómo funciona exactamente el check-in tardío?",
+        "zh": "我将在22:30后抵达——迟到入住（late check-in）具体如何操作？"
+      },
+      "a": {
+        "de": "In drei Schritten: 1. Sie gelangen über die Nachteingangstür ins Haus — haben Sie bereits eine Schlüsselkarte, halten Sie diese einfach an das Lesegerät (der PIN ist darauf bereits hinterlegt); haben Sie noch keine Karte, geben Sie stattdessen Ihren persönlichen PIN direkt am Lesegerät ein. Diesen PIN erhalten Sie ausschließlich für den Late Check-in nach Rezeptionsschluss. Vor dem Haus gibt es drei Türen: Die linke Tür führt zum Frühstücksraum (nur zu den Frühstückszeiten geöffnet), die mittlere ist die Nachteingangstür, die rechte ist der Haupteingang. 2. Ihre Zimmerkarte holen Sie aus dem Schlüsselsafe im Bereich der Nachteingangstür, neben dem Aufzug — auch hier öffnet die Eingabe Ihres persönlichen PINs den Safe. Rechts neben dem Aufzug liegt die Tür zur Lobby und Rezeption. 3. Vom Schlüsselsafe aus geht es weiter: Für Zimmer 11–55 im Vorderhaus nehmen Sie einfach die Treppe direkt neben dem Schlüsselsafe nach oben — das ist bereits die richtige Treppe in die Obergeschosse. Alternativ steht Ihnen rechter Hand auch ein Aufzug zur Verfügung. Für Zimmer 102–510 im Hinterhaus gehen Sie durch die Glastür an der Rezeption vorbei, durch den Gang mit den roten Kinosesseln und biegen dort rechts ab — dort finden Sie den Aufzug in die Obergeschosse.",
+        "en": "Three steps: 1. You enter through the night entrance door — if you already have a key card, just hold it against the reader (the PIN is already stored on it); if you don't have a card yet, enter your personal PIN directly at the reader instead. This PIN is issued solely for late check-in after the reception has closed. There are three doors at the front of the building: the left door leads to the breakfast room (open only during breakfast hours), the middle one is the night entrance, the right one is the main entrance. 2. Collect your room key from the key safe next to the night entrance, beside the lift — entering your personal PIN opens this safe too. The door to the lobby and reception is just to the right of the lift. 3. From the key safe: for rooms 11–55 in the front building, simply take the staircase right next to the key safe — that's already the correct staircase to the upper floors (a lift is also available to the right). For rooms 102–510 in the rear building, go through the glass door past reception, through the corridor with the red cinema seats, and turn right — that's where you'll find the lift to the upper floors.",
+        "fr": "En trois étapes : 1. Vous entrez par la porte de l'entrée de nuit — si vous avez déjà une carte-clé, présentez-la simplement au lecteur (le code PIN y est déjà enregistré) ; si vous n'avez pas encore de carte, saisissez directement votre code PIN personnel au lecteur. Ce code PIN est fourni exclusivement pour l'arrivée tardive après la fermeture de la réception. Il y a trois portes devant le bâtiment : la porte de gauche mène à la salle du petit-déjeuner (ouverte uniquement aux heures du petit-déjeuner), celle du milieu est l'entrée de nuit, celle de droite est l'entrée principale. 2. Récupérez votre carte de chambre dans le coffre à clés situé près de l'entrée de nuit, à côté de l'ascenseur — la saisie de votre code PIN personnel ouvre également ce coffre. La porte du hall et de la réception se trouve juste à droite de l'ascenseur. 3. Depuis le coffre à clés : pour les chambres 11–55 dans le bâtiment avant, prenez simplement l'escalier juste à côté du coffre — c'est déjà le bon escalier vers les étages supérieurs (un ascenseur est également disponible à droite). Pour les chambres 102–510 dans le bâtiment arrière, passez par la porte vitrée près de la réception, traversez le couloir aux fauteuils de cinéma rouges et tournez à droite — vous y trouverez l'ascenseur vers les étages supérieurs.",
+        "es": "En tres pasos: 1. Entra por la puerta de la entrada nocturna — si ya tiene una tarjeta llave, simplemente acérquela al lector (el PIN ya está guardado en ella); si aún no tiene tarjeta, introduzca su PIN personal directamente en el lector. Este PIN se entrega exclusivamente para el check-in tardío tras el cierre de la recepción. Hay tres puertas frente al edificio: la puerta izquierda lleva a la sala de desayunos (abierta solo en horario de desayuno), la del medio es la entrada nocturna, la de la derecha es la entrada principal. 2. Recoja la tarjeta de su habitación de la caja fuerte de llaves junto a la entrada nocturna, al lado del ascensor — introducir su PIN personal también abre esta caja. La puerta al vestíbulo y la recepción está justo a la derecha del ascensor. 3. Desde la caja de llaves: para las habitaciones 11–55 en el edificio delantero, tome simplemente la escalera justo al lado de la caja de llaves — ya es la escalera correcta hacia los pisos superiores (también hay un ascensor disponible a la derecha). Para las habitaciones 102–510 en el edificio trasero, pase por la puerta de cristal junto a la recepción, atraviese el pasillo con las butacas rojas de cine y gire a la derecha — allí encontrará el ascensor a los pisos superiores.",
+        "zh": "共三个步骤：1. 您需通过夜间入口进入酒店——如果您已持有房卡，只需将房卡靠近读卡器即可（PIN码已预存于卡中）；如果您还没有房卡，请直接在读卡器上输入您的专属PIN码。此PIN码仅用于前台下班后的迟到入住。楼前共有三扇门：左侧门通往早餐厅（仅在早餐时间开放），中间为夜间入口，右侧为正门。2. 请在夜间入口旁、电梯附近的钥匙保险柜中取出您的房卡——输入您的专属PIN码同样可以打开此保险柜。大堂和前台的门就在电梯右侧。3. 从钥匙保险柜出发：前楼11–55号房间，只需走保险柜旁边的楼梯上楼——这正是通往楼上的正确楼梯（右侧也设有电梯）。后楼102–510号房间，请经过前台旁的玻璃门，穿过摆放红色影院座椅的走廊后右转——那里就是通往楼上的电梯。"
+      }
+    },
+    {
+      "q": {
+        "de": "Frühstückszeiten?",
+        "en": "Breakfast times?",
+        "fr": "Horaires du petit-déjeuner ?",
+        "es": "¿Horarios de desayuno?",
+        "zh": "早餐时间？"
+      },
+      "a": {
+        "de": "Mo–Fr 6:30–10:00 Uhr, Sa–So 7:00–11:00 Uhr. 18,– € pro Person, Kinder bis 8 Jahre zum halben Preis. Eierspeisen bereiten wir gerne nach Wunsch zu. Neben dem Buffet bieten wir auch vegetarische und laktosefreie Optionen an, auf Anfrage gerne auch glutenfrei. <a href=\"#fruehstueck-buchen\">Frühstück für morgen anmelden →</a>",
+        "en": "Mon–Fri 6:30–10:00 am, Sat–Sun 7:00–11:00 am. €18 per person, children up to 8 years pay half price. We're happy to prepare egg dishes to order. Alongside the buffet we also offer vegetarian and lactose-free options, and gluten-free on request. <a href=\"#fruehstueck-buchen\">Register breakfast for tomorrow →</a>",
+        "fr": "Lun–Ven 6h30–10h00, Sam–Dim 7h00–11h00. 18,00 € par personne, les enfants jusqu'à 8 ans paient demi-tarif. Nous préparons volontiers des plats à base d'œufs sur demande. En plus du buffet, nous proposons également des options végétariennes et sans lactose, et sans gluten sur demande. <a href=\"#fruehstueck-buchen\">Réserver le petit-déjeuner pour demain →</a>",
+        "es": "Lun–Vie 6:30–10:00 h, Sáb–Dom 7:00–11:00 h. 18,00 € por persona, los niños hasta 8 años pagan mitad de precio. Preparamos con gusto platos de huevo a petición. Además del bufé, ofrecemos también opciones vegetarianas y sin lactosa, y sin gluten bajo petición. <a href=\"#fruehstueck-buchen\">Reservar el desayuno para mañana →</a>",
+        "zh": "周一至周五6:30–10:00，周六至周日7:00–11:00。每人18欧元，8岁以下儿童半价。我们也乐意按您的要求现做鸡蛋料理。除自助餐外，我们还提供素食和无乳糖选项，无麸质选项需提前申请。<a href=\"#fruehstueck-buchen\">预订明天的早餐 →</a>"
+      }
+    },
+    {
+      "q": {
+        "de": "Wie finde ich mein Zimmer?",
+        "en": "How do I find my room?",
+        "fr": "Comment trouver ma chambre ?",
+        "es": "¿Cómo encuentro mi habitación?",
+        "zh": "如何找到我的房间？"
+      },
+      "a": {
+        "de": "Unser Wegweiser führt Sie in 15 Sprachen zum Zimmer. <a href=\"wegweiser.html\">Wegweiser öffnen →</a>",
+        "en": "Our room guide leads you to your room in 15 languages. <a href=\"wegweiser.html\">Open the room guide →</a>",
+        "fr": "Notre guide vous conduit à votre chambre en 15 langues. <a href=\"wegweiser.html\">Ouvrir le guide →</a>",
+        "es": "Nuestra guía le lleva a su habitación en 15 idiomas. <a href=\"wegweiser.html\">Abrir la guía →</a>",
+        "zh": "我们的客房指南提供15种语言，带您前往房间。<a href=\"wegweiser.html\">打开指南 →</a>"
+      }
+    },
+    {
+      "q": {
+        "de": "Rezeption kontaktieren",
+        "en": "Contact reception",
+        "fr": "Contacter la réception",
+        "es": "Contactar con recepción",
+        "zh": "联系前台"
+      },
+      "a": {
+        "de": "Wir sind rund um die Uhr erreichbar: <a href=\"tel:+4969154050\">+49 (0)69 15 40 50</a> oder <a href=\"mailto:rooms@turmhotel-frankfurt.de\">rooms@turmhotel-frankfurt.de</a>.",
+        "en": "We're reachable around the clock: <a href=\"tel:+4969154050\">+49 (0)69 15 40 50</a> or <a href=\"mailto:rooms@turmhotel-frankfurt.de\">rooms@turmhotel-frankfurt.de</a>.",
+        "fr": "Nous sommes joignables 24 heures sur 24 : <a href=\"tel:+4969154050\">+49 (0)69 15 40 50</a> ou <a href=\"mailto:rooms@turmhotel-frankfurt.de\">rooms@turmhotel-frankfurt.de</a>.",
+        "es": "Estamos disponibles las 24 horas: <a href=\"tel:+4969154050\">+49 (0)69 15 40 50</a> o <a href=\"mailto:rooms@turmhotel-frankfurt.de\">rooms@turmhotel-frankfurt.de</a>.",
+        "zh": "我们全天候为您服务：<a href=\"tel:+4969154050\">+49 (0)69 15 40 50</a> 或 <a href=\"mailto:rooms@turmhotel-frankfurt.de\">rooms@turmhotel-frankfurt.de</a>。"
+      }
+    },
+    {
+      "q": {
+        "de": "Was ist in der Nähe sehenswert?",
+        "en": "What's worth seeing nearby?",
+        "fr": "Que voir à proximité ?",
+        "es": "¿Qué se puede ver cerca?",
+        "zh": "附近有哪些值得参观的地方？"
+      },
+      "a": {
+        "de": "Der historische Eschenheimer Turm liegt nur wenige Schritte entfernt — ein Spaziergang lohnt sich besonders am Abend. Auch die Innenstadt ist gut zu Fuß erreichbar: Hauptwache (0,4 km), Zeil und Alte Oper (je 0,7 km), Goethehaus (1,0 km), Römerberg (1,2 km), Bankenviertel und Palmengarten (1,5 km), Museumsufer (1,7 km) sowie die Messe Frankfurt (2,0 km).",
+        "en": "The historic Eschenheimer Turm tower is just a few steps away — a walk there is especially lovely in the evening. The city centre is also an easy walk: Hauptwache (0.4 km), Zeil shopping street and Alte Oper (0.7 km each), Goethe House (1.0 km), Römerberg (1.2 km), the financial district and Palmengarten (1.5 km), the Museumsufer riverside museums (1.7 km) and Messe Frankfurt (2.0 km).",
+        "fr": "La célèbre tour historique Eschenheimer Turm se trouve à quelques pas seulement — une promenade y est particulièrement agréable le soir. Le centre-ville est également facilement accessible à pied : Hauptwache (0,4 km), la Zeil et l'Alte Oper (0,7 km chacune), la maison de Goethe (1,0 km), Römerberg (1,2 km), le quartier financier et le Palmengarten (1,5 km), les musées du Museumsufer (1,7 km) ainsi que la foire de Francfort (2,0 km).",
+        "es": "La histórica torre Eschenheimer Turm está a solo unos pasos — un paseo hasta allí es especialmente agradable por la noche. El centro de la ciudad también es fácilmente accesible a pie: Hauptwache (0,4 km), la Zeil y la Alte Oper (0,7 km cada una), la Casa de Goethe (1,0 km), Römerberg (1,2 km), el distrito financiero y el Palmengarten (1,5 km), los museos del Museumsufer (1,7 km) y el recinto ferial Messe Frankfurt (2,0 km).",
+        "zh": "历史悠久的埃申海姆塔（Eschenheimer Turm）近在咫尺——傍晚前往散步尤为惬意。市中心亦可轻松步行到达：中央广场Hauptwache（0.4公里）、采尔购物街与老歌剧院Alte Oper（各0.7公里）、歌德故居（1.0公里）、罗马广场Römerberg（1.2公里）、金融区与棕榈园Palmengarten（1.5公里）、博物馆河岸Museumsufer（1.7公里）以及法兰克福展览中心（2.0公里）。"
+      }
+    },
+    {
+      "q": {
+        "de": "Wie komme ich vom Hauptbahnhof zum Hotel?",
+        "en": "How do I get from the main train station to the hotel?",
+        "fr": "Comment se rendre de la gare centrale à l'hôtel ?",
+        "es": "¿Cómo llegar desde la estación central hasta el hotel?",
+        "zh": "如何从中央火车站前往酒店？"
+      },
+      "a": {
+        "de": "Der Hauptbahnhof ist rund 1,8 km entfernt. Am schnellsten geht es mit der U-Bahn (Linien U1, U2, U3, U8) bis Eschenheimer Tor, ca. 3–4 Minuten Fahrzeit, von dort sind es noch etwa 290 Meter zu Fuß bis zum Hotel. Ein Taxi kostet ungefähr 10–15 €.",
+        "en": "Frankfurt Central Station (Hauptbahnhof) is about 1.8 km away. The fastest way is by U-Bahn (lines U1, U2, U3, U8) to Eschenheimer Tor, about 3–4 minutes, then roughly a 290-metre walk to the hotel. A taxi costs around €10–15.",
+        "fr": "La gare centrale (Hauptbahnhof) est à environ 1,8 km. Le plus rapide est de prendre le métro (U-Bahn, lignes U1, U2, U3, U8) jusqu'à Eschenheimer Tor, environ 3–4 minutes de trajet, puis environ 290 mètres à pied jusqu'à l'hôtel. Un taxi coûte environ 10–15 €.",
+        "es": "La estación central (Hauptbahnhof) está a unos 1,8 km. La forma más rápida es en metro (U-Bahn, líneas U1, U2, U3, U8) hasta Eschenheimer Tor, unos 3–4 minutos, y luego unos 290 metros a pie hasta el hotel. Un taxi cuesta aproximadamente 10–15 €.",
+        "zh": "中央火车站（Hauptbahnhof）距离酒店约1.8公里。最快的方式是乘坐地铁（U-Bahn，U1、U2、U3、U8线）至Eschenheimer Tor站，车程约3–4分钟，之后步行约290米即可到达酒店。乘坐出租车费用约为10–15欧元。"
+      }
+    },
+    {
+      "q": {
+        "de": "Wie komme ich vom Flughafen zum Hotel?",
+        "en": "How do I get from the airport to the hotel?",
+        "fr": "Comment se rendre de l'aéroport à l'hôtel ?",
+        "es": "¿Cómo llegar desde el aeropuerto hasta el hotel?",
+        "zh": "如何从机场前往酒店？"
+      },
+      "a": {
+        "de": "Der Flughafen Frankfurt (FRA) liegt etwa 18 km entfernt. Mit öffentlichen Verkehrsmitteln: S-Bahn bis Hauptwache (ca. 17 Minuten), dann eine Station mit der U-Bahn bis Eschenheimer Tor. Mit dem Taxi rechnen Sie mit etwa 30–50 €.",
+        "en": "Frankfurt Airport (FRA) is about 18 km away. By public transport: take the S-Bahn to Hauptwache (about 17 minutes), then one stop on the U-Bahn to Eschenheimer Tor. A taxi costs roughly €30–50.",
+        "fr": "L'aéroport de Francfort (FRA) est à environ 18 km. En transports en commun : S-Bahn jusqu'à Hauptwache (environ 17 minutes), puis une station de métro jusqu'à Eschenheimer Tor. En taxi, comptez environ 30–50 €.",
+        "es": "El aeropuerto de Fráncfort (FRA) está a unos 18 km. En transporte público: S-Bahn hasta Hauptwache (unos 17 minutos), luego una parada de metro hasta Eschenheimer Tor. En taxi, cuente con unos 30–50 €.",
+        "zh": "法兰克福机场（FRA）距离酒店约18公里。乘坐公共交通：搭乘S-Bahn城铁至Hauptwache站（约17分钟），再乘一站地铁至Eschenheimer Tor站即可。乘坐出租车费用约为30–50欧元。"
+      }
+    },
+    {
+      "q": {
+        "de": "Gibt es Parkplätze?",
+        "en": "Is parking available?",
+        "fr": "Y a-t-il des places de parking ?",
+        "es": "¿Hay aparcamiento disponible?",
+        "zh": "是否提供停车位？"
+      },
+      "a": {
+        "de": "Einige kostenlose Parkplätze stehen direkt am Hotel zur Verfügung (nicht reservierbar) — Zufahrt über die Eschersheimer Landstraße 20. <a href=\"https://earth.google.com/earth/d/1-n5A6hHWrqOlDwZdA92QEH9K27ufq9zV?usp=sharing\" target=\"_blank\">Lage auf der Karte ansehen →</a> Bitte nur hinter dem Haus parken, nicht in der Feuerwehrzufahrt. Alternativ das CONTIPARK Parkhaus Turmcenter direkt nebenan, Querstraße 7-9, kostenpflichtig.",
+        "en": "A few free parking spaces are available directly at the hotel (no reservation possible) — access via Eschersheimer Landstraße 20. <a href=\"https://earth.google.com/earth/d/1-n5A6hHWrqOlDwZdA92QEH9K27ufq9zV?usp=sharing\" target=\"_blank\">View the location on the map →</a> Please only park behind the building, not in the fire lane. Alternatively, the CONTIPARK Turmcenter car park is right next door at Querstraße 7-9 (paid parking).",
+        "fr": "Quelques places de parking gratuites sont disponibles directement à l'hôtel (sans réservation possible) — accès par Eschersheimer Landstraße 20. <a href=\"https://earth.google.com/earth/d/1-n5A6hHWrqOlDwZdA92QEH9K27ufq9zV?usp=sharing\" target=\"_blank\">Voir l'emplacement sur la carte →</a> Merci de vous garer uniquement à l'arrière du bâtiment, et non sur la voie d'accès pour les pompiers. Alternative : le parking CONTIPARK Turmcenter juste à côté, Querstraße 7-9, payant.",
+        "es": "Hay algunas plazas de aparcamiento gratuitas directamente en el hotel (sin reserva posible) — acceso por Eschersheimer Landstraße 20. <a href=\"https://earth.google.com/earth/d/1-n5A6hHWrqOlDwZdA92QEH9K27ufq9zV?usp=sharing\" target=\"_blank\">Ver la ubicación en el mapa →</a> Por favor, aparque solo detrás del edificio, no en la vía de acceso de bomberos. Alternativamente, el aparcamiento CONTIPARK Turmcenter justo al lado, Querstraße 7-9, de pago.",
+        "zh": "酒店提供少量免费停车位（无法预订）——请由Eschersheimer Landstraße 20号进入。<a href=\"https://earth.google.com/earth/d/1-n5A6hHWrqOlDwZdA92QEH9K27ufq9zV?usp=sharing\" target=\"_blank\">在地图上查看位置 →</a> 请仅停在楼后方，切勿占用消防通道。您也可选择紧邻的CONTIPARK Turmcenter停车场（Querstraße 7-9，收费）。"
+      }
+    },
+    {
+      "q": {
+        "de": "Welche Zimmerkategorien gibt es?",
+        "en": "What room categories are there?",
+        "fr": "Quelles catégories de chambres proposez-vous ?",
+        "es": "¿Qué categorías de habitaciones hay?",
+        "zh": "酒店有哪些房型？"
+      },
+      "a": {
+        "de": "Drei Kategorien: <strong>Little Gym</strong> (1–2 Gäste, ca. 20 m², Queen-Size-Bett, mit Sprossenwand und Klimmzugstange), <strong>Vintage</strong> (1–2 Gäste, ca. 20 m², King-Size-Bett, klassisches Design) und <strong>Softstone Superior</strong> (1–3 Gäste, 23–37 m², King-Size-Bett plus optionalem Zusatzbett, verstellbare Klimaanlage und Safe mit Steckdose). Alle Zimmer sind Nichtraucherzimmer mit WLAN, Kühlschrank und schallisolierten Türen und Fenstern.",
+        "en": "Three categories: <strong>Little Gym</strong> (1–2 guests, approx. 20 m², queen-size bed, with wall bars and a pull-up bar), <strong>Vintage</strong> (1–2 guests, approx. 20 m², king-size bed, classic design) and <strong>Softstone Superior</strong> (1–3 guests, 23–37 m², king-size bed plus an optional extra bed, adjustable air conditioning and an in-room safe with power outlet). All rooms are non-smoking, with Wi-Fi, a mini-fridge and soundproofed doors and windows.",
+        "fr": "Trois catégories : <strong>Little Gym</strong> (1–2 personnes, env. 20 m², lit queen-size, avec espalier et barre de traction), <strong>Vintage</strong> (1–2 personnes, env. 20 m², lit king-size, design classique) et <strong>Softstone Superior</strong> (1–3 personnes, 23–37 m², lit king-size avec lit d'appoint en option, climatisation réglable et coffre-fort avec prise électrique). Toutes les chambres sont non-fumeurs, avec Wi-Fi, mini-réfrigérateur et portes et fenêtres insonorisées.",
+        "es": "Tres categorías: <strong>Little Gym</strong> (1–2 huéspedes, aprox. 20 m², cama queen-size, con espaldera y barra de dominadas), <strong>Vintage</strong> (1–2 huéspedes, aprox. 20 m², cama king-size, diseño clásico) y <strong>Softstone Superior</strong> (1–3 huéspedes, 23–37 m², cama king-size más una cama adicional opcional, aire acondicionado regulable y caja fuerte con enchufe). Todas las habitaciones son para no fumadores, con Wi-Fi, minibar refrigerado y puertas y ventanas insonorizadas.",
+        "zh": "共三种房型：<strong>Little Gym</strong>（1–2位客人，约20平方米，大号双人床，配有肋木架和引体向上杆）、<strong>Vintage</strong>（1–2位客人，约20平方米，特大号双人床，经典设计）以及<strong>Softstone Superior</strong>（1–3位客人，23–37平方米，特大号双人床外加可选加床、可调节空调及带电源插座的保险箱）。所有客房均为无烟房，配备无线网络、迷你冰箱及隔音门窗。"
+      }
+    },
+    {
+      "q": {
+        "de": "Kann ich mir zusätzliche Ausstattung aufs Zimmer bringen lassen?",
+        "en": "Can I have extra equipment brought to my room?",
+        "fr": "Puis-je faire apporter des équipements supplémentaires dans ma chambre ?",
+        "es": "¿Puedo pedir equipamiento adicional para mi habitación?",
+        "zh": "我可以要求为房间提供额外设备吗？"
+      },
+      "a": {
+        "de": "Ja, auf Anfrage an der Rezeption: Wasserkocher mit Zubehör, Bügeleisen und Bügelbrett, Badhocker, Hygieneartikel, Kleinkindtritt und Babybett. Betten in Überlänge (210 cm) und allergikerfreundliche Bettwäsche sind ebenfalls auf Wunsch verfügbar.",
+        "en": "Yes, just ask at reception: a kettle with accessories, iron and ironing board, bath step stool, toiletries, a step stool for small children and a baby cot. Extra-long beds (210 cm) and allergy-friendly bedding are also available on request.",
+        "fr": "Oui, sur simple demande à la réception : bouilloire avec accessoires, fer et planche à repasser, marchepied pour la douche, articles d'hygiène, marchepied pour enfants et lit bébé. Des lits extra-longs (210 cm) et une literie hypoallergénique sont également disponibles sur demande.",
+        "es": "Sí, basta con pedirlo en recepción: hervidor de agua con accesorios, plancha y tabla de planchar, taburete de baño, artículos de higiene, escalón para niños pequeños y cuna. También hay camas extralargas (210 cm) y ropa de cama para alérgicos disponibles bajo petición.",
+        "zh": "可以，只需向前台提出即可：电热水壶及配件、熨斗和烫衣板、浴室防滑凳、洗漱用品、儿童踏凳及婴儿床。加长床（210厘米）及防过敏床品也可按需提供。"
+      }
+    },
+    {
+      "q": {
+        "de": "Kann ich mein Haustier mitbringen?",
+        "en": "Can I bring my pet?",
+        "fr": "Puis-je amener mon animal de compagnie ?",
+        "es": "¿Puedo traer a mi mascota?",
+        "zh": "我可以携带宠物入住吗？"
+      },
+      "a": {
+        "de": "Leider nein — wir können in unserem Haus keine Haustiere aufnehmen.",
+        "en": "Unfortunately not — we're unable to accommodate pets in our house.",
+        "fr": "Malheureusement non — nous ne pouvons pas accueillir d'animaux de compagnie dans notre établissement.",
+        "es": "Lamentablemente no — no podemos alojar mascotas en nuestro establecimiento.",
+        "zh": "很抱歉，我们的酒店无法接待宠物。"
+      }
+    },
+    {
+      "q": {
+        "de": "Kann ich mein Gepäck aufbewahren lassen?",
+        "en": "Can I store my luggage?",
+        "fr": "Puis-je faire garder mes bagages ?",
+        "es": "¿Puedo dejar guardado mi equipaje?",
+        "zh": "我可以寄存行李吗？"
+      },
+      "a": {
+        "de": "Ja, gerne — sprechen Sie uns einfach an der Rezeption darauf an: <a href=\"tel:+4969154050\">+49 (0)69 15 40 50</a>.",
+        "en": "Yes, gladly — just ask us at reception: <a href=\"tel:+4969154050\">+49 (0)69 15 40 50</a>.",
+        "fr": "Oui, bien sûr — adressez-vous simplement à la réception : <a href=\"tel:+4969154050\">+49 (0)69 15 40 50</a>.",
+        "es": "Sí, con gusto — simplemente pregúntenos en recepción: <a href=\"tel:+4969154050\">+49 (0)69 15 40 50</a>.",
+        "zh": "可以，欢迎向前台咨询：<a href=\"tel:+4969154050\">+49 (0)69 15 40 50</a>。"
+      }
+    },
+    {
+      "q": {
+        "de": "Gibt es Konferenzräume?",
+        "en": "Are there conference rooms?",
+        "fr": "Y a-t-il des salles de conférence ?",
+        "es": "¿Hay salas de conferencias?",
+        "zh": "是否设有会议室？"
+      },
+      "a": {
+        "de": "Ja, zwei klimatisierte Tagungsräume: <strong>Mailand</strong> für bis zu 8 Personen und <strong>Barcelona</strong> für bis zu 24 Personen — kombiniert bis zu 35 Personen. Mit WLAN, moderner Medientechnik, Tageslicht und optionalem Catering. Details und Anfrage über die Rezeption.",
+        "en": "Yes, two air-conditioned meeting rooms: <strong>Mailand</strong> for up to 8 people and <strong>Barcelona</strong> for up to 24 people — combined for up to 35 people. With Wi-Fi, modern media technology, daylight and optional catering. Please ask reception for details and booking.",
+        "fr": "Oui, deux salles de réunion climatisées : <strong>Mailand</strong> pour jusqu'à 8 personnes et <strong>Barcelona</strong> pour jusqu'à 24 personnes — combinées jusqu'à 35 personnes. Avec Wi-Fi, technologie multimédia moderne, lumière du jour et restauration en option. Détails et réservation auprès de la réception.",
+        "es": "Sí, dos salas de reuniones climatizadas: <strong>Mailand</strong> para hasta 8 personas y <strong>Barcelona</strong> para hasta 24 personas, combinadas hasta 35 personas. Con Wi-Fi, tecnología multimedia moderna, luz natural y catering opcional. Detalles y reservas a través de la recepción.",
+        "zh": "是的，酒店设有两间配备空调的会议室：<strong>Mailand</strong>（米兰厅，可容纳8人）和<strong>Barcelona</strong>（巴塞罗那厅，可容纳24人）——两厅合并可容纳35人。配备无线网络、现代化多媒体设备、自然采光，并可选配餐饮服务。详情及预订请咨询前台。"
+      }
+    },
+    {
+      "q": {
+        "de": "Kann ich ein Fahrrad leihen?",
+        "en": "Can I rent a bicycle?",
+        "fr": "Puis-je louer un vélo ?",
+        "es": "¿Puedo alquilar una bicicleta?",
+        "zh": "我可以租用自行车吗？"
+      },
+      "a": {
+        "de": "Ja, ein Fahrradverleih ist auf Wunsch verfügbar — fragen Sie einfach an der Rezeption nach.",
+        "en": "Yes, bicycle rental is available on request — just ask at reception.",
+        "fr": "Oui, une location de vélos est disponible sur demande — renseignez-vous simplement à la réception.",
+        "es": "Sí, hay alquiler de bicicletas disponible bajo petición — solo tiene que preguntar en recepción.",
+        "zh": "可以，酒店提供自行车租赁服务，请直接向前台咨询。"
+      }
+    },
+    {
+      "q": {
+        "de": "Ich habe nachts ein Problem — was tue ich?",
+        "en": "I have a problem at night — what should I do?",
+        "fr": "J'ai un problème la nuit — que dois-je faire ?",
+        "es": "Tengo un problema por la noche — ¿qué hago?",
+        "zh": "夜间遇到问题该怎么办？"
+      },
+      "a": {
+        "de": "Rufen Sie einfach die Hotel-Telefonnummer an — Sie werden auf jeden Fall weitergeleitet: <a href=\"tel:+4969154050\">+49 (0)69 15 40 50</a>. Bei einem medizinischen oder sonstigen Notfall wählen Sie bitte direkt den Notruf <a href=\"tel:112\">112</a>.",
+        "en": "Just call the hotel's phone number — you will always be put through: <a href=\"tel:+4969154050\">+49 (0)69 15 40 50</a>. In a medical or other emergency, please dial the emergency number <a href=\"tel:112\">112</a> directly.",
+        "fr": "Appelez simplement le numéro de téléphone de l'hôtel — vous serez toujours mis en relation : <a href=\"tel:+4969154050\">+49 (0)69 15 40 50</a>. En cas d'urgence médicale ou autre, composez directement le numéro d'urgence <a href=\"tel:112\">112</a>.",
+        "es": "Simplemente llame al número de teléfono del hotel — siempre le atenderemos: <a href=\"tel:+4969154050\">+49 (0)69 15 40 50</a>. En caso de emergencia médica u otra, marque directamente el número de emergencias <a href=\"tel:112\">112</a>.",
+        "zh": "请直接拨打酒店电话——我们必定会为您转接处理：<a href=\"tel:+4969154050\">+49 (0)69 15 40 50</a>。如遇医疗或其他紧急情况，请直接拨打紧急电话<a href=\"tel:112\">112</a>。"
+      }
+    },
+    {
+      "q": {
+        "de": "Ich möchte meine Buchung um einen Tag verlängern — was kann ich tun?",
+        "en": "I'd like to extend my stay by one night — what can I do?",
+        "fr": "Je souhaite prolonger mon séjour d'une nuit — que puis-je faire ?",
+        "es": "Quiero prolongar mi estancia una noche más — ¿qué puedo hacer?",
+        "zh": "我想将住宿延长一晚，该怎么做？"
+      },
+      "a": {
+        "de": "Endet Ihre Buchung morgen, buchen Sie am besten jetzt gleich die zusätzliche Nacht über unsere offizielle Buchungsseite — so sichern Sie sich Ihr Zimmer, bevor es jemand anderes bucht. <a href=\"https://www.secure-hotel-booking.com/smart/Turm-Hotel/21PC/de/\" target=\"_blank\">Zur Buchungsseite →</a>. Sie zahlen dort dieselben Preise wie an der Rezeption. Sehen Sie kein freies Zimmer mehr, sprechen Sie uns morgens vor Ihrem Check-out direkt an der Rezeption an — unser Team hat Ihre Buchung bereits zu Dienstbeginn vorliegen und hilft Ihnen gerne persönlich weiter.",
+        "en": "If your booking ends tomorrow, it's best to book the extra night right now via our official booking page — that way you secure your room before someone else does. <a href=\"https://www.secure-hotel-booking.com/smart/Turm-Hotel/21PC/de/\" target=\"_blank\">Go to the booking page →</a>. You'll pay the same prices there as at reception. If no room shows as available, speak to us at reception in the morning before your check-out — our team already has your booking on file at the start of the shift and will be happy to help you personally.",
+        "fr": "Si votre réservation se termine demain, le mieux est de réserver dès maintenant la nuit supplémentaire via notre page de réservation officielle — vous garantissez ainsi votre chambre avant que quelqu'un d'autre ne la réserve. <a href=\"https://www.secure-hotel-booking.com/smart/Turm-Hotel/21PC/de/\" target=\"_blank\">Accéder à la page de réservation →</a>. Vous y payez les mêmes tarifs qu'à la réception. Si aucune chambre n'apparaît disponible, adressez-vous à la réception le matin avant votre départ — notre équipe dispose déjà de votre réservation en début de service et se fera un plaisir de vous aider personnellement.",
+        "es": "Si su reserva termina mañana, lo mejor es reservar ya mismo la noche adicional a través de nuestra página de reservas oficial — así asegura su habitación antes de que alguien más la reserve. <a href=\"https://www.secure-hotel-booking.com/smart/Turm-Hotel/21PC/de/\" target=\"_blank\">Ir a la página de reservas →</a>. Allí pagará los mismos precios que en recepción. Si no ve ninguna habitación disponible, hable con nosotros en recepción por la mañana antes de su salida — nuestro equipo ya tiene su reserva registrada al inicio del turno y le ayudará con gusto de forma personal.",
+        "zh": "如果您的预订将于明天结束，建议您现在就通过我们的官方预订页面预订延长的一晚——这样可以在他人预订之前锁定您的房间。<a href=\"https://www.secure-hotel-booking.com/smart/Turm-Hotel/21PC/de/\" target=\"_blank\">前往预订页面 →</a>。在该页面支付的价格与前台一致。如果没有显示可预订的房间，请在退房当天早上直接联系前台——我们的团队在当班开始时已掌握您的预订信息，将很乐意为您亲自处理。"
+      }
+    },
+    {
+      "q": {
+        "de": "Wie schalte ich die Heizung im Zimmer ein?",
+        "en": "How do I turn on the heating in my room?",
+        "fr": "Comment allumer le chauffage dans ma chambre ?",
+        "es": "¿Cómo enciendo la calefacción en mi habitación?",
+        "zh": "如何打开房间的暖气？"
+      },
+      "a": {
+        "de": "Die Heizkörper befinden sich unter dem Fenster und sind mit einem Thermostat ausgestattet. Drehen Sie es einfach auf die gewünschte Stufe — je höher die Zahl, desto wärmer wird es.",
+        "en": "The radiators are located under the window and are fitted with a thermostat. Simply turn it to the desired setting — the higher the number, the warmer it gets.",
+        "fr": "Les radiateurs se trouvent sous la fenêtre et sont équipés d'un thermostat. Tournez-le simplement sur le niveau souhaité — plus le chiffre est élevé, plus il fera chaud.",
+        "es": "Los radiadores se encuentran debajo de la ventana y están equipados con un termostato. Simplemente gírelo al nivel deseado — cuanto más alto el número, más calor hará.",
+        "zh": "暖气片位于窗户下方，配有温控旋钮。只需将旋钮转到所需档位即可——数字越大，温度越高。"
+      }
+    },
+    {
+      "q": {
+        "de": "Etwas anderes",
+        "en": "Something else",
+        "fr": "Autre chose",
+        "es": "Otra cosa",
+        "zh": "其他问题"
+      },
+      "a": {
+        "de": "Rufen Sie uns gerne direkt an — wir sind rund um die Uhr für Sie da: <a href=\"tel:+4969154050\">+49 (0)69 15 40 50</a>. Für eine Zimmerbuchung geht's direkt hier entlang: <a href=\"https://www.secure-hotel-booking.com/smart/Turm-Hotel/21PC/de/\" target=\"_blank\">Zur Buchungsseite →</a>",
+        "en": "Feel free to call us directly — we're here for you around the clock: <a href=\"tel:+4969154050\">+49 (0)69 15 40 50</a>. To book a room, follow this link: <a href=\"https://www.secure-hotel-booking.com/smart/Turm-Hotel/21PC/de/\" target=\"_blank\">Go to the booking page →</a>",
+        "fr": "N'hésitez pas à nous appeler directement — nous sommes là pour vous 24 heures sur 24 : <a href=\"tel:+4969154050\">+49 (0)69 15 40 50</a>. Pour réserver une chambre, suivez ce lien : <a href=\"https://www.secure-hotel-booking.com/smart/Turm-Hotel/21PC/de/\" target=\"_blank\">Accéder à la page de réservation →</a>",
+        "es": "Llámenos directamente con confianza — estamos aquí para usted las 24 horas: <a href=\"tel:+4969154050\">+49 (0)69 15 40 50</a>. Para reservar una habitación, siga este enlace: <a href=\"https://www.secure-hotel-booking.com/smart/Turm-Hotel/21PC/de/\" target=\"_blank\">Ir a la página de reservas →</a>",
+        "zh": "欢迎直接致电我们——我们全天候为您服务：<a href=\"tel:+4969154050\">+49 (0)69 15 40 50</a>。如需预订房间，请点击以下链接：<a href=\"https://www.secure-hotel-booking.com/smart/Turm-Hotel/21PC/de/\" target=\"_blank\">前往预订页面 →</a>"
+      }
+    }
+  ],
+  "chatUi": {
+    "de": {
+      "title": "Fragen zu Ihrem Aufenthalt",
+      "intro": "Kurze Antworten auf die häufigsten Fragen. Für alles andere sind wir rund um die Uhr telefonisch da.",
+      "placeholder": "Stichwort eingeben, z. B. 'Parken' oder 'Frühstück'…",
+      "none": "Dazu haben wir nichts Passendes gefunden — rufen Sie uns gerne direkt an.",
+      "back": "← Zurück zu den Fragen"
+    },
+    "en": {
+      "title": "Questions about your stay",
+      "intro": "Short answers to the most common questions. For anything else, we're available by phone around the clock.",
+      "placeholder": "Enter a keyword, e.g. 'parking' or 'breakfast'…",
+      "none": "We couldn't find a matching answer — please feel free to call us directly.",
+      "back": "← Back to questions"
+    },
+    "fr": {
+      "title": "Questions sur votre séjour",
+      "intro": "Réponses courtes aux questions les plus fréquentes. Pour tout le reste, nous sommes disponibles par téléphone 24 heures sur 24.",
+      "placeholder": "Saisissez un mot-clé, p. ex. « parking » ou « petit-déjeuner »…",
+      "none": "Nous n'avons rien trouvé de correspondant — n'hésitez pas à nous appeler directement.",
+      "back": "← Retour aux questions"
+    },
+    "es": {
+      "title": "Preguntas sobre su estancia",
+      "intro": "Respuestas breves a las preguntas más frecuentes. Para cualquier otra cosa, estamos disponibles por teléfono las 24 horas.",
+      "placeholder": "Introduzca una palabra clave, p. ej. 'aparcamiento' o 'desayuno'…",
+      "none": "No hemos encontrado nada que coincida — llámenos directamente con confianza.",
+      "back": "← Volver a las preguntas"
+    },
+    "zh": {
+      "title": "关于您入住的问题",
+      "intro": "针对最常见问题的简短解答。如有其他问题，我们全天候提供电话服务。",
+      "placeholder": "请输入关键词，例如“停车”或“早餐”…",
+      "none": "未找到匹配的答案——欢迎直接致电我们。",
+      "back": "← 返回问题列表"
+    }
+  },
+  "labels": {
+    "nav.ankunft": {
+      "de": "Ankunft",
+      "en": "Arrival",
+      "fr": "Arrivée",
+      "es": "Llegada",
+      "zh": "抵达"
+    },
+    "nav.zeiten": {
+      "de": "Zeiten",
+      "en": "Hours",
+      "fr": "Horaires",
+      "es": "Horarios",
+      "zh": "时间"
+    },
+    "nav.nacht": {
+      "de": "Nachteingang",
+      "en": "Night entrance",
+      "fr": "Entrée de nuit",
+      "es": "Entrada nocturna",
+      "zh": "夜间入口"
+    },
+    "nav.kontakt": {
+      "de": "Kontakt",
+      "en": "Contact",
+      "fr": "Contact",
+      "es": "Contacto",
+      "zh": "联系方式"
+    },
+    "hero.eyebrow": {
+      "de": "Willkommen im",
+      "en": "Welcome to",
+      "fr": "Bienvenue au",
+      "es": "Bienvenido al",
+      "zh": "欢迎光临"
+    },
+    "hero.lead": {
+      "de": "Schön, dass Sie da sind. Auf dieser Seite finden Sie alle wichtigen Informationen für Ihren Aufenthalt in unserem privat geführten Boutique Hotel im Zentrum Frankfurts.",
+      "en": "We're glad you're here. On this page you'll find all the key information for your stay at our privately run boutique hotel in the centre of Frankfurt.",
+      "fr": "Ravis de vous accueillir. Sur cette page, vous trouverez toutes les informations essentielles pour votre séjour dans notre hôtel-boutique à gestion privée, au cœur de Francfort.",
+      "es": "Nos alegra que esté aquí. En esta página encontrará toda la información importante para su estancia en nuestro hotel boutique de gestión privada, en el centro de Fráncfort.",
+      "zh": "欢迎您的到来。本页面为您提供在法兰克福市中心这家私营精品酒店入住期间所需的所有重要信息。"
+    },
+    "hero.cta": {
+      "de": "💬 Häufige Fragen? Chat öffnen",
+      "en": "💬 Frequently asked questions? Open chat",
+      "fr": "💬 Questions fréquentes ? Ouvrir le chat",
+      "es": "💬 ¿Preguntas frecuentes? Abrir el chat",
+      "zh": "💬 常见问题？打开聊天"
+    },
+    "ankunft.eyebrow": {
+      "de": "Ihr Aufenthalt",
+      "en": "Your stay",
+      "fr": "Votre séjour",
+      "es": "Su estancia",
+      "zh": "您的住宿"
+    },
+    "ankunft.h2": {
+      "de": "Das Wichtigste auf einen Blick",
+      "en": "The essentials at a glance",
+      "fr": "L'essentiel en un coup d'œil",
+      "es": "Lo más importante de un vistazo",
+      "zh": "重要信息一览"
+    },
+    "card.phone.h3": {
+      "de": "Rund um die Uhr erreichbar",
+      "en": "Reachable around the clock",
+      "fr": "Joignable 24 heures sur 24",
+      "es": "Disponibles las 24 horas",
+      "zh": "全天候可联系"
+    },
+    "card.phone.p": {
+      "de": "Sie erreichen uns jederzeit telefonisch:",
+      "en": "You can reach us by phone at any time:",
+      "fr": "Vous pouvez nous joindre à tout moment par téléphone :",
+      "es": "Puede contactarnos por teléfono en cualquier momento:",
+      "zh": "您可以随时通过电话联系我们："
+    },
+    "card.mail.h3": {
+      "de": "Schreiben Sie uns",
+      "en": "Write to us",
+      "fr": "Écrivez-nous",
+      "es": "Escríbanos",
+      "zh": "给我们写信"
+    },
+    "card.mail.p": {
+      "de": "Gerne per E-Mail:",
+      "en": "Gladly by email:",
+      "fr": "Volontiers par e-mail :",
+      "es": "Con gusto por correo electrónico:",
+      "zh": "欢迎发送电子邮件："
+    },
+    "card.map.h3": {
+      "de": "So finden Sie uns",
+      "en": "How to find us",
+      "fr": "Comment nous trouver",
+      "es": "Cómo encontrarnos",
+      "zh": "如何找到我们"
+    },
+    "card.map.link": {
+      "de": "In Google Maps öffnen →",
+      "en": "Open in Google Maps →",
+      "fr": "Ouvrir dans Google Maps →",
+      "es": "Abrir en Google Maps →",
+      "zh": "在谷歌地图中打开 →"
+    },
+    "card.reception.h3": {
+      "de": "Rezeption",
+      "en": "Reception",
+      "fr": "Réception",
+      "es": "Recepción",
+      "zh": "前台"
+    },
+    "card.reception.daily": {
+      "de": "Täglich",
+      "en": "Daily",
+      "fr": "Tous les jours",
+      "es": "Diariamente",
+      "zh": "每日"
+    },
+    "card.reception.dailyHours": {
+      "de": "6.45 – 22.30 Uhr",
+      "en": "6:45 am – 10:30 pm",
+      "fr": "6h45 – 22h30",
+      "es": "6:45 – 22:30 h",
+      "zh": "6:45 – 22:30"
+    },
+    "card.reception.checkin": {
+      "de": "ab 15.00 Uhr",
+      "en": "from 3:00 pm",
+      "fr": "à partir de 15h00",
+      "es": "a partir de las 15:00 h",
+      "zh": "15:00 起"
+    },
+    "card.reception.checkout": {
+      "de": "bis 11.00 Uhr",
+      "en": "by 11:00 am",
+      "fr": "jusqu'à 11h00",
+      "es": "hasta las 11:00 h",
+      "zh": "11:00 前"
+    },
+    "card.breakfast.h3": {
+      "de": "Frühstücksbuffet",
+      "en": "Breakfast buffet",
+      "fr": "Buffet du petit-déjeuner",
+      "es": "Bufé de desayuno",
+      "zh": "自助早餐"
+    },
+    "card.breakfast.weekday": {
+      "de": "Mo – Fr",
+      "en": "Mon – Fri",
+      "fr": "Lun – Ven",
+      "es": "Lun – Vie",
+      "zh": "周一至周五"
+    },
+    "card.breakfast.weekdayHours": {
+      "de": "6.30 – 10.00 Uhr",
+      "en": "6:30 – 10:00 am",
+      "fr": "6h30 – 10h00",
+      "es": "6:30 – 10:00 h",
+      "zh": "6:30 – 10:00"
+    },
+    "card.breakfast.weekend": {
+      "de": "Sa – So",
+      "en": "Sat – Sun",
+      "fr": "Sam – Dim",
+      "es": "Sáb – Dom",
+      "zh": "周六至周日"
+    },
+    "card.breakfast.weekendHours": {
+      "de": "7.00 – 11.00 Uhr",
+      "en": "7:00 – 11:00 am",
+      "fr": "7h00 – 11h00",
+      "es": "7:00 – 11:00 h",
+      "zh": "7:00 – 11:00"
+    },
+    "card.breakfast.priceLabel": {
+      "de": "Preis p. P.",
+      "en": "Price p. p.",
+      "fr": "Prix p. pers.",
+      "es": "Precio p. p.",
+      "zh": "每人价格"
+    },
+    "card.breakfast.note": {
+      "de": "Kinder bis 8 Jahre zum halben Preis. Eierspeisen bereiten wir gerne nach Wunsch zu.",
+      "en": "Children up to 8 years pay half price. We're happy to prepare egg dishes to order.",
+      "fr": "Les enfants jusqu'à 8 ans paient demi-tarif. Nous préparons volontiers des plats à base d'œufs sur demande.",
+      "es": "Los niños hasta 8 años pagan mitad de precio. Preparamos platos de huevo con gusto a petición.",
+      "zh": "8岁以下儿童半价。我们也乐意按您的要求现做鸡蛋料理。"
+    },
+    "nacht.eyebrow": {
+      "de": "Späte Anreise",
+      "en": "Late arrival",
+      "fr": "Arrivée tardive",
+      "es": "Llegada tardía",
+      "zh": "深夜抵达"
+    },
+    "nacht.h2": {
+      "de": "Zugang zur Nachteingangstür",
+      "en": "Access via the night entrance",
+      "fr": "Accès par l'entrée de nuit",
+      "es": "Acceso por la entrada nocturna",
+      "zh": "夜间入口使用方法"
+    },
+    "nacht.lead": {
+      "de": "Sie kommen nach Rezeptionsschluss an? Kein Problem. Mit Ihrer aktivierten Schlüsselkarte gelangen Sie jederzeit ins Haus – in drei einfachen Schritten.",
+      "en": "Arriving after the reception has closed? No problem. With your activated key card you can enter the building at any time — in three simple steps.",
+      "fr": "Vous arrivez après la fermeture de la réception ? Pas de problème. Avec votre carte-clé activée, vous pouvez entrer dans le bâtiment à tout moment — en trois étapes simples.",
+      "es": "¿Llega después del cierre de recepción? No hay problema. Con su tarjeta llave activada puede entrar al edificio en cualquier momento, en tres sencillos pasos.",
+      "zh": "在前台下班后抵达？没问题。凭已激活的房卡，您可以随时进入酒店——只需三个简单步骤。"
+    },
+    "nacht.step1.h3": {
+      "de": "Schlüsselkarte aktivieren",
+      "en": "Activate your key card",
+      "fr": "Activer la carte-clé",
+      "es": "Activar la tarjeta llave",
+      "zh": "激活房卡"
+    },
+    "nacht.step1.p": {
+      "de": "Stellen Sie sicher, dass Ihre Karte bei der Anmeldung am Empfang aktiviert wurde, und halten Sie sie bereit, bevor Sie zur Nachteingangstür gehen.",
+      "en": "Make sure your card was activated at reception when you registered, and have it ready before you go to the night entrance.",
+      "fr": "Assurez-vous que votre carte a été activée à la réception lors de votre enregistrement, et tenez-la prête avant de vous rendre à l'entrée de nuit.",
+      "es": "Asegúrese de que su tarjeta fue activada en la recepción al registrarse, y téngala lista antes de dirigirse a la entrada nocturna.",
+      "zh": "请确认您的房卡已在办理登记时于前台激活，并在前往夜间入口前备好房卡。"
+    },
+    "nacht.step2.h3": {
+      "de": "Karte an das Lesegerät halten",
+      "en": "Hold the card to the reader",
+      "fr": "Présenter la carte au lecteur",
+      "es": "Acercar la tarjeta al lector",
+      "zh": "将房卡靠近读卡器"
+    },
+    "nacht.step2.p": {
+      "de": "Halten Sie die Karte vor der Tür vorsichtig an das elektronische Lesegerät. Achten Sie auf die richtige Position der Karte.",
+      "en": "Hold the card carefully against the electronic reader in front of the door. Make sure the card is positioned correctly.",
+      "fr": "Présentez délicatement la carte au lecteur électronique devant la porte. Veillez à bien positionner la carte.",
+      "es": "Acerque con cuidado la tarjeta al lector electrónico frente a la puerta. Asegúrese de que la tarjeta esté bien colocada.",
+      "zh": "请小心地将房卡靠近门前的电子读卡器，并注意正确的刷卡位置。"
+    },
+    "nacht.step3.h3": {
+      "de": "Tür öffnen",
+      "en": "Open the door",
+      "fr": "Ouvrir la porte",
+      "es": "Abrir la puerta",
+      "zh": "开门"
+    },
+    "nacht.step3.p": {
+      "de": "Warten Sie auf den Piepton bzw. das grüne Licht – beides bestätigt, dass die Karte erkannt wurde. Ziehen Sie die Tür leicht zu sich und treten Sie ein.",
+      "en": "Wait for the beep or the green light — both confirm that the card has been recognised. Pull the door gently towards you and step inside.",
+      "fr": "Attendez le bip sonore ou le voyant vert — les deux confirment que la carte a été reconnue. Tirez légèrement la porte vers vous et entrez.",
+      "es": "Espere el pitido o la luz verde: ambos confirman que la tarjeta ha sido reconocida. Tire suavemente de la puerta hacia usted y entre.",
+      "zh": "请等待提示音或绿灯亮起——两者均表示房卡已被识别。轻轻将门拉向自己并进入。"
+    },
+    "nacht.note": {
+      "de": "Sollte die Karte nicht erkannt werden, rufen Sie uns einfach an – wir sind rund um die Uhr für Sie erreichbar: +49 (0)69 15 40 50.",
+      "en": "If the card isn't recognised, just call us — we're reachable around the clock: +49 (0)69 15 40 50.",
+      "fr": "Si la carte n'est pas reconnue, appelez-nous simplement — nous sommes joignables 24 heures sur 24 : +49 (0)69 15 40 50.",
+      "es": "Si la tarjeta no es reconocida, simplemente llámenos: estamos disponibles las 24 horas: +49 (0)69 15 40 50.",
+      "zh": "如果房卡未被识别，请直接致电我们——我们全天候为您服务：+49 (0)69 15 40 50。"
+    },
+    "nacht.wegweiserLink": {
+      "de": "→ Wegweiser zum Zimmer (in 15 Sprachen)",
+      "en": "→ Room guide (in 15 languages)",
+      "fr": "→ Guide vers votre chambre (en 15 langues)",
+      "es": "→ Guía a su habitación (en 15 idiomas)",
+      "zh": "→ 客房指南（15种语言）"
+    },
+    "fs.eyebrow": {
+      "de": "Für morgen früh",
+      "en": "For tomorrow morning",
+      "fr": "Pour demain matin",
+      "es": "Para mañana por la mañana",
+      "zh": "为明天早上"
+    },
+    "fs.h2": {
+      "de": "Frühstück & Zimmerservice anmelden",
+      "en": "Register breakfast & room service",
+      "fr": "Réserver le petit-déjeuner et le service en chambre",
+      "es": "Reservar desayuno y servicio de habitaciones",
+      "zh": "预订早餐和客房服务"
+    },
+    "fs.lead": {
+      "de": "Unkompliziert für morgen vorbestellen — Ihre Anfrage geht direkt als E-Mail an die Rezeption. Eine automatische Bestätigung erhalten Sie nicht; bei Fragen rufen Sie uns gerne an.",
+      "en": "Order ahead for tomorrow, without any hassle — your request goes straight to reception by email. You won't receive an automatic confirmation; if you have questions, feel free to call us.",
+      "fr": "Réservez facilement pour demain — votre demande est envoyée directement par e-mail à la réception. Vous ne recevrez pas de confirmation automatique ; pour toute question, appelez-nous.",
+      "es": "Reserve fácilmente para mañana — su solicitud se envía directamente por correo electrónico a la recepción. No recibirá una confirmación automática; si tiene preguntas, llámenos con confianza.",
+      "zh": "轻松预订明天所需——您的申请将直接以电子邮件发送至前台。您不会收到自动确认；如有疑问，请随时致电我们。"
+    },
+    "fs.room": {
+      "de": "Zimmernummer",
+      "en": "Room number",
+      "fr": "Numéro de chambre",
+      "es": "Número de habitación",
+      "zh": "房间号"
+    },
+    "fs.guests": {
+      "de": "Personenanzahl",
+      "en": "Number of guests",
+      "fr": "Nombre de personnes",
+      "es": "Número de personas",
+      "zh": "人数"
+    },
+    "fs.diet": {
+      "de": "Ernährungsoption",
+      "en": "Dietary option",
+      "fr": "Option alimentaire",
+      "es": "Opción alimentaria",
+      "zh": "饮食选项"
+    },
+    "fs.diet.standard": {
+      "de": "Standard",
+      "en": "Standard",
+      "fr": "Standard",
+      "es": "Estándar",
+      "zh": "标准"
+    },
+    "fs.diet.veg": {
+      "de": "Vegetarisch",
+      "en": "Vegetarian",
+      "fr": "Végétarien",
+      "es": "Vegetariano",
+      "zh": "素食"
+    },
+    "fs.diet.lactose": {
+      "de": "Laktosefrei",
+      "en": "Lactose-free",
+      "fr": "Sans lactose",
+      "es": "Sin lactosa",
+      "zh": "无乳糖"
+    },
+    "fs.diet.gluten": {
+      "de": "Glutenfrei (auf Anfrage)",
+      "en": "Gluten-free (on request)",
+      "fr": "Sans gluten (sur demande)",
+      "es": "Sin gluten (a petición)",
+      "zh": "无麸质（需提前申请）"
+    },
+    "fs.time": {
+      "de": "Gewünschte Uhrzeit",
+      "en": "Preferred time",
+      "fr": "Heure souhaitée",
+      "es": "Hora deseada",
+      "zh": "期望时间"
+    },
+    "fs.roomservice": {
+      "de": "Zimmerservice gewünscht (+5,00 € pro Person)",
+      "en": "Room service requested (+€5.00 per person)",
+      "fr": "Service en chambre souhaité (+5,00 € par personne)",
+      "es": "Servicio de habitaciones deseado (+5,00 € por persona)",
+      "zh": "需要客房送餐服务（每人+5.00欧元）"
+    },
+    "fs.submit": {
+      "de": "Anfrage per E-Mail senden",
+      "en": "Send request by email",
+      "fr": "Envoyer la demande par e-mail",
+      "es": "Enviar solicitud por correo electrónico",
+      "zh": "通过电子邮件发送请求"
+    },
+    "kontakt.eyebrow": {
+      "de": "Wir sind für Sie da",
+      "en": "We're here for you",
+      "fr": "Nous sommes là pour vous",
+      "es": "Estamos aquí para usted",
+      "zh": "我们随时为您服务"
+    },
+    "kontakt.h2": {
+      "de": "Kontakt",
+      "en": "Contact",
+      "fr": "Contact",
+      "es": "Contacto",
+      "zh": "联系方式"
+    },
+    "kontakt.phone.h3": {
+      "de": "Telefon",
+      "en": "Phone",
+      "fr": "Téléphone",
+      "es": "Teléfono",
+      "zh": "电话"
+    },
+    "kontakt.phone.note": {
+      "de": "rund um die Uhr",
+      "en": "around the clock",
+      "fr": "24 heures sur 24",
+      "es": "las 24 horas",
+      "zh": "全天候"
+    },
+    "kontakt.mail.h3": {
+      "de": "E-Mail",
+      "en": "Email",
+      "fr": "E-mail",
+      "es": "Correo electrónico",
+      "zh": "电子邮件"
+    },
+    "kontakt.booking.h3": {
+      "de": "Reservierung",
+      "en": "Booking",
+      "fr": "Réservation",
+      "es": "Reserva",
+      "zh": "预订"
+    },
+    "kontakt.booking.link": {
+      "de": "Zimmer online reservieren →",
+      "en": "Book a room online →",
+      "fr": "Réserver une chambre en ligne →",
+      "es": "Reservar habitación en línea →",
+      "zh": "在线预订客房 →"
+    },
+    "kontakt.website.h3": {
+      "de": "Website",
+      "en": "Website",
+      "fr": "Site web",
+      "es": "Sitio web",
+      "zh": "官网"
+    },
+    "footer.copyright": {
+      "de": "© 2026 Turm Hotel GmbH · Raum für Möglichkeiten",
+      "en": "© 2026 Turm Hotel GmbH · Room for possibilities",
+      "fr": "© 2026 Turm Hotel GmbH · Un espace de possibilités",
+      "es": "© 2026 Turm Hotel GmbH · Espacio para posibilidades",
+      "zh": "© 2026 Turm Hotel GmbH · 可能性的空间"
+    },
+    "footer.mainsite": {
+      "de": "Hauptseite",
+      "en": "Main site",
+      "fr": "Site principal",
+      "es": "Sitio principal",
+      "zh": "主页"
+    },
+    "footer.impressum": {
+      "de": "Impressum",
+      "en": "Legal notice",
+      "fr": "Mentions légales",
+      "es": "Aviso legal",
+      "zh": "法律声明"
+    },
+    "footer.privacy": {
+      "de": "Datenschutz",
+      "en": "Privacy policy",
+      "fr": "Confidentialité",
+      "es": "Privacidad",
+      "zh": "隐私政策"
+    }
+  }
+}
