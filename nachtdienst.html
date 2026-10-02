@@ -180,7 +180,7 @@ input.search{
 
   <div class="section">
     <h2>Nachteingang heute</h2>
-    <div class="sub">Gäste mit Status „Anreise erwartet“, abgeglichen mit der Safe-/PIN-Tabelle. Bitte Namen und PIN vor Weitergabe an den Gast noch einmal mit dem Original vergleichen — Texterkennung kann Fehler machen.</div>
+    <div class="sub">Alle Zimmer mit zugewiesenem Safe aus der Schlüsselsafe-Tabelle — unabhängig vom Check-in-Status in der Gästeliste, da die Praxis zeigt, dass auch schon „Eingecheckt“ markierte Gäste noch einen Safe für später bekommen. Bitte Namen und PIN vor Weitergabe an den Gast noch einmal mit dem Original vergleichen — Texterkennung kann Fehler machen.</div>
 
     <button type="button" class="btn small" id="pinToggleBtn" onclick="togglePins()" style="margin-bottom:.9rem">🔒 PINs anzeigen</button>
 
@@ -502,11 +502,26 @@ function render(){
   updateHandoffBox();
 }
 
+// ---- Quelle ist die Safe-Tabelle, NICHT der Check-in-Status in der
+// Gästeliste (02.10.: Goncalves/Busa/Boeke standen schon "Eingecheckt",
+// hatten aber trotzdem einen zugewiesenen Safe -- "Anreise erwartet" allein
+// war also die falsche Filterbedingung und hat die untere Tabelle komplett
+// ignoriert). Jede Zeile mit Zimmernummer zählt, auch "Reserve"-Slots;
+// "5 X LEERE KARTEN" hat keine Zimmernummer und fällt automatisch raus.
+function safeAssignedRooms(){
+  return safeRows.filter(function(s){ return s.zimmer; });
+}
+
+function matchGuestForSafe(s){
+  return guestRows.find(function(g){ return g.zi === s.zimmer || g.ziRaw === s.zimmer; }) || null;
+}
+
 // ---- Übergabe an das Housekeeping-Tool (anonymisiert: nur Zimmer + Anreisedatum) ----
 function anonymizedArrivals(){
-  return guestRows
-    .filter(function(g){ return g.status === 'Anreise erwartet'; })
-    .map(function(g){ return { zimmer: g.zi, anreise: g.an }; });
+  return safeAssignedRooms().map(function(s){
+    var guest = matchGuestForSafe(s);
+    return { zimmer: s.zimmer, anreise: guest ? guest.an : '' };
+  });
 }
 
 function updateHandoffBox(){
@@ -542,43 +557,32 @@ function handoffToHousekeeping(){
     });
 }
 
-function matchSafeForGuest(g){
-  // 1) über Zimmernummer
-  var byRoom = safeRows.find(function(s){
-    return s.zimmer && (s.zimmer === g.zi || s.zimmer === g.ziRaw);
-  });
-  if(byRoom) return byRoom;
-  // 2) über Nachnamen (erstes Wort vor dem Komma)
-  var lastName = (g.name.split(',')[0] || '').trim().toLowerCase();
-  if(!lastName) return null;
-  return safeRows.find(function(s){
-    return s.name && s.name.toLowerCase().indexOf(lastName) !== -1 && !/reserve|leere karten/i.test(s.name);
-  }) || null;
-}
-
 function renderArrivals(){
   var wrap = document.getElementById('arrivalsWrap');
   wrap.innerHTML = '';
-  var expected = guestRows.filter(function(g){ return g.status === 'Anreise erwartet'; });
-  if(expected.length === 0){
-    wrap.innerHTML = '<div class="empty-hint">Keine Gäste mit Status „Anreise erwartet“ erkannt — entweder sind heute alle schon da, oder die Fotos noch einmal prüfen.</div>';
+  var rooms = safeAssignedRooms();
+  if(rooms.length === 0){
+    wrap.innerHTML = '<div class="empty-hint">Keine Zimmer mit zugewiesenem Safe erkannt — entweder ist heute keine Safe-Tabelle vorbereitet, oder die Fotos noch einmal prüfen.</div>';
     return;
   }
-  expected.forEach(function(g){
-    var safe = matchSafeForGuest(g);
+  rooms.forEach(function(s){
+    var guest = matchGuestForSafe(s);
+    var isReserve = /reserve/i.test(s.name || '');
+    var displayName = guest ? guest.name : (s.name || '(kein Name)');
+    var arrivalLine = guest
+      ? ('Anreise ' + escapeHtml(guest.an) + ' · Status „' + escapeHtml(guest.status) + '“')
+      : (isReserve ? 'Reserve-Safe, keinem bestimmten Gast zugeordnet' : 'Zimmer nicht in der erkannten Gästeliste gefunden');
     var card = document.createElement('div');
-    card.className = 'arrival-card' + (safe ? '' : ' unmatched');
+    card.className = 'arrival-card' + (guest ? '' : ' unmatched');
     card.innerHTML =
       '<div>' +
-        '<div class="name"><span class="editable" contenteditable="true">' + escapeHtml(g.name) + '</span></div>' +
-        '<div class="room">Zimmer <span class="editable" contenteditable="true" style="display:inline;width:auto">' + escapeHtml(g.zi) + '</span> · Anreise ' + escapeHtml(g.an) + '</div>' +
+        '<div class="name"><span class="editable" contenteditable="true">' + escapeHtml(displayName) + '</span></div>' +
+        '<div class="room">Zimmer <span class="editable" contenteditable="true" style="display:inline;width:auto">' + escapeHtml(s.zimmer) + '</span> · ' + arrivalLine + '</div>' +
       '</div>' +
       '<div class="pin-box">' +
-        (safe
-          ? '<div class="safe">Safe ' + escapeHtml(safe.nr) + '</div><div class="pin' + (pinsRevealed ? ' editable" contenteditable="true"' : '"') + '>' + escapeHtml(pinsRevealed ? safe.pin : maskPin(safe.pin)) + '</div>'
-          : '<div class="safe">kein Safe zugeordnet</div>') +
+        '<div class="safe">Safe ' + escapeHtml(s.nr) + '</div><div class="pin' + (pinsRevealed ? ' editable" contenteditable="true"' : '"') + '>' + escapeHtml(pinsRevealed ? s.pin : maskPin(s.pin)) + '</div>' +
       '</div>' +
-      (safe ? '' : '<div class="warn-note">Nicht automatisch in der Safe-Tabelle gefunden — bitte auf dem Originalfoto nachsehen.</div>');
+      (guest ? '' : '<div class="warn-note">' + (isReserve ? 'Reserve-Safe — kein bestimmter Gast, zur Information.' : 'Bitte auf dem Originalfoto nachsehen.') + '</div>');
     wrap.appendChild(card);
   });
 }
