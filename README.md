@@ -34,6 +34,27 @@ Damit der Betrieb nicht an einer Person hängt:
 
 ## Versionsverlauf
 
+### Nachtdienst-Übergabe in der Zimmerverteilung sichtbar + Stand-Reset — 03.10.2026
+Die Übergabe „Nachtdienst-Liste → Housekeeping Manager" (`/spaeteAnreisen.json`,
+seit `4228664`) war bisher eine Sackgasse: anonymisiert übergebene Zimmer
+erschienen nur als eigene Chip-Liste im Tab „Gästeliste" — unsichtbar für alle,
+die direkt im Tab „Zimmer" verteilen und reinigen.
+- **Neu**: Zimmer mit offener später Anreise bekommen jetzt überall, wo sie
+  ohnehin auftauchen, ein eigenes Badge „🌙 Späte Anreise" — auf der
+  Zimmerkarte selbst und im Zimmer-Modal. Kein zweiter Tab mehr nötig, um zu
+  sehen, welche Zimmer heute Nacht noch jemanden erwarten.
+- **Fix (Datenleiche)**: `/spaeteAnreisen.json` wurde nie geleert — eine
+  vergessene oder ausgefallene Nachtdienst-Übergabe hätte das Badge eines
+  längst angereisten Gasts tagelang stehen lassen. „Zimmerstatus
+  zurücksetzen" (ohnehin der erste Schritt in einen neuen Tag) löscht die
+  Übergabe jetzt mit, zusätzlich zum bisherigen Verlauf-Archiv.
+- Die Übergabe wird jetzt alle 8s im Hintergrund mitsynchronisiert
+  (`syncFromCloud`) statt nur beim Öffnen des Gästeliste-Tabs — dafür den
+  bisherigen „Lädt …"-Platzhalter entfernt, der sonst alle 8s kurz
+  aufgeblitzt wäre.
+- Keine Änderung an `nachtdienst.html` oder am Übergabe-Datenformat nötig —
+  reine Housekeeping-Manager-Seite der bestehenden Übergabe.
+
 ### Zimmerstatistik-Fix + Reserve-Erkennung im Foto-Scan — 29.09.2026
 - **Fix**: `updateStats()` zählte Tagungsraum Mailand und Tagungsraum Barcelona
   fälschlich in die Kopfzeilen-Statistik mit (75 statt der echten 73 Gästezimmer).
