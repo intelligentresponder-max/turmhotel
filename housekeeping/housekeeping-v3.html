@@ -1019,6 +1019,15 @@ function renderSpaeteAnreisen(data){
   var body = document.getElementById('late-arrivals-body');
   var stampEl = document.getElementById('late-arrivals-stamp');
   var zimmer = (data && Array.isArray(data.zimmer)) ? data.zimmer : [];
+
+  // Set fuer die Zimmerkarten-Badges aktuell halten, unabhaengig davon, ob
+  // gerade ueberhaupt Zimmer offen sind (leere Liste muss die Badges auch wieder entfernen).
+  var neueRooms = new Set(zimmer.map(function(z){ return String(z.zimmer == null ? '' : z.zimmer); }).filter(Boolean));
+  var hatSichGeaendert = neueRooms.size !== spaeteAnreisenRooms.size ||
+    Array.from(neueRooms).some(function(r){ return !spaeteAnreisenRooms.has(r); });
+  spaeteAnreisenRooms = neueRooms;
+  if (hatSichGeaendert) renderRooms();
+
   if (zimmer.length === 0){
     body.innerHTML = '<div class="late-arrivals-empty">Keine offenen späten Anreisen übergeben — entweder sind alle schon da, oder es wurde noch nichts aus der Nachtdienst-Liste übergeben.</div>';
     stampEl.textContent = '';
@@ -1038,21 +1047,30 @@ function renderSpaeteAnreisen(data){
   }
 }
 function loadSpaeteAnreisen(){
-  var body = document.getElementById('late-arrivals-body');
-  if (body) body.innerHTML = '<div class="late-arrivals-empty">Lädt …</div>';
+  // Kein "Laedt..."-Platzhalter mehr: die Funktion laeuft jetzt alle 8s im
+  // Hintergrund mit (syncFromCloud), ein staendiges Flackern im offenen
+  // Gaesteliste-Tab waere nur stoerend. Der Inhalt bleibt bis zur Antwort
+  // einfach stehen, wie bei renderRooms()/renderOverview() auch.
   dbUrl('/spaeteAnreisen.json').then(function(url){ return fetch(url); })
     .then(checkFirebaseResponse)
     .then(function(res){ return res.json(); })
     .then(function(data){ setSyncStatus(true); renderSpaeteAnreisen(data || {}); })
     .catch(function(e){
+      // Bewusst kein Fehlertext im Panel: laeuft jetzt alle 8s mit (syncFromCloud) und
+      // wuerde sonst bei jedem kurzen Netz-Hakler den zuletzt bekannten Stand ueberschreiben.
+      // Der globale Sync-Status (setSyncStatus) zeigt den Ausfall bereits an.
       console.warn('Späte Anreisen laden fehlgeschlagen', e);
       setSyncStatus(false);
-      if (body) body.innerHTML = '<div class="late-arrivals-empty">Konnte nicht geladen werden (kein Sync gerade möglich).</div>';
     });
 }
 
 let state = loadState();
 let staff = loadStaff();
+// Zimmer mit offener, aus nachtdienst.html uebergebener spaeter Anreise (Zimmer-IDs als Strings).
+// Wird aus renderSpaeteAnreisen() befuellt und faerbt die Zimmerkarten/den Modal-Hinweis ein,
+// damit die Nachtdienst-Uebergabe auch in der Zimmerverteilung sichtbar ist, nicht nur im
+// separaten "Gaesteliste"-Tab.
+let spaeteAnreisenRooms = new Set();
 if (!staff.length) {
   staff = [
     { name: 'Kanczler', abb: 'KAN', color: '#c9a227' },
@@ -1125,6 +1143,7 @@ function renderRooms() {
       const typBdg = rs.roomType ? `<span class="badge" style="background:rgba(201,162,39,.1);color:var(--gold)">${rs.roomType}</span>` : '';
       const kinderBdg = rs.kinderbett ? `<span class="badge" style="background:rgba(91,179,232,.15);color:#5bb3e8;border:1px solid rgba(91,179,232,.4)">+Kind</span>` : '';
       const oooBdg = rs.ooo ? `<span class="badge" style="background:rgba(192,57,43,.18);color:#ff6b4a;border:1px solid rgba(192,57,43,.45)">OOO</span>` : '';
+      const lateBdg = spaeteAnreisenRooms.has(r) ? `<span class="badge" style="background:rgba(99,102,241,.18);color:#a5a9f5;border:1px solid rgba(99,102,241,.45)" title="Aus der Nachtdienst-Uebergabe: Gast war bei Schichtende noch nicht da">🌙 Späte Anreise</span>` : '';
       const roomType = ROOM_TYPES[r] || '';
       const typeColors = {
         'SDH': 'background:rgba(42,122,75,.18);color:#4ecb82;border:1px solid rgba(42,122,75,.4)',
@@ -1141,7 +1160,7 @@ function renderRooms() {
         <div class="room-status-row">
           <span class="badge ${rs.clean ? 'badge-clean' : 'badge-dirty'}">${rs.clean ? 'Sauber' : 'Offen'}</span>
           <span class="badge ${(rs.occupied || rs.guestType) ? 'badge-occupied' : 'badge-free'}">${(rs.occupied || rs.guestType) ? 'Belegt' : 'Frei'}</span>
-          ${sdhBdg}${typeBadge}${typBdg}${kinderBdg}${oooBdg}
+          ${sdhBdg}${typeBadge}${typBdg}${kinderBdg}${oooBdg}${lateBdg}
         </div>
         ${staffObj ? `<div class="room-staff"><span class="staff-chip" style="background:${staffObj.color}">${staffObj.abb}</span></div>` : ''}
         ${rs.note ? `<div class="room-note">${rs.note}</div>` : ''}
@@ -1205,9 +1224,10 @@ function openModal(roomId) {
   const typeLabel = rs.roomType ? ` · Typ <strong style="color:var(--gold)">${rs.roomType}</strong>` : '';
   const kinderLabel = rs.kinderbett ? ` · <strong style="color:#5bb3e8">+ Kinderbett</strong>` : '';
   const oooLabel = rs.ooo ? ` · <strong style="color:#ff6b4a">⛔ OOO</strong>` : '';
-  if (rs.guestType === 'checkout') gi.innerHTML = `<span class="co-tag">↗ Abreise heute — Zimmer wird frei${typeLabel}${kinderLabel}</span>${oooLabel}`;
-  else if (rs.guestType === 'overnight') gi.innerHTML = `<span class="ov-tag">🌙 Overnight — Gast bleibt${typeLabel}${kinderLabel}</span>${oooLabel}`;
-  else gi.innerHTML = oooLabel ? oooLabel.replace(/^ · /, '') : '';
+  const lateLabel = spaeteAnreisenRooms.has(roomId) ? ` · <strong style="color:#a5a9f5">🌙 Späte Anreise lt. Nachtdienst-Übergabe</strong>` : '';
+  if (rs.guestType === 'checkout') gi.innerHTML = `<span class="co-tag">↗ Abreise heute — Zimmer wird frei${typeLabel}${kinderLabel}</span>${oooLabel}${lateLabel}`;
+  else if (rs.guestType === 'overnight') gi.innerHTML = `<span class="ov-tag">🌙 Overnight — Gast bleibt${typeLabel}${kinderLabel}</span>${oooLabel}${lateLabel}`;
+  else gi.innerHTML = [oooLabel, lateLabel].filter(Boolean).map(l => l.replace(/^ · /, '')).join(' · ');
 
   const sel = document.getElementById('modal-staff');
   sel.innerHTML = '<option value="">— Niemand zugewiesen —</option>';
@@ -1628,8 +1648,23 @@ function resetRoomStatus() {
   csvParsed = [];
   const banner = document.getElementById('import-banner');
   if (banner) banner.classList.remove('show');
+  clearSpaeteAnreisen();
   renderRooms(); renderPersonal(); renderOverview();
   alert('Zimmerstatus wurde zurueckgesetzt.');
+}
+
+// Die Nachtdienst-Uebergabe betrifft immer die gerade zu Ende gehende Nacht. Ohne
+// diesen Schritt blieb ein "Spaete Anreise"-Badge an einem Zimmer haengen, bis die
+// naechste Nacht erneut uebergibt — auch wenn der Gast laengst normal eingecheckt ist
+// (oder der Nachtdienst die Uebergabe an einem Tag schlicht vergisst). "Zimmerstatus
+// zuruecksetzen" ist im Ablauf ohnehin der erste Schritt in einen neuen Tag, daher hier.
+function clearSpaeteAnreisen(){
+  renderSpaeteAnreisen({});
+  dbUrl('/spaeteAnreisen.json').then(function(url){
+    return fetch(url, {method: 'DELETE'});
+  }).then(checkFirebaseResponse).catch(function(e){
+    console.warn('Spaete-Anreisen-Reset fehlgeschlagen (kein Sync gerade moeglich)', e);
+  });
 }
 
 // ══ VERLAUF (Tages-Archiv) ══
@@ -3053,6 +3088,10 @@ async function syncFromCloud() {
     console.warn('Cloud-Sync fehlgeschlagen, nutze lokalen Stand', e);
     setSyncStatus(false);
   }
+  // Laeuft unabhaengig vom try/catch oben mit eigener Fehlerbehandlung (siehe
+  // loadSpaeteAnreisen): so faerbt die Nachtdienst-Uebergabe die Zimmerkarten
+  // auch dann ein, wenn der Gaesteliste-Tab nie geoeffnet wird.
+  loadSpaeteAnreisen();
 }
 syncFromCloud();
 setInterval(syncFromCloud, 8000);
