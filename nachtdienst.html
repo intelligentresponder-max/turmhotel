@@ -517,8 +517,16 @@ function matchGuestForSafe(s){
 }
 
 // ---- Übergabe an das Housekeeping-Tool (anonymisiert: nur Zimmer + Anreisedatum) ----
+// "Reserve"-Zeilen (z.B. 301, 501 am 08.10.: laut Safe-Liste nur gereinigte
+// Reserve-Zimmer ohne Gast) dürfen NICHT mit übergeben werden -- sonst zeigt
+// Housekeeping faelschlich "Späte Anreise" auf leeren Reserve-Zimmern an, die
+// dort bereits über die eigene Foto-Scan-Reserve-Erkennung korrekt als
+// sauber/frei geführt werden. Nur Safes mit echtem Gastnamen sind eine
+// tatsächliche Spätanreise.
 function anonymizedArrivals(){
-  return safeAssignedRooms().map(function(s){
+  return safeAssignedRooms().filter(function(s){
+    return s.name && !/reserve/i.test(s.name);
+  }).map(function(s){
     var guest = matchGuestForSafe(s);
     return { zimmer: s.zimmer, anreise: guest ? guest.an : '' };
   });
