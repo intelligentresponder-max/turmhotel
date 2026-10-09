@@ -2073,18 +2073,30 @@ function scanPruefSummen(fusssumme) {
   scanLastFusssumme = fusssumme;
   if (fusssumme) {
     var zeilen = scanZeilenFuerSumme();
-    var unbekannt = zeilen.filter(function(r){ return r.betten == null; });
-    var bekannt = zeilen.filter(function(r){ return r.betten != null; });
-    if (unbekannt.length === 1) {
-      var bekannteSumme = bekannt.reduce(function(s,r){ return s + r.betten; }, 0);
-      var fehlt = fusssumme.erw - bekannteSumme;
+    var unbekanntErw = zeilen.filter(function(r){ return r.betten == null; });
+    var bekanntErw = zeilen.filter(function(r){ return r.betten != null; });
+    if (unbekanntErw.length === 1) {
+      var bekannteSummeErw = bekanntErw.reduce(function(s,r){ return s + r.betten; }, 0);
+      var fehltErw = fusssumme.erw - bekannteSummeErw;
       // Eine einzelne Zimmerzeile hat plausibel 0-4 Erwachsene; ausserhalb
       // dieses Bereichs eher ein Zeichen, dass noch mehr Zeilen falsch
       // gelesen wurden, als dass genau dieser Wert stimmt — dann lieber
       // leer lassen statt eine falsche Zahl einzutragen.
-      if (fehlt >= 0 && fehlt <= 4) {
-        unbekannt[0].betten = fehlt;
-        unbekannt[0].berechnetErw = true;
+      if (fehltErw >= 0 && fehltErw <= 4) {
+        unbekanntErw[0].betten = fehltErw;
+        unbekanntErw[0].berechnetErw = true;
+      }
+    }
+    // Dieselbe Luecken-Logik fuer Kin. (seltener noetig, Kin. ist meistens 0,
+    // aber jetzt genauso ehrlich "nicht gelesen" statt stillschweigend 0).
+    var unbekanntKin = zeilen.filter(function(r){ return r.kinder == null; });
+    var bekanntKin = zeilen.filter(function(r){ return r.kinder != null; });
+    if (unbekanntKin.length === 1) {
+      var bekannteSummeKin = bekanntKin.reduce(function(s,r){ return s + r.kinder; }, 0);
+      var fehltKin = fusssumme.kin - bekannteSummeKin;
+      if (fehltKin >= 0 && fehltKin <= 4) {
+        unbekanntKin[0].kinder = fehltKin;
+        unbekanntKin[0].berechnetKin = true;
       }
     }
   }
@@ -2102,19 +2114,28 @@ function scanRenderErwKinBadge() {
   var erwSumme = zeilen.reduce(function(s,r){ return s + (r.betten || 0); }, 0);
   var kinSumme = zeilen.reduce(function(s,r){ return s + (r.kinder || 0); }, 0);
   var erwOffen = zeilen.filter(function(r){ return r.betten == null; }).length;
-  var berechnet = zeilen.filter(function(r){ return r.berechnetErw; }).length;
+  var kinOffen = zeilen.filter(function(r){ return r.kinder == null; }).length;
+  var berechnet = zeilen.filter(function(r){ return r.berechnetErw || r.berechnetKin; }).length;
 
   var erwOk = erwSumme === scanLastFusssumme.erw;
   var kinOk = kinSumme === scanLastFusssumme.kin;
 
-  if (erwOk && kinOk) {
+  if (erwOk && kinOk && !erwOffen && !kinOffen) {
     badge.className = 'scan-badge ok';
     badge.textContent = '✓ Σ Erw. ' + erwSumme + '/' + scanLastFusssumme.erw + ' · Σ Kin. ' + kinSumme + '/' + scanLastFusssumme.kin
-      + (berechnet ? ' (1× errechnet)' : '');
-  } else if (erwOffen > 1) {
+      + (berechnet ? ' (' + berechnet + '× errechnet)' : '');
+  } else if (erwOk && kinOk) {
+    // Summen stimmen, aber es gibt noch offene (nicht gelesene) Zeilen, die
+    // sich rechnerisch nicht eindeutig auflösen ließen (mehr als eine Lücke)
+    // -- Zufallstreffer möglich, deshalb trotzdem als Hinweis zeigen statt als
+    // fertig "ok" durchgehen zu lassen.
     badge.className = 'scan-badge warn';
     badge.textContent = '! Σ Erw. ' + erwSumme + '/' + scanLastFusssumme.erw + ' · Σ Kin. ' + kinSumme + '/' + scanLastFusssumme.kin
-      + ' — ' + erwOffen + ' Zeilen ohne Erw.-Zahl, nicht eindeutig zuordenbar, bitte pruefen';
+      + ' — Summe stimmt, aber ' + (erwOffen + kinOffen) + ' Zelle(n) wurden gar nicht gelesen, bitte trotzdem prüfen';
+  } else if (erwOffen > 1 || kinOffen > 1) {
+    badge.className = 'scan-badge warn';
+    badge.textContent = '! Σ Erw. ' + erwSumme + '/' + scanLastFusssumme.erw + ' · Σ Kin. ' + kinSumme + '/' + scanLastFusssumme.kin
+      + ' — ' + erwOffen + ' Zeile(n) ohne Erw.-, ' + kinOffen + ' ohne Kin.-Zahl, nicht eindeutig zuordenbar, bitte pruefen';
   } else {
     badge.className = 'scan-badge bad';
     badge.textContent = '✕ Σ Erw. ' + erwSumme + '/' + scanLastFusssumme.erw + ' · Σ Kin. ' + kinSumme + '/' + scanLastFusssumme.kin
@@ -2267,6 +2288,23 @@ function scanZimmerAmZeilenanfang(zeile, belegt) {
   return { zimmer: frei[0], laenge: m[0].length };
 }
 
+// Nach André (09.10., echtes Handy-Testfoto): die Erw./Kin.-Spalte kam fast
+// durchgehend als "0" an -- tatsaechlich war in den meisten dieser Zeilen gar
+// keine Ziffer lesbar (Match schlug komplett fehl), und die alte Fallback-
+// Zuweisung `kin: 0` hat dann "nicht gelesen" und "wirklich 0 Kinder" beide
+// gleich behandelt. Zwei Ursachen behoben:
+// 1. `kinderArr.push(ek ? ek.kin : 0)` -> jetzt `null` wie bei Erw. schon,
+//    damit "nicht gelesen" in der Tabelle auch als "nicht gelesen" (—)
+//    erscheint statt als stille Null.
+// 2. Die Ziffernerkennung selbst war zu starr: `\s+` zwischen den drei
+//    Ziffern verlangte je mindestens ein Leerzeichen -- bei enger Kamera-
+//    Spaltenabstaenden kommen die drei Ziffern aus Tesseract aber oft ohne
+//    jeden Zwischenraum an ("101" statt "1 0 1"), dann schlug der ganze
+//    Zeilen-Treffer fehl. Jetzt `\s*` (auch ganz ohne Leerzeichen gueltig).
+//    Dazu dieselbe Buchstaben/Ziffern-Verwechslung wie schon bei der
+//    Zimmernummer (scanZimmerAmZeilenanfang) auch hier zugelassen, da
+//    einzelne Ziffern in dieser Spalte denselben Verwechslungen unterliegen
+//    (O/o->0, I/l/|->1, S/s/§->5, B->8).
 function scanErwKinAnz(zeile) {
   // Nach Anreise- und Abreisedatum stehen auf der Alpha-Liste die Spalten Erw./Kin./Anz.
   // als drei einzelne Ziffern hintereinander, z.B. "... 23.09.2026 25.09.2026 1 0 1 LGS".
@@ -2274,10 +2312,21 @@ function scanErwKinAnz(zeile) {
   // Leerzeichen an einer Fehlerkennung aus der Kat.-Spalte (z.B. "1 0 14." statt
   // "1 0 1 LGS") — ohne \b wird die erste (richtige) Ziffer trotzdem erkannt.
   var datum = '\\d{2}[.,:\\s]{0,2}\\d{2}[.,:\\s]{0,2}(?:\\d{4}|\\d{3}|\\d{2})';
-  var re = new RegExp(datum + '\\s+' + datum + '\\D{0,6}(\\d)\\s+(\\d)\\s+(\\d)');
+  var ziffer = '[0-9OoIl|Ss§B]';
+  // Die Luecke zwischen den Daten und der ersten Ziffer darf KEIN Zeichen aus
+  // der Ziffer-Klasse selbst enthalten (\D allein wuerde ein als Ziffer
+  // verwechselbares "O" mitfressen und erst bei der naechsten echten Ziffer
+  // weitersuchen -- an "O 0 1 STS" waere so faelschlich "0 1 S" statt "O 0 1"
+  // erkannt worden, mit Playwright nachgestellt und so gefunden).
+  var luecke = '[^0-9OoIl|Ss§B]{0,6}';
+  var re = new RegExp(datum + '\\s+' + datum + luecke + '(' + ziffer + ')\\s*(' + ziffer + ')\\s*(' + ziffer + ')');
   var m = zeile.match(re);
   if (!m) return null;
-  return { erw: +m[1], kin: +m[2], anz: +m[3] };
+  function zifferNorm(z) {
+    var karte = { 'O':'0', 'o':'0', 'I':'1', 'l':'1', '|':'1', 'S':'5', 's':'5', '§':'5', 'B':'8' };
+    return +(karte[z] !== undefined ? karte[z] : z);
+  }
+  return { erw: zifferNorm(m[1]), kin: zifferNorm(m[2]), anz: zifferNorm(m[3]) };
 }
 
 function scanReserveZimmer(text) {
@@ -2311,13 +2360,13 @@ function scanParseText(text) {
       rooms.push(mz.zimmer); departures.push(d[1]); belegt[mz.zimmer] = 1;
       var ek = scanErwKinAnz(zeile);
       bettenArr.push(ek ? ek.erw : null);
-      kinderArr.push(ek ? ek.kin : 0);
+      kinderArr.push(ek ? ek.kin : null);
     }
   });
 
   if (rooms.length < 5) {
     const roomRe = /(?:^|\n)\s*(\d{3})\b/g;
-    while ((m = roomRe.exec(text)) !== null) { rooms.push(m[1]); bettenArr.push(null); kinderArr.push(0); }
+    while ((m = roomRe.exec(text)) !== null) { rooms.push(m[1]); bettenArr.push(null); kinderArr.push(null); }
     const alle = scanDatumsTreffer(text, jahr);
     for (let i = 1; i < alle.length; i += 2) departures.push(alle[i]);
     scanPruefText = 'spaltenweise gelesen — Zuordnung unsicher, bitte jede Zeile pruefen';
@@ -2333,7 +2382,14 @@ function scanParseText(text) {
     const z = scanNormalizeRoom(rooms[i]);
     if (gesehen.has(z)) { dubletten++; continue; }
     gesehen.add(z);
-    scanRows.push({ zimmer: z, abreise: departures[i], leer: false, betten: bettenArr[i] || null, kinder: kinderArr[i] || 0 });
+    // "|| null"/"|| 0" wuerden ein echtes 0 (z.B. Erw.=0 bei Suite8-Status
+    // "LAT" ohne Citytax, oder tatsaechlich 0 Kinder) wieder mit "nicht
+    // gelesen" verwechseln -- deshalb explizit auf null/undefined pruefen.
+    scanRows.push({
+      zimmer: z, abreise: departures[i], leer: false,
+      betten: bettenArr[i] == null ? null : bettenArr[i],
+      kinder: kinderArr[i] == null ? null : kinderArr[i],
+    });
   }
   const ungueltig = scanRows.filter(function(r){ return SCAN_ZIMMER.indexOf(r.zimmer) === -1; });
   scanRows = scanRows.filter(function(r){ return SCAN_ZIMMER.indexOf(r.zimmer) !== -1; });
@@ -2397,7 +2453,7 @@ function scanRenderRows() {
       <td><input type="text" value="${r.zimmer}" data-i="${i}" data-f="zimmer" placeholder="z.B. 14"></td>
       <td><input type="text" value="${r.abreise}" data-i="${i}" data-f="abreise" placeholder="TT.MM.JJJJ"></td>
       <td><input type="number" min="0" max="4" value="${r.betten == null ? '' : r.betten}" data-i="${i}" data-f="betten" placeholder="—" style="text-align:center" class="${r.berechnetErw ? 'scan-berechnet' : ''}" title="${r.berechnetErw ? 'Aus der Fußzeilen-Prüfsumme errechnet — bitte gegen das Original prüfen' : ''}"></td>
-      <td><input type="number" min="0" max="4" value="${r.kinder || ''}" data-i="${i}" data-f="kinder" placeholder="0" style="text-align:center"></td>
+      <td><input type="number" min="0" max="4" value="${r.kinder == null ? '' : r.kinder}" data-i="${i}" data-f="kinder" placeholder="—" style="text-align:center" class="${r.berechnetKin ? 'scan-berechnet' : ''}" title="${r.berechnetKin ? 'Aus der Fußzeilen-Prüfsumme errechnet — bitte gegen das Original prüfen' : ''}"></td>
       <td>${r.exOOO ? '<span class="scan-leer-tag" style="color:#ff6b4a">EX-OOO</span>' : (r.reserve ? '<span class="scan-leer-tag" style="color:var(--gold-bright)">RESERVE</span>' : (r.leer ? '<span class="scan-leer-tag">LEER</span>' : hinweise.join('')))}<button class="scan-row-del" data-i="${i}">✕</button></td>
     `;
     scanRowsBody.appendChild(tr);
@@ -2407,8 +2463,9 @@ function scanRenderRows() {
       const i = +e.target.dataset.i, f = e.target.dataset.f;
       if (f === 'betten' || f === 'kinder') {
         scanRows[i][f] = e.target.value === '' ? null : (parseInt(e.target.value, 10) || 0);
-        if (f === 'betten' && scanRows[i].berechnetErw) {
-          scanRows[i].berechnetErw = false;
+        var berechnetFeld = f === 'betten' ? 'berechnetErw' : 'berechnetKin';
+        if (scanRows[i][berechnetFeld]) {
+          scanRows[i][berechnetFeld] = false;
           e.target.classList.remove('scan-berechnet');
           e.target.title = '';
         }
