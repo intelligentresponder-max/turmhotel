@@ -424,6 +424,7 @@ nav{
 .scan-table td{padding:6px;border-bottom:1px solid rgba(255,255,255,.04);}
 .scan-table td input{width:100%;background:transparent;border:1px solid transparent;border-radius:3px;color:var(--paper);font-family:'Spline Sans Mono',monospace;font-size:.8rem;padding:4px 6px;}
 .scan-table td input:focus{border-color:var(--gold);outline:none;background:rgba(255,255,255,.03);}
+.scan-table td input.scan-berechnet{border-color:rgba(201,162,39,.5);background:rgba(201,162,39,.1);color:var(--gold-bright);}
 .scan-row-del{color:#e87070;cursor:pointer;background:none;border:none;font-size:1rem;padding:2px 8px;}
 .scan-check-row{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-top:14px;}
 .scan-check-row label{font-size:.78rem;color:var(--muted);font-family:'Spline Sans Mono',monospace;}
@@ -432,6 +433,7 @@ nav{
 .scan-badge.ok{background:var(--clean-bg);color:#4ecb82;border:1px solid rgba(42,122,75,.4);}
 .scan-badge.bad{background:var(--occupied-bg);color:#ff6b4a;border:1px solid rgba(192,57,43,.4);}
 .scan-badge.wait{background:rgba(255,255,255,.05);color:var(--muted);border:1px solid var(--line);}
+.scan-badge.warn{background:rgba(201,162,39,.12);color:var(--gold-bright);border:1px solid rgba(201,162,39,.4);}
 .scan-chip-grid{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px;}
 .scan-chip{font-family:'Spline Sans Mono',monospace;font-size:.72rem;padding:6px 10px;border-radius:4px;background:rgba(255,255,255,.04);color:var(--muted);border:1px solid var(--line);cursor:pointer;}
 .scan-chip.active{background:var(--checkout-bg);color:var(--checkout-col);border-color:rgba(230,126,34,.55);}
@@ -633,6 +635,10 @@ nav{
           <label for="scan-pms-total">Anzahl laut PMS-Summe:</label>
           <input type="number" id="scan-pms-total" min="0" placeholder="—">
           <span class="scan-badge wait" id="scan-check-badge">wartet auf Eingabe</span>
+        </div>
+        <div class="scan-hint" id="scan-erwkin-hint" style="display:none;margin-top:10px;">
+          Σ Erw./Kin. aus der Fußzeile der letzten Seite, zum Abgleich mit den erkannten Zeilen — fehlt in genau einer Zeile die Erw.-Zahl, wird sie daraus errechnet (gelb markiert, in der Tabelle unten prüfbar).
+          <span class="scan-badge wait" id="scan-erwkin-badge" style="display:block;margin-top:6px;">noch keine Fußzeile erkannt</span>
         </div>
         <div class="scan-hint" style="margin-top:14px;">Aus der Verfügbarkeit (Suite8) die Zeile „Anreisen Zimmer" für heute ablesen. Sind mehr Anreisen als Abreisen geplant, kommen die restlichen Zimmer aus dem Leerstand — die stehen auf keiner Alpha-Liste und müssen ergänzt werden.</div>
         <div class="scan-check-row">
@@ -1492,6 +1498,7 @@ let scanListenMonat = 0, scanListenJahr = 0;
 let scanDrehung = 0;
 let scanPruefText = '';
 let scanLastVerfuegbarkeit = null;
+let scanLastFusssumme = null; // {erw,kin,anz} aus der Fusszeile, fuer die Erw./Kin.-Pruefsumme
 
 function scanSetHskDate(d) {
   scanHskDate.value = d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
@@ -1842,6 +1849,71 @@ function scanPruefStatus(kopf, summe, ungueltig, dubletten) {
   }
 }
 
+// Reserve-/Leerstand-Zeilen stehen nicht auf der gedruckten Alpha-Liste und
+// zaehlen deshalb nicht zur Fusszeilen-Pruefsumme.
+function scanZeilenFuerSumme() {
+  return scanRows.filter(function(r){ return !r.reserve && !r.leer; });
+}
+
+// Einmalig nach dem Einlesen aufgerufen (nicht bei jeder Korrektur): fehlt in
+// genau einer Zeile die Erw.-Zahl und ist die Fusszeile bekannt, wird die
+// Luecke rechnerisch geschlossen (Fusszeile minus Summe der bekannten Zeilen)
+// und als "errechnet" markiert, statt den Eintrag leer zu lassen (AUFTRAG
+// Abschnitt 4.1). Bei mehreren Luecken ist die Zuordnung nicht eindeutig,
+// dort bleibt nur die Warnung im Badge.
+function scanPruefSummen(fusssumme) {
+  scanLastFusssumme = fusssumme;
+  if (fusssumme) {
+    var zeilen = scanZeilenFuerSumme();
+    var unbekannt = zeilen.filter(function(r){ return r.betten == null; });
+    var bekannt = zeilen.filter(function(r){ return r.betten != null; });
+    if (unbekannt.length === 1) {
+      var bekannteSumme = bekannt.reduce(function(s,r){ return s + r.betten; }, 0);
+      var fehlt = fusssumme.erw - bekannteSumme;
+      // Eine einzelne Zimmerzeile hat plausibel 0-4 Erwachsene; ausserhalb
+      // dieses Bereichs eher ein Zeichen, dass noch mehr Zeilen falsch
+      // gelesen wurden, als dass genau dieser Wert stimmt — dann lieber
+      // leer lassen statt eine falsche Zahl einzutragen.
+      if (fehlt >= 0 && fehlt <= 4) {
+        unbekannt[0].betten = fehlt;
+        unbekannt[0].berechnetErw = true;
+      }
+    }
+  }
+  scanRenderErwKinBadge();
+}
+
+function scanRenderErwKinBadge() {
+  var hint = document.getElementById('scan-erwkin-hint');
+  var badge = document.getElementById('scan-erwkin-badge');
+  if (!hint || !badge) return;
+  if (!scanLastFusssumme) { hint.style.display = 'none'; return; }
+  hint.style.display = 'block';
+
+  var zeilen = scanZeilenFuerSumme();
+  var erwSumme = zeilen.reduce(function(s,r){ return s + (r.betten || 0); }, 0);
+  var kinSumme = zeilen.reduce(function(s,r){ return s + (r.kinder || 0); }, 0);
+  var erwOffen = zeilen.filter(function(r){ return r.betten == null; }).length;
+  var berechnet = zeilen.filter(function(r){ return r.berechnetErw; }).length;
+
+  var erwOk = erwSumme === scanLastFusssumme.erw;
+  var kinOk = kinSumme === scanLastFusssumme.kin;
+
+  if (erwOk && kinOk) {
+    badge.className = 'scan-badge ok';
+    badge.textContent = '✓ Σ Erw. ' + erwSumme + '/' + scanLastFusssumme.erw + ' · Σ Kin. ' + kinSumme + '/' + scanLastFusssumme.kin
+      + (berechnet ? ' (1× errechnet)' : '');
+  } else if (erwOffen > 1) {
+    badge.className = 'scan-badge warn';
+    badge.textContent = '! Σ Erw. ' + erwSumme + '/' + scanLastFusssumme.erw + ' · Σ Kin. ' + kinSumme + '/' + scanLastFusssumme.kin
+      + ' — ' + erwOffen + ' Zeilen ohne Erw.-Zahl, nicht eindeutig zuordenbar, bitte pruefen';
+  } else {
+    badge.className = 'scan-badge bad';
+    badge.textContent = '✕ Σ Erw. ' + erwSumme + '/' + scanLastFusssumme.erw + ' · Σ Kin. ' + kinSumme + '/' + scanLastFusssumme.kin
+      + ' — weicht ab, bitte Zeilen pruefen (die Fusszeile steht nur auf der letzten Seite — fehlt eine Seite im Scan?)';
+  }
+}
+
 function scanRenderFreeRooms() {
   var belegt = scanRows.filter(function(r){ return !r.leer; }).map(function(r){ return r.zimmer.trim(); });
   var gew = scanRows.filter(function(r){ return r.leer; }).map(function(r){ return r.zimmer.trim(); });
@@ -1956,11 +2028,17 @@ function scanDatumsTreffer(str, jahr) {
   return out;
 }
 
-function scanAnzSumme(text) {
+// Fusszeile der letzten Seite traegt die PMS-Summen in der Spaltenreihenfolge
+// der Alpha-Liste: Erw. · Kin. · Anz. (Beispiel 08.10.2026: "81  0  63").
+// scanAnzSumme() las bisher nur Anz. -- Erw./Kin. wurden gar nicht erfasst,
+// obwohl sie fuer die Pruefsumme (AUFTRAG_CLAUDE_CODE_2026-10-09.md
+// Abschnitt 4.1) gebraucht werden, um eine einzelne nicht gelesene Erw.-Zahl
+// rechnerisch zu ergaenzen.
+function scanFussSumme(text) {
   var m = text.match(/(?:^|\n)\s*(\d{2,3})\s+(\d{1,2})\s+(\d{1,3})\s*[^\d\n]{0,4}(?:\n|$)/);
   if (!m) return null;
-  var anz = parseInt(m[3], 10);
-  return (anz > 0 && anz <= 73) ? anz : null;
+  var erw = parseInt(m[1], 10), kin = parseInt(m[2], 10), anz = parseInt(m[3], 10);
+  return (anz > 0 && anz <= 73) ? { erw: erw, kin: kin, anz: anz } : null;
 }
 
 function scanZimmerAmZeilenanfang(zeile, belegt) {
@@ -2067,10 +2145,11 @@ function scanParseText(text) {
   const kopf = text.match(/am\s+(\d{2})[.,:\s](\d{2})[.,:\s](\d{4})/);
   if (kopf) { var kd = new Date(+kopf[3], +kopf[2]-1, +kopf[1]); kd.setDate(kd.getDate()+1); scanSetHskDate(kd); }
 
-  const summe = scanAnzSumme(text);
-  if (summe && !scanPmsTotalInput.value) scanPmsTotalInput.value = summe;
+  const fusssumme = scanFussSumme(text);
+  if (fusssumme && !scanPmsTotalInput.value) scanPmsTotalInput.value = fusssumme.anz;
 
-  scanPruefStatus(kopf, summe, ungueltig.length, dubletten);
+  scanPruefStatus(kopf, fusssumme ? fusssumme.anz : null, ungueltig.length, dubletten);
+  scanPruefSummen(fusssumme);
 
   if (dubletten > 0) {
     scanDupeNote.textContent = dubletten + ' doppelte Zimmernummer(n) entfernt — im PMS kann dasselbe Zimmer zweimal gebucht sein, gereinigt wird es trotzdem nur einmal.';
@@ -2093,19 +2172,38 @@ function scanRenderRows() {
   }
   scanRows.forEach((r, i) => {
     const tr = document.createElement('tr');
+    // Plausibilitaetshinweise (AUFTRAG Abschnitt 4.5): Erw.=0 kommt echt vor
+    // (Safe-Zimmer ohne Checkin, s. F19/F20) und ist kein Lesefehler, aber
+    // auffaellig genug, um es dem Team zu zeigen; Erw.>=3 bzw. Kin.>0
+    // deuten auf Zusatzbett/Kinderbett hin, die beim Richten nicht fehlen duerfen.
+    const hinweise = [];
+    if (!r.reserve && !r.leer) {
+      if (r.betten === 0) hinweise.push('<span class="scan-leer-tag" title="Kommt vor, z.B. Safe-Zimmer ohne Checkin — kein Lesefehler">0 Erw.</span>');
+      else if (r.betten >= 3) hinweise.push('<span class="scan-leer-tag" style="color:var(--gold-bright)" title="Zusatzbett pruefen">' + r.betten + ' Erw.</span>');
+      if (r.kinder > 0) hinweise.push('<span class="scan-leer-tag" style="color:#5bb3e8" title="Kinderbett/Extras pruefen">+' + r.kinder + ' Kind</span>');
+    }
     tr.innerHTML = `
       <td><input type="text" value="${r.zimmer}" data-i="${i}" data-f="zimmer" placeholder="z.B. 14"></td>
       <td><input type="text" value="${r.abreise}" data-i="${i}" data-f="abreise" placeholder="TT.MM.JJJJ"></td>
-      <td><input type="number" min="1" max="3" value="${r.betten || ''}" data-i="${i}" data-f="betten" placeholder="—" style="text-align:center"></td>
+      <td><input type="number" min="0" max="4" value="${r.betten == null ? '' : r.betten}" data-i="${i}" data-f="betten" placeholder="—" style="text-align:center" class="${r.berechnetErw ? 'scan-berechnet' : ''}" title="${r.berechnetErw ? 'Aus der Fußzeilen-Prüfsumme errechnet — bitte gegen das Original prüfen' : ''}"></td>
       <td><input type="number" min="0" max="4" value="${r.kinder || ''}" data-i="${i}" data-f="kinder" placeholder="0" style="text-align:center"></td>
-      <td>${r.exOOO ? '<span class="scan-leer-tag" style="color:#ff6b4a">EX-OOO</span>' : (r.reserve ? '<span class="scan-leer-tag" style="color:var(--gold-bright)">RESERVE</span>' : (r.leer ? '<span class="scan-leer-tag">LEER</span>' : ''))}<button class="scan-row-del" data-i="${i}">✕</button></td>
+      <td>${r.exOOO ? '<span class="scan-leer-tag" style="color:#ff6b4a">EX-OOO</span>' : (r.reserve ? '<span class="scan-leer-tag" style="color:var(--gold-bright)">RESERVE</span>' : (r.leer ? '<span class="scan-leer-tag">LEER</span>' : hinweise.join('')))}<button class="scan-row-del" data-i="${i}">✕</button></td>
     `;
     scanRowsBody.appendChild(tr);
   });
   scanRowsBody.querySelectorAll('input').forEach(inp => {
     inp.addEventListener('input', e => {
       const i = +e.target.dataset.i, f = e.target.dataset.f;
-      scanRows[i][f] = (f === 'betten' || f === 'kinder') ? (parseInt(e.target.value, 10) || 0) : e.target.value;
+      if (f === 'betten' || f === 'kinder') {
+        scanRows[i][f] = e.target.value === '' ? null : (parseInt(e.target.value, 10) || 0);
+        if (f === 'betten' && scanRows[i].berechnetErw) {
+          scanRows[i].berechnetErw = false;
+          e.target.classList.remove('scan-berechnet');
+          e.target.title = '';
+        }
+      } else {
+        scanRows[i][f] = e.target.value;
+      }
       scanUpdateCheck();
     });
   });
@@ -2139,6 +2237,7 @@ scanHskDate.addEventListener('change', function(){
 });
 
 function scanUpdateCheck() {
+  scanRenderErwKinBadge();
   const belegte = scanRows.filter(r => !r.leer && r.zimmer.trim());
   const leere = scanRows.filter(r => r.leer && r.zimmer.trim());
 
