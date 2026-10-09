@@ -1,6 +1,6 @@
 # TURMHOTEL HOUSEKEEPING — ÜBERGABE (Trigger: HSK777)
 
-Stand: **09.10.2026** · Basis: `588b526` (main) plus PR #30 aus `AUFTRAG_CLAUDE_CODE_2026-10-09.md` Abschnitt 3 (Funktions-Inventur, abgeschlossen) + Abschnitt 4.1/4.5 (OCR-Prüfsumme, s. Abschnitt 8 unten).
+Stand: **09.10.2026** · Basis: `588b526` (main) plus PR #30 aus `AUFTRAG_CLAUDE_CODE_2026-10-09.md`: Abschnitt 3 (Funktions-Inventur, abgeschlossen), Abschnitt 4.1/4.5 (OCR-Prüfsumme, s. Abschnitt 8), Abschnitt 2.3–2.5 (Sync-Gate/Backup/Scan-Entwurf, s. Abschnitt 9).
 Diese Datei ist der Einstiegspunkt — egal ob am PC (Git Bash) oder am Handy (Termux).
 Bei „HSK777": diese Datei lesen, dann bei Abschnitt 3 weitermachen.
 
@@ -349,3 +349,47 @@ Plausibilitätsmarker, voller Tab-Regressionstest weiterhin grün.
 speichert aktuell nur das Abreisedatum je Zeile, nicht das Anreisedatum —
 dafür müsste eine neue Spalte durch die gesamte Vorschau-/Übernehmen-Pipeline
 durchgereicht werden.
+
+---
+
+## 9. Datensicherheit 09.10.2026 (`AUFTRAG_CLAUDE_CODE_2026-10-09.md` Abschnitt 2)
+
+**Umgesetzt (2.3 Sync-Gate, 2.4 Backup, 2.5 Scan-Entwurf):**
+- **Sync-Gate:** Volle PUTs (`saveState()` ohne `changedRoom`, `saveStaffData()`
+  immer, da es dafür keine PATCH-Variante gibt) warten jetzt, bis der erste
+  `syncFromCloud()`-Versuch durch ist — das war die eigentliche Ursache von
+  F23: ein frischer Browser mit leerem lokalen Stand ersetzte den noch nie
+  gelesenen Cloud-Stand. Neues Ladebanner „Lädt den Cloud-Stand …" währenddessen.
+  Wird währenddessen trotzdem etwas geändert, geht es nicht verloren: beim
+  Auflösen des Gates wird der Stand von vor der Blockade mit dem inzwischen
+  eingetroffenen Cloud-Stand zusammengeführt (pro Zimmer/Mitarbeiter-Name
+  gewinnt die jüngere lokale Eingabe) statt blind überschrieben. Bekannte
+  Einschränkung: ein Löschen genau in diesem kurzen Fenster (meist < 2s) würde
+  dabei nicht übernommen.
+- **Backup vor Massenschreiben:** Vor jedem vollen Stand-Ersatz wird der
+  bisherige Cloud-Stand nach `/backup/state-letzter.json` kopiert (bestes
+  Bemühen, blockiert das Speichern nicht). Dazu ein „Letzten Stand
+  wiederherstellen"-Knopf im bestehenden Offline-/Fehler-Banner — bewusst
+  keine Dauerfunktion.
+- **Scan-Entwurf persistieren (löst B1/F24):** `scanRows` + HK-Tag + PMS-Zahlen
+  jetzt lokal in IndexedDB **und** unter `/scanEntwurf.json` in Firebase
+  gesichert (nur Zimmerdaten, keine Namen/Preise/Fotos). Wird beim Laden
+  wiederhergestellt (Firebase bevorzugt, IndexedDB als Fallback), mit
+  sichtbarem Hinweis samt Zeitstempel. Gelöscht nach „Auf Zimmer übertragen"
+  und bei „Neu beginnen".
+
+Getestet mit Playwright: Sync-Gate mit künstlich verzögertem ersten Sync (kein
+PUT vorher, korrektes Zusammenführen danach inkl. einer währenddessen
+hinzugefügten Testperson), Backup-Reihenfolge (GET+PUT auf `/backup/...` vor
+dem finalen PUT), `restoreLastBackup()` direkt, Scan-Entwurf über einen echten
+Seiten-Reload (IndexedDB) und über einen zweiten, isolierten Browser-Context
+ohne lokale Kopie (simuliert ein zweites Handy, Firebase-Pfad). Voller
+Tab-/Personal-Regressionstest nach jedem Schritt weiterhin grün.
+
+**Nicht Teil dieser Umsetzung, aus dem Auftrag:**
+| Punkt | Stand |
+|---|---|
+| 2.1 Welche Adresse (`sponder-max.github.io`) ist kanonisch | André prüft das selbst — sehr wahrscheinlich nur eine abgeschnittene Adresszeile desselben `intelligentresponder-max.github.io`, siehe vorheriges Gespräch |
+| 2.2 Cloud-Inhalt live prüfen (`/state.json?shallow=true` etc.) | Diese Sandbox hat kein Netz zu `firebasedatabase.app` (F12) — nicht durchführbar von hier aus |
+| 2.6 Reset-Rückfrage ehrlich formulieren / Reset entfernen | Gegenstandslos — der Button „Reset" (`resetAll()`) wurde in PR #30 (Abschnitt 3) bereits ganz entfernt |
+| 2.7 Personal/`da` nach „Neuer Tag" | Code-Durchsicht: `resetDay()` fasst `staff`/`da` gar nicht an, setzt nur `clean=false`. Keinen Code-Pfad gefunden, der `da` automatisch zurücksetzt — die ursprüngliche Beobachtung („alle heute nicht da") ist damit vermutlich kein Reset-Bug, sondern schlicht ein neuer Tag, an dem noch niemand „heute da" angetippt hat. Nicht weiter verändert, da kein Fund dazu vorliegt. |
