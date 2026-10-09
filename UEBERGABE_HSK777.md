@@ -283,22 +283,21 @@ Funktion wurde auf tatsächliche Aufrufer geprüft, nicht nur grep auf den Namen
 | Button „Reset" + `resetAll()` | Löschte Zimmer+Personal+Gästeliste per PUT für **alle Handys gleichzeitig**, Rückfrage erwähnte das nicht (B4) |
 | „Stand exportieren/importieren" (JSON) + `exportData()`/`importData()` | Cloud-Sync ersetzt den Anwendungsfall; ein alter Import hätte denselben Überschreib-Effekt wie B4/F23 gehabt |
 | Tab „Verlauf" (UI: Tab-Button, Tab-Inhalt, `ladeVerlaufListe()`, `verlaufBerichtAnzeigen()`, `isoZuAnzeige()`) | Entscheidung André (09.10.): Tab weg. Die tägliche Archivierung selbst (`archiveBeforeReset()`/`ddmmyyyyZuIso()`, läuft aus „Zimmerstatus zurücksetzen" heraus) bleibt **erhalten** und schreibt weiterhin nach `/history/<Datum>.json` — nur die Oberfläche zum erneuten Ansehen ist weg |
+| Tab „Übersicht" (Personal-Fortschritt + „Nicht zugewiesene Zimmer") | Entscheidung André (09.10.): weg. `renderOverview()` + alle 8 Aufrufstellen entfernt. „Nicht zugewiesen" gibt es weiterhin gleichwertig über den Filter „Nicht zugewiesen" im Zimmer-Tab |
+| Link „FACILITY" im Kopf | Entscheidung André (09.10.): weg. Die davon unabhängige Technik-Ticket-Funktion (Checkliste → „Problem melden", gemeinsamer `facility_tasks`-localStorage-Key mit `facility.html`) bleibt bestehen — nur der Navigations-Link ist entfernt |
+| CSV-Datei-Upload-Pfad und „⚡ JSON-Funktion"-Einfügepfad | Entfernt (09.10., Andrés Auftrag: „schlage vor was plausibel ist"). Entfernt wurden nur der reine Datei-Upload-Teil (Dropzone, `handleCsvDrop`/`handleCsvFile`/`parseCsvFile`/`parseCsv`/`findCol`, dazu `parseDate`/`datesEqual`, die ausschließlich von `parseCsv` genutzt wurden) und das JSON-Einfügefeld (`pasteFromClipboard`/`parseJsonInput`/`showJsonPreview`/`applyJsonImport`/`jsonParsed` — hatte zudem jedem Zimmer pauschal „checkout" zugewiesen, gröber als die Foto-Scan-Erkennung). **Bewusst behalten:** `showCsvPreview()`/`applyCsvImport()`/`csvParsed`/`btn-apply-csv`, weil der Foto-Scan diese für seine eigene „Auf Zimmer übertragen"-Vorschau intern wiederverwendet — kein Duplikat. Der Moduswechsler (CSV/Scan/JSON) ist weg, Foto-Scan ist jetzt direkt sichtbar. |
+| Rotes „×" zum Personal löschen (`deleteStaff`) | Geprüft, **unverändert gelassen**: hat bereits `confirm('Mitarbeiter entfernen?')` — die im Auftrag genannte Sorge (versehentliches Löschen) war damit schon abgedeckt. Ein ersatzloses Entfernen hätte nur verhindert, einen Fehleintrag je wieder zu korrigieren. |
+| Farbwahl für Personal (`COLORS`-Picker) | Picker-UI entfernt, `addStaff()` vergibt die Farbe jetzt automatisch (nächste freie aus `COLORS`, sonst rotierend). Die Farbe selbst musste bleiben — sie färbt die Zimmerkarten-Zuteilung ein (genau der im Auftrag genannte Fall „nur behalten, wenn Zuordnung ohne Farbe unklar wird") |
 
 **Behalten (bewusst, Kernfunktionen):** Zimmer-Grid, „Meine Zimmer"/Fertig-Checkliste
 (inkl. Technik-Ticket), Foto-Scan/PDF-Import inkl. Doppelcheck, „Auf Zimmer
-übertragen", Personal anlegen + „heute da/nicht da", automatisch verteilen,
-„Neuer Tag" (nur Reinigungsstatus, einzeln vom entfernten „Reset" zu
-unterscheiden), Übergabebericht, Sync-Banner, `vorfuehrung.html`/Demo-Seiten
-(nicht Teil dieses Auftrags).
+übertragen", manuelle Einzelzimmer-Korrektur („Setzen"), Personal anlegen +
+„heute da/nicht da", automatisch verteilen, „Neuer Tag" (nur Reinigungsstatus,
+einzeln vom entfernten „Reset" zu unterscheiden), Übergabebericht, Sync-Banner,
+`vorfuehrung.html`/Demo-Seiten (nicht Teil dieses Auftrags).
 
-**Offen — noch nicht entschieden/umgesetzt:**
-| Kandidat | Stand |
-|---|---|
-| Tab „Übersicht" (Statistik) | André-Rückfrage aus dem Auftrag noch unbeantwortet — nicht angefasst |
-| Link „FACILITY" im Kopf | Verweist auf eine andere Anwendung (`facility.html`); ob andere Rollen ihn brauchen, ist unklar — nicht entfernt |
-| CSV-Datei-Upload-Pfad (`csv-dropzone`, `handleCsvDrop`/`handleCsvFile`/`parseCsvFile`/`parseCsv`/`findCol`) und „⚡ JSON-Funktion"-Einfügepfad (`pasteFromClipboard`/`parseJsonInput`/`applyJsonImport`) | Vorschlag im Auftrag: entfernen, falls Foto/PDF-Import vollständig reicht. **Vorsicht beim Umsetzen:** der Foto-Scan ruft für seine eigene „Auf Zimmer übertragen"-Vorschau intern dieselben Funktionen `showCsvPreview()`/`applyCsvImport()` auf wie der CSV-Weg — das sind **keine** Duplikate, die man mitlöschen darf, nur der reine Datei-Upload-Teil (Dropzone + Parser) ist der eigentliche Kandidat. Noch nicht umgesetzt. |
-| Rotes „×" zum Personal löschen (`deleteStaff`) | Vorschlag: durch Bestätigung/„heute nicht da" ersetzen — nicht umgesetzt |
-| Farbwahl für Personal (`COLORS`-Picker in `renderPersonal`) | Nutzen unklar, nicht angefasst |
+Damit ist die Funktions-Inventur aus Abschnitt 3 des Auftrags abgeschlossen —
+alle Kandidaten entschieden und umgesetzt, keine offenen Punkte mehr.
 
 **Vorgehen je Entfernung:** Syntaxcheck (`node --check`), Playwright-Klicktest
 bei 390px mit gemockten Firebase-/Tesseract-Netzwerkaufrufen (diese Sandbox
