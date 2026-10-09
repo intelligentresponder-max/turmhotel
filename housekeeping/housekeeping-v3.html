@@ -577,11 +577,7 @@ nav{
   <div class="room-grid" id="grid-tagungsraum-barcelona"></div>
 
   <div class="reset-row">
-    <button class="btn-export" onclick="exportData()">⬇ Stand exportieren</button>
-    <button class="btn-import-json" onclick="document.getElementById('import-file-json').click()">⬆ Stand importieren</button>
-    <input type="file" id="import-file-json" accept=".json" onchange="importData(event)">
     <button class="btn-reset-day" onclick="resetDay()">Neuer Tag</button>
-    <button class="btn-reset" onclick="resetAll()">Reset</button>
   </div>
 </div>
 
@@ -965,8 +961,6 @@ const ROOM_TYPES = {
   '51': 'SDH', '52': 'SDS', '53': 'SDS', '54': 'STS', '55': 'STH',
   '101': 'MASSAGE',
 };
-// Legacy SDH list for compat
-const SDH_ROOMS = ['11','21','31','41','51'];
 
 const COLORS = ['#c9a227','#2a7a4b','#1a6fa8','#8e44ad','#e67e22','#c0392b','#16a085','#d4a574'];
 let selectedColor = COLORS[0];
@@ -2247,47 +2241,6 @@ function scanAufCanvas(img, grad, faktor) {
   return c;
 }
 
-async function scanAusrichtungPruefen(file, melde) {
-  var img = await scanAlsBild(file);
-  var klein = Math.min(1, 1100 / Math.max(img.width, img.height));
-  var beste = 0, bestN = -1;
-  var winkel = [0, 90, -90];
-  for (var i = 0; i < winkel.length; i++) {
-    melde('Ausrichtung wird geprueft ... ' + (i+1) + '/' + winkel.length);
-    try {
-      var r = await Tesseract.recognize(scanAufCanvas(img, winkel[i], klein), 'deu');
-      var n = (r.data.text.match(/(?:^|\n)\s*\d{3}\b/g) || []).length;
-      if (n > bestN) { bestN = n; beste = winkel[i]; }
-      if (n >= 15) break;
-    } catch (e) { }
-  }
-  scanDrehung = beste;
-  return beste;
-}
-
-function scanBildAufbereiten(file) {
-  return new Promise(function(res){
-    var img = new Image();
-    img.onload = function(){
-      // Verdoppeln verbessert die Trefferquote (v3.5), aber bei grossen Fotos
-      // (z.B. 1475x2048 einer vollen A4-Seite) sprengt das unveraendert die
-      // Handy-Speichergrenze: 2950x4096 Pixel als Graustufen-Canvas + separate
-      // ImageData-Kopie + Tesseract-eigener WASM-Speicher fuer dasselbe Bild
-      // koennen den Tab zum Absturz/Neuladen bringen — laufende Auswertung
-      // (noch nicht uebertragene Zeilen) geht dabei komplett verloren (F11).
-      // Lange Kante deshalb auf max. 3000px deckeln, Verdoppelung bleibt fuer
-      // normal grosse Fotos unveraendert erhalten.
-      var MAX_KANTE = 3000;
-      var faktor = img.width < 2000 ? 2 : 1;
-      var langeKante = Math.max(img.width, img.height) * faktor;
-      if (langeKante > MAX_KANTE) faktor *= MAX_KANTE / langeKante;
-      res(scanAufCanvas(img, scanDrehung, faktor));
-    };
-    img.onerror = function(){ res(file); };
-    img.src = URL.createObjectURL(file);
-  });
-}
-
 function scanHeuteStr() {
   if (scanHskDate && scanHskDate.value) {
     var p = scanHskDate.value.split('-');
@@ -2695,71 +2648,6 @@ function resetDay() {
   ALL_ROOMS.forEach(r => { if (state[r]) state[r].clean = false; });
   saveState(state); renderRooms();
 }
-function resetAll() {
-  if (!confirm('ALLES zurücksetzen? (Zimmer + Personal + Gästeliste)')) return;
-  state = {}; staff = [];
-  saveState(state); saveStaffData(staff);
-  renderRooms(); renderPersonal(); renderOverview();
-}
-
-// ══ EXPORT / IMPORT JSON ══
-function exportData() {
-  const payload = { version: 3, exported: new Date().toISOString(), state, staff };
-  const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url;
-  a.download = 'housekeeping-' + new Date().toISOString().slice(0,10) + '.json';
-  a.click();
-  URL.revokeObjectURL(url);
-}
-function importData(event) {
-  const file = event.target.files[0];
-  if (!file) return;
-  const reader = new FileReader();
-  reader.onload = function(e) {
-    try {
-      const payload = JSON.parse(e.target.result);
-      if (!payload.state) throw new Error('Ungültiges Format');
-      if (!confirm('Stand vom ' + (payload.exported || '?').slice(0,10) + ' laden?')) return;
-      state = payload.state;
-      staff = payload.staff || [];
-      saveState(state); saveStaffData(staff);
-      renderRooms(); renderPersonal(); renderOverview();
-      alert('✓ Stand geladen.');
-    } catch(err) { alert('Fehler: ' + err.message); }
-    event.target.value = '';
-  };
-  reader.readAsText(file);
-}
-
-// ══ LANGUAGE ══
-const L = {
-  de: { eyebrow:'Digitalisierungsprojekt · Turmhotel Frankfurt', meta:'Entwickelt von <span>André Schwarz — ASGlobal</span> · Daten lokal im Browser gespeichert', clean:'gereinigt', dirty:'ausstehend', free:'frei', occ:'belegt', checkout:'Abreise', overnight:'Overnight', progress:'Tagesfortschritt Reinigung', tabs:['Zimmer','Übersicht','Gästeliste','Personal'] },
-  en: { eyebrow:'Digitalisation Project · Turmhotel Frankfurt', meta:'Developed by <span>André Schwarz — ASGlobal</span> · Data stored locally in browser', clean:'cleaned', dirty:'pending', free:'vacant', occ:'occupied', checkout:'Checkout', overnight:'Overnight', progress:'Daily Cleaning Progress', tabs:['Rooms','Overview','Guest List','Staff'] },
-  hu: { eyebrow:'Digitalizációs Projekt · Turmhotel Frankfurt', meta:'Fejlesztette: <span>André Schwarz — ASGlobal</span> · Az adatok helyben tárolódnak', clean:'takarítva', dirty:'folyamatban', free:'szabad', occ:'foglalt', checkout:'Kijelentkezés', overnight:'Overnight', progress:'Napi takarítás', tabs:['Szobák','Áttekintés','Vendéglista','Személyzet'] },
-};
-let currentLang = 'de';
-function setLang(lang) {
-  currentLang = lang;
-  const t = L[lang];
-  document.querySelectorAll('.lang-btn').forEach((b,i) => b.classList.toggle('active',['de','en','hu'][i]===lang));
-  document.getElementById('lbl-eyebrow').textContent = t.eyebrow;
-  document.getElementById('lbl-meta').innerHTML = t.meta;
-  document.getElementById('lbl-clean').textContent = t.clean;
-  document.getElementById('lbl-dirty').textContent = t.dirty;
-  document.getElementById('lbl-free').textContent = t.free;
-  document.getElementById('lbl-occ').textContent = t.occ;
-  document.getElementById('lbl-checkout').textContent = t.checkout;
-  document.getElementById('lbl-overnight').textContent = t.overnight;
-  document.getElementById('lbl-progress-text').textContent = t.progress;
-  t.tabs.forEach((label, i) => {
-    const ids = ['zimmer','uebersicht','gaeste','personal'];
-    document.getElementById('tab-btn-' + ids[i]).textContent = label;
-  });
-}
-
-
 // ══ 3-KLICK FERTIGMELDUNG ══
 const CHECKLIST = [
   'Bett frisch bezogen & glatt',
@@ -2896,52 +2784,6 @@ function createTechTicket(roomId) {
 }
 
 // ══ INIT ══
-function seedNotes() {
-  const seeds = {
-    "44": "Bitte pruefen: Abreise-Zimmer noch nicht eindeutig zugeordnet (STS)",
-    "54": "Bitte pruefen: Abreise-Zimmer noch nicht eindeutig zugeordnet (STS)",
-    "404": "Siphon stinkt - bitte Haustechnik informieren"
-  };
-  Object.keys(seeds).forEach(function(room) {
-    const rs = getRoomState(room);
-    if (rs.note === "") {
-      state[room] = Object.assign({}, rs, { note: seeds[room] });
-    }
-  });
-  saveState(state);
-}
-function seedAllRoomsTestNote() {
-  const msg = "Erster Test laeuft - bitte Zimmer-Funktion pruefen und ausprobieren";
-  ALL_ROOMS.forEach(function(room) {
-    const rs = getRoomState(room);
-    if (rs.note === "") {
-      state[room] = Object.assign({}, rs, { note: msg });
-    }
-  });
-  saveState(state);
-}
-// seedNotes(); // F23: schrieb beim Laden per PUT den ganzen Cloud-Stand (09.10.2026)
-function forceFixNotes() {
-  const fixes = {
-    "44": "Bitte pruefen: Abreise-Zimmer noch nicht eindeutig zugeordnet (STS)",
-    "54": "Bitte pruefen: Abreise-Zimmer noch nicht eindeutig zugeordnet (STS)"
-  };
-  Object.keys(fixes).forEach(function(room) {
-    const rs = getRoomState(room);
-    state[room] = Object.assign({}, rs, { note: fixes[room] });
-  });
-  saveState(state);
-}
-function assignTeamsAndInstructions() {
-  const teams = ["Team", "Team 2", "Team 3"];
-  const instructions = "So meldest du fertig: Zimmer antippen -> Haken bei Reinigung/Belegung setzen -> Fertig melden -> bestaetigen. Fehlt Bettwaesche o.ae., NICHT fertig melden, sondern hier eintragen z.B. Bettwaesche fehlt - bleibt bis morgen offen.";
-  ALL_ROOMS.forEach(function(room, i) {
-    const rs = getRoomState(room);
-    const team = teams[i % teams.length];
-    state[room] = Object.assign({}, rs, { staff: team, note: instructions });
-  });
-  saveState(state);
-}
 renderRooms();
 renderPersonal();
 updateStats();
