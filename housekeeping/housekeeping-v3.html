@@ -332,10 +332,6 @@ nav{
   padding:18px 20px;margin-bottom:20px;
 }
 .import-info-title{font-family:'Spline Sans Mono',monospace;font-size:.65rem;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin-bottom:12px;}
-.csv-format-table{width:100%;border-collapse:collapse;font-family:'Spline Sans Mono',monospace;font-size:.72rem;}
-.csv-format-table th{text-align:left;color:var(--gold);padding:4px 8px;border-bottom:1px solid var(--line);}
-.csv-format-table td{padding:4px 8px;color:var(--muted);border-bottom:1px solid rgba(201,162,39,.07);}
-.csv-format-table td:first-child{color:var(--paper);}
 .import-preview{
   background:rgba(255,255,255,.03);border:1px solid rgba(230,126,34,.3);border-radius:var(--radius);
   padding:18px 20px;margin-bottom:20px;display:none;
@@ -587,28 +583,8 @@ nav{
   <div class="import-panel">
     <div class="building-label" style="margin-top:4px">Gästeliste importieren</div>
 
-    <!-- Import Mode Toggle -->
-    <div style="display:flex;gap:8px;margin-bottom:16px;">
-      <button class="filter-btn active" id="mode-btn-csv" onclick="switchImportMode('csv')">📋 CSV-Datei</button>
-      <button class="filter-btn" id="mode-btn-scan" onclick="switchImportMode('scan')">📷 Foto-Scan</button>
-      <button class="filter-btn" id="mode-btn-json" onclick="switchImportMode('json')">⚡ JSON-Funktion</button>
-    </div>
-
-    <!-- CSV Mode -->
-    <div id="import-mode-csv">
-      <div class="import-zone" id="csv-dropzone" onclick="document.getElementById('csv-file-input').click()"
-           ondragover="event.preventDefault();this.style.borderColor='var(--gold)'"
-           ondragleave="this.style.borderColor=''"
-           ondrop="handleCsvDrop(event)">
-        <div class="import-zone-icon">📋</div>
-        <div class="import-zone-title">CSV-Datei hier ablegen</div>
-        <div class="import-zone-hint">oder klicken zum Auswählen · PMS-Export, Excel-CSV</div>
-      </div>
-      <input type="file" id="csv-file-input" accept=".csv,.txt" style="display:none" onchange="handleCsvFile(event)">
-    </div>
-
-    <!-- Foto-Scan Mode -->
-    <div id="import-mode-scan" style="display:none;">
+    <!-- Foto-Scan -->
+    <div id="import-mode-scan">
       <div class="import-info-box" style="margin-bottom:14px;">
         <div class="import-zone-hint">Alpha-Liste als <b>PDF</b> (am besten: Suite8 → Drucken → „Microsoft Print to PDF") oder als <b>Foto</b>. PDF wird ohne Texterkennung exakt gelesen. Alles läuft lokal im Browser, es werden keine Daten an einen Server gesendet. Die Safe-Liste darf mit aufs Foto — „Reserve"-Zimmer werden automatisch als sauber/frei erkannt. <b>Den Tür-PIN-Kasten dabei immer abdecken oder außerhalb des Fotos lassen.</b></div>
       </div>
@@ -684,46 +660,6 @@ nav{
         <button class="btn btn-save" id="scan-uebernehmen-btn">✓ Auf Zimmer übertragen</button>
         <button class="btn btn-cancel" id="scan-reset-btn" style="margin-left:8px;">Neu beginnen</button>
       </div>
-    </div>
-
-    <!-- JSON Mode -->
-    <div id="import-mode-json" style="display:none;">
-      <div class="import-info-box" style="margin-bottom:14px;">
-        <div class="import-info-title">JSON-Funktion einfügen</div>
-        <p style="font-family:'Spline Sans Mono',monospace;font-size:.7rem;color:var(--muted);margin-bottom:10px;">
-          Format: <code style="color:var(--gold)">generateCleaningList</code> · Felder: <code style="color:var(--paper)">rooms_to_clean</code> (room, type) + optional <code style="color:var(--paper)">excluded_rooms</code>
-        </p>
-      </div>
-      <textarea id="json-input" style="width:100%;height:200px;background:rgba(255,255,255,.04);border:1px solid var(--line);border-radius:var(--radius);color:var(--paper);font-family:'Spline Sans Mono',monospace;font-size:.72rem;padding:12px;resize:vertical;line-height:1.5;" placeholder='{"processing_results":{"rooms_to_clean":[{"room":"011","type":"D"},...],"excluded_rooms":["024"]}}'></textarea>
-      <div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap;">
-        <button class="btn btn-save" onclick="parseJsonInput()" style="flex:1;">⚡ JSON einlesen</button>
-        <button class="btn btn-cancel" onclick="document.getElementById('json-input').value='';document.getElementById('json-preview').classList.remove('show');">✕ Leeren</button>
-        <button class="btn btn-save" onclick="pasteFromClipboard()" style="background:rgba(201,162,39,.3);color:var(--gold-bright);">📋 Einfügen</button>
-      </div>
-
-      <!-- JSON Preview -->
-      <div class="import-preview show" id="json-preview" style="display:none!important;">
-        <div class="import-preview-title" id="json-preview-title">Erkannte Zimmer</div>
-        <div class="preview-list" id="json-preview-list"></div>
-        <div id="json-type-summary" style="font-family:'Spline Sans Mono',monospace;font-size:.7rem;color:var(--muted);margin:8px 0;"></div>
-        <button class="btn btn-apply" id="btn-apply-json" onclick="applyJsonImport()">✓ Auf Zimmer übertragen</button>
-      </div>
-    </div>
-
-    <!-- Format Info -->
-    <div class="import-info-box">
-      <div class="import-info-title">Erwartetes CSV-Format</div>
-      <table class="csv-format-table">
-        <tr><th>Spalte</th><th>Beispiel</th><th>Hinweis</th></tr>
-        <tr><td>Zimmer</td><td>201</td><td>Zimmernummer</td></tr>
-        <tr><td>Abreise</td><td>05.07.2026</td><td>Datum (TT.MM.JJJJ)</td></tr>
-        <tr><td>Anreise</td><td>06.07.2026</td><td>optional</td></tr>
-        <tr><td>Gast</td><td>Müller, Hans</td><td>optional</td></tr>
-        <tr><td>Status</td><td>Abreise / Overnight</td><td>optional, wird erkannt</td></tr>
-      </table>
-      <p style="font-family:'Spline Sans Mono',monospace;font-size:.68rem;color:var(--muted);margin-top:10px;">
-        Trennzeichen: Semikolon (;) oder Komma (,) · Erste Zeile = Kopfzeile · Heutiges Datum (05.07.2026) wird automatisch gefiltert.
-      </p>
     </div>
 
     <!-- Manuell hinzufügen -->
@@ -1389,107 +1325,7 @@ function showTab(tab) {
   if (tab === 'personal') renderPersonal();
 }
 
-// ══ CSV IMPORT ══
-function handleCsvDrop(event) {
-  event.preventDefault();
-  document.getElementById('csv-dropzone').style.borderColor = '';
-  const file = event.dataTransfer.files[0];
-  if (file) parseCsvFile(file);
-}
-function handleCsvFile(event) {
-  const file = event.target.files[0];
-  if (file) parseCsvFile(file);
-  event.target.value = '';
-}
-
-function parseCsvFile(file) {
-  const reader = new FileReader();
-  reader.onload = function(e) {
-    const text = e.target.result;
-    const results = parseCsv(text);
-    showCsvPreview(results);
-  };
-  reader.readAsText(file, 'UTF-8');
-}
-
-function parseCsv(text) {
-  const lines = text.trim().split(/\r?\n/);
-  if (lines.length < 2) return [];
-  // detect separator
-  const sep = lines[0].includes(';') ? ';' : ',';
-  const headers = lines[0].split(sep).map(h => h.trim().toLowerCase().replace(/"/g,''));
-
-  // find column indices (flexible matching)
-  const colZimmer = findCol(headers, ['zimmer','room','zim','zimmer-nr','zimmernr','nr']);
-  const colAbreise = findCol(headers, ['abreise','checkout','departure','abr','check-out','check out']);
-  const colAnreise = findCol(headers, ['anreise','checkin','arrival','anr','check-in','check in']);
-  const colStatus = findCol(headers, ['status','typ','type']);
-  const colGast = findCol(headers, ['gast','guest','name','gäste']);
-
-  const today = todayStr();
-  const todayDate = parseDate(today);
-  const results = [];
-
-  for (let i = 1; i < lines.length; i++) {
-    const cells = lines[i].split(sep).map(c => c.trim().replace(/"/g,''));
-    if (!cells.some(c => c)) continue;
-
-    const roomRaw = colZimmer >= 0 ? cells[colZimmer] : '';
-    const room = /^\d+$/.test(roomRaw.trim()) ? String(parseInt(roomRaw, 10)) : roomRaw.trim();
-    if (!room || !ALL_ROOMS.includes(room)) continue;
-
-    const abreiseRaw = colAbreise >= 0 ? cells[colAbreise] : '';
-    const anreiseRaw = colAnreise >= 0 ? cells[colAnreise] : '';
-    const statusRaw = (colStatus >= 0 ? cells[colStatus] : '').toLowerCase();
-
-    let guestType = '';
-
-    // Determine by status column first
-    if (statusRaw.includes('abreise') || statusRaw.includes('checkout') || statusRaw.includes('departure')) {
-      guestType = 'checkout';
-    } else if (statusRaw.includes('overnight') || statusRaw.includes('bleib') || statusRaw.includes('stay')) {
-      guestType = 'overnight';
-    } else {
-      // Determine by dates
-      const abreiseDate = parseDate(abreiseRaw);
-      const anreiseDate = parseDate(anreiseRaw);
-      if (abreiseDate && datesEqual(abreiseDate, todayDate)) {
-        guestType = 'checkout';
-      } else if (abreiseDate && abreiseDate > todayDate) {
-        guestType = 'overnight';
-      } else if (anreiseDate && datesEqual(anreiseDate, todayDate)) {
-        guestType = 'checkout'; // arriving today — room needs prep
-      }
-    }
-
-    if (guestType) results.push({ room, guestType });
-  }
-  return results;
-}
-
-function findCol(headers, candidates) {
-  for (const c of candidates) {
-    const idx = headers.findIndex(h => h === c || h.includes(c));
-    if (idx >= 0) return idx;
-  }
-  return -1;
-}
-
-function parseDate(str) {
-  if (!str) return null;
-  // DD.MM.YYYY
-  let m = str.match(/^(\d{1,2})\.(\d{1,2})\.(\d{4})$/);
-  if (m) return new Date(+m[3], +m[2]-1, +m[1]);
-  // YYYY-MM-DD
-  m = str.match(/^(\d{4})-(\d{2})-(\d{2})/);
-  if (m) return new Date(+m[1], +m[2]-1, +m[3]);
-  return null;
-}
-
-function datesEqual(a, b) {
-  return a && b && a.getFullYear()===b.getFullYear() && a.getMonth()===b.getMonth() && a.getDate()===b.getDate();
-}
-
+// ══ IMPORT-VORSCHAU (gespeist vom Foto-Scan, s. scanUebernehmenBtn) ══
 function showCsvPreview(results) {
   csvParsed = results;
   const preview = document.getElementById('import-preview');
@@ -1616,16 +1452,6 @@ function applyManual() {
   saveState(state, room);
   renderRooms();
   document.getElementById('manual-room').value = '';
-}
-
-// ══ IMPORT MODE TOGGLE ══
-function switchImportMode(mode) {
-  document.getElementById('import-mode-csv').style.display = mode === 'csv' ? '' : 'none';
-  document.getElementById('import-mode-json').style.display = mode === 'json' ? '' : 'none';
-  document.getElementById('import-mode-scan').style.display = mode === 'scan' ? '' : 'none';
-  document.getElementById('mode-btn-csv').classList.toggle('active', mode === 'csv');
-  document.getElementById('mode-btn-json').classList.toggle('active', mode === 'json');
-  document.getElementById('mode-btn-scan').classList.toggle('active', mode === 'scan');
 }
 
 // ══ FOTO-SCAN (übernommen aus alpha-scan.html, damit ein Gerät für Scan + Verteilung reicht) ══
@@ -2355,8 +2181,10 @@ function scanUpdateCheck() {
 // Bettenzahl (Erw.) -> Zimmertyp-Badge, gleiche Konvention wie beim JSON-Import (1/2/3 -> E/D/T).
 const BETTEN_TYP = { 1: 'E', 2: 'D', 3: 'T' };
 
-// Direktübernahme statt CSV-Download: erzeugt dieselbe {room, guestType}-Form wie
-// parseCsv() und speist sie in dieselbe Vorschau + denselben Übertragen-Knopf ein.
+// Erzeugt dieselbe {room, guestType}-Form wie showCsvPreview()/applyCsvImport()
+// erwarten und speist sie in dieselbe Vorschau + denselben Übertragen-Knopf ein
+// (der CSV-Datei-Upload-Weg selbst wurde entfernt, diese beiden Funktionen
+// bedienen jetzt nur noch den Foto-Scan).
 scanUebernehmenBtn.addEventListener('click', () => {
   const heute = scanHeuteStr();
   const valid = scanRows.filter(r => r.zimmer.trim() && r.abreise.trim());
@@ -2395,113 +2223,6 @@ scanResetBtn.addEventListener('click', () => {
   scanReserveNote.style.display = 'none';
   scanFileInput.value = '';
 });
-
-// ══ JSON IMPORT ══
-let jsonParsed = [];
-
-async function pasteFromClipboard() {
-  try {
-    const text = await navigator.clipboard.readText();
-    document.getElementById('json-input').value = text;
-  } catch {
-    alert('Einfügen nicht möglich — bitte manuell Ctrl+V ins Textfeld.');
-  }
-}
-
-function parseJsonInput() {
-  const raw = document.getElementById('json-input').value.trim();
-  if (!raw) { alert('Bitte JSON einfügen.'); return; }
-
-  let data;
-  try { data = JSON.parse(raw); } catch(e) { alert('Ungültiges JSON: ' + e.message); return; }
-
-  // Flexible: support top-level or nested unter processing_results
-  const results = data.processing_results || data;
-  const roomsRaw = results.rooms_to_clean || data.rooms_to_clean || [];
-  const excluded = results.excluded_rooms || data.excluded_rooms || [];
-
-  if (!roomsRaw.length) { alert('Keine rooms_to_clean gefunden.'); return; }
-
-  // Normalize room numbers: "011" → "11", keep as string
-  function normRoom(r) {
-    // Strip leading zeros for matching (App uses '11', not '011')
-    return String(parseInt(r, 10));
-  }
-
-  const excludedNorm = excluded.map(e => normRoom(e));
-
-  // Type mapping: 1→E, 2→D, 3→T (also accept string codes directly)
-  const typeMap = (data.parameters && data.parameters.filter_rules && data.parameters.filter_rules.type_mapping) || { '1':'E','2':'D','3':'T' };
-
-  jsonParsed = [];
-  const skipped = [];
-  const excl = [];
-
-  roomsRaw.forEach(entry => {
-    const roomNorm = normRoom(entry.room);
-    if (excludedNorm.includes(roomNorm)) { excl.push(roomNorm); return; }
-    if (!ALL_ROOMS.includes(roomNorm)) { skipped.push(roomNorm); return; }
-
-    // Resolve type
-    let typeRaw = String(entry.type || '');
-    let typeResolved = typeMap[typeRaw] || typeRaw || 'D';
-
-    jsonParsed.push({ room: roomNorm, type: typeResolved });
-  });
-
-  showJsonPreview(jsonParsed, skipped, excl);
-}
-
-function showJsonPreview(rooms, skipped, excluded) {
-  const preview = document.getElementById('json-preview');
-  const list = document.getElementById('json-preview-list');
-  const title = document.getElementById('json-preview-title');
-  const summary = document.getElementById('json-type-summary');
-  list.innerHTML = '';
-
-  const byType = {};
-  rooms.forEach(r => {
-    byType[r.type] = (byType[r.type] || 0) + 1;
-    const tag = document.createElement('span');
-    tag.className = 'preview-tag';
-    tag.textContent = r.room + ' · ' + r.type;
-    list.appendChild(tag);
-  });
-
-  const typeStr = Object.entries(byType).map(([k,v]) => `${v}× ${k}`).join(' · ');
-  title.textContent = `${rooms.length} Abreisezimmer erkannt`;
-  summary.innerHTML = `<span style="color:var(--gold)">${typeStr}</span>${skipped.length ? ` · <span style="color:#e87070">${skipped.length} nicht im System</span>` : ''}${excluded.length ? ` · <span style="color:var(--muted)">${excluded.length} ausgeschlossen</span>` : ''}`;
-
-  preview.style.removeProperty('display');
-  preview.classList.add('show');
-}
-
-function applyJsonImport() {
-  if (!jsonParsed.length) return;
-
-  // First clear all existing guestType
-  ALL_ROOMS.forEach(r => {
-    if (state[r]) { state[r].guestType = ''; state[r].occupied = false; }
-  });
-
-  jsonParsed.forEach(({ room, type }) => {
-    const rs = getRoomState(room);
-    state[room] = { ...rs, guestType: 'checkout', roomType: type, occupied: true };
-  });
-
-  saveState(state);
-  renderRooms();
-
-  const typeCount = {};
-  jsonParsed.forEach(r => { typeCount[r.type] = (typeCount[r.type]||0)+1; });
-  const typeStr = Object.entries(typeCount).map(([k,v]) => `${v}× ${k}`).join(' · ');
-
-  const banner = document.getElementById('import-banner');
-  document.getElementById('import-banner-text').innerHTML =
-    `✓ JSON geladen · <strong>${jsonParsed.length} Abreisezimmer</strong> (${typeStr}) · Datum: ${todayStr()}`;
-  banner.classList.add('show');
-  showTab('zimmer');
-}
 
 // ══ RESET ══
 function resetDay() {
