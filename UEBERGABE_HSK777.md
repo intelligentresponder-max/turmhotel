@@ -1,6 +1,6 @@
 # TURMHOTEL HOUSEKEEPING — ÜBERGABE (Trigger: HSK777)
 
-Stand: **09.10.2026** · Basis: `be3343d` (main, F23-Korrektur) plus Eintrag F23.
+Stand: **09.10.2026** · Basis: `588b526` (main) plus PR aus `AUFTRAG_CLAUDE_CODE_2026-10-09.md` Abschnitt 3 (Funktions-Inventur, in Arbeit).
 Diese Datei ist der Einstiegspunkt — egal ob am PC (Git Bash) oder am Handy (Termux).
 Bei „HSK777": diese Datei lesen, dann bei Abschnitt 3 weitermachen.
 
@@ -264,3 +264,43 @@ Am Handy gibt es kein `~/downloads`; Downloads liegen unter
 nicht ankommt: Änderung stattdessen als Patch-Skript einfügen und ausführen.
 Mehrere `cp`-Zeilen immer mit `&&` verketten, sonst läuft ein Commit auch
 dann durch, wenn das Kopieren fehlgeschlagen ist.
+
+---
+
+## 7. Funktions-Inventur 09.10.2026 (Entrümpelung, `AUFTRAG_CLAUDE_CODE_2026-10-09.md` Abschnitt 3)
+
+Vollständige Inventur aller Top-Level-Funktionen, Buttons und Tabs in
+`housekeeping-v3.html` per Code-Durchsicht erstellt (keine Kürzung — jede
+Funktion wurde auf tatsächliche Aufrufer geprüft, nicht nur grep auf den Namen).
+
+**Entfernt (erledigt):**
+| Was | Grund |
+|---|---|
+| `seedNotes`/`seedAllRoomsTestNote`/`forceFixNotes`/`assignTeamsAndInstructions` | Nie aufgerufen, reine Debug-/Einmal-Helfer; `seedNotes` war die Ursache von F23 |
+| `setLang()` + `L`-Dictionary (DE/EN/HU) | Nie aufgerufen, die zugehörigen Umschalt-Buttons existieren in der Oberfläche gar nicht mehr |
+| `scanAusrichtungPruefen()`/`scanBildAufbereiten()` | Alte Scan-Vorverarbeitung, längst durch `scanWinkelFinden()`/`scanSeiteAufbereiten()` ersetzt, nie mehr aufgerufen |
+| `SDH_ROOMS`-Konstante | "Legacy ... for compat", nirgends mehr gelesen |
+| Button „Reset" + `resetAll()` | Löschte Zimmer+Personal+Gästeliste per PUT für **alle Handys gleichzeitig**, Rückfrage erwähnte das nicht (B4) |
+| „Stand exportieren/importieren" (JSON) + `exportData()`/`importData()` | Cloud-Sync ersetzt den Anwendungsfall; ein alter Import hätte denselben Überschreib-Effekt wie B4/F23 gehabt |
+| Tab „Verlauf" (UI: Tab-Button, Tab-Inhalt, `ladeVerlaufListe()`, `verlaufBerichtAnzeigen()`, `isoZuAnzeige()`) | Entscheidung André (09.10.): Tab weg. Die tägliche Archivierung selbst (`archiveBeforeReset()`/`ddmmyyyyZuIso()`, läuft aus „Zimmerstatus zurücksetzen" heraus) bleibt **erhalten** und schreibt weiterhin nach `/history/<Datum>.json` — nur die Oberfläche zum erneuten Ansehen ist weg |
+
+**Behalten (bewusst, Kernfunktionen):** Zimmer-Grid, „Meine Zimmer"/Fertig-Checkliste
+(inkl. Technik-Ticket), Foto-Scan/PDF-Import inkl. Doppelcheck, „Auf Zimmer
+übertragen", Personal anlegen + „heute da/nicht da", automatisch verteilen,
+„Neuer Tag" (nur Reinigungsstatus, einzeln vom entfernten „Reset" zu
+unterscheiden), Übergabebericht, Sync-Banner, `vorfuehrung.html`/Demo-Seiten
+(nicht Teil dieses Auftrags).
+
+**Offen — noch nicht entschieden/umgesetzt:**
+| Kandidat | Stand |
+|---|---|
+| Tab „Übersicht" (Statistik) | André-Rückfrage aus dem Auftrag noch unbeantwortet — nicht angefasst |
+| Link „FACILITY" im Kopf | Verweist auf eine andere Anwendung (`facility.html`); ob andere Rollen ihn brauchen, ist unklar — nicht entfernt |
+| CSV-Datei-Upload-Pfad (`csv-dropzone`, `handleCsvDrop`/`handleCsvFile`/`parseCsvFile`/`parseCsv`/`findCol`) und „⚡ JSON-Funktion"-Einfügepfad (`pasteFromClipboard`/`parseJsonInput`/`applyJsonImport`) | Vorschlag im Auftrag: entfernen, falls Foto/PDF-Import vollständig reicht. **Vorsicht beim Umsetzen:** der Foto-Scan ruft für seine eigene „Auf Zimmer übertragen"-Vorschau intern dieselben Funktionen `showCsvPreview()`/`applyCsvImport()` auf wie der CSV-Weg — das sind **keine** Duplikate, die man mitlöschen darf, nur der reine Datei-Upload-Teil (Dropzone + Parser) ist der eigentliche Kandidat. Noch nicht umgesetzt. |
+| Rotes „×" zum Personal löschen (`deleteStaff`) | Vorschlag: durch Bestätigung/„heute nicht da" ersetzen — nicht umgesetzt |
+| Farbwahl für Personal (`COLORS`-Picker in `renderPersonal`) | Nutzen unklar, nicht angefasst |
+
+**Vorgehen je Entfernung:** Syntaxcheck (`node --check`), Playwright-Klicktest
+bei 390px mit gemockten Firebase-/Tesseract-Netzwerkaufrufen (diese Sandbox
+hat kein Netz zu `firebasedatabase.app`/`cdnjs.cloudflare.com`, s. F12),
+grep auf jede entfernte Kennung zur Kontrolle auf Restreferenzen.
