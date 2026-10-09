@@ -594,6 +594,7 @@ nav{
 
     <!-- Foto-Scan -->
     <div id="import-mode-scan">
+      <div class="scan-hint" id="scan-entwurf-hinweis" style="display:none;margin-bottom:14px;color:var(--gold-bright);border-left-color:var(--gold);"></div>
       <div class="import-info-box" style="margin-bottom:14px;">
         <div class="import-zone-hint">Alpha-Liste als <b>PDF</b> (am besten: Suite8 → Drucken → „Microsoft Print to PDF") oder als <b>Foto</b>. PDF wird ohne Texterkennung exakt gelesen. Alles läuft lokal im Browser, es werden keine Daten an einen Server gesendet. Die Safe-Liste darf mit aufs Foto — „Reserve"-Zimmer werden automatisch als sauber/frei erkannt. <b>Den Tür-PIN-Kasten dabei immer abdecken oder außerhalb des Fotos lassen.</b></div>
       </div>
@@ -1515,6 +1516,9 @@ function applyCsvImport() {
   if (scanLastVerfuegbarkeit) { state.__verfuegbarkeit = scanLastVerfuegbarkeit; scanLastVerfuegbarkeit = null; }
   saveState(state);
   renderRooms();
+  // Uebertragen abgeschlossen -- der Entwurf (egal ob aus dem Foto-Scan oder
+  // ein zuvor wiederhergestellter) hat seinen Zweck erfuellt.
+  scanEntwurfLoeschen();
 
   // Show banner in Zimmer tab
   const co = csvParsed.filter(r => r.guestType === 'checkout').length;
@@ -1578,6 +1582,131 @@ let scanDrehung = 0;
 let scanPruefText = '';
 let scanLastVerfuegbarkeit = null;
 let scanLastFusssumme = null; // {erw,kin,anz} aus der Fusszeile, fuer die Erw./Kin.-Pruefsumme
+
+// ── SCAN-ENTWURF PERSISTIEREN (B1/F24, AUFTRAG Abschnitt 2.5) ──
+// scanRows lag bisher nur im Arbeitsspeicher: Tab-Reload, Speicherlimit
+// (F11) oder Browserwechsel loeschten eine noch nicht uebertragene
+// Auswertung komplett, waehrend Personal (synchronisiert) erhalten blieb.
+// Gesichert werden ausdruecklich NUR Zimmerdaten -- keine Namen, keine
+// Preise, keine Fotos/PDFs selbst (die bleiben Dateien im Speicher dieses
+// einen Tabs und werden nicht hochgeladen). Lokal in IndexedDB (uebersteht
+// Reload auch ohne Netz) UND unter /scanEntwurf.json in Firebase (damit alle
+// Handys denselben Entwurf sehen), nach "Auf Zimmer uebertragen" geloescht.
+const SCAN_ENTWURF_DB = 'hk_scan_entwurf';
+const SCAN_ENTWURF_STORE = 'entwurf';
+let scanEntwurfSaveTimer = null;
+
+function scanEntwurfDbOffen() {
+  return new Promise(function(resolve, reject){
+    if (!window.indexedDB) { reject(new Error('IndexedDB nicht verfuegbar')); return; }
+    var req = indexedDB.open(SCAN_ENTWURF_DB, 1);
+    req.onupgradeneeded = function(){ req.result.createObjectStore(SCAN_ENTWURF_STORE); };
+    req.onsuccess = function(){ resolve(req.result); };
+    req.onerror = function(){ reject(req.error); };
+  });
+}
+function scanEntwurfLokalSchreiben(data) {
+  return scanEntwurfDbOffen().then(function(db){
+    return new Promise(function(resolve, reject){
+      var tx = db.transaction(SCAN_ENTWURF_STORE, 'readwrite');
+      tx.objectStore(SCAN_ENTWURF_STORE).put(data, 'aktuell');
+      tx.oncomplete = function(){ resolve(); };
+      tx.onerror = function(){ reject(tx.error); };
+    });
+  }).catch(function(e){ console.warn('Scan-Entwurf lokal speichern fehlgeschlagen', e); });
+}
+function scanEntwurfLokalLesen() {
+  return scanEntwurfDbOffen().then(function(db){
+    return new Promise(function(resolve, reject){
+      var tx = db.transaction(SCAN_ENTWURF_STORE, 'readonly');
+      var req = tx.objectStore(SCAN_ENTWURF_STORE).get('aktuell');
+      req.onsuccess = function(){ resolve(req.result || null); };
+      req.onerror = function(){ reject(req.error); };
+    });
+  }).catch(function(e){ console.warn('Scan-Entwurf lokal lesen fehlgeschlagen', e); return null; });
+}
+function scanEntwurfLokalLoeschen() {
+  return scanEntwurfDbOffen().then(function(db){
+    return new Promise(function(resolve, reject){
+      var tx = db.transaction(SCAN_ENTWURF_STORE, 'readwrite');
+      tx.objectStore(SCAN_ENTWURF_STORE).delete('aktuell');
+      tx.oncomplete = function(){ resolve(); };
+      tx.onerror = function(){ reject(tx.error); };
+    });
+  }).catch(function(e){ console.warn('Scan-Entwurf lokal loeschen fehlgeschlagen', e); });
+}
+
+function scanEntwurfSchnappschuss() {
+  return {
+    rows: scanRows.map(function(r){
+      return { zimmer: r.zimmer, abreise: r.abreise, leer: !!r.leer, exOOO: !!r.exOOO, reserve: !!r.reserve, betten: r.betten == null ? null : r.betten, kinder: r.kinder == null ? null : r.kinder };
+    }),
+    hskDatum: (scanHskDate && scanHskDate.value) || '',
+    pmsTotal: (scanPmsTotalInput && scanPmsTotalInput.value) || '',
+    pmsAnreisen: (scanPmsArrivalsInput && scanPmsArrivalsInput.value) || '',
+    stand: new Date().toISOString(),
+  };
+}
+
+// Debounced: wird bei jeder Zelleneingabe aufgerufen (scanUpdateCheck),
+// soll aber nicht bei jedem Tastendruck einzeln schreiben.
+function scanEntwurfSpeichern() {
+  clearTimeout(scanEntwurfSaveTimer);
+  scanEntwurfSaveTimer = setTimeout(function(){
+    if (!scanRows.length) return;
+    var snap = scanEntwurfSchnappschuss();
+    scanEntwurfLokalSchreiben(snap);
+    dbUrl('/scanEntwurf.json').then(function(url){
+      return fetch(url, {method:'PUT', headers:{'Content-Type':'application/json'}, body: JSON.stringify(snap)});
+    }).catch(function(e){ console.warn('Scan-Entwurf Cloud-Speichern fehlgeschlagen', e); });
+  }, 800);
+}
+
+function scanEntwurfLoeschen() {
+  clearTimeout(scanEntwurfSaveTimer);
+  scanEntwurfLokalLoeschen();
+  var hinweis = document.getElementById('scan-entwurf-hinweis');
+  if (hinweis) hinweis.style.display = 'none';
+  dbUrl('/scanEntwurf.json').then(function(url){
+    return fetch(url, {method:'DELETE'});
+  }).catch(function(e){ console.warn('Scan-Entwurf Cloud-Loeschen fehlgeschlagen', e); });
+}
+
+// Einmal beim Laden: zuerst die Firebase-Fassung versuchen (die ist, falls
+// vorhanden, die von allen Handys zuletzt gesehene), sonst den lokalen
+// IndexedDB-Stand. Reine Bestpractice-Wiederherstellung -- schlaegt beides
+// fehl, startet die Seite einfach mit einem leeren Scan wie bisher.
+function scanEntwurfWiederherstellen() {
+  dbUrl('/scanEntwurf.json').then(function(url){ return fetch(url); })
+    .then(checkFirebaseResponse)
+    .then(function(res){ return res.json(); })
+    .then(function(data){
+      if (data && typeof data === 'object' && Array.isArray(data.rows) && data.rows.length) return data;
+      return scanEntwurfLokalLesen();
+    })
+    .catch(function(){ return scanEntwurfLokalLesen(); })
+    .then(function(data){
+      if (!data || !Array.isArray(data.rows) || !data.rows.length) return;
+      scanRows = data.rows.map(function(r){ return Object.assign({}, r); });
+      if (data.hskDatum && scanHskDate) { scanHskDate.value = data.hskDatum; }
+      if (data.pmsTotal && scanPmsTotalInput) scanPmsTotalInput.value = data.pmsTotal;
+      if (data.pmsAnreisen && scanPmsArrivalsInput) scanPmsArrivalsInput.value = data.pmsAnreisen;
+      scanRenderRows();
+      scanResultsSection.style.display = 'block';
+      scanCheckSection.style.display = 'block';
+      scanFreeSection.style.display = 'block';
+      scanExportSection.style.display = 'block';
+      if (scanDateBadge) scanDateBadge.textContent = 'Tag der Reinigung: ' + scanHeuteStr();
+      scanUpdateCheck();
+      var hinweis = document.getElementById('scan-entwurf-hinweis');
+      if (hinweis) {
+        var zeit = data.stand ? new Date(data.stand).toLocaleString('de-DE') : '';
+        hinweis.textContent = '↻ Nicht übertragener Entwurf wiederhergestellt' + (zeit ? ' (Stand ' + zeit + ')' : '') + ' — geprüft weitermachen oder „Neu beginnen".';
+        hinweis.style.display = 'block';
+      }
+    })
+    .catch(function(e){ console.warn('Scan-Entwurf wiederherstellen fehlgeschlagen', e); });
+}
 
 function scanSetHskDate(d) {
   scanHskDate.value = d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
@@ -2320,6 +2449,7 @@ scanHskDate.addEventListener('change', function(){
 
 function scanUpdateCheck() {
   scanRenderErwKinBadge();
+  scanEntwurfSpeichern();
   const belegte = scanRows.filter(r => !r.leer && r.zimmer.trim());
   const leere = scanRows.filter(r => r.leer && r.zimmer.trim());
 
@@ -2403,6 +2533,7 @@ scanResetBtn.addEventListener('click', () => {
   scanDupeNote.style.display = 'none';
   scanReserveNote.style.display = 'none';
   scanFileInput.value = '';
+  scanEntwurfLoeschen();
 });
 
 // ══ RESET ══
@@ -2733,6 +2864,7 @@ async function syncFromCloud() {
 }
 syncFromCloud();
 setInterval(syncFromCloud, 8000);
+scanEntwurfWiederherstellen();
 </script>
 </body>
 </html>
