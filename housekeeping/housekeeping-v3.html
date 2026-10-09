@@ -149,6 +149,12 @@ nav{
   font-family:'Spline Sans Mono',monospace;font-size:.72rem;letter-spacing:.02em;color:#e87070;
 }
 .sync-offline-banner.show{display:flex;}
+.sync-loading-banner{
+  background:rgba(201,162,39,.1);border-bottom:1px solid rgba(201,162,39,.35);
+  padding:8px 24px;display:none;align-items:center;gap:8px;
+  font-family:'Spline Sans Mono',monospace;font-size:.72rem;letter-spacing:.02em;color:var(--gold-bright);
+}
+.sync-loading-banner.show{display:flex;}
 
 /* ── SECTION LABELS ── */
 .building-label{
@@ -457,7 +463,8 @@ nav{
   </div>
 </nav>
 
-<div class="sync-offline-banner" id="sync-offline-banner">⚠️ Offline – Änderungen werden nur lokal gespeichert, nicht mit anderen Geräten abgeglichen.</div>
+<div class="sync-offline-banner" id="sync-offline-banner">⚠️ Offline – Änderungen werden nur lokal gespeichert, nicht mit anderen Geräten abgeglichen. <button class="btn btn-cancel" id="sync-restore-btn" style="margin-left:auto;padding:3px 10px;font-size:.68rem;" onclick="restoreLastBackup()">Letzten Stand wiederherstellen</button></div>
+<div class="sync-loading-banner" id="sync-loading-banner">⏳ Lädt den Cloud-Stand … Zimmer-/Personal-Änderungen werden übernommen, sobald der erste Abgleich fertig ist (meist 1–2 Sekunden).</div>
 
 <div class="tool-header">
   <p class="eyebrow" id="lbl-eyebrow">Digitalisierungsprojekt · Turmhotel Frankfurt</p>
@@ -878,6 +885,41 @@ function checkFirebaseResponse(res) {
   if (!res.ok) throw new Error('Firebase HTTP ' + res.status);
   return res;
 }
+
+// ── SYNC-GATE (B3/F23) ──
+// Ein frischer Browser/Handy hat beim allerersten Rendern einen leeren oder
+// veralteten lokalen Stand. Schreibt er in diesem Moment per PUT den ganzen
+// Stand, ersetzt er den (noch ungelesenen) Cloud-Stand auf allen Geraeten --
+// genau das ist bei F23 passiert. Deshalb: volle PUTs (kein changedRoom,
+// betrifft den gesamten Stand) warten, bis der erste syncFromCloud()-Versuch
+// durch ist -- egal ob er klappt oder nicht, danach ist zumindest bekannt,
+// was in der Cloud stand. Einzelzimmer-PATCHes sind nicht betroffen, die
+// koennen ohnehin nie mehr als das eine Zimmer ueberschreiben.
+let firstSyncAttempted = false;
+let pendingStateWrite = null; // Schnappschuss von state zum Zeitpunkt der Blockade, oder null
+let pendingStaffWrite = null; // Schnappschuss von staff zum Zeitpunkt der Blockade, oder null
+function setSyncGateBanner(show) {
+  const banner = document.getElementById('sync-loading-banner');
+  if (banner) banner.classList.toggle('show', show);
+}
+
+// Vor jedem vollen Stand-Ersatz (PUT) wird der bisherige Cloud-Stand nach
+// /backup/state-letzter.json kopiert -- Bestpractice-Sicherung, kein
+// eigener Dauer-Knopf. Blockiert das eigentliche Speichern nicht, falls das
+// Backup selbst fehlschlaegt (z.B. kurzzeitig offline).
+function backupBeforeOverwrite(quellPfad, zielPfad) {
+  return dbUrl(quellPfad).then(function(url){ return fetch(url); })
+    .then(checkFirebaseResponse)
+    .then(function(res){ return res.json(); })
+    .then(function(data){
+      if (!data || typeof data !== 'object' || !Object.keys(data).length) return;
+      return dbUrl(zielPfad).then(function(url){
+        return fetch(url, {method:'PUT', headers:{'Content-Type':'application/json'}, body: JSON.stringify(data)});
+      });
+    })
+    .catch(function(e){ console.warn('Backup vor Ueberschreiben fehlgeschlagen (Speichern laeuft trotzdem weiter)', e); });
+}
+
 function saveState(s, changedRoom) {
   localStorage.setItem('hk_state3', JSON.stringify(s));
   // Einzelzimmer-Aktionen (changedRoom gesetzt) schreiben per PATCH nur das
@@ -885,20 +927,57 @@ function saveState(s, changedRoom) {
   // Handy nicht überschrieben wird (F12). Massenaktionen (Import, Reset,
   // Verteilen) sollen weiterhin den kompletten Stand ersetzen -> PUT.
   const singleRoom = changedRoom && s[changedRoom] !== undefined;
+  if (!singleRoom && !firstSyncAttempted) {
+    pendingStateWrite = s;
+    setSyncGateBanner(true);
+    return;
+  }
   const body = singleRoom ? { [changedRoom]: s[changedRoom] } : s;
-  dbUrl('/state.json').then(function(url){
-    return fetch(url, {method: singleRoom ? 'PATCH' : 'PUT', headers:{'Content-Type':'application/json'}, body: JSON.stringify(body)});
-  })
-    .then(checkFirebaseResponse).then(function(){ setSyncStatus(true); })
-    .catch(function(e){ console.warn('Sync state fehlgeschlagen', e); setSyncStatus(false); });
+  const method = singleRoom ? 'PATCH' : 'PUT';
+  function schreiben() {
+    dbUrl('/state.json').then(function(url){
+      return fetch(url, {method: method, headers:{'Content-Type':'application/json'}, body: JSON.stringify(body)});
+    })
+      .then(checkFirebaseResponse).then(function(){ setSyncStatus(true); })
+      .catch(function(e){ console.warn('Sync state fehlgeschlagen', e); setSyncStatus(false); });
+  }
+  if (singleRoom) schreiben();
+  else backupBeforeOverwrite('/state.json', '/backup/state-letzter.json').then(schreiben);
 }
 function saveStaffData(s) {
   localStorage.setItem('hk_staff3', JSON.stringify(s));
+  if (!firstSyncAttempted) {
+    pendingStaffWrite = s;
+    setSyncGateBanner(true);
+    return;
+  }
   dbUrl('/staff.json').then(function(url){
     return fetch(url, {method:'PUT', headers:{'Content-Type':'application/json'}, body: JSON.stringify(s)});
   })
     .then(checkFirebaseResponse).then(function(){ setSyncStatus(true); })
     .catch(function(e){ console.warn('Sync staff fehlgeschlagen', e); setSyncStatus(false); });
+}
+
+// Zeigt den Restore-Knopf nur, wenn gerade ohnehin ein Sync-Problem sichtbar
+// ist (sync-offline-banner) -- bewusst kein staendig sichtbarer "Undo"-Knopf,
+// um ihn nicht zu einem Button fuer den Alltagsgebrauch zu machen. Wirkt nur
+// auf Geraeten, die wieder online sind; waehrend des eigentlichen Ausfalls
+// kann ohnehin nicht nach Firebase geschrieben werden.
+function restoreLastBackup() {
+  if (!confirm('Letzten gesicherten Stand wiederherstellen? Das ersetzt den aktuellen Cloud-Stand auf ALLEN Geraeten mit der Sicherung von vor der letzten Massenaktion (Import/Verteilen/Zuruecksetzen).')) return;
+  dbUrl('/backup/state-letzter.json').then(function(url){ return fetch(url); })
+    .then(checkFirebaseResponse)
+    .then(function(res){ return res.json(); })
+    .then(function(data){
+      if (!data || typeof data !== 'object' || !Object.keys(data).length) { alert('Keine Sicherung vorhanden.'); return Promise.reject(new Error('keine Sicherung')); }
+      state = data;
+      localStorage.setItem('hk_state3', JSON.stringify(state));
+      return dbUrl('/state.json').then(function(url){
+        return fetch(url, {method:'PUT', headers:{'Content-Type':'application/json'}, body: JSON.stringify(state)});
+      }).then(checkFirebaseResponse);
+    })
+    .then(function(){ renderRooms(); alert('Letzter gesicherter Stand wiederhergestellt.'); })
+    .catch(function(e){ if (e.message !== 'keine Sicherung') alert('Wiederherstellen fehlgeschlagen: ' + e.message); });
 }
 
 // Anonymisierte Übergabe aus nachtdienst.html: liest nur { stand, zimmer:[{zimmer,anreise}] }
@@ -2612,6 +2691,40 @@ async function syncFromCloud() {
   } catch (e) {
     console.warn('Cloud-Sync fehlgeschlagen, nutze lokalen Stand', e);
     setSyncStatus(false);
+  }
+  // Sync-Gate loesen: ob der Versuch oben geklappt hat oder nicht, danach ist
+  // zumindest bekannt, was (falls erreichbar) in der Cloud stand -- ab jetzt
+  // duerfen volle PUTs wieder raus. War waehrenddessen ein Schreibversuch
+  // blockiert (z.B. "+ Hinzufuegen" in den ersten 1-2 Sekunden), darf der
+  // nicht einfach verworfen werden, sobald der obige Cloud-Abgleich state/
+  // staff komplett ersetzt hat -- sonst waere die Eingabe von eben weg.
+  // Deshalb zusammenfuehren statt blind ueberschreiben: der Schnappschuss von
+  // vor der Blockade gewinnt pro Zimmer/Mitarbeiter-Name gegen die Cloud-
+  // Fassung (das war die juengere, bewusste Eingabe); was nur in der Cloud
+  // steht, bleibt erhalten. Einschraenkung: ein Loeschen genau in diesem
+  // kurzen Fenster wuerde dabei nicht uebernommen -- akzeptiert, das Fenster
+  // ist typischerweise unter 2 Sekunden und direkt nach dem Laden hat dort
+  // noch niemand etwas zum Loeschen gesehen.
+  if (!firstSyncAttempted) {
+    firstSyncAttempted = true;
+    setSyncGateBanner(false);
+    if (pendingStateWrite) {
+      state = Object.assign({}, state, pendingStateWrite);
+      pendingStateWrite = null;
+      localStorage.setItem('hk_state3', JSON.stringify(state));
+      renderRooms();
+      saveState(state);
+    }
+    if (pendingStaffWrite) {
+      var staffSnap = pendingStaffWrite; pendingStaffWrite = null;
+      staffSnap.forEach(function(s){
+        var idx = staff.findIndex(function(x){ return x.name === s.name; });
+        if (idx === -1) staff.push(s); else staff[idx] = s;
+      });
+      localStorage.setItem('hk_staff3', JSON.stringify(staff));
+      renderPersonal();
+      saveStaffData(staff);
+    }
   }
   // Laeuft unabhaengig vom try/catch oben mit eigener Fehlerbehandlung (siehe
   // loadSpaeteAnreisen): so faerbt die Nachtdienst-Uebergabe die Zimmerkarten
