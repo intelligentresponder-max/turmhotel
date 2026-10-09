@@ -510,7 +510,6 @@ nav{
   <button class="tab" id="tab-btn-uebersicht" onclick="showTab('uebersicht')">Übersicht</button>
   <button class="tab" id="tab-btn-gaeste" onclick="showTab('gaeste')">Gästeliste</button>
   <button class="tab" id="tab-btn-personal" onclick="showTab('personal')">Personal</button>
-  <button class="tab" id="tab-btn-verlauf" onclick="showTab('verlauf')">Verlauf</button>
 </div>
 
 <div class="main">
@@ -797,24 +796,6 @@ nav{
       <button class="btn btn-add" onclick="addStaff()">+ Hinzufügen</button>
     </div>
   </div>
-</div>
-
-<!-- ══ TAB: VERLAUF ══ -->
-<div id="tab-verlauf" style="display:none">
-  <div class="building-label" style="margin-top:4px">Vergangene Tage</div>
-  <p style="font-family:'Spline Sans Mono',monospace;font-size:.72rem;color:var(--muted);margin:0 0 16px;">
-    Jeder Tag wird beim Klick auf „Zimmerstatus zurücksetzen" automatisch archiviert, bevor er überschrieben wird.
-    Hier lässt sich der Übergabebericht eines vergangenen Tages erneut ansehen.
-  </p>
-  <div class="form-row">
-    <select class="staff-select" id="verlauf-datum" style="flex:1;margin-bottom:0;">
-      <option value="">Lade Verlauf …</option>
-    </select>
-    <button class="btn btn-save" onclick="verlaufBerichtAnzeigen()" style="white-space:nowrap;">Bericht ansehen</button>
-  </div>
-  <p style="font-family:'Spline Sans Mono',monospace;font-size:.68rem;color:var(--muted);margin-top:14px;">
-    Zeigt den archivierten Zimmerstatus (Reinigung, Zuteilung, Notizen) im selben Format wie der aktuelle Übergabebericht.
-  </p>
 </div>
 
 </div><!-- /main -->
@@ -1487,7 +1468,7 @@ function deleteStaff(i) {
 
 // ══ TABS ══
 function showTab(tab) {
-  ['zimmer','meine','uebersicht','gaeste','personal','verlauf'].forEach(id => {
+  ['zimmer','meine','uebersicht','gaeste','personal'].forEach(id => {
     document.getElementById('tab-' + id).style.display = id === tab ? '' : 'none';
     document.getElementById('tab-btn-' + id).classList.toggle('active', id === tab);
   });
@@ -1495,7 +1476,6 @@ function showTab(tab) {
   if (tab === 'uebersicht') renderOverview();
   if (tab === 'gaeste') loadSpaeteAnreisen();
   if (tab === 'personal') renderPersonal();
-  if (tab === 'verlauf') ladeVerlaufListe();
 }
 
 // ══ CSV IMPORT ══
@@ -1670,11 +1650,6 @@ function ddmmyyyyZuIso(d) {
   if (p.length !== 3) return null;
   return p[2] + '-' + p[1].padStart(2,'0') + '-' + p[0].padStart(2,'0');
 }
-function isoZuAnzeige(iso) {
-  var p = iso.split('-');
-  var dt = new Date(+p[0], +p[1]-1, +p[2]);
-  return dt.toLocaleDateString('de-DE', {weekday:'short', day:'2-digit', month:'2-digit', year:'numeric'});
-}
 function archiveBeforeReset() {
   var hatDaten = ALL_ROOMS.some(function(id){
     var rs = state[id];
@@ -1686,31 +1661,6 @@ function archiveBeforeReset() {
   dbUrl('/history/' + key + '.json').then(function(url){
     return fetch(url, { method: 'PUT', headers: {'Content-Type':'application/json'}, body: JSON.stringify(state) });
   }).catch(function(e){ console.warn('Verlauf-Archivierung fehlgeschlagen', e); });
-}
-async function ladeVerlaufListe() {
-  var sel = document.getElementById('verlauf-datum');
-  sel.innerHTML = '<option value="">Lade Verlauf …</option>';
-  try {
-    var res = await fetch(await dbUrl('/history.json?shallow=true'));
-    var data = await res.json();
-    var keys = data ? Object.keys(data).sort().reverse() : [];
-    if (!keys.length) { sel.innerHTML = '<option value="">Noch kein Verlauf vorhanden</option>'; return; }
-    sel.innerHTML = keys.map(function(k){ return '<option value="' + k + '">' + isoZuAnzeige(k) + '</option>'; }).join('');
-  } catch (e) {
-    sel.innerHTML = '<option value="">Verlauf konnte nicht geladen werden</option>';
-  }
-}
-async function verlaufBerichtAnzeigen() {
-  var key = document.getElementById('verlauf-datum').value;
-  if (!key) return;
-  try {
-    var res = await fetch(await dbUrl('/history/' + key + '.json'));
-    var snap = await res.json();
-    if (!snap) { alert('Keine Daten fuer diesen Tag gefunden.'); return; }
-    printHandoverReport(snap, isoZuAnzeige(key));
-  } catch (e) {
-    alert('Verlauf konnte nicht geladen werden: ' + e.message);
-  }
 }
 
 function applyCsvImport() {
