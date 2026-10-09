@@ -1,6 +1,6 @@
 # TURMHOTEL HOUSEKEEPING — ÜBERGABE (Trigger: HSK777)
 
-Stand: **09.10.2026** · Basis: `588b526` (main) plus PR aus `AUFTRAG_CLAUDE_CODE_2026-10-09.md` Abschnitt 3 (Funktions-Inventur, in Arbeit).
+Stand: **09.10.2026** · Basis: `588b526` (main) plus PR #30 aus `AUFTRAG_CLAUDE_CODE_2026-10-09.md` Abschnitt 3 (Funktions-Inventur, abgeschlossen) + Abschnitt 4.1/4.5 (OCR-Prüfsumme, s. Abschnitt 8 unten).
 Diese Datei ist der Einstiegspunkt — egal ob am PC (Git Bash) oder am Handy (Termux).
 Bei „HSK777": diese Datei lesen, dann bei Abschnitt 3 weitermachen.
 
@@ -303,3 +303,46 @@ alle Kandidaten entschieden und umgesetzt, keine offenen Punkte mehr.
 bei 390px mit gemockten Firebase-/Tesseract-Netzwerkaufrufen (diese Sandbox
 hat kein Netz zu `firebasedatabase.app`/`cdnjs.cloudflare.com`, s. F12),
 grep auf jede entfernte Kennung zur Kontrolle auf Restreferenzen.
+
+---
+
+## 8. OCR-Verbesserung Erw./Kin. 09.10.2026 (`AUFTRAG_CLAUDE_CODE_2026-10-09.md` Abschnitt 4)
+
+**Umgesetzt (4.1 + 4.5):**
+- `scanFussSumme()` (vorher `scanAnzSumme()`) liest jetzt alle drei Summen aus
+  der Fußzeile der letzten Seite (Erw./Kin./Anz., z. B. „81 0 63"), nicht mehr
+  nur Anz.
+- `scanPruefSummen()`: fehlt in genau einer Zeile die Erw.-Zahl, wird sie aus
+  Fußzeile minus Summe der bekannten Zeilen errechnet (nur im plausiblen
+  Bereich 0–4) und gelb markiert („errechnet", mit Tooltip). Bei mehreren
+  Lücken bleibt es bei der Warnung — keine geratene Zuordnung. Reserve-/
+  Leerstand-Zeilen zählen nicht mit, die stehen nicht auf der gedruckten Liste.
+- Neues Badge zeigt Σ Erw./Σ Kin. laufend gegen die Fußzeile (ok/warn/bad),
+  aktualisiert sich bei jeder manuellen Korrektur. Wird eine errechnete Zahl
+  von Hand geändert, verschwindet die Markierung sofort.
+- Plausibilitätsmarker in der Tabelle: Erw.=0 (kommt vor, z. B. Safe-Zimmer
+  ohne Checkin wie Zi. 34 am 08.10. — kein Lesefehler, nur Hinweis), Erw.≥3
+  („Zusatzbett prüfen"), Kin.>0 („Kinderbett/Extras prüfen").
+- Nebenbei behoben: Erw.=0 wurde bisher als leeres Feld dargestellt, nicht von
+  „nicht gelesen" unterscheidbar.
+
+Getestet: Node-Unit-Test der real aus der Datei extrahierten Funktionen gegen
+vier Szenarien (abgetippter Text 08.10., Σ Erw.=23/Σ Kin.=0 für die 17 Zeilen
+von Seite 2) — alles gelesen, eine Lücke (korrekt auf den Zi.34-Fall 0
+errechnet), zwei Lücken (keine Autofill), echte Abweichung (bad-Badge).
+Playwright bei 390px bestätigt dasselbe live im DOM plus alle vier
+Plausibilitätsmarker, voller Tab-Regressionstest weiterhin grün.
+
+**Bewusst nicht umgesetzt — offene Folgepunkte:**
+| Punkt | Warum nicht jetzt |
+|---|---|
+| 4.2 Spaltenbasierte Erkennung (Tesseract-Wortpositionen statt Regex) | Ändert das Zusammenspiel mit echter Kamera-OCR; diese Sandbox hat kein Netz zu `cdnjs.cloudflare.com` (F12) und kann es nicht gegen echte Fotos verantwortbar testen |
+| 4.3 Nur Zahlenspalten zuschneiden, mit Ziffern-Whitelist an OCR geben | Gleicher Grund — Bildvorverarbeitung ohne echte OCR-Laufzeit nicht testbar |
+| 4.4 Kat. aus Zimmerbestand ableiten | `ROOM_TYPES` deckt nur die zweistelligen Vorderhaus-Zimmer ab (11–55), nicht die Hinterhaus-Zimmer (102–510) — für die fehlt die Typ-Zuordnung, eine verlässliche Ableitung ist damit nicht möglich |
+| 4.6 PDF vor Foto empfehlen | Bereits vorhanden — der Hinweistext nennt PDF zuerst und „am besten", erklärt den Vorteil (keine OCR nötig). Keine Änderung nötig. |
+| 4.7 Große Personenzahl-Anzeige am Zimmer | Erw./Kin. laufen aktuell nur als Zimmertyp-Buchstabe (E/D/T) durch `applyCsvImport()` in den Zimmer-State, nicht als Zahl — dafür wäre eine Schema-Änderung nötig, die über diese Teilaufgabe hinausgeht |
+
+„Abreise vor Anreise"-Prüfung (Teil von 4.5) ebenfalls offen: `scanRows`
+speichert aktuell nur das Abreisedatum je Zeile, nicht das Anreisedatum —
+dafür müsste eine neue Spalte durch die gesamte Vorschau-/Übernehmen-Pipeline
+durchgereicht werden.
