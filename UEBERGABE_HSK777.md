@@ -320,9 +320,12 @@ grep auf jede entfernte Kennung zur Kontrolle auf Restreferenzen.
 - Neues Badge zeigt Σ Erw./Σ Kin. laufend gegen die Fußzeile (ok/warn/bad),
   aktualisiert sich bei jeder manuellen Korrektur. Wird eine errechnete Zahl
   von Hand geändert, verschwindet die Markierung sofort.
-- Plausibilitätsmarker in der Tabelle: Erw.=0 (kommt vor, z. B. Safe-Zimmer
-  ohne Checkin wie Zi. 34 am 08.10. — kein Lesefehler, nur Hinweis), Erw.≥3
-  („Zusatzbett prüfen"), Kin.>0 („Kinderbett/Extras prüfen").
+- Plausibilitätsmarker in der Tabelle: Erw.=0 (kommt vor und ist **kein
+  Lesefehler** — André, 09.10.: Suite8 setzt bei Nicht-Anreise den Status
+  „LAT", damit die Citytax für die Nacht nicht berechnet wird, und die
+  Erw.-Zahl steht dadurch bewusst auf 0; Beispiel Zi. 34 am 08.10., noch
+  unabgeholter Safe — nur zur Information markiert, nicht als Fehler),
+  Erw.≥3 („Zusatzbett prüfen"), Kin.>0 („Kinderbett/Extras prüfen").
 - Nebenbei behoben: Erw.=0 wurde bisher als leeres Feld dargestellt, nicht von
   „nicht gelesen" unterscheidbar.
 

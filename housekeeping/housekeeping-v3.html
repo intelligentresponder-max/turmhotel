@@ -2173,12 +2173,15 @@ function scanRenderRows() {
   scanRows.forEach((r, i) => {
     const tr = document.createElement('tr');
     // Plausibilitaetshinweise (AUFTRAG Abschnitt 4.5): Erw.=0 kommt echt vor
-    // (Safe-Zimmer ohne Checkin, s. F19/F20) und ist kein Lesefehler, aber
-    // auffaellig genug, um es dem Team zu zeigen; Erw.>=3 bzw. Kin.>0
-    // deuten auf Zusatzbett/Kinderbett hin, die beim Richten nicht fehlen duerfen.
+    // und ist kein Lesefehler -- Suite8 setzt bei Nicht-Anreise den Status
+    // "LAT", damit die Citytax fuer die Nacht nicht berechnet wird, und die
+    // Erw.-Zahl steht dadurch bewusst auf 0 (Beispiel Zi.34 am 08.10., noch
+    // unabgeholter Safe, s. F19/F20). Trotzdem auffaellig genug, um es dem
+    // Team zu zeigen; Erw.>=3 bzw. Kin.>0 deuten auf Zusatzbett/Kinderbett
+    // hin, die beim Richten nicht fehlen duerfen.
     const hinweise = [];
     if (!r.reserve && !r.leer) {
-      if (r.betten === 0) hinweise.push('<span class="scan-leer-tag" title="Kommt vor, z.B. Safe-Zimmer ohne Checkin — kein Lesefehler">0 Erw.</span>');
+      if (r.betten === 0) hinweise.push('<span class="scan-leer-tag" title="Kommt vor: Suite8 setzt bei Nicht-Anreise LAT, damit keine Citytax anfaellt — kein Lesefehler">0 Erw.</span>');
       else if (r.betten >= 3) hinweise.push('<span class="scan-leer-tag" style="color:var(--gold-bright)" title="Zusatzbett pruefen">' + r.betten + ' Erw.</span>');
       if (r.kinder > 0) hinweise.push('<span class="scan-leer-tag" style="color:#5bb3e8" title="Kinderbett/Extras pruefen">+' + r.kinder + ' Kind</span>');
     }
