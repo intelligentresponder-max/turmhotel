@@ -149,6 +149,12 @@ nav{
   font-family:'Spline Sans Mono',monospace;font-size:.72rem;letter-spacing:.02em;color:#e87070;
 }
 .sync-offline-banner.show{display:flex;}
+.sync-loading-banner{
+  background:rgba(201,162,39,.1);border-bottom:1px solid rgba(201,162,39,.35);
+  padding:8px 24px;display:none;align-items:center;gap:8px;
+  font-family:'Spline Sans Mono',monospace;font-size:.72rem;letter-spacing:.02em;color:var(--gold-bright);
+}
+.sync-loading-banner.show{display:flex;}
 
 /* ── SECTION LABELS ── */
 .building-label{
@@ -286,18 +292,6 @@ nav{
 .btn-cancel{background:rgba(255,255,255,.06);color:var(--muted);border:1px solid var(--line);}
 .btn-cancel:hover{color:var(--paper);}
 
-/* ── OVERVIEW ── */
-.staff-overview{display:grid;gap:16px;margin-top:8px;}
-.staff-row{background:rgba(255,255,255,.035);border:1px solid var(--line);border-radius:var(--radius);padding:20px 22px;}
-.staff-row-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;flex-wrap:wrap;gap:8px;}
-.staff-name-display{display:flex;align-items:center;gap:10px;font-family:'Fraunces',serif;font-size:1.1rem;}
-.staff-progress-bar{height:4px;background:rgba(255,255,255,.07);border-radius:2px;margin-bottom:8px;overflow:hidden;}
-.staff-progress-fill{height:100%;border-radius:2px;transition:width .5s;}
-.staff-rooms-list{font-family:'Spline Sans Mono',monospace;font-size:.7rem;color:var(--muted);display:flex;flex-wrap:wrap;gap:5px;}
-.staff-room-tag{padding:2px 7px;border-radius:1px;border:1px solid var(--line);color:var(--paper);}
-.staff-room-tag.done{border-color:var(--clean);color:#4ecb82;}
-.staff-room-tag.checkout{border-color:rgba(230,126,34,.4);color:var(--checkout-col);}
-
 /* ── PERSONAL ── */
 .personal-panel{max-width:540px;}
 .personal-list{display:grid;gap:8px;margin-bottom:24px;}
@@ -311,9 +305,6 @@ nav{
 .form-row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px;}
 .form-input{flex:1;min-width:110px;background:rgba(255,255,255,.06);border:1px solid var(--line);color:var(--paper);padding:8px 11px;border-radius:2px;font-family:'Spline Sans',sans-serif;font-size:.86rem;}
 .form-input:focus{outline:none;border-color:var(--gold);}
-.color-options{display:flex;gap:7px;margin-bottom:12px;flex-wrap:wrap;}
-.color-opt{width:26px;height:26px;border-radius:50%;border:2px solid transparent;cursor:pointer;transition:.15s;}
-.color-opt.selected{border-color:var(--paper);transform:scale(1.15);}
 .btn-add{background:var(--gold);color:var(--ink);font-weight:600;width:100%;}
 .btn-add:hover{background:var(--gold-bright);}
 
@@ -347,10 +338,6 @@ nav{
   padding:18px 20px;margin-bottom:20px;
 }
 .import-info-title{font-family:'Spline Sans Mono',monospace;font-size:.65rem;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin-bottom:12px;}
-.csv-format-table{width:100%;border-collapse:collapse;font-family:'Spline Sans Mono',monospace;font-size:.72rem;}
-.csv-format-table th{text-align:left;color:var(--gold);padding:4px 8px;border-bottom:1px solid var(--line);}
-.csv-format-table td{padding:4px 8px;color:var(--muted);border-bottom:1px solid rgba(201,162,39,.07);}
-.csv-format-table td:first-child{color:var(--paper);}
 .import-preview{
   background:rgba(255,255,255,.03);border:1px solid rgba(230,126,34,.3);border-radius:var(--radius);
   padding:18px 20px;margin-bottom:20px;display:none;
@@ -443,6 +430,7 @@ nav{
 .scan-table td{padding:6px;border-bottom:1px solid rgba(255,255,255,.04);}
 .scan-table td input{width:100%;background:transparent;border:1px solid transparent;border-radius:3px;color:var(--paper);font-family:'Spline Sans Mono',monospace;font-size:.8rem;padding:4px 6px;}
 .scan-table td input:focus{border-color:var(--gold);outline:none;background:rgba(255,255,255,.03);}
+.scan-table td input.scan-berechnet{border-color:rgba(201,162,39,.5);background:rgba(201,162,39,.1);color:var(--gold-bright);}
 .scan-row-del{color:#e87070;cursor:pointer;background:none;border:none;font-size:1rem;padding:2px 8px;}
 .scan-check-row{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-top:14px;}
 .scan-check-row label{font-size:.78rem;color:var(--muted);font-family:'Spline Sans Mono',monospace;}
@@ -451,6 +439,7 @@ nav{
 .scan-badge.ok{background:var(--clean-bg);color:#4ecb82;border:1px solid rgba(42,122,75,.4);}
 .scan-badge.bad{background:var(--occupied-bg);color:#ff6b4a;border:1px solid rgba(192,57,43,.4);}
 .scan-badge.wait{background:rgba(255,255,255,.05);color:var(--muted);border:1px solid var(--line);}
+.scan-badge.warn{background:rgba(201,162,39,.12);color:var(--gold-bright);border:1px solid rgba(201,162,39,.4);}
 .scan-chip-grid{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px;}
 .scan-chip{font-family:'Spline Sans Mono',monospace;font-size:.72rem;padding:6px 10px;border-radius:4px;background:rgba(255,255,255,.04);color:var(--muted);border:1px solid var(--line);cursor:pointer;}
 .scan-chip.active{background:var(--checkout-bg);color:var(--checkout-col);border-color:rgba(230,126,34,.55);}
@@ -470,12 +459,12 @@ nav{
 <nav>
   <a class="nav-brand" href="../manager.html">Turmhotel Frankfurt</a>
   <div class="nav-right">
-    <a href="../facility.html" style="font-family:'Spline Sans Mono',monospace;font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);text-decoration:none;border:1px solid var(--line);padding:5px 12px;border-radius:3px;transition:.15s;" onmouseover="this.style.color='var(--gold)';this.style.borderColor='var(--gold)'" onmouseout="this.style.color='var(--muted)';this.style.borderColor='var(--line)'">🔧 Facility</a>
     <button class="lang-btn" onclick="printHandoverReport()">🖨️ Übergabebericht</button>
   </div>
 </nav>
 
-<div class="sync-offline-banner" id="sync-offline-banner">⚠️ Offline – Änderungen werden nur lokal gespeichert, nicht mit anderen Geräten abgeglichen.</div>
+<div class="sync-offline-banner" id="sync-offline-banner">⚠️ Offline – Änderungen werden nur lokal gespeichert, nicht mit anderen Geräten abgeglichen. <button class="btn btn-cancel" id="sync-restore-btn" style="margin-left:auto;padding:3px 10px;font-size:.68rem;" onclick="restoreLastBackup()">Letzten Stand wiederherstellen</button></div>
+<div class="sync-loading-banner" id="sync-loading-banner">⏳ Lädt den Cloud-Stand … Zimmer-/Personal-Änderungen werden übernommen, sobald der erste Abgleich fertig ist (meist 1–2 Sekunden).</div>
 
 <div class="tool-header">
   <p class="eyebrow" id="lbl-eyebrow">Digitalisierungsprojekt · Turmhotel Frankfurt</p>
@@ -507,10 +496,8 @@ nav{
 <div class="tabs">
   <button class="tab active" id="tab-btn-zimmer" onclick="showTab('zimmer')">Zimmer</button>
   <button class="tab" id="tab-btn-meine" onclick="showTab('meine')">Meine Zimmer</button>
-  <button class="tab" id="tab-btn-uebersicht" onclick="showTab('uebersicht')">Übersicht</button>
   <button class="tab" id="tab-btn-gaeste" onclick="showTab('gaeste')">Gästeliste</button>
   <button class="tab" id="tab-btn-personal" onclick="showTab('personal')">Personal</button>
-  <button class="tab" id="tab-btn-verlauf" onclick="showTab('verlauf')">Verlauf</button>
 </div>
 
 <div class="main">
@@ -577,11 +564,7 @@ nav{
   <div class="room-grid" id="grid-tagungsraum-barcelona"></div>
 
   <div class="reset-row">
-    <button class="btn-export" onclick="exportData()">⬇ Stand exportieren</button>
-    <button class="btn-import-json" onclick="document.getElementById('import-file-json').click()">⬆ Stand importieren</button>
-    <input type="file" id="import-file-json" accept=".json" onchange="importData(event)">
     <button class="btn-reset-day" onclick="resetDay()">Neuer Tag</button>
-    <button class="btn-reset" onclick="resetAll()">Reset</button>
   </div>
 </div>
 
@@ -590,14 +573,6 @@ nav{
   <div id="mine-body"></div>
 </div>
 
-<div id="tab-uebersicht" style="display:none">
-  <div class="building-label" style="margin-top:4px">Übersicht nach Personal</div>
-  <div class="staff-overview" id="staff-overview"></div>
-  <div style="margin-top:28px;padding-top:22px;border-top:1px solid var(--line);">
-    <div class="building-label" style="margin-top:0">Nicht zugewiesene Zimmer</div>
-    <div class="room-grid" id="unassigned-grid" style="margin-top:8px"></div>
-  </div>
-</div>
 
 <!-- ══ TAB: GÄSTELISTE ══ -->
 <div id="tab-gaeste" style="display:none">
@@ -617,28 +592,9 @@ nav{
   <div class="import-panel">
     <div class="building-label" style="margin-top:4px">Gästeliste importieren</div>
 
-    <!-- Import Mode Toggle -->
-    <div style="display:flex;gap:8px;margin-bottom:16px;">
-      <button class="filter-btn active" id="mode-btn-csv" onclick="switchImportMode('csv')">📋 CSV-Datei</button>
-      <button class="filter-btn" id="mode-btn-scan" onclick="switchImportMode('scan')">📷 Foto-Scan</button>
-      <button class="filter-btn" id="mode-btn-json" onclick="switchImportMode('json')">⚡ JSON-Funktion</button>
-    </div>
-
-    <!-- CSV Mode -->
-    <div id="import-mode-csv">
-      <div class="import-zone" id="csv-dropzone" onclick="document.getElementById('csv-file-input').click()"
-           ondragover="event.preventDefault();this.style.borderColor='var(--gold)'"
-           ondragleave="this.style.borderColor=''"
-           ondrop="handleCsvDrop(event)">
-        <div class="import-zone-icon">📋</div>
-        <div class="import-zone-title">CSV-Datei hier ablegen</div>
-        <div class="import-zone-hint">oder klicken zum Auswählen · PMS-Export, Excel-CSV</div>
-      </div>
-      <input type="file" id="csv-file-input" accept=".csv,.txt" style="display:none" onchange="handleCsvFile(event)">
-    </div>
-
-    <!-- Foto-Scan Mode -->
-    <div id="import-mode-scan" style="display:none;">
+    <!-- Foto-Scan -->
+    <div id="import-mode-scan">
+      <div class="scan-hint" id="scan-entwurf-hinweis" style="display:none;margin-bottom:14px;color:var(--gold-bright);border-left-color:var(--gold);"></div>
       <div class="import-info-box" style="margin-bottom:14px;">
         <div class="import-zone-hint">Alpha-Liste als <b>PDF</b> (am besten: Suite8 → Drucken → „Microsoft Print to PDF") oder als <b>Foto</b>. PDF wird ohne Texterkennung exakt gelesen. Alles läuft lokal im Browser, es werden keine Daten an einen Server gesendet. Die Safe-Liste darf mit aufs Foto — „Reserve"-Zimmer werden automatisch als sauber/frei erkannt. <b>Den Tür-PIN-Kasten dabei immer abdecken oder außerhalb des Fotos lassen.</b></div>
       </div>
@@ -688,6 +644,10 @@ nav{
           <input type="number" id="scan-pms-total" min="0" placeholder="—">
           <span class="scan-badge wait" id="scan-check-badge">wartet auf Eingabe</span>
         </div>
+        <div class="scan-hint" id="scan-erwkin-hint" style="display:none;margin-top:10px;">
+          Σ Erw./Kin. aus der Fußzeile der letzten Seite, zum Abgleich mit den erkannten Zeilen — fehlt in genau einer Zeile die Erw.-Zahl, wird sie daraus errechnet (gelb markiert, in der Tabelle unten prüfbar).
+          <span class="scan-badge wait" id="scan-erwkin-badge" style="display:block;margin-top:6px;">noch keine Fußzeile erkannt</span>
+        </div>
         <div class="scan-hint" style="margin-top:14px;">Aus der Verfügbarkeit (Suite8) die Zeile „Anreisen Zimmer" für heute ablesen. Sind mehr Anreisen als Abreisen geplant, kommen die restlichen Zimmer aus dem Leerstand — die stehen auf keiner Alpha-Liste und müssen ergänzt werden.</div>
         <div class="scan-check-row">
           <label for="scan-pms-arrivals">Anreisen Zimmer laut PMS:</label>
@@ -714,46 +674,6 @@ nav{
         <button class="btn btn-save" id="scan-uebernehmen-btn">✓ Auf Zimmer übertragen</button>
         <button class="btn btn-cancel" id="scan-reset-btn" style="margin-left:8px;">Neu beginnen</button>
       </div>
-    </div>
-
-    <!-- JSON Mode -->
-    <div id="import-mode-json" style="display:none;">
-      <div class="import-info-box" style="margin-bottom:14px;">
-        <div class="import-info-title">JSON-Funktion einfügen</div>
-        <p style="font-family:'Spline Sans Mono',monospace;font-size:.7rem;color:var(--muted);margin-bottom:10px;">
-          Format: <code style="color:var(--gold)">generateCleaningList</code> · Felder: <code style="color:var(--paper)">rooms_to_clean</code> (room, type) + optional <code style="color:var(--paper)">excluded_rooms</code>
-        </p>
-      </div>
-      <textarea id="json-input" style="width:100%;height:200px;background:rgba(255,255,255,.04);border:1px solid var(--line);border-radius:var(--radius);color:var(--paper);font-family:'Spline Sans Mono',monospace;font-size:.72rem;padding:12px;resize:vertical;line-height:1.5;" placeholder='{"processing_results":{"rooms_to_clean":[{"room":"011","type":"D"},...],"excluded_rooms":["024"]}}'></textarea>
-      <div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap;">
-        <button class="btn btn-save" onclick="parseJsonInput()" style="flex:1;">⚡ JSON einlesen</button>
-        <button class="btn btn-cancel" onclick="document.getElementById('json-input').value='';document.getElementById('json-preview').classList.remove('show');">✕ Leeren</button>
-        <button class="btn btn-save" onclick="pasteFromClipboard()" style="background:rgba(201,162,39,.3);color:var(--gold-bright);">📋 Einfügen</button>
-      </div>
-
-      <!-- JSON Preview -->
-      <div class="import-preview show" id="json-preview" style="display:none!important;">
-        <div class="import-preview-title" id="json-preview-title">Erkannte Zimmer</div>
-        <div class="preview-list" id="json-preview-list"></div>
-        <div id="json-type-summary" style="font-family:'Spline Sans Mono',monospace;font-size:.7rem;color:var(--muted);margin:8px 0;"></div>
-        <button class="btn btn-apply" id="btn-apply-json" onclick="applyJsonImport()">✓ Auf Zimmer übertragen</button>
-      </div>
-    </div>
-
-    <!-- Format Info -->
-    <div class="import-info-box">
-      <div class="import-info-title">Erwartetes CSV-Format</div>
-      <table class="csv-format-table">
-        <tr><th>Spalte</th><th>Beispiel</th><th>Hinweis</th></tr>
-        <tr><td>Zimmer</td><td>201</td><td>Zimmernummer</td></tr>
-        <tr><td>Abreise</td><td>05.07.2026</td><td>Datum (TT.MM.JJJJ)</td></tr>
-        <tr><td>Anreise</td><td>06.07.2026</td><td>optional</td></tr>
-        <tr><td>Gast</td><td>Müller, Hans</td><td>optional</td></tr>
-        <tr><td>Status</td><td>Abreise / Overnight</td><td>optional, wird erkannt</td></tr>
-      </table>
-      <p style="font-family:'Spline Sans Mono',monospace;font-size:.68rem;color:var(--muted);margin-top:10px;">
-        Trennzeichen: Semikolon (;) oder Komma (,) · Erste Zeile = Kopfzeile · Heutiges Datum (05.07.2026) wird automatisch gefiltert.
-      </p>
     </div>
 
     <!-- Manuell hinzufügen -->
@@ -796,29 +716,9 @@ nav{
         <input class="form-input" id="new-name" placeholder="Name" maxlength="30">
         <input class="form-input" id="new-abb" placeholder="Kürzel" maxlength="3" style="max-width:80px;text-transform:uppercase">
       </div>
-      <div class="field-label">Farbe</div>
-      <div class="color-options" id="color-options"></div>
       <button class="btn btn-add" onclick="addStaff()">+ Hinzufügen</button>
     </div>
   </div>
-</div>
-
-<!-- ══ TAB: VERLAUF ══ -->
-<div id="tab-verlauf" style="display:none">
-  <div class="building-label" style="margin-top:4px">Vergangene Tage</div>
-  <p style="font-family:'Spline Sans Mono',monospace;font-size:.72rem;color:var(--muted);margin:0 0 16px;">
-    Jeder Tag wird beim Klick auf „Zimmerstatus zurücksetzen" automatisch archiviert, bevor er überschrieben wird.
-    Hier lässt sich der Übergabebericht eines vergangenen Tages erneut ansehen.
-  </p>
-  <div class="form-row">
-    <select class="staff-select" id="verlauf-datum" style="flex:1;margin-bottom:0;">
-      <option value="">Lade Verlauf …</option>
-    </select>
-    <button class="btn btn-save" onclick="verlaufBerichtAnzeigen()" style="white-space:nowrap;">Bericht ansehen</button>
-  </div>
-  <p style="font-family:'Spline Sans Mono',monospace;font-size:.68rem;color:var(--muted);margin-top:14px;">
-    Zeigt den archivierten Zimmerstatus (Reinigung, Zuteilung, Notizen) im selben Format wie der aktuelle Übergabebericht.
-  </p>
 </div>
 
 </div><!-- /main -->
@@ -965,11 +865,8 @@ const ROOM_TYPES = {
   '51': 'SDH', '52': 'SDS', '53': 'SDS', '54': 'STS', '55': 'STH',
   '101': 'MASSAGE',
 };
-// Legacy SDH list for compat
-const SDH_ROOMS = ['11','21','31','41','51'];
 
 const COLORS = ['#c9a227','#2a7a4b','#1a6fa8','#8e44ad','#e67e22','#c0392b','#16a085','#d4a574'];
-let selectedColor = COLORS[0];
 let activeFilter = 'all';
 let csvParsed = []; // {room, type: 'checkout'|'overnight'}
 
@@ -989,6 +886,41 @@ function checkFirebaseResponse(res) {
   if (!res.ok) throw new Error('Firebase HTTP ' + res.status);
   return res;
 }
+
+// ── SYNC-GATE (B3/F23) ──
+// Ein frischer Browser/Handy hat beim allerersten Rendern einen leeren oder
+// veralteten lokalen Stand. Schreibt er in diesem Moment per PUT den ganzen
+// Stand, ersetzt er den (noch ungelesenen) Cloud-Stand auf allen Geraeten --
+// genau das ist bei F23 passiert. Deshalb: volle PUTs (kein changedRoom,
+// betrifft den gesamten Stand) warten, bis der erste syncFromCloud()-Versuch
+// durch ist -- egal ob er klappt oder nicht, danach ist zumindest bekannt,
+// was in der Cloud stand. Einzelzimmer-PATCHes sind nicht betroffen, die
+// koennen ohnehin nie mehr als das eine Zimmer ueberschreiben.
+let firstSyncAttempted = false;
+let pendingStateWrite = null; // Schnappschuss von state zum Zeitpunkt der Blockade, oder null
+let pendingStaffWrite = null; // Schnappschuss von staff zum Zeitpunkt der Blockade, oder null
+function setSyncGateBanner(show) {
+  const banner = document.getElementById('sync-loading-banner');
+  if (banner) banner.classList.toggle('show', show);
+}
+
+// Vor jedem vollen Stand-Ersatz (PUT) wird der bisherige Cloud-Stand nach
+// /backup/state-letzter.json kopiert -- Bestpractice-Sicherung, kein
+// eigener Dauer-Knopf. Blockiert das eigentliche Speichern nicht, falls das
+// Backup selbst fehlschlaegt (z.B. kurzzeitig offline).
+function backupBeforeOverwrite(quellPfad, zielPfad) {
+  return dbUrl(quellPfad).then(function(url){ return fetch(url); })
+    .then(checkFirebaseResponse)
+    .then(function(res){ return res.json(); })
+    .then(function(data){
+      if (!data || typeof data !== 'object' || !Object.keys(data).length) return;
+      return dbUrl(zielPfad).then(function(url){
+        return fetch(url, {method:'PUT', headers:{'Content-Type':'application/json'}, body: JSON.stringify(data)});
+      });
+    })
+    .catch(function(e){ console.warn('Backup vor Ueberschreiben fehlgeschlagen (Speichern laeuft trotzdem weiter)', e); });
+}
+
 function saveState(s, changedRoom) {
   localStorage.setItem('hk_state3', JSON.stringify(s));
   // Einzelzimmer-Aktionen (changedRoom gesetzt) schreiben per PATCH nur das
@@ -996,20 +928,57 @@ function saveState(s, changedRoom) {
   // Handy nicht überschrieben wird (F12). Massenaktionen (Import, Reset,
   // Verteilen) sollen weiterhin den kompletten Stand ersetzen -> PUT.
   const singleRoom = changedRoom && s[changedRoom] !== undefined;
+  if (!singleRoom && !firstSyncAttempted) {
+    pendingStateWrite = s;
+    setSyncGateBanner(true);
+    return;
+  }
   const body = singleRoom ? { [changedRoom]: s[changedRoom] } : s;
-  dbUrl('/state.json').then(function(url){
-    return fetch(url, {method: singleRoom ? 'PATCH' : 'PUT', headers:{'Content-Type':'application/json'}, body: JSON.stringify(body)});
-  })
-    .then(checkFirebaseResponse).then(function(){ setSyncStatus(true); })
-    .catch(function(e){ console.warn('Sync state fehlgeschlagen', e); setSyncStatus(false); });
+  const method = singleRoom ? 'PATCH' : 'PUT';
+  function schreiben() {
+    dbUrl('/state.json').then(function(url){
+      return fetch(url, {method: method, headers:{'Content-Type':'application/json'}, body: JSON.stringify(body)});
+    })
+      .then(checkFirebaseResponse).then(function(){ setSyncStatus(true); })
+      .catch(function(e){ console.warn('Sync state fehlgeschlagen', e); setSyncStatus(false); });
+  }
+  if (singleRoom) schreiben();
+  else backupBeforeOverwrite('/state.json', '/backup/state-letzter.json').then(schreiben);
 }
 function saveStaffData(s) {
   localStorage.setItem('hk_staff3', JSON.stringify(s));
+  if (!firstSyncAttempted) {
+    pendingStaffWrite = s;
+    setSyncGateBanner(true);
+    return;
+  }
   dbUrl('/staff.json').then(function(url){
     return fetch(url, {method:'PUT', headers:{'Content-Type':'application/json'}, body: JSON.stringify(s)});
   })
     .then(checkFirebaseResponse).then(function(){ setSyncStatus(true); })
     .catch(function(e){ console.warn('Sync staff fehlgeschlagen', e); setSyncStatus(false); });
+}
+
+// Zeigt den Restore-Knopf nur, wenn gerade ohnehin ein Sync-Problem sichtbar
+// ist (sync-offline-banner) -- bewusst kein staendig sichtbarer "Undo"-Knopf,
+// um ihn nicht zu einem Button fuer den Alltagsgebrauch zu machen. Wirkt nur
+// auf Geraeten, die wieder online sind; waehrend des eigentlichen Ausfalls
+// kann ohnehin nicht nach Firebase geschrieben werden.
+function restoreLastBackup() {
+  if (!confirm('Letzten gesicherten Stand wiederherstellen? Das ersetzt den aktuellen Cloud-Stand auf ALLEN Geraeten mit der Sicherung von vor der letzten Massenaktion (Import/Verteilen/Zuruecksetzen).')) return;
+  dbUrl('/backup/state-letzter.json').then(function(url){ return fetch(url); })
+    .then(checkFirebaseResponse)
+    .then(function(res){ return res.json(); })
+    .then(function(data){
+      if (!data || typeof data !== 'object' || !Object.keys(data).length) { alert('Keine Sicherung vorhanden.'); return Promise.reject(new Error('keine Sicherung')); }
+      state = data;
+      localStorage.setItem('hk_state3', JSON.stringify(state));
+      return dbUrl('/state.json').then(function(url){
+        return fetch(url, {method:'PUT', headers:{'Content-Type':'application/json'}, body: JSON.stringify(state)});
+      }).then(checkFirebaseResponse);
+    })
+    .then(function(){ renderRooms(); alert('Letzter gesicherter Stand wiederhergestellt.'); })
+    .catch(function(e){ if (e.message !== 'keine Sicherung') alert('Wiederherstellen fehlgeschlagen: ' + e.message); });
 }
 
 // Anonymisierte Übergabe aus nachtdienst.html: liest nur { stand, zimmer:[{zimmer,anreise}] }
@@ -1050,7 +1019,7 @@ function loadSpaeteAnreisen(){
   // Kein "Laedt..."-Platzhalter mehr: die Funktion laeuft jetzt alle 8s im
   // Hintergrund mit (syncFromCloud), ein staendiges Flackern im offenen
   // Gaesteliste-Tab waere nur stoerend. Der Inhalt bleibt bis zur Antwort
-  // einfach stehen, wie bei renderRooms()/renderOverview() auch.
+  // einfach stehen, wie bei renderRooms() auch.
   dbUrl('/spaeteAnreisen.json').then(function(url){ return fetch(url); })
     .then(checkFirebaseResponse)
     .then(function(res){ return res.json(); })
@@ -1272,7 +1241,6 @@ function saveRoom() {
   };
   saveState(state, currentRoom);
   renderRooms();
-  renderOverview();
   closeModalDirect();
 }
 
@@ -1288,7 +1256,7 @@ function toggleFertig(id) {
   const rs = getRoomState(id);
   state[id] = { ...rs, clean: !rs.clean };
   saveState(state, id);
-  renderMine(); renderRooms(); renderOverview();
+  renderMine(); renderRooms();
 }
 
 function renderMine() {
@@ -1335,58 +1303,6 @@ function renderMine() {
     block('Bleiber', 'Gast bleibt — nur auffrischen', bleiber);
 }
 
-function renderOverview() {
-  const container = document.getElementById('staff-overview');
-  container.innerHTML = '';
-  if (!staff.length) {
-    container.innerHTML = '<p style="color:var(--muted);font-family:\'Spline Sans Mono\',monospace;font-size:.8rem">Noch keine Mitarbeiter — gehe zu »Personal«.</p>';
-  }
-  staff.forEach(s => {
-    const assigned = ALL_ROOMS.filter(r => getRoomState(r).staff === s.name);
-    const done = assigned.filter(r => getRoomState(r).clean);
-    const pct = assigned.length ? Math.round(done.length / assigned.length * 100) : 0;
-    const row = document.createElement('div');
-    row.className = 'staff-row';
-    row.innerHTML = `
-      <div class="staff-row-header">
-        <div class="staff-name-display">
-          <span class="staff-chip" style="background:${s.color}">${s.abb}</span>${s.name}
-        </div>
-        <span style="font-family:'Spline Sans Mono',monospace;font-size:.76rem;color:var(--muted)">
-          ${done.length}/${assigned.length} · <span style="color:${s.color}">${pct}%</span>
-        </span>
-      </div>
-      <div class="staff-progress-bar"><div class="staff-progress-fill" style="width:${pct}%;background:${s.color}"></div></div>
-      <div class="staff-rooms-list">
-        ${assigned.length ? assigned.map(r => {
-          const rs = getRoomState(r);
-          let cls = 'staff-room-tag';
-          if (rs.clean) cls += ' done';
-          else if (rs.guestType === 'checkout') cls += ' checkout';
-          return `<span class="${cls}">${r}</span>`;
-        }).join('') : '<span style="color:var(--muted)">Keine Zimmer zugewiesen</span>'}
-      </div>
-    `;
-    container.appendChild(row);
-  });
-
-  const unassigned = ALL_ROOMS.filter(r => !getRoomState(r).staff);
-  const ugrid = document.getElementById('unassigned-grid');
-  ugrid.innerHTML = '';
-  if (!unassigned.length) {
-    ugrid.innerHTML = '<p style="color:var(--muted);font-size:.8rem;font-family:\'Spline Sans Mono\',monospace">Alle Zimmer sind zugewiesen ✓</p>';
-  } else {
-    unassigned.forEach(r => {
-      const rs = getRoomState(r);
-      const tag = document.createElement('div');
-      tag.className = 'room-card ' + (rs.clean ? 'clean' : 'dirty');
-      tag.onclick = () => { showTab('zimmer'); openModal(r); };
-      tag.innerHTML = `<div class="room-num">${r}</div><div class="room-status-row"><span class="badge ${rs.clean ? 'badge-clean':'badge-dirty'}">${rs.clean?'Sauber':'Offen'}</span></div>`;
-      ugrid.appendChild(tag);
-    });
-  }
-}
-
 // ══ PERSONAL ══
 function autoAssignStaff() {
   if (!staff.length) { alert('Erst Personal anlegen.'); return; }
@@ -1409,7 +1325,7 @@ function autoAssignStaff() {
   distribute(checkoutRooms);
   distribute(overnightRooms);
   saveState(state);
-  renderRooms(); renderPersonal(); renderOverview();
+  renderRooms(); renderPersonal();
   alert('Verteilt: ' + checkoutRooms.length + ' Abreise + ' + overnightRooms.length + ' Overnight auf ' + team.length + ' Personen (' + team.map(function(s){return s.name;}).join(', ') + ').');
 }
 
@@ -1433,7 +1349,7 @@ function teamLaden() {
   if (!confirm('Das komplette Housekeeping aus dem Dienstplan übernehmen? Die bisherige Personalliste wird ersetzt, die Zimmerzuteilung bleibt.')) return;
   staff = TEAM_DIENSTPLAN.map(function(p){ return { name:p.name, abb:p.abb, color:p.color, rolle:p.rolle, da:false }; });
   saveStaffData(staff);
-  renderPersonal(); renderOverview(); renderMine();
+  renderPersonal(); renderMine();
   alert('11 Personen übernommen. Jetzt antippen, wer heute da ist.');
 }
 
@@ -1458,15 +1374,6 @@ function renderPersonal() {
       `<button class="del-btn" onclick="deleteStaff(${i})">×</button>`;
     list.appendChild(item);
   });
-  const cp = document.getElementById('color-options');
-  cp.innerHTML = '';
-  COLORS.forEach(c => {
-    const d = document.createElement('div');
-    d.className = 'color-opt' + (c === selectedColor ? ' selected' : '');
-    d.style.background = c;
-    d.onclick = () => { selectedColor = c; renderPersonal(); };
-    cp.appendChild(d);
-  });
 }
 
 function addStaff() {
@@ -1474,7 +1381,9 @@ function addStaff() {
   const abb = document.getElementById('new-abb').value.trim().toUpperCase();
   if (!name || !abb) { alert('Name und Kürzel ausfüllen.'); return; }
   if (staff.find(s => s.name === name)) { alert('Name bereits vergeben.'); return; }
-  staff.push({ name, abb, color: selectedColor });
+  const usedColors = staff.map(s => s.color);
+  const color = COLORS.find(c => !usedColors.includes(c)) || COLORS[staff.length % COLORS.length];
+  staff.push({ name, abb, color });
   saveStaffData(staff);
   document.getElementById('new-name').value = '';
   document.getElementById('new-abb').value = '';
@@ -1488,123 +1397,21 @@ function deleteStaff(i) {
   saveStaffData(staff);
   Object.keys(state).forEach(r => { if (state[r].staff === name) state[r].staff = ''; });
   saveState(state);
-  renderPersonal(); renderRooms(); renderOverview();
+  renderPersonal(); renderRooms();
 }
 
 // ══ TABS ══
 function showTab(tab) {
-  ['zimmer','meine','uebersicht','gaeste','personal','verlauf'].forEach(id => {
+  ['zimmer','meine','gaeste','personal'].forEach(id => {
     document.getElementById('tab-' + id).style.display = id === tab ? '' : 'none';
     document.getElementById('tab-btn-' + id).classList.toggle('active', id === tab);
   });
   if (tab === 'meine') renderMine();
-  if (tab === 'uebersicht') renderOverview();
   if (tab === 'gaeste') loadSpaeteAnreisen();
   if (tab === 'personal') renderPersonal();
-  if (tab === 'verlauf') ladeVerlaufListe();
 }
 
-// ══ CSV IMPORT ══
-function handleCsvDrop(event) {
-  event.preventDefault();
-  document.getElementById('csv-dropzone').style.borderColor = '';
-  const file = event.dataTransfer.files[0];
-  if (file) parseCsvFile(file);
-}
-function handleCsvFile(event) {
-  const file = event.target.files[0];
-  if (file) parseCsvFile(file);
-  event.target.value = '';
-}
-
-function parseCsvFile(file) {
-  const reader = new FileReader();
-  reader.onload = function(e) {
-    const text = e.target.result;
-    const results = parseCsv(text);
-    showCsvPreview(results);
-  };
-  reader.readAsText(file, 'UTF-8');
-}
-
-function parseCsv(text) {
-  const lines = text.trim().split(/\r?\n/);
-  if (lines.length < 2) return [];
-  // detect separator
-  const sep = lines[0].includes(';') ? ';' : ',';
-  const headers = lines[0].split(sep).map(h => h.trim().toLowerCase().replace(/"/g,''));
-
-  // find column indices (flexible matching)
-  const colZimmer = findCol(headers, ['zimmer','room','zim','zimmer-nr','zimmernr','nr']);
-  const colAbreise = findCol(headers, ['abreise','checkout','departure','abr','check-out','check out']);
-  const colAnreise = findCol(headers, ['anreise','checkin','arrival','anr','check-in','check in']);
-  const colStatus = findCol(headers, ['status','typ','type']);
-  const colGast = findCol(headers, ['gast','guest','name','gäste']);
-
-  const today = todayStr();
-  const todayDate = parseDate(today);
-  const results = [];
-
-  for (let i = 1; i < lines.length; i++) {
-    const cells = lines[i].split(sep).map(c => c.trim().replace(/"/g,''));
-    if (!cells.some(c => c)) continue;
-
-    const roomRaw = colZimmer >= 0 ? cells[colZimmer] : '';
-    const room = /^\d+$/.test(roomRaw.trim()) ? String(parseInt(roomRaw, 10)) : roomRaw.trim();
-    if (!room || !ALL_ROOMS.includes(room)) continue;
-
-    const abreiseRaw = colAbreise >= 0 ? cells[colAbreise] : '';
-    const anreiseRaw = colAnreise >= 0 ? cells[colAnreise] : '';
-    const statusRaw = (colStatus >= 0 ? cells[colStatus] : '').toLowerCase();
-
-    let guestType = '';
-
-    // Determine by status column first
-    if (statusRaw.includes('abreise') || statusRaw.includes('checkout') || statusRaw.includes('departure')) {
-      guestType = 'checkout';
-    } else if (statusRaw.includes('overnight') || statusRaw.includes('bleib') || statusRaw.includes('stay')) {
-      guestType = 'overnight';
-    } else {
-      // Determine by dates
-      const abreiseDate = parseDate(abreiseRaw);
-      const anreiseDate = parseDate(anreiseRaw);
-      if (abreiseDate && datesEqual(abreiseDate, todayDate)) {
-        guestType = 'checkout';
-      } else if (abreiseDate && abreiseDate > todayDate) {
-        guestType = 'overnight';
-      } else if (anreiseDate && datesEqual(anreiseDate, todayDate)) {
-        guestType = 'checkout'; // arriving today — room needs prep
-      }
-    }
-
-    if (guestType) results.push({ room, guestType });
-  }
-  return results;
-}
-
-function findCol(headers, candidates) {
-  for (const c of candidates) {
-    const idx = headers.findIndex(h => h === c || h.includes(c));
-    if (idx >= 0) return idx;
-  }
-  return -1;
-}
-
-function parseDate(str) {
-  if (!str) return null;
-  // DD.MM.YYYY
-  let m = str.match(/^(\d{1,2})\.(\d{1,2})\.(\d{4})$/);
-  if (m) return new Date(+m[3], +m[2]-1, +m[1]);
-  // YYYY-MM-DD
-  m = str.match(/^(\d{4})-(\d{2})-(\d{2})/);
-  if (m) return new Date(+m[1], +m[2]-1, +m[3]);
-  return null;
-}
-
-function datesEqual(a, b) {
-  return a && b && a.getFullYear()===b.getFullYear() && a.getMonth()===b.getMonth() && a.getDate()===b.getDate();
-}
-
+// ══ IMPORT-VORSCHAU (gespeist vom Foto-Scan, s. scanUebernehmenBtn) ══
 function showCsvPreview(results) {
   csvParsed = results;
   const preview = document.getElementById('import-preview');
@@ -1649,7 +1456,7 @@ function resetRoomStatus() {
   const banner = document.getElementById('import-banner');
   if (banner) banner.classList.remove('show');
   clearSpaeteAnreisen();
-  renderRooms(); renderPersonal(); renderOverview();
+  renderRooms(); renderPersonal();
   alert('Zimmerstatus wurde zurueckgesetzt.');
 }
 
@@ -1676,11 +1483,6 @@ function ddmmyyyyZuIso(d) {
   if (p.length !== 3) return null;
   return p[2] + '-' + p[1].padStart(2,'0') + '-' + p[0].padStart(2,'0');
 }
-function isoZuAnzeige(iso) {
-  var p = iso.split('-');
-  var dt = new Date(+p[0], +p[1]-1, +p[2]);
-  return dt.toLocaleDateString('de-DE', {weekday:'short', day:'2-digit', month:'2-digit', year:'numeric'});
-}
 function archiveBeforeReset() {
   var hatDaten = ALL_ROOMS.some(function(id){
     var rs = state[id];
@@ -1692,31 +1494,6 @@ function archiveBeforeReset() {
   dbUrl('/history/' + key + '.json').then(function(url){
     return fetch(url, { method: 'PUT', headers: {'Content-Type':'application/json'}, body: JSON.stringify(state) });
   }).catch(function(e){ console.warn('Verlauf-Archivierung fehlgeschlagen', e); });
-}
-async function ladeVerlaufListe() {
-  var sel = document.getElementById('verlauf-datum');
-  sel.innerHTML = '<option value="">Lade Verlauf …</option>';
-  try {
-    var res = await fetch(await dbUrl('/history.json?shallow=true'));
-    var data = await res.json();
-    var keys = data ? Object.keys(data).sort().reverse() : [];
-    if (!keys.length) { sel.innerHTML = '<option value="">Noch kein Verlauf vorhanden</option>'; return; }
-    sel.innerHTML = keys.map(function(k){ return '<option value="' + k + '">' + isoZuAnzeige(k) + '</option>'; }).join('');
-  } catch (e) {
-    sel.innerHTML = '<option value="">Verlauf konnte nicht geladen werden</option>';
-  }
-}
-async function verlaufBerichtAnzeigen() {
-  var key = document.getElementById('verlauf-datum').value;
-  if (!key) return;
-  try {
-    var res = await fetch(await dbUrl('/history/' + key + '.json'));
-    var snap = await res.json();
-    if (!snap) { alert('Keine Daten fuer diesen Tag gefunden.'); return; }
-    printHandoverReport(snap, isoZuAnzeige(key));
-  } catch (e) {
-    alert('Verlauf konnte nicht geladen werden: ' + e.message);
-  }
 }
 
 function applyCsvImport() {
@@ -1739,6 +1516,9 @@ function applyCsvImport() {
   if (scanLastVerfuegbarkeit) { state.__verfuegbarkeit = scanLastVerfuegbarkeit; scanLastVerfuegbarkeit = null; }
   saveState(state);
   renderRooms();
+  // Uebertragen abgeschlossen -- der Entwurf (egal ob aus dem Foto-Scan oder
+  // ein zuvor wiederhergestellter) hat seinen Zweck erfuellt.
+  scanEntwurfLoeschen();
 
   // Show banner in Zimmer tab
   const co = csvParsed.filter(r => r.guestType === 'checkout').length;
@@ -1761,16 +1541,6 @@ function applyManual() {
   saveState(state, room);
   renderRooms();
   document.getElementById('manual-room').value = '';
-}
-
-// ══ IMPORT MODE TOGGLE ══
-function switchImportMode(mode) {
-  document.getElementById('import-mode-csv').style.display = mode === 'csv' ? '' : 'none';
-  document.getElementById('import-mode-json').style.display = mode === 'json' ? '' : 'none';
-  document.getElementById('import-mode-scan').style.display = mode === 'scan' ? '' : 'none';
-  document.getElementById('mode-btn-csv').classList.toggle('active', mode === 'csv');
-  document.getElementById('mode-btn-json').classList.toggle('active', mode === 'json');
-  document.getElementById('mode-btn-scan').classList.toggle('active', mode === 'scan');
 }
 
 // ══ FOTO-SCAN (übernommen aus alpha-scan.html, damit ein Gerät für Scan + Verteilung reicht) ══
@@ -1811,6 +1581,132 @@ let scanListenMonat = 0, scanListenJahr = 0;
 let scanDrehung = 0;
 let scanPruefText = '';
 let scanLastVerfuegbarkeit = null;
+let scanLastFusssumme = null; // {erw,kin,anz} aus der Fusszeile, fuer die Erw./Kin.-Pruefsumme
+
+// ── SCAN-ENTWURF PERSISTIEREN (B1/F24, AUFTRAG Abschnitt 2.5) ──
+// scanRows lag bisher nur im Arbeitsspeicher: Tab-Reload, Speicherlimit
+// (F11) oder Browserwechsel loeschten eine noch nicht uebertragene
+// Auswertung komplett, waehrend Personal (synchronisiert) erhalten blieb.
+// Gesichert werden ausdruecklich NUR Zimmerdaten -- keine Namen, keine
+// Preise, keine Fotos/PDFs selbst (die bleiben Dateien im Speicher dieses
+// einen Tabs und werden nicht hochgeladen). Lokal in IndexedDB (uebersteht
+// Reload auch ohne Netz) UND unter /scanEntwurf.json in Firebase (damit alle
+// Handys denselben Entwurf sehen), nach "Auf Zimmer uebertragen" geloescht.
+const SCAN_ENTWURF_DB = 'hk_scan_entwurf';
+const SCAN_ENTWURF_STORE = 'entwurf';
+let scanEntwurfSaveTimer = null;
+
+function scanEntwurfDbOffen() {
+  return new Promise(function(resolve, reject){
+    if (!window.indexedDB) { reject(new Error('IndexedDB nicht verfuegbar')); return; }
+    var req = indexedDB.open(SCAN_ENTWURF_DB, 1);
+    req.onupgradeneeded = function(){ req.result.createObjectStore(SCAN_ENTWURF_STORE); };
+    req.onsuccess = function(){ resolve(req.result); };
+    req.onerror = function(){ reject(req.error); };
+  });
+}
+function scanEntwurfLokalSchreiben(data) {
+  return scanEntwurfDbOffen().then(function(db){
+    return new Promise(function(resolve, reject){
+      var tx = db.transaction(SCAN_ENTWURF_STORE, 'readwrite');
+      tx.objectStore(SCAN_ENTWURF_STORE).put(data, 'aktuell');
+      tx.oncomplete = function(){ resolve(); };
+      tx.onerror = function(){ reject(tx.error); };
+    });
+  }).catch(function(e){ console.warn('Scan-Entwurf lokal speichern fehlgeschlagen', e); });
+}
+function scanEntwurfLokalLesen() {
+  return scanEntwurfDbOffen().then(function(db){
+    return new Promise(function(resolve, reject){
+      var tx = db.transaction(SCAN_ENTWURF_STORE, 'readonly');
+      var req = tx.objectStore(SCAN_ENTWURF_STORE).get('aktuell');
+      req.onsuccess = function(){ resolve(req.result || null); };
+      req.onerror = function(){ reject(req.error); };
+    });
+  }).catch(function(e){ console.warn('Scan-Entwurf lokal lesen fehlgeschlagen', e); return null; });
+}
+function scanEntwurfLokalLoeschen() {
+  return scanEntwurfDbOffen().then(function(db){
+    return new Promise(function(resolve, reject){
+      var tx = db.transaction(SCAN_ENTWURF_STORE, 'readwrite');
+      tx.objectStore(SCAN_ENTWURF_STORE).delete('aktuell');
+      tx.oncomplete = function(){ resolve(); };
+      tx.onerror = function(){ reject(tx.error); };
+    });
+  }).catch(function(e){ console.warn('Scan-Entwurf lokal loeschen fehlgeschlagen', e); });
+}
+
+function scanEntwurfSchnappschuss() {
+  return {
+    rows: scanRows.map(function(r){
+      return { zimmer: r.zimmer, abreise: r.abreise, leer: !!r.leer, exOOO: !!r.exOOO, reserve: !!r.reserve, betten: r.betten == null ? null : r.betten, kinder: r.kinder == null ? null : r.kinder };
+    }),
+    hskDatum: (scanHskDate && scanHskDate.value) || '',
+    pmsTotal: (scanPmsTotalInput && scanPmsTotalInput.value) || '',
+    pmsAnreisen: (scanPmsArrivalsInput && scanPmsArrivalsInput.value) || '',
+    stand: new Date().toISOString(),
+  };
+}
+
+// Debounced: wird bei jeder Zelleneingabe aufgerufen (scanUpdateCheck),
+// soll aber nicht bei jedem Tastendruck einzeln schreiben.
+function scanEntwurfSpeichern() {
+  clearTimeout(scanEntwurfSaveTimer);
+  scanEntwurfSaveTimer = setTimeout(function(){
+    if (!scanRows.length) return;
+    var snap = scanEntwurfSchnappschuss();
+    scanEntwurfLokalSchreiben(snap);
+    dbUrl('/scanEntwurf.json').then(function(url){
+      return fetch(url, {method:'PUT', headers:{'Content-Type':'application/json'}, body: JSON.stringify(snap)});
+    }).catch(function(e){ console.warn('Scan-Entwurf Cloud-Speichern fehlgeschlagen', e); });
+  }, 800);
+}
+
+function scanEntwurfLoeschen() {
+  clearTimeout(scanEntwurfSaveTimer);
+  scanEntwurfLokalLoeschen();
+  var hinweis = document.getElementById('scan-entwurf-hinweis');
+  if (hinweis) hinweis.style.display = 'none';
+  dbUrl('/scanEntwurf.json').then(function(url){
+    return fetch(url, {method:'DELETE'});
+  }).catch(function(e){ console.warn('Scan-Entwurf Cloud-Loeschen fehlgeschlagen', e); });
+}
+
+// Einmal beim Laden: zuerst die Firebase-Fassung versuchen (die ist, falls
+// vorhanden, die von allen Handys zuletzt gesehene), sonst den lokalen
+// IndexedDB-Stand. Reine Bestpractice-Wiederherstellung -- schlaegt beides
+// fehl, startet die Seite einfach mit einem leeren Scan wie bisher.
+function scanEntwurfWiederherstellen() {
+  dbUrl('/scanEntwurf.json').then(function(url){ return fetch(url); })
+    .then(checkFirebaseResponse)
+    .then(function(res){ return res.json(); })
+    .then(function(data){
+      if (data && typeof data === 'object' && Array.isArray(data.rows) && data.rows.length) return data;
+      return scanEntwurfLokalLesen();
+    })
+    .catch(function(){ return scanEntwurfLokalLesen(); })
+    .then(function(data){
+      if (!data || !Array.isArray(data.rows) || !data.rows.length) return;
+      scanRows = data.rows.map(function(r){ return Object.assign({}, r); });
+      if (data.hskDatum && scanHskDate) { scanHskDate.value = data.hskDatum; }
+      if (data.pmsTotal && scanPmsTotalInput) scanPmsTotalInput.value = data.pmsTotal;
+      if (data.pmsAnreisen && scanPmsArrivalsInput) scanPmsArrivalsInput.value = data.pmsAnreisen;
+      scanRenderRows();
+      scanResultsSection.style.display = 'block';
+      scanCheckSection.style.display = 'block';
+      scanFreeSection.style.display = 'block';
+      scanExportSection.style.display = 'block';
+      if (scanDateBadge) scanDateBadge.textContent = 'Tag der Reinigung: ' + scanHeuteStr();
+      scanUpdateCheck();
+      var hinweis = document.getElementById('scan-entwurf-hinweis');
+      if (hinweis) {
+        var zeit = data.stand ? new Date(data.stand).toLocaleString('de-DE') : '';
+        hinweis.textContent = '↻ Nicht übertragener Entwurf wiederhergestellt' + (zeit ? ' (Stand ' + zeit + ')' : '') + ' — geprüft weitermachen oder „Neu beginnen".';
+        hinweis.style.display = 'block';
+      }
+    })
+    .catch(function(e){ console.warn('Scan-Entwurf wiederherstellen fehlgeschlagen', e); });
+}
 
 function scanSetHskDate(d) {
   scanHskDate.value = d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
@@ -2161,6 +2057,71 @@ function scanPruefStatus(kopf, summe, ungueltig, dubletten) {
   }
 }
 
+// Reserve-/Leerstand-Zeilen stehen nicht auf der gedruckten Alpha-Liste und
+// zaehlen deshalb nicht zur Fusszeilen-Pruefsumme.
+function scanZeilenFuerSumme() {
+  return scanRows.filter(function(r){ return !r.reserve && !r.leer; });
+}
+
+// Einmalig nach dem Einlesen aufgerufen (nicht bei jeder Korrektur): fehlt in
+// genau einer Zeile die Erw.-Zahl und ist die Fusszeile bekannt, wird die
+// Luecke rechnerisch geschlossen (Fusszeile minus Summe der bekannten Zeilen)
+// und als "errechnet" markiert, statt den Eintrag leer zu lassen (AUFTRAG
+// Abschnitt 4.1). Bei mehreren Luecken ist die Zuordnung nicht eindeutig,
+// dort bleibt nur die Warnung im Badge.
+function scanPruefSummen(fusssumme) {
+  scanLastFusssumme = fusssumme;
+  if (fusssumme) {
+    var zeilen = scanZeilenFuerSumme();
+    var unbekannt = zeilen.filter(function(r){ return r.betten == null; });
+    var bekannt = zeilen.filter(function(r){ return r.betten != null; });
+    if (unbekannt.length === 1) {
+      var bekannteSumme = bekannt.reduce(function(s,r){ return s + r.betten; }, 0);
+      var fehlt = fusssumme.erw - bekannteSumme;
+      // Eine einzelne Zimmerzeile hat plausibel 0-4 Erwachsene; ausserhalb
+      // dieses Bereichs eher ein Zeichen, dass noch mehr Zeilen falsch
+      // gelesen wurden, als dass genau dieser Wert stimmt — dann lieber
+      // leer lassen statt eine falsche Zahl einzutragen.
+      if (fehlt >= 0 && fehlt <= 4) {
+        unbekannt[0].betten = fehlt;
+        unbekannt[0].berechnetErw = true;
+      }
+    }
+  }
+  scanRenderErwKinBadge();
+}
+
+function scanRenderErwKinBadge() {
+  var hint = document.getElementById('scan-erwkin-hint');
+  var badge = document.getElementById('scan-erwkin-badge');
+  if (!hint || !badge) return;
+  if (!scanLastFusssumme) { hint.style.display = 'none'; return; }
+  hint.style.display = 'block';
+
+  var zeilen = scanZeilenFuerSumme();
+  var erwSumme = zeilen.reduce(function(s,r){ return s + (r.betten || 0); }, 0);
+  var kinSumme = zeilen.reduce(function(s,r){ return s + (r.kinder || 0); }, 0);
+  var erwOffen = zeilen.filter(function(r){ return r.betten == null; }).length;
+  var berechnet = zeilen.filter(function(r){ return r.berechnetErw; }).length;
+
+  var erwOk = erwSumme === scanLastFusssumme.erw;
+  var kinOk = kinSumme === scanLastFusssumme.kin;
+
+  if (erwOk && kinOk) {
+    badge.className = 'scan-badge ok';
+    badge.textContent = '✓ Σ Erw. ' + erwSumme + '/' + scanLastFusssumme.erw + ' · Σ Kin. ' + kinSumme + '/' + scanLastFusssumme.kin
+      + (berechnet ? ' (1× errechnet)' : '');
+  } else if (erwOffen > 1) {
+    badge.className = 'scan-badge warn';
+    badge.textContent = '! Σ Erw. ' + erwSumme + '/' + scanLastFusssumme.erw + ' · Σ Kin. ' + kinSumme + '/' + scanLastFusssumme.kin
+      + ' — ' + erwOffen + ' Zeilen ohne Erw.-Zahl, nicht eindeutig zuordenbar, bitte pruefen';
+  } else {
+    badge.className = 'scan-badge bad';
+    badge.textContent = '✕ Σ Erw. ' + erwSumme + '/' + scanLastFusssumme.erw + ' · Σ Kin. ' + kinSumme + '/' + scanLastFusssumme.kin
+      + ' — weicht ab, bitte Zeilen pruefen (die Fusszeile steht nur auf der letzten Seite — fehlt eine Seite im Scan?)';
+  }
+}
+
 function scanRenderFreeRooms() {
   var belegt = scanRows.filter(function(r){ return !r.leer; }).map(function(r){ return r.zimmer.trim(); });
   var gew = scanRows.filter(function(r){ return r.leer; }).map(function(r){ return r.zimmer.trim(); });
@@ -2247,47 +2208,6 @@ function scanAufCanvas(img, grad, faktor) {
   return c;
 }
 
-async function scanAusrichtungPruefen(file, melde) {
-  var img = await scanAlsBild(file);
-  var klein = Math.min(1, 1100 / Math.max(img.width, img.height));
-  var beste = 0, bestN = -1;
-  var winkel = [0, 90, -90];
-  for (var i = 0; i < winkel.length; i++) {
-    melde('Ausrichtung wird geprueft ... ' + (i+1) + '/' + winkel.length);
-    try {
-      var r = await Tesseract.recognize(scanAufCanvas(img, winkel[i], klein), 'deu');
-      var n = (r.data.text.match(/(?:^|\n)\s*\d{3}\b/g) || []).length;
-      if (n > bestN) { bestN = n; beste = winkel[i]; }
-      if (n >= 15) break;
-    } catch (e) { }
-  }
-  scanDrehung = beste;
-  return beste;
-}
-
-function scanBildAufbereiten(file) {
-  return new Promise(function(res){
-    var img = new Image();
-    img.onload = function(){
-      // Verdoppeln verbessert die Trefferquote (v3.5), aber bei grossen Fotos
-      // (z.B. 1475x2048 einer vollen A4-Seite) sprengt das unveraendert die
-      // Handy-Speichergrenze: 2950x4096 Pixel als Graustufen-Canvas + separate
-      // ImageData-Kopie + Tesseract-eigener WASM-Speicher fuer dasselbe Bild
-      // koennen den Tab zum Absturz/Neuladen bringen — laufende Auswertung
-      // (noch nicht uebertragene Zeilen) geht dabei komplett verloren (F11).
-      // Lange Kante deshalb auf max. 3000px deckeln, Verdoppelung bleibt fuer
-      // normal grosse Fotos unveraendert erhalten.
-      var MAX_KANTE = 3000;
-      var faktor = img.width < 2000 ? 2 : 1;
-      var langeKante = Math.max(img.width, img.height) * faktor;
-      if (langeKante > MAX_KANTE) faktor *= MAX_KANTE / langeKante;
-      res(scanAufCanvas(img, scanDrehung, faktor));
-    };
-    img.onerror = function(){ res(file); };
-    img.src = URL.createObjectURL(file);
-  });
-}
-
 function scanHeuteStr() {
   if (scanHskDate && scanHskDate.value) {
     var p = scanHskDate.value.split('-');
@@ -2316,11 +2236,17 @@ function scanDatumsTreffer(str, jahr) {
   return out;
 }
 
-function scanAnzSumme(text) {
+// Fusszeile der letzten Seite traegt die PMS-Summen in der Spaltenreihenfolge
+// der Alpha-Liste: Erw. · Kin. · Anz. (Beispiel 08.10.2026: "81  0  63").
+// scanAnzSumme() las bisher nur Anz. -- Erw./Kin. wurden gar nicht erfasst,
+// obwohl sie fuer die Pruefsumme (AUFTRAG_CLAUDE_CODE_2026-10-09.md
+// Abschnitt 4.1) gebraucht werden, um eine einzelne nicht gelesene Erw.-Zahl
+// rechnerisch zu ergaenzen.
+function scanFussSumme(text) {
   var m = text.match(/(?:^|\n)\s*(\d{2,3})\s+(\d{1,2})\s+(\d{1,3})\s*[^\d\n]{0,4}(?:\n|$)/);
   if (!m) return null;
-  var anz = parseInt(m[3], 10);
-  return (anz > 0 && anz <= 73) ? anz : null;
+  var erw = parseInt(m[1], 10), kin = parseInt(m[2], 10), anz = parseInt(m[3], 10);
+  return (anz > 0 && anz <= 73) ? { erw: erw, kin: kin, anz: anz } : null;
 }
 
 function scanZimmerAmZeilenanfang(zeile, belegt) {
@@ -2427,10 +2353,11 @@ function scanParseText(text) {
   const kopf = text.match(/am\s+(\d{2})[.,:\s](\d{2})[.,:\s](\d{4})/);
   if (kopf) { var kd = new Date(+kopf[3], +kopf[2]-1, +kopf[1]); kd.setDate(kd.getDate()+1); scanSetHskDate(kd); }
 
-  const summe = scanAnzSumme(text);
-  if (summe && !scanPmsTotalInput.value) scanPmsTotalInput.value = summe;
+  const fusssumme = scanFussSumme(text);
+  if (fusssumme && !scanPmsTotalInput.value) scanPmsTotalInput.value = fusssumme.anz;
 
-  scanPruefStatus(kopf, summe, ungueltig.length, dubletten);
+  scanPruefStatus(kopf, fusssumme ? fusssumme.anz : null, ungueltig.length, dubletten);
+  scanPruefSummen(fusssumme);
 
   if (dubletten > 0) {
     scanDupeNote.textContent = dubletten + ' doppelte Zimmernummer(n) entfernt — im PMS kann dasselbe Zimmer zweimal gebucht sein, gereinigt wird es trotzdem nur einmal.';
@@ -2453,19 +2380,41 @@ function scanRenderRows() {
   }
   scanRows.forEach((r, i) => {
     const tr = document.createElement('tr');
+    // Plausibilitaetshinweise (AUFTRAG Abschnitt 4.5): Erw.=0 kommt echt vor
+    // und ist kein Lesefehler -- Suite8 setzt bei Nicht-Anreise den Status
+    // "LAT", damit die Citytax fuer die Nacht nicht berechnet wird, und die
+    // Erw.-Zahl steht dadurch bewusst auf 0 (Beispiel Zi.34 am 08.10., noch
+    // unabgeholter Safe, s. F19/F20). Trotzdem auffaellig genug, um es dem
+    // Team zu zeigen; Erw.>=3 bzw. Kin.>0 deuten auf Zusatzbett/Kinderbett
+    // hin, die beim Richten nicht fehlen duerfen.
+    const hinweise = [];
+    if (!r.reserve && !r.leer) {
+      if (r.betten === 0) hinweise.push('<span class="scan-leer-tag" title="Kommt vor: Suite8 setzt bei Nicht-Anreise LAT, damit keine Citytax anfaellt — kein Lesefehler">0 Erw.</span>');
+      else if (r.betten >= 3) hinweise.push('<span class="scan-leer-tag" style="color:var(--gold-bright)" title="Zusatzbett pruefen">' + r.betten + ' Erw.</span>');
+      if (r.kinder > 0) hinweise.push('<span class="scan-leer-tag" style="color:#5bb3e8" title="Kinderbett/Extras pruefen">+' + r.kinder + ' Kind</span>');
+    }
     tr.innerHTML = `
       <td><input type="text" value="${r.zimmer}" data-i="${i}" data-f="zimmer" placeholder="z.B. 14"></td>
       <td><input type="text" value="${r.abreise}" data-i="${i}" data-f="abreise" placeholder="TT.MM.JJJJ"></td>
-      <td><input type="number" min="1" max="3" value="${r.betten || ''}" data-i="${i}" data-f="betten" placeholder="—" style="text-align:center"></td>
+      <td><input type="number" min="0" max="4" value="${r.betten == null ? '' : r.betten}" data-i="${i}" data-f="betten" placeholder="—" style="text-align:center" class="${r.berechnetErw ? 'scan-berechnet' : ''}" title="${r.berechnetErw ? 'Aus der Fußzeilen-Prüfsumme errechnet — bitte gegen das Original prüfen' : ''}"></td>
       <td><input type="number" min="0" max="4" value="${r.kinder || ''}" data-i="${i}" data-f="kinder" placeholder="0" style="text-align:center"></td>
-      <td>${r.exOOO ? '<span class="scan-leer-tag" style="color:#ff6b4a">EX-OOO</span>' : (r.reserve ? '<span class="scan-leer-tag" style="color:var(--gold-bright)">RESERVE</span>' : (r.leer ? '<span class="scan-leer-tag">LEER</span>' : ''))}<button class="scan-row-del" data-i="${i}">✕</button></td>
+      <td>${r.exOOO ? '<span class="scan-leer-tag" style="color:#ff6b4a">EX-OOO</span>' : (r.reserve ? '<span class="scan-leer-tag" style="color:var(--gold-bright)">RESERVE</span>' : (r.leer ? '<span class="scan-leer-tag">LEER</span>' : hinweise.join('')))}<button class="scan-row-del" data-i="${i}">✕</button></td>
     `;
     scanRowsBody.appendChild(tr);
   });
   scanRowsBody.querySelectorAll('input').forEach(inp => {
     inp.addEventListener('input', e => {
       const i = +e.target.dataset.i, f = e.target.dataset.f;
-      scanRows[i][f] = (f === 'betten' || f === 'kinder') ? (parseInt(e.target.value, 10) || 0) : e.target.value;
+      if (f === 'betten' || f === 'kinder') {
+        scanRows[i][f] = e.target.value === '' ? null : (parseInt(e.target.value, 10) || 0);
+        if (f === 'betten' && scanRows[i].berechnetErw) {
+          scanRows[i].berechnetErw = false;
+          e.target.classList.remove('scan-berechnet');
+          e.target.title = '';
+        }
+      } else {
+        scanRows[i][f] = e.target.value;
+      }
       scanUpdateCheck();
     });
   });
@@ -2499,6 +2448,8 @@ scanHskDate.addEventListener('change', function(){
 });
 
 function scanUpdateCheck() {
+  scanRenderErwKinBadge();
+  scanEntwurfSpeichern();
   const belegte = scanRows.filter(r => !r.leer && r.zimmer.trim());
   const leere = scanRows.filter(r => r.leer && r.zimmer.trim());
 
@@ -2541,8 +2492,10 @@ function scanUpdateCheck() {
 // Bettenzahl (Erw.) -> Zimmertyp-Badge, gleiche Konvention wie beim JSON-Import (1/2/3 -> E/D/T).
 const BETTEN_TYP = { 1: 'E', 2: 'D', 3: 'T' };
 
-// Direktübernahme statt CSV-Download: erzeugt dieselbe {room, guestType}-Form wie
-// parseCsv() und speist sie in dieselbe Vorschau + denselben Übertragen-Knopf ein.
+// Erzeugt dieselbe {room, guestType}-Form wie showCsvPreview()/applyCsvImport()
+// erwarten und speist sie in dieselbe Vorschau + denselben Übertragen-Knopf ein
+// (der CSV-Datei-Upload-Weg selbst wurde entfernt, diese beiden Funktionen
+// bedienen jetzt nur noch den Foto-Scan).
 scanUebernehmenBtn.addEventListener('click', () => {
   const heute = scanHeuteStr();
   const valid = scanRows.filter(r => r.zimmer.trim() && r.abreise.trim());
@@ -2580,114 +2533,8 @@ scanResetBtn.addEventListener('click', () => {
   scanDupeNote.style.display = 'none';
   scanReserveNote.style.display = 'none';
   scanFileInput.value = '';
+  scanEntwurfLoeschen();
 });
-
-// ══ JSON IMPORT ══
-let jsonParsed = [];
-
-async function pasteFromClipboard() {
-  try {
-    const text = await navigator.clipboard.readText();
-    document.getElementById('json-input').value = text;
-  } catch {
-    alert('Einfügen nicht möglich — bitte manuell Ctrl+V ins Textfeld.');
-  }
-}
-
-function parseJsonInput() {
-  const raw = document.getElementById('json-input').value.trim();
-  if (!raw) { alert('Bitte JSON einfügen.'); return; }
-
-  let data;
-  try { data = JSON.parse(raw); } catch(e) { alert('Ungültiges JSON: ' + e.message); return; }
-
-  // Flexible: support top-level or nested unter processing_results
-  const results = data.processing_results || data;
-  const roomsRaw = results.rooms_to_clean || data.rooms_to_clean || [];
-  const excluded = results.excluded_rooms || data.excluded_rooms || [];
-
-  if (!roomsRaw.length) { alert('Keine rooms_to_clean gefunden.'); return; }
-
-  // Normalize room numbers: "011" → "11", keep as string
-  function normRoom(r) {
-    // Strip leading zeros for matching (App uses '11', not '011')
-    return String(parseInt(r, 10));
-  }
-
-  const excludedNorm = excluded.map(e => normRoom(e));
-
-  // Type mapping: 1→E, 2→D, 3→T (also accept string codes directly)
-  const typeMap = (data.parameters && data.parameters.filter_rules && data.parameters.filter_rules.type_mapping) || { '1':'E','2':'D','3':'T' };
-
-  jsonParsed = [];
-  const skipped = [];
-  const excl = [];
-
-  roomsRaw.forEach(entry => {
-    const roomNorm = normRoom(entry.room);
-    if (excludedNorm.includes(roomNorm)) { excl.push(roomNorm); return; }
-    if (!ALL_ROOMS.includes(roomNorm)) { skipped.push(roomNorm); return; }
-
-    // Resolve type
-    let typeRaw = String(entry.type || '');
-    let typeResolved = typeMap[typeRaw] || typeRaw || 'D';
-
-    jsonParsed.push({ room: roomNorm, type: typeResolved });
-  });
-
-  showJsonPreview(jsonParsed, skipped, excl);
-}
-
-function showJsonPreview(rooms, skipped, excluded) {
-  const preview = document.getElementById('json-preview');
-  const list = document.getElementById('json-preview-list');
-  const title = document.getElementById('json-preview-title');
-  const summary = document.getElementById('json-type-summary');
-  list.innerHTML = '';
-
-  const byType = {};
-  rooms.forEach(r => {
-    byType[r.type] = (byType[r.type] || 0) + 1;
-    const tag = document.createElement('span');
-    tag.className = 'preview-tag';
-    tag.textContent = r.room + ' · ' + r.type;
-    list.appendChild(tag);
-  });
-
-  const typeStr = Object.entries(byType).map(([k,v]) => `${v}× ${k}`).join(' · ');
-  title.textContent = `${rooms.length} Abreisezimmer erkannt`;
-  summary.innerHTML = `<span style="color:var(--gold)">${typeStr}</span>${skipped.length ? ` · <span style="color:#e87070">${skipped.length} nicht im System</span>` : ''}${excluded.length ? ` · <span style="color:var(--muted)">${excluded.length} ausgeschlossen</span>` : ''}`;
-
-  preview.style.removeProperty('display');
-  preview.classList.add('show');
-}
-
-function applyJsonImport() {
-  if (!jsonParsed.length) return;
-
-  // First clear all existing guestType
-  ALL_ROOMS.forEach(r => {
-    if (state[r]) { state[r].guestType = ''; state[r].occupied = false; }
-  });
-
-  jsonParsed.forEach(({ room, type }) => {
-    const rs = getRoomState(room);
-    state[room] = { ...rs, guestType: 'checkout', roomType: type, occupied: true };
-  });
-
-  saveState(state);
-  renderRooms();
-
-  const typeCount = {};
-  jsonParsed.forEach(r => { typeCount[r.type] = (typeCount[r.type]||0)+1; });
-  const typeStr = Object.entries(typeCount).map(([k,v]) => `${v}× ${k}`).join(' · ');
-
-  const banner = document.getElementById('import-banner');
-  document.getElementById('import-banner-text').innerHTML =
-    `✓ JSON geladen · <strong>${jsonParsed.length} Abreisezimmer</strong> (${typeStr}) · Datum: ${todayStr()}`;
-  banner.classList.add('show');
-  showTab('zimmer');
-}
 
 // ══ RESET ══
 function resetDay() {
@@ -2695,71 +2542,6 @@ function resetDay() {
   ALL_ROOMS.forEach(r => { if (state[r]) state[r].clean = false; });
   saveState(state); renderRooms();
 }
-function resetAll() {
-  if (!confirm('ALLES zurücksetzen? (Zimmer + Personal + Gästeliste)')) return;
-  state = {}; staff = [];
-  saveState(state); saveStaffData(staff);
-  renderRooms(); renderPersonal(); renderOverview();
-}
-
-// ══ EXPORT / IMPORT JSON ══
-function exportData() {
-  const payload = { version: 3, exported: new Date().toISOString(), state, staff };
-  const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url;
-  a.download = 'housekeeping-' + new Date().toISOString().slice(0,10) + '.json';
-  a.click();
-  URL.revokeObjectURL(url);
-}
-function importData(event) {
-  const file = event.target.files[0];
-  if (!file) return;
-  const reader = new FileReader();
-  reader.onload = function(e) {
-    try {
-      const payload = JSON.parse(e.target.result);
-      if (!payload.state) throw new Error('Ungültiges Format');
-      if (!confirm('Stand vom ' + (payload.exported || '?').slice(0,10) + ' laden?')) return;
-      state = payload.state;
-      staff = payload.staff || [];
-      saveState(state); saveStaffData(staff);
-      renderRooms(); renderPersonal(); renderOverview();
-      alert('✓ Stand geladen.');
-    } catch(err) { alert('Fehler: ' + err.message); }
-    event.target.value = '';
-  };
-  reader.readAsText(file);
-}
-
-// ══ LANGUAGE ══
-const L = {
-  de: { eyebrow:'Digitalisierungsprojekt · Turmhotel Frankfurt', meta:'Entwickelt von <span>André Schwarz — ASGlobal</span> · Daten lokal im Browser gespeichert', clean:'gereinigt', dirty:'ausstehend', free:'frei', occ:'belegt', checkout:'Abreise', overnight:'Overnight', progress:'Tagesfortschritt Reinigung', tabs:['Zimmer','Übersicht','Gästeliste','Personal'] },
-  en: { eyebrow:'Digitalisation Project · Turmhotel Frankfurt', meta:'Developed by <span>André Schwarz — ASGlobal</span> · Data stored locally in browser', clean:'cleaned', dirty:'pending', free:'vacant', occ:'occupied', checkout:'Checkout', overnight:'Overnight', progress:'Daily Cleaning Progress', tabs:['Rooms','Overview','Guest List','Staff'] },
-  hu: { eyebrow:'Digitalizációs Projekt · Turmhotel Frankfurt', meta:'Fejlesztette: <span>André Schwarz — ASGlobal</span> · Az adatok helyben tárolódnak', clean:'takarítva', dirty:'folyamatban', free:'szabad', occ:'foglalt', checkout:'Kijelentkezés', overnight:'Overnight', progress:'Napi takarítás', tabs:['Szobák','Áttekintés','Vendéglista','Személyzet'] },
-};
-let currentLang = 'de';
-function setLang(lang) {
-  currentLang = lang;
-  const t = L[lang];
-  document.querySelectorAll('.lang-btn').forEach((b,i) => b.classList.toggle('active',['de','en','hu'][i]===lang));
-  document.getElementById('lbl-eyebrow').textContent = t.eyebrow;
-  document.getElementById('lbl-meta').innerHTML = t.meta;
-  document.getElementById('lbl-clean').textContent = t.clean;
-  document.getElementById('lbl-dirty').textContent = t.dirty;
-  document.getElementById('lbl-free').textContent = t.free;
-  document.getElementById('lbl-occ').textContent = t.occ;
-  document.getElementById('lbl-checkout').textContent = t.checkout;
-  document.getElementById('lbl-overnight').textContent = t.overnight;
-  document.getElementById('lbl-progress-text').textContent = t.progress;
-  t.tabs.forEach((label, i) => {
-    const ids = ['zimmer','uebersicht','gaeste','personal'];
-    document.getElementById('tab-btn-' + ids[i]).textContent = label;
-  });
-}
-
-
 // ══ 3-KLICK FERTIGMELDUNG ══
 const CHECKLIST = [
   'Bett frisch bezogen & glatt',
@@ -2819,7 +2601,6 @@ function confirmChecklist() {
   createTechTicket(checklistRoom);
   saveState(state, checklistRoom);
   renderRooms();
-  renderOverview();
   closeChecklistDirect();
 }
 
@@ -2896,52 +2677,6 @@ function createTechTicket(roomId) {
 }
 
 // ══ INIT ══
-function seedNotes() {
-  const seeds = {
-    "44": "Bitte pruefen: Abreise-Zimmer noch nicht eindeutig zugeordnet (STS)",
-    "54": "Bitte pruefen: Abreise-Zimmer noch nicht eindeutig zugeordnet (STS)",
-    "404": "Siphon stinkt - bitte Haustechnik informieren"
-  };
-  Object.keys(seeds).forEach(function(room) {
-    const rs = getRoomState(room);
-    if (rs.note === "") {
-      state[room] = Object.assign({}, rs, { note: seeds[room] });
-    }
-  });
-  saveState(state);
-}
-function seedAllRoomsTestNote() {
-  const msg = "Erster Test laeuft - bitte Zimmer-Funktion pruefen und ausprobieren";
-  ALL_ROOMS.forEach(function(room) {
-    const rs = getRoomState(room);
-    if (rs.note === "") {
-      state[room] = Object.assign({}, rs, { note: msg });
-    }
-  });
-  saveState(state);
-}
-// seedNotes(); // F23: schrieb beim Laden per PUT den ganzen Cloud-Stand (09.10.2026)
-function forceFixNotes() {
-  const fixes = {
-    "44": "Bitte pruefen: Abreise-Zimmer noch nicht eindeutig zugeordnet (STS)",
-    "54": "Bitte pruefen: Abreise-Zimmer noch nicht eindeutig zugeordnet (STS)"
-  };
-  Object.keys(fixes).forEach(function(room) {
-    const rs = getRoomState(room);
-    state[room] = Object.assign({}, rs, { note: fixes[room] });
-  });
-  saveState(state);
-}
-function assignTeamsAndInstructions() {
-  const teams = ["Team", "Team 2", "Team 3"];
-  const instructions = "So meldest du fertig: Zimmer antippen -> Haken bei Reinigung/Belegung setzen -> Fertig melden -> bestaetigen. Fehlt Bettwaesche o.ae., NICHT fertig melden, sondern hier eintragen z.B. Bettwaesche fehlt - bleibt bis morgen offen.";
-  ALL_ROOMS.forEach(function(room, i) {
-    const rs = getRoomState(room);
-    const team = teams[i % teams.length];
-    state[room] = Object.assign({}, rs, { staff: team, note: instructions });
-  });
-  saveState(state);
-}
 renderRooms();
 renderPersonal();
 updateStats();
@@ -3082,11 +2817,45 @@ async function syncFromCloud() {
       staff = cloudStaff;
       localStorage.setItem('hk_staff3', JSON.stringify(staff));
     }
-    renderRooms(); renderPersonal(); renderOverview();
+    renderRooms(); renderPersonal();
     setSyncStatus(true);
   } catch (e) {
     console.warn('Cloud-Sync fehlgeschlagen, nutze lokalen Stand', e);
     setSyncStatus(false);
+  }
+  // Sync-Gate loesen: ob der Versuch oben geklappt hat oder nicht, danach ist
+  // zumindest bekannt, was (falls erreichbar) in der Cloud stand -- ab jetzt
+  // duerfen volle PUTs wieder raus. War waehrenddessen ein Schreibversuch
+  // blockiert (z.B. "+ Hinzufuegen" in den ersten 1-2 Sekunden), darf der
+  // nicht einfach verworfen werden, sobald der obige Cloud-Abgleich state/
+  // staff komplett ersetzt hat -- sonst waere die Eingabe von eben weg.
+  // Deshalb zusammenfuehren statt blind ueberschreiben: der Schnappschuss von
+  // vor der Blockade gewinnt pro Zimmer/Mitarbeiter-Name gegen die Cloud-
+  // Fassung (das war die juengere, bewusste Eingabe); was nur in der Cloud
+  // steht, bleibt erhalten. Einschraenkung: ein Loeschen genau in diesem
+  // kurzen Fenster wuerde dabei nicht uebernommen -- akzeptiert, das Fenster
+  // ist typischerweise unter 2 Sekunden und direkt nach dem Laden hat dort
+  // noch niemand etwas zum Loeschen gesehen.
+  if (!firstSyncAttempted) {
+    firstSyncAttempted = true;
+    setSyncGateBanner(false);
+    if (pendingStateWrite) {
+      state = Object.assign({}, state, pendingStateWrite);
+      pendingStateWrite = null;
+      localStorage.setItem('hk_state3', JSON.stringify(state));
+      renderRooms();
+      saveState(state);
+    }
+    if (pendingStaffWrite) {
+      var staffSnap = pendingStaffWrite; pendingStaffWrite = null;
+      staffSnap.forEach(function(s){
+        var idx = staff.findIndex(function(x){ return x.name === s.name; });
+        if (idx === -1) staff.push(s); else staff[idx] = s;
+      });
+      localStorage.setItem('hk_staff3', JSON.stringify(staff));
+      renderPersonal();
+      saveStaffData(staff);
+    }
   }
   // Laeuft unabhaengig vom try/catch oben mit eigener Fehlerbehandlung (siehe
   // loadSpaeteAnreisen): so faerbt die Nachtdienst-Uebergabe die Zimmerkarten
@@ -3095,6 +2864,7 @@ async function syncFromCloud() {
 }
 syncFromCloud();
 setInterval(syncFromCloud, 8000);
+scanEntwurfWiederherstellen();
 </script>
 </body>
 </html>

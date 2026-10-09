@@ -1,6 +1,6 @@
 # TURMHOTEL HOUSEKEEPING — ÜBERGABE (Trigger: HSK777)
 
-Stand: **09.10.2026** · Basis: `be3343d` (main, F23-Korrektur) plus Eintrag F23.
+Stand: **09.10.2026** · Basis: `588b526` (main) plus PR #30 aus `AUFTRAG_CLAUDE_CODE_2026-10-09.md`: Abschnitt 3 (Funktions-Inventur, abgeschlossen), Abschnitt 4.1/4.5 (OCR-Prüfsumme, s. Abschnitt 8), Abschnitt 2.3–2.5 (Sync-Gate/Backup/Scan-Entwurf, s. Abschnitt 9).
 Diese Datei ist der Einstiegspunkt — egal ob am PC (Git Bash) oder am Handy (Termux).
 Bei „HSK777": diese Datei lesen, dann bei Abschnitt 3 weitermachen.
 
@@ -264,3 +264,132 @@ Am Handy gibt es kein `~/downloads`; Downloads liegen unter
 nicht ankommt: Änderung stattdessen als Patch-Skript einfügen und ausführen.
 Mehrere `cp`-Zeilen immer mit `&&` verketten, sonst läuft ein Commit auch
 dann durch, wenn das Kopieren fehlgeschlagen ist.
+
+---
+
+## 7. Funktions-Inventur 09.10.2026 (Entrümpelung, `AUFTRAG_CLAUDE_CODE_2026-10-09.md` Abschnitt 3)
+
+Vollständige Inventur aller Top-Level-Funktionen, Buttons und Tabs in
+`housekeeping-v3.html` per Code-Durchsicht erstellt (keine Kürzung — jede
+Funktion wurde auf tatsächliche Aufrufer geprüft, nicht nur grep auf den Namen).
+
+**Entfernt (erledigt):**
+| Was | Grund |
+|---|---|
+| `seedNotes`/`seedAllRoomsTestNote`/`forceFixNotes`/`assignTeamsAndInstructions` | Nie aufgerufen, reine Debug-/Einmal-Helfer; `seedNotes` war die Ursache von F23 |
+| `setLang()` + `L`-Dictionary (DE/EN/HU) | Nie aufgerufen, die zugehörigen Umschalt-Buttons existieren in der Oberfläche gar nicht mehr |
+| `scanAusrichtungPruefen()`/`scanBildAufbereiten()` | Alte Scan-Vorverarbeitung, längst durch `scanWinkelFinden()`/`scanSeiteAufbereiten()` ersetzt, nie mehr aufgerufen |
+| `SDH_ROOMS`-Konstante | "Legacy ... for compat", nirgends mehr gelesen |
+| Button „Reset" + `resetAll()` | Löschte Zimmer+Personal+Gästeliste per PUT für **alle Handys gleichzeitig**, Rückfrage erwähnte das nicht (B4) |
+| „Stand exportieren/importieren" (JSON) + `exportData()`/`importData()` | Cloud-Sync ersetzt den Anwendungsfall; ein alter Import hätte denselben Überschreib-Effekt wie B4/F23 gehabt |
+| Tab „Verlauf" (UI: Tab-Button, Tab-Inhalt, `ladeVerlaufListe()`, `verlaufBerichtAnzeigen()`, `isoZuAnzeige()`) | Entscheidung André (09.10.): Tab weg. Die tägliche Archivierung selbst (`archiveBeforeReset()`/`ddmmyyyyZuIso()`, läuft aus „Zimmerstatus zurücksetzen" heraus) bleibt **erhalten** und schreibt weiterhin nach `/history/<Datum>.json` — nur die Oberfläche zum erneuten Ansehen ist weg |
+| Tab „Übersicht" (Personal-Fortschritt + „Nicht zugewiesene Zimmer") | Entscheidung André (09.10.): weg. `renderOverview()` + alle 8 Aufrufstellen entfernt. „Nicht zugewiesen" gibt es weiterhin gleichwertig über den Filter „Nicht zugewiesen" im Zimmer-Tab |
+| Link „FACILITY" im Kopf | Entscheidung André (09.10.): weg. Die davon unabhängige Technik-Ticket-Funktion (Checkliste → „Problem melden", gemeinsamer `facility_tasks`-localStorage-Key mit `facility.html`) bleibt bestehen — nur der Navigations-Link ist entfernt |
+| CSV-Datei-Upload-Pfad und „⚡ JSON-Funktion"-Einfügepfad | Entfernt (09.10., Andrés Auftrag: „schlage vor was plausibel ist"). Entfernt wurden nur der reine Datei-Upload-Teil (Dropzone, `handleCsvDrop`/`handleCsvFile`/`parseCsvFile`/`parseCsv`/`findCol`, dazu `parseDate`/`datesEqual`, die ausschließlich von `parseCsv` genutzt wurden) und das JSON-Einfügefeld (`pasteFromClipboard`/`parseJsonInput`/`showJsonPreview`/`applyJsonImport`/`jsonParsed` — hatte zudem jedem Zimmer pauschal „checkout" zugewiesen, gröber als die Foto-Scan-Erkennung). **Bewusst behalten:** `showCsvPreview()`/`applyCsvImport()`/`csvParsed`/`btn-apply-csv`, weil der Foto-Scan diese für seine eigene „Auf Zimmer übertragen"-Vorschau intern wiederverwendet — kein Duplikat. Der Moduswechsler (CSV/Scan/JSON) ist weg, Foto-Scan ist jetzt direkt sichtbar. |
+| Rotes „×" zum Personal löschen (`deleteStaff`) | Geprüft, **unverändert gelassen**: hat bereits `confirm('Mitarbeiter entfernen?')` — die im Auftrag genannte Sorge (versehentliches Löschen) war damit schon abgedeckt. Ein ersatzloses Entfernen hätte nur verhindert, einen Fehleintrag je wieder zu korrigieren. |
+| Farbwahl für Personal (`COLORS`-Picker) | Picker-UI entfernt, `addStaff()` vergibt die Farbe jetzt automatisch (nächste freie aus `COLORS`, sonst rotierend). Die Farbe selbst musste bleiben — sie färbt die Zimmerkarten-Zuteilung ein (genau der im Auftrag genannte Fall „nur behalten, wenn Zuordnung ohne Farbe unklar wird") |
+
+**Behalten (bewusst, Kernfunktionen):** Zimmer-Grid, „Meine Zimmer"/Fertig-Checkliste
+(inkl. Technik-Ticket), Foto-Scan/PDF-Import inkl. Doppelcheck, „Auf Zimmer
+übertragen", manuelle Einzelzimmer-Korrektur („Setzen"), Personal anlegen +
+„heute da/nicht da", automatisch verteilen, „Neuer Tag" (nur Reinigungsstatus,
+einzeln vom entfernten „Reset" zu unterscheiden), Übergabebericht, Sync-Banner,
+`vorfuehrung.html`/Demo-Seiten (nicht Teil dieses Auftrags).
+
+Damit ist die Funktions-Inventur aus Abschnitt 3 des Auftrags abgeschlossen —
+alle Kandidaten entschieden und umgesetzt, keine offenen Punkte mehr.
+
+**Vorgehen je Entfernung:** Syntaxcheck (`node --check`), Playwright-Klicktest
+bei 390px mit gemockten Firebase-/Tesseract-Netzwerkaufrufen (diese Sandbox
+hat kein Netz zu `firebasedatabase.app`/`cdnjs.cloudflare.com`, s. F12),
+grep auf jede entfernte Kennung zur Kontrolle auf Restreferenzen.
+
+---
+
+## 8. OCR-Verbesserung Erw./Kin. 09.10.2026 (`AUFTRAG_CLAUDE_CODE_2026-10-09.md` Abschnitt 4)
+
+**Umgesetzt (4.1 + 4.5):**
+- `scanFussSumme()` (vorher `scanAnzSumme()`) liest jetzt alle drei Summen aus
+  der Fußzeile der letzten Seite (Erw./Kin./Anz., z. B. „81 0 63"), nicht mehr
+  nur Anz.
+- `scanPruefSummen()`: fehlt in genau einer Zeile die Erw.-Zahl, wird sie aus
+  Fußzeile minus Summe der bekannten Zeilen errechnet (nur im plausiblen
+  Bereich 0–4) und gelb markiert („errechnet", mit Tooltip). Bei mehreren
+  Lücken bleibt es bei der Warnung — keine geratene Zuordnung. Reserve-/
+  Leerstand-Zeilen zählen nicht mit, die stehen nicht auf der gedruckten Liste.
+- Neues Badge zeigt Σ Erw./Σ Kin. laufend gegen die Fußzeile (ok/warn/bad),
+  aktualisiert sich bei jeder manuellen Korrektur. Wird eine errechnete Zahl
+  von Hand geändert, verschwindet die Markierung sofort.
+- Plausibilitätsmarker in der Tabelle: Erw.=0 (kommt vor und ist **kein
+  Lesefehler** — André, 09.10.: Suite8 setzt bei Nicht-Anreise den Status
+  „LAT", damit die Citytax für die Nacht nicht berechnet wird, und die
+  Erw.-Zahl steht dadurch bewusst auf 0; Beispiel Zi. 34 am 08.10., noch
+  unabgeholter Safe — nur zur Information markiert, nicht als Fehler),
+  Erw.≥3 („Zusatzbett prüfen"), Kin.>0 („Kinderbett/Extras prüfen").
+- Nebenbei behoben: Erw.=0 wurde bisher als leeres Feld dargestellt, nicht von
+  „nicht gelesen" unterscheidbar.
+
+Getestet: Node-Unit-Test der real aus der Datei extrahierten Funktionen gegen
+vier Szenarien (abgetippter Text 08.10., Σ Erw.=23/Σ Kin.=0 für die 17 Zeilen
+von Seite 2) — alles gelesen, eine Lücke (korrekt auf den Zi.34-Fall 0
+errechnet), zwei Lücken (keine Autofill), echte Abweichung (bad-Badge).
+Playwright bei 390px bestätigt dasselbe live im DOM plus alle vier
+Plausibilitätsmarker, voller Tab-Regressionstest weiterhin grün.
+
+**Bewusst nicht umgesetzt — offene Folgepunkte:**
+| Punkt | Warum nicht jetzt |
+|---|---|
+| 4.2 Spaltenbasierte Erkennung (Tesseract-Wortpositionen statt Regex) | Ändert das Zusammenspiel mit echter Kamera-OCR; diese Sandbox hat kein Netz zu `cdnjs.cloudflare.com` (F12) und kann es nicht gegen echte Fotos verantwortbar testen |
+| 4.3 Nur Zahlenspalten zuschneiden, mit Ziffern-Whitelist an OCR geben | Gleicher Grund — Bildvorverarbeitung ohne echte OCR-Laufzeit nicht testbar |
+| 4.4 Kat. aus Zimmerbestand ableiten | `ROOM_TYPES` deckt nur die zweistelligen Vorderhaus-Zimmer ab (11–55), nicht die Hinterhaus-Zimmer (102–510) — für die fehlt die Typ-Zuordnung, eine verlässliche Ableitung ist damit nicht möglich |
+| 4.6 PDF vor Foto empfehlen | Bereits vorhanden — der Hinweistext nennt PDF zuerst und „am besten", erklärt den Vorteil (keine OCR nötig). Keine Änderung nötig. |
+| 4.7 Große Personenzahl-Anzeige am Zimmer | Erw./Kin. laufen aktuell nur als Zimmertyp-Buchstabe (E/D/T) durch `applyCsvImport()` in den Zimmer-State, nicht als Zahl — dafür wäre eine Schema-Änderung nötig, die über diese Teilaufgabe hinausgeht |
+
+„Abreise vor Anreise"-Prüfung (Teil von 4.5) ebenfalls offen: `scanRows`
+speichert aktuell nur das Abreisedatum je Zeile, nicht das Anreisedatum —
+dafür müsste eine neue Spalte durch die gesamte Vorschau-/Übernehmen-Pipeline
+durchgereicht werden.
+
+---
+
+## 9. Datensicherheit 09.10.2026 (`AUFTRAG_CLAUDE_CODE_2026-10-09.md` Abschnitt 2)
+
+**Umgesetzt (2.3 Sync-Gate, 2.4 Backup, 2.5 Scan-Entwurf):**
+- **Sync-Gate:** Volle PUTs (`saveState()` ohne `changedRoom`, `saveStaffData()`
+  immer, da es dafür keine PATCH-Variante gibt) warten jetzt, bis der erste
+  `syncFromCloud()`-Versuch durch ist — das war die eigentliche Ursache von
+  F23: ein frischer Browser mit leerem lokalen Stand ersetzte den noch nie
+  gelesenen Cloud-Stand. Neues Ladebanner „Lädt den Cloud-Stand …" währenddessen.
+  Wird währenddessen trotzdem etwas geändert, geht es nicht verloren: beim
+  Auflösen des Gates wird der Stand von vor der Blockade mit dem inzwischen
+  eingetroffenen Cloud-Stand zusammengeführt (pro Zimmer/Mitarbeiter-Name
+  gewinnt die jüngere lokale Eingabe) statt blind überschrieben. Bekannte
+  Einschränkung: ein Löschen genau in diesem kurzen Fenster (meist < 2s) würde
+  dabei nicht übernommen.
+- **Backup vor Massenschreiben:** Vor jedem vollen Stand-Ersatz wird der
+  bisherige Cloud-Stand nach `/backup/state-letzter.json` kopiert (bestes
+  Bemühen, blockiert das Speichern nicht). Dazu ein „Letzten Stand
+  wiederherstellen"-Knopf im bestehenden Offline-/Fehler-Banner — bewusst
+  keine Dauerfunktion.
+- **Scan-Entwurf persistieren (löst B1/F24):** `scanRows` + HK-Tag + PMS-Zahlen
+  jetzt lokal in IndexedDB **und** unter `/scanEntwurf.json` in Firebase
+  gesichert (nur Zimmerdaten, keine Namen/Preise/Fotos). Wird beim Laden
+  wiederhergestellt (Firebase bevorzugt, IndexedDB als Fallback), mit
+  sichtbarem Hinweis samt Zeitstempel. Gelöscht nach „Auf Zimmer übertragen"
+  und bei „Neu beginnen".
+
+Getestet mit Playwright: Sync-Gate mit künstlich verzögertem ersten Sync (kein
+PUT vorher, korrektes Zusammenführen danach inkl. einer währenddessen
+hinzugefügten Testperson), Backup-Reihenfolge (GET+PUT auf `/backup/...` vor
+dem finalen PUT), `restoreLastBackup()` direkt, Scan-Entwurf über einen echten
+Seiten-Reload (IndexedDB) und über einen zweiten, isolierten Browser-Context
+ohne lokale Kopie (simuliert ein zweites Handy, Firebase-Pfad). Voller
+Tab-/Personal-Regressionstest nach jedem Schritt weiterhin grün.
+
+**Nicht Teil dieser Umsetzung, aus dem Auftrag:**
+| Punkt | Stand |
+|---|---|
+| 2.1 Welche Adresse (`sponder-max.github.io`) ist kanonisch | André prüft das selbst — sehr wahrscheinlich nur eine abgeschnittene Adresszeile desselben `intelligentresponder-max.github.io`, siehe vorheriges Gespräch |
+| 2.2 Cloud-Inhalt live prüfen (`/state.json?shallow=true` etc.) | Diese Sandbox hat kein Netz zu `firebasedatabase.app` (F12) — nicht durchführbar von hier aus |
+| 2.6 Reset-Rückfrage ehrlich formulieren / Reset entfernen | Gegenstandslos — der Button „Reset" (`resetAll()`) wurde in PR #30 (Abschnitt 3) bereits ganz entfernt |
+| 2.7 Personal/`da` nach „Neuer Tag" | Code-Durchsicht: `resetDay()` fasst `staff`/`da` gar nicht an, setzt nur `clean=false`. Keinen Code-Pfad gefunden, der `da` automatisch zurücksetzt — die ursprüngliche Beobachtung („alle heute nicht da") ist damit vermutlich kein Reset-Bug, sondern schlicht ein neuer Tag, an dem noch niemand „heute da" angetippt hat. Nicht weiter verändert, da kein Fund dazu vorliegt. |
