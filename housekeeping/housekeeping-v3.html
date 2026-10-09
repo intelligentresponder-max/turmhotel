@@ -286,18 +286,6 @@ nav{
 .btn-cancel{background:rgba(255,255,255,.06);color:var(--muted);border:1px solid var(--line);}
 .btn-cancel:hover{color:var(--paper);}
 
-/* ── OVERVIEW ── */
-.staff-overview{display:grid;gap:16px;margin-top:8px;}
-.staff-row{background:rgba(255,255,255,.035);border:1px solid var(--line);border-radius:var(--radius);padding:20px 22px;}
-.staff-row-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;flex-wrap:wrap;gap:8px;}
-.staff-name-display{display:flex;align-items:center;gap:10px;font-family:'Fraunces',serif;font-size:1.1rem;}
-.staff-progress-bar{height:4px;background:rgba(255,255,255,.07);border-radius:2px;margin-bottom:8px;overflow:hidden;}
-.staff-progress-fill{height:100%;border-radius:2px;transition:width .5s;}
-.staff-rooms-list{font-family:'Spline Sans Mono',monospace;font-size:.7rem;color:var(--muted);display:flex;flex-wrap:wrap;gap:5px;}
-.staff-room-tag{padding:2px 7px;border-radius:1px;border:1px solid var(--line);color:var(--paper);}
-.staff-room-tag.done{border-color:var(--clean);color:#4ecb82;}
-.staff-room-tag.checkout{border-color:rgba(230,126,34,.4);color:var(--checkout-col);}
-
 /* ── PERSONAL ── */
 .personal-panel{max-width:540px;}
 .personal-list{display:grid;gap:8px;margin-bottom:24px;}
@@ -311,9 +299,6 @@ nav{
 .form-row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px;}
 .form-input{flex:1;min-width:110px;background:rgba(255,255,255,.06);border:1px solid var(--line);color:var(--paper);padding:8px 11px;border-radius:2px;font-family:'Spline Sans',sans-serif;font-size:.86rem;}
 .form-input:focus{outline:none;border-color:var(--gold);}
-.color-options{display:flex;gap:7px;margin-bottom:12px;flex-wrap:wrap;}
-.color-opt{width:26px;height:26px;border-radius:50%;border:2px solid transparent;cursor:pointer;transition:.15s;}
-.color-opt.selected{border-color:var(--paper);transform:scale(1.15);}
 .btn-add{background:var(--gold);color:var(--ink);font-weight:600;width:100%;}
 .btn-add:hover{background:var(--gold-bright);}
 
@@ -470,7 +455,6 @@ nav{
 <nav>
   <a class="nav-brand" href="../manager.html">Turmhotel Frankfurt</a>
   <div class="nav-right">
-    <a href="../facility.html" style="font-family:'Spline Sans Mono',monospace;font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);text-decoration:none;border:1px solid var(--line);padding:5px 12px;border-radius:3px;transition:.15s;" onmouseover="this.style.color='var(--gold)';this.style.borderColor='var(--gold)'" onmouseout="this.style.color='var(--muted)';this.style.borderColor='var(--line)'">🔧 Facility</a>
     <button class="lang-btn" onclick="printHandoverReport()">🖨️ Übergabebericht</button>
   </div>
 </nav>
@@ -507,7 +491,6 @@ nav{
 <div class="tabs">
   <button class="tab active" id="tab-btn-zimmer" onclick="showTab('zimmer')">Zimmer</button>
   <button class="tab" id="tab-btn-meine" onclick="showTab('meine')">Meine Zimmer</button>
-  <button class="tab" id="tab-btn-uebersicht" onclick="showTab('uebersicht')">Übersicht</button>
   <button class="tab" id="tab-btn-gaeste" onclick="showTab('gaeste')">Gästeliste</button>
   <button class="tab" id="tab-btn-personal" onclick="showTab('personal')">Personal</button>
 </div>
@@ -585,14 +568,6 @@ nav{
   <div id="mine-body"></div>
 </div>
 
-<div id="tab-uebersicht" style="display:none">
-  <div class="building-label" style="margin-top:4px">Übersicht nach Personal</div>
-  <div class="staff-overview" id="staff-overview"></div>
-  <div style="margin-top:28px;padding-top:22px;border-top:1px solid var(--line);">
-    <div class="building-label" style="margin-top:0">Nicht zugewiesene Zimmer</div>
-    <div class="room-grid" id="unassigned-grid" style="margin-top:8px"></div>
-  </div>
-</div>
 
 <!-- ══ TAB: GÄSTELISTE ══ -->
 <div id="tab-gaeste" style="display:none">
@@ -791,8 +766,6 @@ nav{
         <input class="form-input" id="new-name" placeholder="Name" maxlength="30">
         <input class="form-input" id="new-abb" placeholder="Kürzel" maxlength="3" style="max-width:80px;text-transform:uppercase">
       </div>
-      <div class="field-label">Farbe</div>
-      <div class="color-options" id="color-options"></div>
       <button class="btn btn-add" onclick="addStaff()">+ Hinzufügen</button>
     </div>
   </div>
@@ -944,7 +917,6 @@ const ROOM_TYPES = {
 };
 
 const COLORS = ['#c9a227','#2a7a4b','#1a6fa8','#8e44ad','#e67e22','#c0392b','#16a085','#d4a574'];
-let selectedColor = COLORS[0];
 let activeFilter = 'all';
 let csvParsed = []; // {room, type: 'checkout'|'overnight'}
 
@@ -1025,7 +997,7 @@ function loadSpaeteAnreisen(){
   // Kein "Laedt..."-Platzhalter mehr: die Funktion laeuft jetzt alle 8s im
   // Hintergrund mit (syncFromCloud), ein staendiges Flackern im offenen
   // Gaesteliste-Tab waere nur stoerend. Der Inhalt bleibt bis zur Antwort
-  // einfach stehen, wie bei renderRooms()/renderOverview() auch.
+  // einfach stehen, wie bei renderRooms() auch.
   dbUrl('/spaeteAnreisen.json').then(function(url){ return fetch(url); })
     .then(checkFirebaseResponse)
     .then(function(res){ return res.json(); })
@@ -1247,7 +1219,6 @@ function saveRoom() {
   };
   saveState(state, currentRoom);
   renderRooms();
-  renderOverview();
   closeModalDirect();
 }
 
@@ -1263,7 +1234,7 @@ function toggleFertig(id) {
   const rs = getRoomState(id);
   state[id] = { ...rs, clean: !rs.clean };
   saveState(state, id);
-  renderMine(); renderRooms(); renderOverview();
+  renderMine(); renderRooms();
 }
 
 function renderMine() {
@@ -1310,58 +1281,6 @@ function renderMine() {
     block('Bleiber', 'Gast bleibt — nur auffrischen', bleiber);
 }
 
-function renderOverview() {
-  const container = document.getElementById('staff-overview');
-  container.innerHTML = '';
-  if (!staff.length) {
-    container.innerHTML = '<p style="color:var(--muted);font-family:\'Spline Sans Mono\',monospace;font-size:.8rem">Noch keine Mitarbeiter — gehe zu »Personal«.</p>';
-  }
-  staff.forEach(s => {
-    const assigned = ALL_ROOMS.filter(r => getRoomState(r).staff === s.name);
-    const done = assigned.filter(r => getRoomState(r).clean);
-    const pct = assigned.length ? Math.round(done.length / assigned.length * 100) : 0;
-    const row = document.createElement('div');
-    row.className = 'staff-row';
-    row.innerHTML = `
-      <div class="staff-row-header">
-        <div class="staff-name-display">
-          <span class="staff-chip" style="background:${s.color}">${s.abb}</span>${s.name}
-        </div>
-        <span style="font-family:'Spline Sans Mono',monospace;font-size:.76rem;color:var(--muted)">
-          ${done.length}/${assigned.length} · <span style="color:${s.color}">${pct}%</span>
-        </span>
-      </div>
-      <div class="staff-progress-bar"><div class="staff-progress-fill" style="width:${pct}%;background:${s.color}"></div></div>
-      <div class="staff-rooms-list">
-        ${assigned.length ? assigned.map(r => {
-          const rs = getRoomState(r);
-          let cls = 'staff-room-tag';
-          if (rs.clean) cls += ' done';
-          else if (rs.guestType === 'checkout') cls += ' checkout';
-          return `<span class="${cls}">${r}</span>`;
-        }).join('') : '<span style="color:var(--muted)">Keine Zimmer zugewiesen</span>'}
-      </div>
-    `;
-    container.appendChild(row);
-  });
-
-  const unassigned = ALL_ROOMS.filter(r => !getRoomState(r).staff);
-  const ugrid = document.getElementById('unassigned-grid');
-  ugrid.innerHTML = '';
-  if (!unassigned.length) {
-    ugrid.innerHTML = '<p style="color:var(--muted);font-size:.8rem;font-family:\'Spline Sans Mono\',monospace">Alle Zimmer sind zugewiesen ✓</p>';
-  } else {
-    unassigned.forEach(r => {
-      const rs = getRoomState(r);
-      const tag = document.createElement('div');
-      tag.className = 'room-card ' + (rs.clean ? 'clean' : 'dirty');
-      tag.onclick = () => { showTab('zimmer'); openModal(r); };
-      tag.innerHTML = `<div class="room-num">${r}</div><div class="room-status-row"><span class="badge ${rs.clean ? 'badge-clean':'badge-dirty'}">${rs.clean?'Sauber':'Offen'}</span></div>`;
-      ugrid.appendChild(tag);
-    });
-  }
-}
-
 // ══ PERSONAL ══
 function autoAssignStaff() {
   if (!staff.length) { alert('Erst Personal anlegen.'); return; }
@@ -1384,7 +1303,7 @@ function autoAssignStaff() {
   distribute(checkoutRooms);
   distribute(overnightRooms);
   saveState(state);
-  renderRooms(); renderPersonal(); renderOverview();
+  renderRooms(); renderPersonal();
   alert('Verteilt: ' + checkoutRooms.length + ' Abreise + ' + overnightRooms.length + ' Overnight auf ' + team.length + ' Personen (' + team.map(function(s){return s.name;}).join(', ') + ').');
 }
 
@@ -1408,7 +1327,7 @@ function teamLaden() {
   if (!confirm('Das komplette Housekeeping aus dem Dienstplan übernehmen? Die bisherige Personalliste wird ersetzt, die Zimmerzuteilung bleibt.')) return;
   staff = TEAM_DIENSTPLAN.map(function(p){ return { name:p.name, abb:p.abb, color:p.color, rolle:p.rolle, da:false }; });
   saveStaffData(staff);
-  renderPersonal(); renderOverview(); renderMine();
+  renderPersonal(); renderMine();
   alert('11 Personen übernommen. Jetzt antippen, wer heute da ist.');
 }
 
@@ -1433,15 +1352,6 @@ function renderPersonal() {
       `<button class="del-btn" onclick="deleteStaff(${i})">×</button>`;
     list.appendChild(item);
   });
-  const cp = document.getElementById('color-options');
-  cp.innerHTML = '';
-  COLORS.forEach(c => {
-    const d = document.createElement('div');
-    d.className = 'color-opt' + (c === selectedColor ? ' selected' : '');
-    d.style.background = c;
-    d.onclick = () => { selectedColor = c; renderPersonal(); };
-    cp.appendChild(d);
-  });
 }
 
 function addStaff() {
@@ -1449,7 +1359,9 @@ function addStaff() {
   const abb = document.getElementById('new-abb').value.trim().toUpperCase();
   if (!name || !abb) { alert('Name und Kürzel ausfüllen.'); return; }
   if (staff.find(s => s.name === name)) { alert('Name bereits vergeben.'); return; }
-  staff.push({ name, abb, color: selectedColor });
+  const usedColors = staff.map(s => s.color);
+  const color = COLORS.find(c => !usedColors.includes(c)) || COLORS[staff.length % COLORS.length];
+  staff.push({ name, abb, color });
   saveStaffData(staff);
   document.getElementById('new-name').value = '';
   document.getElementById('new-abb').value = '';
@@ -1463,17 +1375,16 @@ function deleteStaff(i) {
   saveStaffData(staff);
   Object.keys(state).forEach(r => { if (state[r].staff === name) state[r].staff = ''; });
   saveState(state);
-  renderPersonal(); renderRooms(); renderOverview();
+  renderPersonal(); renderRooms();
 }
 
 // ══ TABS ══
 function showTab(tab) {
-  ['zimmer','meine','uebersicht','gaeste','personal'].forEach(id => {
+  ['zimmer','meine','gaeste','personal'].forEach(id => {
     document.getElementById('tab-' + id).style.display = id === tab ? '' : 'none';
     document.getElementById('tab-btn-' + id).classList.toggle('active', id === tab);
   });
   if (tab === 'meine') renderMine();
-  if (tab === 'uebersicht') renderOverview();
   if (tab === 'gaeste') loadSpaeteAnreisen();
   if (tab === 'personal') renderPersonal();
 }
@@ -1623,7 +1534,7 @@ function resetRoomStatus() {
   const banner = document.getElementById('import-banner');
   if (banner) banner.classList.remove('show');
   clearSpaeteAnreisen();
-  renderRooms(); renderPersonal(); renderOverview();
+  renderRooms(); renderPersonal();
   alert('Zimmerstatus wurde zurueckgesetzt.');
 }
 
@@ -2657,7 +2568,6 @@ function confirmChecklist() {
   createTechTicket(checklistRoom);
   saveState(state, checklistRoom);
   renderRooms();
-  renderOverview();
   closeChecklistDirect();
 }
 
@@ -2874,7 +2784,7 @@ async function syncFromCloud() {
       staff = cloudStaff;
       localStorage.setItem('hk_staff3', JSON.stringify(staff));
     }
-    renderRooms(); renderPersonal(); renderOverview();
+    renderRooms(); renderPersonal();
     setSyncStatus(true);
   } catch (e) {
     console.warn('Cloud-Sync fehlgeschlagen, nutze lokalen Stand', e);
