@@ -1284,9 +1284,24 @@ function closeModal(e) { if (e.target === document.getElementById('overlay')) cl
 function meinName()      { return localStorage.getItem('hk_me') || ''; }
 function setMeinName(n)  { localStorage.setItem('hk_me', n); renderMine(); }
 
+// Rolle der Person, die sich in „Meine Zimmer“ angemeldet hat ('' wenn unbekannt).
+function meineRolle() {
+  const ich = staff.find(s => s.name === meinName());
+  return ich ? (ich.rolle || '') : '';
+}
+
+// A1 (30.10.2026): Fertigmelden geht nur noch über die Checkliste. Zurück auf
+// „offen“ darf aus „Meine Zimmer“ nur die Hausdame; die Rezeption nutzt dafür
+// wie bisher das Zimmerfenster im Reiter „Zimmer“.
 function toggleFertig(id) {
   const rs = getRoomState(id);
-  state[id] = { ...rs, clean: !rs.clean };
+  if (!rs.clean) { openChecklist(id); return; }
+  if (meineRolle() !== 'Hausdame') {
+    alert('Zimmer ' + id + ' ist schon fertig gemeldet. Zurücksetzen kann nur die Hausdame oder die Rezeption.');
+    return;
+  }
+  if (!confirm('Zimmer ' + id + ' wieder auf „offen“ setzen?')) return;
+  state[id] = { ...rs, clean: false };
   saveState(state, id);
   renderMine(); renderRooms(); renderOverview();
 }
@@ -1322,7 +1337,7 @@ function renderMine() {
         const rs = getRoomState(r);
         return '<button class="mine-room' + (rs.clean ? ' done' : '') + '" onclick="toggleFertig(\'' + r + '\')">' +
                '<span class="nr">' + r + '</span>' +
-               '<span class="st">' + (rs.clean ? '✓ fertig' : 'antippen wenn fertig') + '</span></button>';
+               '<span class="st">' + (rs.clean ? '✓ fertig' : 'antippen → Checkliste') + '</span></button>';
       }).join('') + '</div>';
   }
 
@@ -2820,6 +2835,7 @@ function confirmChecklist() {
   saveState(state, checklistRoom);
   renderRooms();
   renderOverview();
+  renderMine();
   closeChecklistDirect();
 }
 
