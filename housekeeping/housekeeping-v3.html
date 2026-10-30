@@ -218,6 +218,14 @@ nav{
   font-family:'Spline Sans Mono',monospace;
 }
 .room-note{margin-top:4px;font-size:.67rem;color:var(--muted);font-style:italic;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+/* B1: Freigabe durch die Hausdame */
+.badge-approved{background:rgba(201,162,39,.18);color:var(--gold-bright);border:1px solid rgba(201,162,39,.45);}
+.room-return{margin-top:4px;font-size:.67rem;color:#ff6b4a;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.approve-row{display:flex;gap:5px;margin-top:7px;}
+.approve-row button{flex:1;font-family:'Spline Sans Mono',monospace;font-size:.6rem;letter-spacing:.06em;padding:3px 6px;border-radius:2px;cursor:pointer;background:none;}
+.approve-btn{border:1px solid rgba(201,162,39,.5);color:var(--gold-bright);}
+.return-btn{border:1px solid rgba(192,57,43,.45);color:#ff6b4a;}
+.modal-verlauf{margin-top:12px;font-family:'Spline Sans Mono',monospace;font-size:.68rem;color:var(--muted);line-height:1.6;}
 
 /* ── FILTER ROW ── */
 .filter-row{
@@ -496,6 +504,7 @@ nav{
 <!-- STATS -->
 <div class="stats-bar">
   <div class="stat"><div class="stat-dot" style="background:#4ecb82"></div><span class="stat-num" id="stat-clean">0</span><span class="stat-label" id="lbl-clean">gereinigt</span></div>
+  <div class="stat"><div class="stat-dot" style="background:var(--gold-bright)"></div><span class="stat-num" id="stat-approved">0</span><span class="stat-label" id="lbl-approved">freigegeben</span></div>
   <div class="stat"><div class="stat-dot" style="background:var(--gold)"></div><span class="stat-num" id="stat-dirty">0</span><span class="stat-label" id="lbl-dirty">ausstehend</span></div>
   <div class="stat"><div class="stat-dot" style="background:var(--checkout-col)"></div><span class="stat-num" id="stat-checkout">0</span><span class="stat-label" id="lbl-checkout">Abreise</span></div>
   <div class="stat"><div class="stat-dot" style="background:#c084fc"></div><span class="stat-num" id="stat-overnight">0</span><span class="stat-label" id="lbl-overnight">Overnight</span></div>
@@ -854,6 +863,8 @@ nav{
     <div class="field-label">Notiz</div>
     <textarea class="note-input" id="modal-note" placeholder="z.B. Handtücher fehlen..."></textarea>
 
+    <div class="modal-verlauf" id="modal-verlauf"></div>
+
     <div class="modal-actions">
       <button class="btn btn-cancel" onclick="closeModalDirect()">Abbrechen</button>
       <button class="btn btn-save" onclick="saveRoom()">Speichern</button>
@@ -1088,6 +1099,53 @@ function getRoomState(id) {
   return state[id] || { clean: false, occupied: false, staff: '', note: '', guestType: '', roomType: '', kinderbett: false, ooo: false };
 }
 
+// ══ FREIGABE + VERLAUF (B1, 30.10.2026) ══
+// Zustände: offen (clean:false) → gereinigt (clean:true) → freigegeben (approved:{by,at}).
+// Jede Statusänderung hängt {was, by, at[, grund]} an rs.verlauf an (letzte 20).
+function escHtml(s) { return String(s == null ? '' : s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+function mitVerlauf(rs, was, grund) {
+  const v = (Array.isArray(rs.verlauf) ? rs.verlauf : []).slice(-19);
+  const e = { was: was, by: meinName() || rs.staff || 'unbekannt', at: new Date().toISOString() };
+  if (grund) e.grund = grund;
+  v.push(e);
+  return v;
+}
+function hausdameDarf(id, aktion) {
+  if (meineRolle() !== 'Hausdame') {
+    alert(aktion + ' kann nur die Hausdame. Bitte unter „Meine Zimmer“ mit dem eigenen Namen (Rolle Hausdame) anmelden.');
+    return false;
+  }
+  return true;
+}
+function freigeben(id) {
+  const rs = getRoomState(id);
+  if (!rs.clean || rs.approved) return;
+  if (!hausdameDarf(id, 'Freigeben')) return;
+  if (rs.staff && rs.staff === meinName()) { alert('Zimmer ' + id + ' hast du selbst gereinigt — bitte eine andere Hausdame freigeben lassen.'); return; }
+  state[id] = { ...rs, approved: { by: meinName(), at: new Date().toISOString() }, verlauf: mitVerlauf(rs, 'freigegeben') };
+  saveState(state, id);
+  renderRooms(); renderOverview(); renderMine();
+}
+function zurueckAnReinigung(id) {
+  const rs = getRoomState(id);
+  if (!rs.clean) return;
+  if (!hausdameDarf(id, 'Zurückgeben')) return;
+  const grund = (prompt('Zimmer ' + id + ' zurück an die Reinigung' + (rs.staff ? ' (' + rs.staff + ')' : '') + '.\nGrund (Pflicht):') || '').trim();
+  if (!grund) { alert('Ohne Grund wird nichts zurückgegeben.'); return; }
+  state[id] = { ...rs, clean: false, approved: null, rueckgabe: grund, verlauf: mitVerlauf(rs, 'zurück an Reinigung', grund) };
+  saveState(state, id);
+  renderRooms(); renderOverview(); renderMine();
+}
+function verlaufHtml(rs) {
+  const v = Array.isArray(rs.verlauf) ? rs.verlauf : [];
+  if (!v.length) return '';
+  return '<div class="field-label">Verlauf</div>' + v.slice().reverse().map(function(e){
+    const d = new Date(e.at);
+    const zeit = isNaN(d) ? '' : d.toLocaleString('de-DE', { day:'2-digit', month:'2-digit', hour:'2-digit', minute:'2-digit' });
+    return '<div>' + escHtml(zeit) + ' · ' + escHtml(e.was) + ' · ' + escHtml(e.by) + (e.grund ? ' — „' + escHtml(e.grund) + '“' : '') + '</div>';
+  }).join('');
+}
+
 // ══ TODAY ══
 function todayStr() {
   const d = new Date();
@@ -1161,12 +1219,14 @@ function renderRooms() {
       card.innerHTML = `
         <div class="room-num">${r}</div>
         <div class="room-status-row">
-          <span class="badge ${rs.clean ? 'badge-clean' : 'badge-dirty'}">${rs.clean ? 'Sauber' : 'Offen'}</span>
+          <span class="badge ${rs.approved ? 'badge-approved' : (rs.clean ? 'badge-clean' : 'badge-dirty')}">${rs.approved ? 'Freigegeben' : (rs.clean ? 'Gereinigt' : 'Offen')}</span>
           <span class="badge ${(rs.occupied || rs.guestType) ? 'badge-occupied' : 'badge-free'}">${(rs.occupied || rs.guestType) ? 'Belegt' : 'Frei'}</span>
           ${sdhBdg}${typeBadge}${typBdg}${kinderBdg}${oooBdg}${lateBdg}
         </div>
         ${staffObj ? `<div class="room-staff"><span class="staff-chip" style="background:${staffObj.color}">${staffObj.abb}</span></div>` : ''}
         ${rs.note ? `<div class="room-note">${rs.note}</div>` : ''}
+        ${!rs.clean && rs.rueckgabe ? `<div class="room-return">↩ ${escHtml(rs.rueckgabe)}</div>` : ''}
+        ${rs.clean && r !== '101' ? `<div class="approve-row">${rs.approved ? '' : `<button class="approve-btn" onclick="event.stopPropagation();freigeben('${r}')">✓ Freigeben</button>`}<button class="return-btn" onclick="event.stopPropagation();zurueckAnReinigung('${r}')">↩ Zurück</button></div>` : ''}
         ${!rs.clean && rs.staff ? `<div style="margin-top:7px"><button
           style="font-family:'Spline Sans Mono',monospace;font-size:.6rem;letter-spacing:.08em;
                  background:rgba(42,122,75,.15);border:1px solid rgba(42,122,75,.4);color:#4ecb82;
@@ -1185,17 +1245,19 @@ function renderRooms() {
 
 // ══ STATS + PROGRESS ══
 function updateStats() {
-  let clean=0, dirty=0, free=0, occ=0, checkout=0, overnight=0, total=0;
+  let clean=0, approved=0, dirty=0, free=0, occ=0, checkout=0, overnight=0, total=0;
   ALL_ROOMS.forEach(r => {
     if (r === '101' || /^Tagungsraum/.test(r)) return; // Massageraum & Tagungsräume — keine Gästezimmer
     total++;
     const rs = getRoomState(r);
     if (rs.clean) clean++; else dirty++;
+    if (rs.clean && rs.approved) approved++;
     if (rs.occupied || rs.guestType) occ++; else free++;
     if (rs.guestType === 'checkout') checkout++;
     if (rs.guestType === 'overnight') overnight++;
   });
   document.getElementById('stat-clean').textContent = clean;
+  document.getElementById('stat-approved').textContent = approved;
   document.getElementById('stat-dirty').textContent = dirty;
   document.getElementById('stat-free').textContent = free;
   document.getElementById('stat-occ').textContent = occ;
@@ -1243,6 +1305,7 @@ function openModal(roomId) {
   });
 
   document.getElementById('modal-note').value = rs.note || '';
+  document.getElementById('modal-verlauf').innerHTML = verlaufHtml(rs);
   refreshModalButtons();
   document.getElementById('overlay').classList.add('show');
 }
@@ -1263,7 +1326,12 @@ function setOOO(v) { tempState.ooo = v; refreshModalButtons(); }
 function saveRoom() {
   if (!currentRoom) return;
   const existing = getRoomState(currentRoom);
+  // B1: Freigabe/Rückgabe/Verlauf beim Speichern aus dem Zimmerfenster erhalten.
+  const cleanGeaendert = !!tempState.clean !== !!existing.clean;
   state[currentRoom] = {
+    approved: tempState.clean ? (existing.approved || null) : null,
+    rueckgabe: tempState.clean ? '' : (existing.rueckgabe || ''),
+    verlauf: cleanGeaendert ? mitVerlauf(existing, tempState.clean ? 'gereinigt (Zimmerfenster)' : 'offen (Zimmerfenster)') : (existing.verlauf || []),
     clean: tempState.clean,
     occupied: tempState.occupied,
     staff: document.getElementById('modal-staff').value,
@@ -1304,7 +1372,7 @@ function toggleFertig(id) {
     return;
   }
   if (!confirm('Zimmer ' + id + ' wieder auf „offen“ setzen?')) return;
-  state[id] = { ...rs, clean: false };
+  state[id] = { ...rs, clean: false, approved: null, verlauf: mitVerlauf(rs, 'offen (Meine Zimmer)') };
   saveState(state, id);
   renderMine(); renderRooms(); renderOverview();
 }
@@ -1338,9 +1406,10 @@ function renderMine() {
     return '<div class="mine-group"><h3>' + titel + '</h3><div class="mine-sub">' + unter + '</div>' +
       liste.map(function(r){
         const rs = getRoomState(r);
+        const st = rs.approved ? '✓ freigegeben' : rs.clean ? '✓ fertig' : rs.rueckgabe ? '↩ zurück: ' + escHtml(rs.rueckgabe) : 'antippen → Checkliste';
         return '<button class="mine-room' + (rs.clean ? ' done' : '') + '" onclick="toggleFertig(\'' + r + '\')">' +
                '<span class="nr">' + r + '</span>' +
-               '<span class="st">' + (rs.clean ? '✓ fertig' : 'antippen → Checkliste') + '</span></button>';
+               '<span class="st">' + st + '</span></button>';
       }).join('') + '</div>';
   }
 
@@ -2753,9 +2822,9 @@ function importData(event) {
 
 // ══ LANGUAGE ══
 const L = {
-  de: { eyebrow:'Digitalisierungsprojekt · Turmhotel Frankfurt', meta:'Entwickelt von <span>André Schwarz — ASGlobal</span> · Daten werden über die Cloud mit allen Geräten abgeglichen', clean:'gereinigt', dirty:'ausstehend', free:'frei', occ:'belegt', checkout:'Abreise', overnight:'Overnight', progress:'Tagesfortschritt Reinigung', tabs:['Zimmer','Übersicht','Gästeliste','Personal'] },
-  en: { eyebrow:'Digitalisation Project · Turmhotel Frankfurt', meta:'Developed by <span>André Schwarz — ASGlobal</span> · Data synced with all devices via the cloud', clean:'cleaned', dirty:'pending', free:'vacant', occ:'occupied', checkout:'Checkout', overnight:'Overnight', progress:'Daily Cleaning Progress', tabs:['Rooms','Overview','Guest List','Staff'] },
-  hu: { eyebrow:'Digitalizációs Projekt · Turmhotel Frankfurt', meta:'Fejlesztette: <span>André Schwarz — ASGlobal</span> · Az adatok a felhőn keresztül szinkronizálódnak minden eszközzel', clean:'takarítva', dirty:'folyamatban', free:'szabad', occ:'foglalt', checkout:'Kijelentkezés', overnight:'Overnight', progress:'Napi takarítás', tabs:['Szobák','Áttekintés','Vendéglista','Személyzet'] },
+  de: { eyebrow:'Digitalisierungsprojekt · Turmhotel Frankfurt', meta:'Entwickelt von <span>André Schwarz — ASGlobal</span> · Daten werden über die Cloud mit allen Geräten abgeglichen', clean:'gereinigt', approved:'freigegeben', dirty:'ausstehend', free:'frei', occ:'belegt', checkout:'Abreise', overnight:'Overnight', progress:'Tagesfortschritt Reinigung', tabs:['Zimmer','Übersicht','Gästeliste','Personal'] },
+  en: { eyebrow:'Digitalisation Project · Turmhotel Frankfurt', meta:'Developed by <span>André Schwarz — ASGlobal</span> · Data synced with all devices via the cloud', clean:'cleaned', approved:'approved', dirty:'pending', free:'vacant', occ:'occupied', checkout:'Checkout', overnight:'Overnight', progress:'Daily Cleaning Progress', tabs:['Rooms','Overview','Guest List','Staff'] },
+  hu: { eyebrow:'Digitalizációs Projekt · Turmhotel Frankfurt', meta:'Fejlesztette: <span>André Schwarz — ASGlobal</span> · Az adatok a felhőn keresztül szinkronizálódnak minden eszközzel', clean:'takarítva', approved:'jóváhagyva', dirty:'folyamatban', free:'szabad', occ:'foglalt', checkout:'Kijelentkezés', overnight:'Overnight', progress:'Napi takarítás', tabs:['Szobák','Áttekintés','Vendéglista','Személyzet'] },
 };
 let currentLang = 'de';
 function setLang(lang) {
@@ -2765,6 +2834,7 @@ function setLang(lang) {
   document.getElementById('lbl-eyebrow').textContent = t.eyebrow;
   document.getElementById('lbl-meta').innerHTML = t.meta;
   document.getElementById('lbl-clean').textContent = t.clean;
+  document.getElementById('lbl-approved').textContent = t.approved;
   document.getElementById('lbl-dirty').textContent = t.dirty;
   document.getElementById('lbl-free').textContent = t.free;
   document.getElementById('lbl-occ').textContent = t.occ;
@@ -2833,7 +2903,7 @@ function updateChecklistBtn() {
 function confirmChecklist() {
   if (!checklistRoom) return;
   const rs = getRoomState(checklistRoom);
-  state[checklistRoom] = { ...rs, clean: true };
+  state[checklistRoom] = { ...rs, clean: true, approved: null, rueckgabe: '', verlauf: mitVerlauf(rs, 'gereinigt (Checkliste)') };
   createTechTicket(checklistRoom);
   saveState(state, checklistRoom);
   renderRooms();
@@ -2977,6 +3047,7 @@ function printHandoverReport(historicalState, historicalLabel) {
       id: id,
       type: ROOM_TYPES[id] || '',
       clean: !!rs.clean,
+      approved: !!(rs.clean && rs.approved),
       occupied: !!rs.occupied,
       guestType: rs.guestType || '',
       staffName: rs.staff || '',
@@ -2986,6 +3057,7 @@ function printHandoverReport(historicalState, historicalLabel) {
   var totalRooms = rows.length;
   var cleanedCount = rows.filter(function(r){ return r.clean; }).length;
   var openCount = totalRooms - cleanedCount;
+  var approvedCount = rows.filter(function(r){ return r.approved; }).length;
   var checkoutCount = rows.filter(function(r){ return r.guestType === 'checkout'; }).length;
   var overnightCount = rows.filter(function(r){ return r.guestType === 'overnight'; }).length;
   var occupiedCount = rows.filter(function(r){ return r.occupied || r.guestType; }).length;
@@ -3049,6 +3121,7 @@ function printHandoverReport(historicalState, historicalLabel) {
     '<div class="summary">' +
       '<span><strong>' + totalRooms + '</strong> Zimmer gesamt</span>' +
       '<span><strong>' + cleanedCount + '</strong> gereinigt</span>' +
+      '<span><strong>' + approvedCount + '</strong> davon freigegeben</span>' +
       '<span><strong>' + openCount + '</strong> ausstehend</span>' +
       '<span><strong>' + checkoutCount + '</strong> Abreise</span>' +
       '<span><strong>' + overnightCount + '</strong> Overnight</span>' +
@@ -3103,6 +3176,8 @@ async function syncFromCloud() {
       localStorage.setItem('hk_staff3', JSON.stringify(staff));
     }
     renderRooms(); renderPersonal(); renderOverview();
+    // „Meine Zimmer“ mitziehen, damit Zuteilung und Rückgaben der Hausdame ohne Reiterwechsel ankommen.
+    if (document.getElementById('tab-meine').style.display !== 'none') renderMine();
     setSyncStatus(true);
   } catch (e) {
     console.warn('Cloud-Sync fehlgeschlagen, nutze lokalen Stand', e);
