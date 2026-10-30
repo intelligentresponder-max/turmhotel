@@ -29,20 +29,20 @@ Weicht ein Wert ab: **stoppen**, Stand lesen, Anker anpassen. Nicht blind patche
 - **Wo:** `housekeeping/housekeeping-v3.html`, `function toggleFertig(id)` (ca. Z. 1287)
 - **Ist:** setzt `clean: !rs.clean` direkt, ohne Checkliste.
 - **Soll:** Button in „Meine Zimmer“ ruft `openChecklist(id)` auf. Zurücksetzen auf „offen“ nur für Rolle Hausdame/Rezeption.
-- [ ] Umgesetzt · [ ] Test: Zimmer in „Meine Zimmer“ ohne Haken nicht fertig meldbar
+- [x] Umgesetzt (`11b74d3`) · [x] Test: Zimmer in „Meine Zimmer“ ohne Haken nicht fertig meldbar (Browser-Test mit simulierter Cloud, 30.10.)
 
 ### A2 · Ticket übernimmt Kategorie und Priorität — klein
 - **Wo:** `function createTechTicket(roomId)` (ca. Z. 2874), `const TECH_CATS` (ca. Z. 2836)
 - **Ist:** schreibt immer `cat: 'Elektro'`, `prio: 'mittel'`.
 - **Soll:** `cat` aus `selectedTechCat` (ohne Emoji), `prio` aus Zuordnung: Sanitär, Steckdose, Schloss/Safe = `hoch`; TV, Möbel = `niedrig`; Rest = `mittel`.
 - **Soll:** Ein gemeinsamer Kategorienkatalog für HSK und `facility.html` (heute 10 gegen 7 Kategorien).
-- [ ] Umgesetzt · [ ] Test: Ticket „Sanitär“ erscheint als Sanitär/hoch
+- [x] Umgesetzt (`814536e`, neue Datei `kategorien.js`) · [x] Test: Ticket „Sanitär“ erscheint als Sanitär/hoch
 
 ### A3 · Kopfzeile korrigieren — klein
 - **Wo:** Z. 483 (`#lbl-meta`) und Z. 2738 (`meta:` im Sprachobjekt `de`)
 - **Ist:** „Daten lokal im Browser gespeichert“ — falsch seit Cloud-Sync.
 - **Soll:** z. B. „Daten werden geschützt in der Cloud synchronisiert“. Beide Stellen ändern.
-- [ ] Umgesetzt · [ ] Beschriftung Vorder-/Hinterhaus mit dem Haus abgeglichen
+- [x] Umgesetzt (`f3f4394`, auch en/hu; Text: „Daten werden über die Cloud mit allen Geräten abgeglichen“ — bewusst ohne „geschützt“) · [ ] Beschriftung Vorder-/Hinterhaus mit dem Haus abgeglichen (André vor Ort)
 
 ### B1 · Freigabe durch die Hausdame — mittel
 - **Ist:** nur `clean: true/false`.
@@ -51,7 +51,7 @@ Weicht ein Wert ab: **stoppen**, Stand lesen, Anker anpassen. Nicht blind patche
   - „Zurück an Reinigung“ setzt `clean:false`, Pflicht-Grund, gleiche Person bleibt zugeteilt.
   - Rezeption sieht „freigegeben“ getrennt; Zähler oben ergänzen.
   - Jede Statusänderung speichert Person + Uhrzeit (Verlauf).
-- [ ] Umgesetzt · [ ] Test: Zimmermädchen kann nicht selbst freigeben
+- [x] Umgesetzt (`52a9b77`) · [x] Test: Zimmermädchen kann nicht selbst freigeben (simuliert; echter Test am Handy steht aus)
 
 ### B2 · Facility an die Cloud — mittel
 - **Wo:** `facility.html`, `function load()` / `function save(d)` (Z. 286–287), `moveTask`, `deleteTask`
@@ -60,7 +60,7 @@ Weicht ein Wert ab: **stoppen**, Stand lesen, Anker anpassen. Nicht blind patche
   - HSK v3 `createTechTicket()` schreibt ebenfalls dorthin.
   - `deleteTask` ersetzen durch Status „abgelehnt“ mit Grund.
   - Beim Laden **nie** den Cloud-Stand überschreiben (F23).
-- [ ] Umgesetzt · [ ] Test: Ticket vom Handy A erscheint auf Gerät B
+- [x] Umgesetzt (`73b3081`) · [x] Test: Ticket vom Handy A erscheint auf Gerät B (simuliert mit 3 Browsern inkl. Offline/Nachsenden; echter Test steht aus)
 
 ### C1 · Optionale Fotobestätigung überall — groß
 - **Stellen:** Fertigmeldung (Checkliste), Freigabe/Rückgabe Hausdame, Ticket anlegen, Ticket erledigt (vorher/nachher).
@@ -72,6 +72,14 @@ Weicht ein Wert ab: **stoppen**, Stand lesen, Anker anpassen. Nicht blind patche
 - **Datenschutz:** Hinweis am Button „Keine Personen, keine Gastsachen, keine Listen/PINs“ (F16). Automatische Löschung nach 30 Tagen.
 - **Fehler:** HTTP-Status prüfen, Fehler sichtbar anzeigen (F12).
 - [ ] Storage freigeschaltet · [ ] Umgesetzt · [ ] Test am Handy mit schlechtem Netz
+
+**Umsetzungsplan C1 (30.10.2026, wartet auf Freigabe Storage durch André):**
+1. *André, Firebase-Konsole:* Storage aktivieren (Tarif prüfen), Budgetwarnung z. B. 5 €/Monat, Bucket-Namen notieren (vermutlich `turmhotel-hsk.firebasestorage.app` — **ungeprüft**). Regeln: Lesen/Schreiben nur `request.auth != null`, nur `image/.*`, `< 1 MB`, nur unter `fotos/`. Löschregel 30 Tage (Lebenszyklus in der Google-Cloud-Konsole).
+2. *Code:* neue gemeinsame Datei `foto.js` (wie `kategorien.js`) für HSK und Facility: Aufnahme (`capture="environment"`), Verkleinern (lange Kante ≤ 1280 px, nie hochskalieren, JPEG 0,7, notfalls Qualität senken bis < 200 KB), Upload per Storage-REST mit dem Token aus `fbEnsureAuth()`, `res.ok` prüfen, Fehler sichtbar (F12). In der DB nur der Pfad.
+3. *Offline:* Foto in IndexedDB puffern, im 8-s-Sync nachsenden. Fertigmeldung/Ticket speichern sofort, Foto-Feld zunächst `{wartet:true}` — nie am Upload scheitern.
+4. *Vier Stellen:* Checkliste (`confirmChecklist`), Freigabe/Rückgabe (`freigeben`/`zurueckAnReinigung`), Ticket anlegen (`createTechTicket`, Facility `addTask`), Ticket erledigt (`moveTask(…,'done')` = nachher-Foto).
+5. *Hinweis am Knopf:* „Keine Personen, keine Gastsachen, keine Listen/PINs“ (F16).
+6. *Test:* Browser-Test mit simuliertem Storage, danach echtes Handy mit schwachem Netz/Flugmodus.
 
 ---
 

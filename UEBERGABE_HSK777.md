@@ -1,6 +1,7 @@
 # TURMHOTEL HOUSEKEEPING — ÜBERGABE (Trigger: HSK777)
 
-Stand: **09.10.2026** · Basis: `be3343d` (main, F23-Korrektur) plus Eintrag F23.
+Stand: **30.10.2026** · Basis: `73b3081` (Optimierung A1–B2 + Fix F25) plus Doku-Commit.
+Aufgabenliste dieser Runde: `UEBERGABE_OPTIMIERUNG.md` (C1 Fotofunktion wartet auf Storage-Freigabe).
 Diese Datei ist der Einstiegspunkt — egal ob am PC (Git Bash) oder am Handy (Termux).
 Bei „HSK777": diese Datei lesen, dann bei Abschnitt 3 weitermachen.
 
@@ -17,7 +18,9 @@ Bei „HSK777": diese Datei lesen, dann bei Abschnitt 3 weitermachen.
 - Team-Anleitung: `Gebrauchsanweisung-Housekeeping-App.pdf` (DE/EN/HR/HU/AF)
 - Vorführungs-/Demo-Seite: `vorfuehrung.html` — Klick-Anleitung, Neuerungen,
   Verlinkung der Unterlagen; verlinkt in `manager.html`
-- Cloud-Sync: Firebase RTDB, `state.json` / `staff.json`, Archiv unter `/history/<Datum>.json`
+- Cloud-Sync: Firebase RTDB, `state.json` / `staff.json`, Archiv unter `/history/<Datum>.json`,
+  Facility-Aufgaben unter `/facility/tasks/<id>` (seit 30.10.)
+- Technik-Kategorien (HSK + Facility gemeinsam): `kategorien.js` im Repo-Root
 - Konto-Umzug und Updates: `KONTEN_UMZUG.md`, `ANLEITUNG_UPDATES.md`
 - Alte Patch-Skripte: `scripts/` · alte Backups: `archiv/`
 
@@ -123,6 +126,24 @@ Neue Importwege müssen beide Felder setzen.
 
 ## 3. Offene Punkte (Reihenfolge = Priorität)
 
+### Offen nach der Runde vom 30.10.2026
+1. **C1 Fotofunktion** — wartet auf Freigabe Firebase Storage durch André; Plan steht in `UEBERGABE_OPTIMIERUNG.md`.
+2. **Abnahme am Handy** (Abschnitt 3 in `UEBERGABE_OPTIMIERUNG.md`): alles nur mit simulierter Cloud im Browser getestet, nicht mit echten Handys und echter Firebase.
+3. **`nachtdienst.html` hat einen leeren `FIREBASE_API_KEY`** (Zeile 248). Mit Regeln `auth != null` dürfte die Übergabe „Späte Anreisen“ daher abgelehnt werden. Am Handy prüfen; wenn ja, Schlüssel wie in `housekeeping-v3.html` eintragen (öffentlicher Schlüssel, nicht geheim — F21).
+4. **Facility:** Statusänderungen, die offline gemacht werden, gehen beim nächsten Abgleich verloren (Cloud gewinnt); nur neu angelegte Aufgaben werden nachgesendet. Erledigte/abgelehnte Aufgaben werden nicht mehr gelöscht — Liste wächst, später Ausblenden nach X Tagen.
+5. **Facility:** Gast-Name bei Beschwerden liegt jetzt in der Cloud (vorher nur im Gerät). Jeder mit der Seite kann ihn lesen. Feld ist optional — im Team ansagen: nur wenn nötig.
+6. **HSK:** Notizen (`rs.note`) werden in der Zimmerkarte ungeschützt als HTML angezeigt; neue Felder (Rückgabe-Grund, Verlauf) sind geschützt. Bei Gelegenheit gleich behandeln.
+7. **Aus F23 weiter offen:** Rückfrage bei „Alles zurücksetzen“ mit Hinweis „gilt für alle Handys“; Test mit mehreren Personen.
+8. **Vorder-/Hinterhaus-Beschriftung** mit dem Haus abgleichen (André vor Ort).
+
+### Erledigt am 30.10.2026 (`11b74d3`–`73b3081`)
+- ~~A1 Checkliste umgehbar~~ → „Meine Zimmer“ öffnet die Checkliste; zurücksetzen nur Hausdame (bzw. Rezeption im Zimmerfenster).
+- ~~A2 Ticket immer Elektro/mittel~~ → Kategorie + Priorität aus gemeinsamem Katalog `kategorien.js`.
+- ~~A3 Kopfzeile „lokal im Browser“~~ → „über die Cloud mit allen Geräten abgeglichen“ (de/en/hu).
+- ~~B1 Freigabe Hausdame~~ → offen → gereinigt → freigegeben, Rückgabe mit Grund, Verlauf, Zähler.
+- ~~B2 Facility nur lokal~~ → Cloud unter `/facility/tasks`, Ablehnen statt Löschen.
+- ~~F25~~ Personal-Vorbelegung überschrieb beim Laden die Cloud (`ce46496`).
+
 Alle fünf Punkte aus der letzten Übergabe sind mit `5467ab9` erledigt (Details
 siehe 2.2/2.3 und Verlauf-Tabelle). Aktuell keine neuen offenen Punkte aus
 dieser Runde — folgendes bleibt aus der alten Roadmap liegen:
@@ -213,6 +234,14 @@ dieser Runde — folgendes bleibt aus der alten Roadmap liegen:
 | 25.09. | `a271cef` | Erw./Kin.-Regex robuster gegen OCR-Fehlerkennungen (F10), mit echten Fotos von der Vorführung getestet |
 | 25.09. | `53b6735` | Foto-Scan-Speicherverbrauch bei großen Fotos begrenzt — behebt Tab-Reload/Datenverlust nach dem Scan (F11) |
 | 25.09. | `4d5435b` | Firebase-Sync-Fehler sichtbar gemacht (rotes Banner), stillen Datenverlust bei `Permission denied` behoben (F12), PATCH statt PUT für die vier Einzelzimmer-Aktionen (Last-Writer-wins entschärft) |
+| 09.10. | `be3343d` | Fix F23: `seedNotes()` beim Laden ausgeschaltet |
+| 30.10. | `0275a8a` | Übergabe Optimierung HSK v3 + Facility |
+| 30.10. | `11b74d3` | A1 Fertigmeldung nur über Checkliste |
+| 30.10. | `ce46496` | Fix F25: Personal-Vorbelegung nicht mehr in die Cloud |
+| 30.10. | `814536e` | A2 Kategorie/Priorität, `kategorien.js` |
+| 30.10. | `f3f4394` | A3 Kopfzeile |
+| 30.10. | `52a9b77` | B1 Freigabe durch die Hausdame, Verlauf |
+| 30.10. | `73b3081` | B2 Facility in der Cloud, Ablehnen statt Löschen |
 
 ---
 
@@ -243,6 +272,8 @@ dieser Runde — folgendes bleibt aus der alten Roadmap liegen:
 | F21 | 08.10.2026: Ablauf für den Firebase-Schlüssel geplant, ohne vorher git fetch zu machen und ohne den Code zu lesen. Den Web-API-Schlüssel suchen lassen und den falschen Fundort genannt. Nummer F18 aus altem Gedächtnis gewählt | Rund 25 Minuten Suche bei niedrigem Akku. Die Anmeldung (PR 26) war auf main längst eingebaut, der Handy-Stand war veraltet. Doppelte Nummer F18 nur durch den Push-Fehler aufgefallen. Widersprüchliche Aussage, ob der Schlüssel geheim ist (er ist es nicht, er steht im öffentlichen Seitencode) | Zuerst git fetch und git log HEAD..origin/main, dann Code lesen, dann erst Plan und Konsolenschritte. Neue F-Nummer immer aus der Datei auf origin/main ableiten, nie aus dem Chat. Fundorte in Konsolen nur als ungeprüft nennen. Zu Schlüsseln einmal klar sagen, ob sie geheim sind. |
 | F22 | 09.10.2026: Beim Prüfen der Schlüsselzeile mit cut -c1-40 wurden 14 Zeichen des Web-API-Schlüssels sichtbar, obwohl ich zugesagt hatte, der Rest bleibe verdeckt | Falsche Zusage; 14 Zeichen eines ohnehin öffentlichen Web-Schlüssels im Chat, kein Sicherheitsproblem | Prüfen nur mit grep -c oder die Zeichenzahl vor dem Schlüssel nachrechnen, bevor Verdecken zugesagt wird. |
 | F23 | 09.10.2026: `seedNotes()` lief bei jedem Laden der Seite und schrieb per PUT den ganzen Stand in die Cloud. Ein frischer Browser (Inkognito, neues Handy) ersetzte so den Cloud-Stand durch drei Startnotizen (404, 44, 54). Zusätzlich fragt `resetAll()` nicht, dass es für alle Handys gilt | Hochgeladene Listen und Belegung gingen nach Sekunden verloren, der erste Browser holte den kleinen Stand beim nächsten Sync zurück (8 s). Fund: Cloud enthielt nur 3 Zimmer | Aufruf in Zeile 2923 auskommentiert (be3343d), Cloud danach mit 78 Einträgen geprüft. Offen: Startnotizen nur noch per PATCH nach erstem Sync setzen, Rückfrage bei Reset mit Hinweis auf alle Handys, Test mit mehreren Personen. |
+| F24 | 30.10.2026: Übergabe- und Audit-Dokument teils aus altem Gedächtnisstand geschrieben („keine Anmeldung“, „Alpha-Scan als eigene Datei“, „CSV-Weg“) | Programmierer hätte erledigte Arbeit erneut geplant | Vor jedem Planungsdokument Repo pullen und Code lesen; Commit im Kopf angeben |
+| F25 | 30.10.2026, beim Test von A1 gefunden: Bei leerem Gerätespeicher (neues Handy, Inkognito) legte `housekeeping-v3.html` beim Laden 4 Standardnamen an und schrieb sie per `saveStaffData()` (PUT) nach `/staff.json` — gleiche Fehlerart wie F23, nur für die Personalliste | Personalliste aller Handys inkl. Rollen und „heute da“ durch 4 Namen ersetzt; „Meine Zimmer“ fand die eigene Person nicht mehr | Vorbelegung nur noch lokal (`ce46496`), mit simuliertem frischem Browser geprüft: beim Laden kein Schreibzugriff mehr. Regel: nach jeder Änderung einen Browser-Test „frisches Gerät öffnet Seite“ laufen lassen und prüfen, dass beim Laden **kein** PUT/PATCH rausgeht (Ausnahme: bewusstes Ergänzen per PATCH, z. B. Facility-Aufgaben nur auf dem Gerät). |
 
 ---
 
