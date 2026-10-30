@@ -9,6 +9,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..900;1,9..144,300..900&family=Spline+Sans+Mono:wght@400;500;600&family=Spline+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/tesseract.js/5.0.5/tesseract.min.js"></script>
+<script src="../kategorien.js"></script>
 <style>
 :root {
   --ink: #0c0a08;
@@ -2851,7 +2852,8 @@ function closeChecklist(e) {
 
 
 // ══ TECHNIK TICKET SYSTEM ══
-const TECH_CATS = ['💡 Beleuchtung', '📺 TV / Fernbedienung', '🚿 Sanitär', '🔌 Steckdose', '🪟 Fenster / Tür', '🛏 Möbel', '❄️ Klima / Heizung', '🔑 Schloss / Safe', '📶 WLAN', '🧹 Sonstiges'];
+// Kategorien und Standard-Priorität kommen aus ../kategorien.js (gemeinsam mit facility.html, A2).
+const TECH_CATS = TECH_KATALOG.filter(k => k.hsk);
 let techProblem = false;
 let selectedTechCat = '';
 
@@ -2867,11 +2869,11 @@ function initTechSection() {
   // Build category buttons
   const row = document.getElementById('tech-cat-row');
   row.innerHTML = '';
-  TECH_CATS.forEach(cat => {
+  TECH_CATS.forEach(k => {
     const btn = document.createElement('button');
     btn.className = 'tech-cat-btn';
-    btn.textContent = cat;
-    btn.onclick = () => selectTechCat(cat, btn);
+    btn.textContent = k.icon + ' ' + k.name;
+    btn.onclick = () => selectTechCat(k.name, btn);
     row.appendChild(btn);
   });
 }
@@ -2893,7 +2895,7 @@ function createTechTicket(roomId) {
   if (!techProblem) return;
   const cat = selectedTechCat || 'Sonstiges';
   const desc = document.getElementById('tech-desc').value.trim();
-  const title = cat.replace(/^.+? /, '') + (desc ? ': ' + desc.slice(0,50) : '');
+  const title = cat + (desc ? ': ' + desc.slice(0,50) : '');
 
   // shared localStorage key with facility.html
   let fTasks = [];
@@ -2902,8 +2904,8 @@ function createTechTicket(roomId) {
   fTasks.push({
     id: 'hk_' + Date.now(),
     title: 'Zimmer ' + roomId + ' — ' + title,
-    cat: 'Elektro',
-    prio: 'mittel',
+    cat: cat,
+    prio: (techKategorie(cat) || {}).prio || 'mittel',
     location: 'Zimmer ' + roomId,
     desc: (desc || '') + '\n[Gemeldet beim Abschluss der Reinigung — Housekeeping]',
     status: 'offen',

@@ -173,7 +173,7 @@ nav{position:sticky;top:0;z-index:200;background:rgba(12,10,8,.95);backdrop-filt
       <button class="filter-btn active" id="f-all" onclick="setFilter('all')">Alle</button>
       <button class="filter-btn" id="f-hoch" onclick="setFilter('hoch')">🔴 Hohe Prio</button>
       <button class="filter-btn" id="f-beschwerde" onclick="setFilter('beschwerde')">💬 Beschwerden</button>
-      <button class="filter-btn" id="f-sanitaer" onclick="setFilter('Sanitär')">🔧 Sanitär</button>
+      <button class="filter-btn" id="f-sanitaer" onclick="setFilter('Sanitär')">🔧 Sanitär / Heizung</button>
       <button class="filter-btn" id="f-elektro" onclick="setFilter('Elektro')">⚡ Elektro</button>
     </div>
     <div class="board">
@@ -213,14 +213,7 @@ nav{position:sticky;top:0;z-index:200;background:rgba(12,10,8,.95);backdrop-filt
         <div class="form-row">
           <div class="form-group">
             <div class="field-label">Kategorie</div>
-            <select class="form-select" id="new-cat">
-              <option value="Sanitär">🔧 Sanitär</option>
-              <option value="Elektro">⚡ Elektro</option>
-              <option value="Möbel">🪑 Möbel / Einrichtung</option>
-              <option value="Reinigung">🧹 Reinigung</option>
-              <option value="Sicherheit">🔒 Sicherheit</option>
-              <option value="Sonstiges">📋 Sonstiges</option>
-            </select>
+            <select class="form-select" id="new-cat" onchange="vorschlagPrio()"></select>
           </div>
           <div class="form-group">
             <div class="field-label">Priorität</div>
@@ -281,6 +274,7 @@ nav{position:sticky;top:0;z-index:200;background:rgba(12,10,8,.95);backdrop-filt
   Turmhotel Frankfurt · Facility Manager · Entwickelt von André Schwarz — ASGlobal
 </div>
 
+<script src="kategorien.js"></script>
 <script>
 // ══ PERSISTENCE ══
 function load() { try { return JSON.parse(localStorage.getItem('facility_tasks') || '[]'); } catch { return []; } }
@@ -301,9 +295,23 @@ function nowStr() {
 }
 
 // ══ CAT CSS ══
+// Farbe kommt aus dem gemeinsamen Katalog (kategorien.js, A2).
 function catClass(cat) {
-  const m = { 'Sanitär':'sanitaer','Elektro':'elektro','Möbel':'moebel','Reinigung':'reinigung','Sicherheit':'sicherheit','Beschwerde':'beschwerde' };
-  return 'cat-' + (m[cat] || 'sonstiges');
+  if (cat === 'Beschwerde') return 'cat-beschwerde';
+  const k = techKategorie(cat);
+  return 'cat-' + (k ? k.css : 'sonstiges');
+}
+
+// Auswahlliste „Neue Aufgabe“ aus dem Katalog füllen, Priorität vorschlagen.
+function fuelleKategorien() {
+  const sel = document.getElementById('new-cat');
+  sel.innerHTML = TECH_KATALOG.map(k => '<option value="' + k.name + '">' + k.icon + ' ' + k.name + '</option>').join('');
+  sel.value = 'Sanitär';
+  vorschlagPrio();
+}
+function vorschlagPrio() {
+  const k = techKategorie(document.getElementById('new-cat').value);
+  if (k) document.getElementById('new-prio').value = k.prio;
 }
 
 // ══ FILTER ══
@@ -325,7 +333,9 @@ function matchesFilter(t) {
   if (activeFilter === 'all') return true;
   if (activeFilter === 'hoch') return t.prio === 'hoch';
   if (activeFilter === 'beschwerde') return t.cat === 'Beschwerde';
-  return t.cat === activeFilter;
+  // Sanitär/Elektro-Filter fassen die Unterkategorien gleicher Farbe zusammen
+  // (z. B. Steckdose, Beleuchtung → Elektro).
+  return catClass(t.cat) === catClass(activeFilter);
 }
 
 // ══ RENDER ══
@@ -465,6 +475,7 @@ function showTab(tab) {
 }
 
 // ══ INIT ══
+fuelleKategorien();
 renderBoard();
 </script>
 </body>
