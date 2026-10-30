@@ -2967,11 +2967,13 @@ function createTechTicket(roomId) {
   const desc = document.getElementById('tech-desc').value.trim();
   const title = cat + (desc ? ': ' + desc.slice(0,50) : '');
 
-  // shared localStorage key with facility.html
+  // B2: Ticket geht nach /facility/tasks/<id> in die Cloud. Lokal bleibt es
+  // zusätzlich unter 'facility_tasks' (geteilt mit facility.html) — fällt das
+  // Netz aus, ergänzt facility.html es beim nächsten Sync auf diesem Gerät.
   let fTasks = [];
   try { fTasks = JSON.parse(localStorage.getItem('facility_tasks') || '[]'); } catch {}
 
-  fTasks.push({
+  const ticket = {
     id: 'hk_' + Date.now(),
     title: 'Zimmer ' + roomId + ' — ' + title,
     cat: cat,
@@ -2980,8 +2982,15 @@ function createTechTicket(roomId) {
     desc: (desc || '') + '\n[Gemeldet beim Abschluss der Reinigung — Housekeeping]',
     status: 'offen',
     created: new Date().toLocaleString('de-DE'),
-  });
+    von: meinName() || '',
+  };
+  fTasks.push(ticket);
   localStorage.setItem('facility_tasks', JSON.stringify(fTasks));
+  dbUrl('/facility/tasks/' + ticket.id + '.json').then(function(url){
+    return fetch(url, { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(ticket) });
+  })
+    .then(checkFirebaseResponse).then(function(){ setSyncStatus(true); })
+    .catch(function(e){ console.warn('Technik-Ticket nicht gesendet', e); setSyncStatus(false); });
   document.getElementById('tech-ticket-sent').style.display = 'block';
 }
 

@@ -282,6 +282,11 @@ Firebase-Projekte lassen sich nicht einfach übertragen — es braucht ein
    direkt bitten, den einen Zeilen-Tausch zu machen und die Syntaxprüfung
    laufen zu lassen). Wird sinnvollerweise im selben Commit wie Schritt 5
    (Auth-Code) erledigt, da beides dieselben Zeilen betrifft.
+   **Nachtrag 30.10.2026 (B2):** `FIREBASE_URL` und `FIREBASE_API_KEY` stehen
+   jetzt in **drei** Dateien: `housekeeping/housekeeping-v3.html`,
+   `nachtdienst.html` und `facility.html` (Facility-Aufgaben unter
+   `/facility/tasks`). Beim Umzug alle drei ändern:
+   `grep -n "FIREBASE_URL =\|FIREBASE_API_KEY =" *.html housekeeping/*.html`
 7. Testen: Auf zwei Geräten öffnen, auf einem einen Zimmerstatus ändern, prüfen
    ob es auf dem anderen ankommt.
 

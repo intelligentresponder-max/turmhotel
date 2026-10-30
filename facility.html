@@ -129,6 +129,11 @@ nav{position:sticky;top:0;z-index:200;background:rgba(12,10,8,.95);backdrop-filt
 .filter-btn.active{background:rgba(201,162,39,.12);color:var(--gold);border-color:var(--gold);}
 
 /* FOOTER */
+/* Sync-Status (B2, wie housekeeping-v3.html) */
+.sync-offline-banner{position:relative;z-index:1;background:rgba(232,112,112,.1);border-bottom:1px solid rgba(232,112,112,.35);padding:8px 24px;display:none;align-items:center;gap:8px;font-family:'Spline Sans Mono',monospace;font-size:.72rem;letter-spacing:.02em;color:#e87070;}
+.sync-offline-banner.show{display:flex;}
+.task-rejected{margin-top:6px;font-size:.72rem;color:#e87070;}
+.task-card.abgelehnt{opacity:.6;}
 .tool-footer{position:relative;z-index:1;border-top:1px solid var(--line);margin-top:48px;padding:20px 24px;text-align:center;font-family:'Spline Sans Mono',monospace;font-size:.7rem;color:var(--muted);}
 .tool-footer a{color:var(--gold);text-decoration:none;}
 
@@ -143,6 +148,7 @@ nav{position:sticky;top:0;z-index:200;background:rgba(12,10,8,.95);backdrop-filt
     <a class="nav-link" href="housekeeping/housekeeping-v3.html">← Housekeeping</a>
   </div>
 </nav>
+<div class="sync-offline-banner" id="sync-offline-banner">⚠️ Offline – Aufgaben werden nur auf diesem Gerät gespeichert und später nachgesendet.</div>
 
 <div class="tool-header">
   <div class="eyebrow">Turmhotel Frankfurt · Facility & Beschwerden</div>
@@ -276,9 +282,110 @@ nav{position:sticky;top:0;z-index:200;background:rgba(12,10,8,.95);backdrop-filt
 
 <script src="kategorien.js"></script>
 <script>
+// ══ CLOUD-SYNC (B2, 30.10.2026) ══
+// Gleiche Datenbank und anonyme Anmeldung wie housekeeping-v3.html (Code von
+// dort übernommen — bei Konten-Umzug auch hier ändern, siehe KONTEN_UMZUG.md).
+// Aufgaben liegen unter /facility/tasks/<id>. Jede Aufgabe wird einzeln
+// geschrieben; beim Laden wird nur gelesen und höchstens ergänzt (F23).
+const FIREBASE_URL = 'https://turmhotel-hsk-default-rtdb.europe-west1.firebasedatabase.app';
+
+// Anonymous-Auth-Anbindung fuer die neuen Regeln aus KONTEN_UMZUG.md
+// (".read"/".write": "auth != null"). Ohne eingetragenen Key verhaelt sich
+// alles exakt wie bisher -- kein SDK, reine fetch()-Aufrufe, mit einem
+// simulierten fetch() durchgetestet (26.09.2026, siehe KONTEN_UMZUG.md).
+const FIREBASE_API_KEY = 'AIzaSyBnk18bvLn8r9It0uMhCah9l23b1Hzr8vM'; // Web API Key aus der Firebase-Konsole eintragen, sobald die Regeln stehen
+var fbAuth = { idToken: null, refreshToken: null, expiresAt: 0 };
+
+async function fbEnsureAuth() {
+  if (!FIREBASE_API_KEY) return null; // kein Key hinterlegt -> Verhalten wie bisher, ohne Anmeldung
+  if (fbAuth.idToken && Date.now() < fbAuth.expiresAt) return fbAuth.idToken;
+  try {
+    if (fbAuth.refreshToken) {
+      const r = await fetch('https://securetoken.googleapis.com/v1/token?key=' + FIREBASE_API_KEY, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: 'grant_type=refresh_token&refresh_token=' + fbAuth.refreshToken
+      });
+      const d = await r.json();
+      if (d.id_token) {
+        fbAuth = { idToken: d.id_token, refreshToken: d.refresh_token, expiresAt: Date.now() + (+d.expires_in - 60) * 1000 };
+        return fbAuth.idToken;
+      }
+    }
+    const r2 = await fetch('https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=' + FIREBASE_API_KEY, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ returnSecureToken: true })
+    });
+    const d2 = await r2.json();
+    if (d2.idToken) {
+      fbAuth = { idToken: d2.idToken, refreshToken: d2.refreshToken, expiresAt: Date.now() + (+d2.expiresIn - 60) * 1000 };
+      return fbAuth.idToken;
+    }
+  } catch (e) { console.error('Firebase-Anmeldung fehlgeschlagen', e); }
+  return null;
+}
+
+async function dbUrl(pfad) {
+  const token = await fbEnsureAuth();
+  if (!token) return FIREBASE_URL + pfad;
+  return FIREBASE_URL + pfad + (pfad.indexOf('?') >= 0 ? '&' : '?') + 'auth=' + token;
+}
+function setSyncStatus(ok) {
+  const banner = document.getElementById('sync-offline-banner');
+  if (banner) banner.classList.toggle('show', !ok);
+}
+function checkFirebaseResponse(res) {
+  if (!res.ok) throw new Error('Firebase HTTP ' + res.status);
+  return res;
+}
+function escHtml(s) { return String(s == null ? '' : s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+const ID_OK = /^[A-Za-z0-9_-]+$/;
+
 // ══ PERSISTENCE ══
+// localStorage bleibt Spiegel + Puffer für Offline; geteilt mit housekeeping-v3.html.
 function load() { try { return JSON.parse(localStorage.getItem('facility_tasks') || '[]'); } catch { return []; } }
 function save(d) { localStorage.setItem('facility_tasks', JSON.stringify(d)); }
+function saveTask(t) {
+  save(tasks);
+  dbUrl('/facility/tasks/' + t.id + '.json').then(function(url){
+    return fetch(url, { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(t) });
+  })
+    .then(checkFirebaseResponse).then(function(){ setSyncStatus(true); })
+    .catch(function(e){ console.warn('Aufgabe nicht gesendet', e); setSyncStatus(false); });
+}
+function mitVerlauf(t, status, grund) {
+  const v = Array.isArray(t.verlauf) ? t.verlauf.slice(-19) : [];
+  const e = { status: status, at: new Date().toISOString() };
+  if (grund) e.grund = grund;
+  v.push(e);
+  return v;
+}
+
+async function syncFromCloud() {
+  try {
+    const res = checkFirebaseResponse(await fetch(await dbUrl('/facility/tasks.json')));
+    const cloud = await res.json();
+    if (cloud && typeof cloud === 'object' && cloud.error) throw new Error(cloud.error); // F12
+    const cloudTasks = Object.values(cloud || {}).filter(t => t && ID_OK.test(t.id));
+    const cloudIds = new Set(cloudTasks.map(t => t.id));
+    // Nur hier vorhandene Aufgaben (offline angelegt, alte lokale Liste, Ticket
+    // aus dem Housekeeping ohne Netz) ergänzen — per PATCH, nichts wird ersetzt.
+    const nurLokal = tasks.filter(t => t && ID_OK.test(t.id) && !cloudIds.has(t.id));
+    if (nurLokal.length) {
+      const body = {};
+      nurLokal.forEach(t => { body[t.id] = t; });
+      checkFirebaseResponse(await fetch(await dbUrl('/facility/tasks.json'), { method: 'PATCH', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) }));
+    }
+    tasks = cloudTasks.concat(nurLokal);
+    save(tasks);
+    renderBoard();
+    setSyncStatus(true);
+  } catch (e) {
+    console.warn('Cloud-Sync fehlgeschlagen, nutze lokalen Stand', e);
+    setSyncStatus(false);
+  }
+}
 
 let tasks = load();
 let activeFilter = 'all';
@@ -343,7 +450,9 @@ function renderBoard() {
   const cols = { offen: [], progress: [], done: [] };
   tasks.forEach(t => {
     if (!matchesFilter(t)) return;
-    cols[t.status].push(t);
+    // abgelehnte Aufgaben stehen bei „Erledigt“, rot markiert
+    const col = t.status === 'abgelehnt' ? 'done' : (cols[t.status] ? t.status : 'offen');
+    cols[col].push(t);
   });
 
   ['offen','progress','done'].forEach(status => {
@@ -364,26 +473,29 @@ function renderBoard() {
 
 function buildCard(t) {
   const div = document.createElement('div');
-  let cls = 'task-card prio-' + t.prio;
+  const prio = ['hoch','mittel','niedrig'].indexOf(t.prio) >= 0 ? t.prio : 'mittel';
+  let cls = 'task-card prio-' + prio;
   if (t.cat === 'Beschwerde') cls += ' beschwerde';
+  if (t.status === 'abgelehnt') cls += ' abgelehnt';
   div.className = cls;
 
+  // Daten kommen jetzt von allen Geräten (Cloud) → alles escapen; IDs sind per ID_OK geprüft.
   let actions = '';
   if (t.status === 'offen') actions = `<button class="task-btn btn-start" onclick="moveTask('${t.id}','progress')">In Arbeit</button>`;
   if (t.status === 'progress') actions = `<button class="task-btn btn-done" onclick="moveTask('${t.id}','done')">✓ Erledigt</button>`;
-  if (t.status === 'done') actions = `<button class="task-btn btn-del" onclick="deleteTask('${t.id}')">Löschen</button>`;
-  if (t.status !== 'done') actions += ` <button class="task-btn btn-del" onclick="deleteTask('${t.id}')">×</button>`;
+  if (t.status === 'offen' || t.status === 'progress') actions += ` <button class="task-btn btn-del" onclick="rejectTask('${t.id}')">Ablehnen</button>`;
 
   div.innerHTML = `
     <div class="task-top">
-      <span class="task-cat ${catClass(t.cat)}">${t.cat}</span>
-      <span class="task-prio prio-chip-${t.prio}">${t.prio}</span>
+      <span class="task-cat ${catClass(t.cat)}">${escHtml(t.cat)}</span>
+      <span class="task-prio prio-chip-${prio}">${prio}</span>
     </div>
-    <div class="task-title">${t.title}</div>
-    <div class="task-location">📍 ${t.location || '—'}</div>
-    ${t.desc ? `<div class="task-desc">${t.desc}</div>` : ''}
+    <div class="task-title">${escHtml(t.title)}</div>
+    <div class="task-location">📍 ${escHtml(t.location || '—')}</div>
+    ${t.desc ? `<div class="task-desc">${escHtml(t.desc)}</div>` : ''}
+    ${t.status === 'abgelehnt' ? `<div class="task-rejected">✕ abgelehnt${t.grund ? ': ' + escHtml(t.grund) : ''}</div>` : ''}
     <div class="task-meta">
-      <span class="task-date">${t.created}</span>
+      <span class="task-date">${escHtml(t.created)}</span>
       <div class="task-actions">${actions}</div>
     </div>
   `;
@@ -393,12 +505,16 @@ function buildCard(t) {
 // ══ ACTIONS ══
 function moveTask(id, status) {
   const t = tasks.find(x => x.id === id);
-  if (t) { t.status = status; save(tasks); renderBoard(); }
+  if (t) { t.status = status; t.verlauf = mitVerlauf(t, status); saveTask(t); renderBoard(); }
 }
-function deleteTask(id) {
-  if (!confirm('Aufgabe löschen?')) return;
-  tasks = tasks.filter(x => x.id !== id);
-  save(tasks); renderBoard();
+// B2: statt Löschen „abgelehnt“ mit Pflicht-Grund — bleibt nachvollziehbar.
+function rejectTask(id) {
+  const t = tasks.find(x => x.id === id);
+  if (!t) return;
+  const grund = (prompt('Aufgabe ablehnen — Grund (Pflicht):') || '').trim();
+  if (!grund) { alert('Ohne Grund wird nichts abgelehnt.'); return; }
+  t.status = 'abgelehnt'; t.grund = grund; t.verlauf = mitVerlauf(t, 'abgelehnt', grund);
+  saveTask(t); renderBoard();
 }
 
 // ══ NEW TASK ══
@@ -406,7 +522,7 @@ function addTask() {
   const title = document.getElementById('new-title').value.trim();
   const location = document.getElementById('new-location').value.trim();
   if (!title) { alert('Titel ausfüllen.'); return; }
-  tasks.push({
+  const t = {
     id: 't' + (++nextId),
     title,
     cat: document.getElementById('new-cat').value,
@@ -415,8 +531,9 @@ function addTask() {
     desc: document.getElementById('new-desc').value.trim(),
     status: 'offen',
     created: nowStr(),
-  });
-  save(tasks);
+  };
+  tasks.push(t);
+  saveTask(t);
   document.getElementById('new-title').value = '';
   document.getElementById('new-location').value = '';
   document.getElementById('new-desc').value = '';
@@ -431,7 +548,7 @@ function addBeschwerde() {
   if (!title) { alert('Beschwerde ausfüllen.'); return; }
   const guest = document.getElementById('b-guest').value.trim();
   const desc = document.getElementById('b-desc').value.trim();
-  tasks.push({
+  const t = {
     id: 't' + (++nextId),
     title: (guest ? `[${guest}] ` : '') + title,
     cat: 'Beschwerde',
@@ -440,8 +557,9 @@ function addBeschwerde() {
     desc,
     status: 'offen',
     created: nowStr(),
-  });
-  save(tasks);
+  };
+  tasks.push(t);
+  saveTask(t);
   document.getElementById('b-title').value = '';
   document.getElementById('b-location').value = '';
   document.getElementById('b-guest').value = '';
@@ -477,6 +595,8 @@ function showTab(tab) {
 // ══ INIT ══
 fuelleKategorien();
 renderBoard();
+syncFromCloud();
+setInterval(syncFromCloud, 8000);
 </script>
 </body>
 </html>
