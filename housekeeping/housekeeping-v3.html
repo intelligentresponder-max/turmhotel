@@ -481,7 +481,7 @@ nav{
 <div class="tool-header">
   <p class="eyebrow" id="lbl-eyebrow">Digitalisierungsprojekt · Turmhotel Frankfurt</p>
   <h1 class="tool-title">Housekeeping <em>Manager</em> <span style="font-family:'Spline Sans Mono',monospace;font-size:.55em;color:var(--muted);font-weight:400;font-style:normal;">v3</span></h1>
-  <p class="tool-meta" id="lbl-meta">Entwickelt von <span>André Schwarz — ASGlobal</span> · Daten lokal im Browser gespeichert</p>
+  <p class="tool-meta" id="lbl-meta">Entwickelt von <span>André Schwarz — ASGlobal</span> · Daten werden über die Cloud mit allen Geräten abgeglichen</p>
 </div>
 
 <!-- PROGRESS -->
@@ -2753,9 +2753,9 @@ function importData(event) {
 
 // ══ LANGUAGE ══
 const L = {
-  de: { eyebrow:'Digitalisierungsprojekt · Turmhotel Frankfurt', meta:'Entwickelt von <span>André Schwarz — ASGlobal</span> · Daten lokal im Browser gespeichert', clean:'gereinigt', dirty:'ausstehend', free:'frei', occ:'belegt', checkout:'Abreise', overnight:'Overnight', progress:'Tagesfortschritt Reinigung', tabs:['Zimmer','Übersicht','Gästeliste','Personal'] },
-  en: { eyebrow:'Digitalisation Project · Turmhotel Frankfurt', meta:'Developed by <span>André Schwarz — ASGlobal</span> · Data stored locally in browser', clean:'cleaned', dirty:'pending', free:'vacant', occ:'occupied', checkout:'Checkout', overnight:'Overnight', progress:'Daily Cleaning Progress', tabs:['Rooms','Overview','Guest List','Staff'] },
-  hu: { eyebrow:'Digitalizációs Projekt · Turmhotel Frankfurt', meta:'Fejlesztette: <span>André Schwarz — ASGlobal</span> · Az adatok helyben tárolódnak', clean:'takarítva', dirty:'folyamatban', free:'szabad', occ:'foglalt', checkout:'Kijelentkezés', overnight:'Overnight', progress:'Napi takarítás', tabs:['Szobák','Áttekintés','Vendéglista','Személyzet'] },
+  de: { eyebrow:'Digitalisierungsprojekt · Turmhotel Frankfurt', meta:'Entwickelt von <span>André Schwarz — ASGlobal</span> · Daten werden über die Cloud mit allen Geräten abgeglichen', clean:'gereinigt', dirty:'ausstehend', free:'frei', occ:'belegt', checkout:'Abreise', overnight:'Overnight', progress:'Tagesfortschritt Reinigung', tabs:['Zimmer','Übersicht','Gästeliste','Personal'] },
+  en: { eyebrow:'Digitalisation Project · Turmhotel Frankfurt', meta:'Developed by <span>André Schwarz — ASGlobal</span> · Data synced with all devices via the cloud', clean:'cleaned', dirty:'pending', free:'vacant', occ:'occupied', checkout:'Checkout', overnight:'Overnight', progress:'Daily Cleaning Progress', tabs:['Rooms','Overview','Guest List','Staff'] },
+  hu: { eyebrow:'Digitalizációs Projekt · Turmhotel Frankfurt', meta:'Fejlesztette: <span>André Schwarz — ASGlobal</span> · Az adatok a felhőn keresztül szinkronizálódnak minden eszközzel', clean:'takarítva', dirty:'folyamatban', free:'szabad', occ:'foglalt', checkout:'Kijelentkezés', overnight:'Overnight', progress:'Napi takarítás', tabs:['Szobák','Áttekintés','Vendéglista','Személyzet'] },
 };
 let currentLang = 'de';
 function setLang(lang) {
