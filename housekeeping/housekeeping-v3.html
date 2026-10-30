@@ -1078,7 +1078,9 @@ if (!staff.length) {
     { name: 'Mehari', abb: 'MEH', color: '#5b8dee' },
     { name: 'Kulwinder', abb: 'KUL', color: '#e67e22' }
   ];
-  saveStaffData(staff);
+  // F25 (30.10.2026): nur lokal vorbelegen. saveStaffData() schrieb hier per PUT
+  // die Personalliste der Cloud mit diesen 4 Namen über, sobald ein frisches
+  // Handy/Inkognito-Fenster die Seite öffnete (gleiche Art Fehler wie F23).
 }
 
 function getRoomState(id) {
